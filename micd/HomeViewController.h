@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SetFramesProtocol.h"
 
-@interface HomeViewController : UIViewController
+@protocol MovementDelegate <NSObject>
+
+- (void)shouldMoveWithTranslation:(CGPoint)translation;
+- (void)shouldMoveToPositionState:(HomeViewContollerPositionState)state;
+
+@end
+
+@interface HomeViewController : UIViewController <SetFramesProtocol>
+
+@property (weak, nonatomic) id<MovementDelegate> movementDelegate;
 
 @end

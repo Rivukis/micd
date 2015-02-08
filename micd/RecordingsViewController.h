@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SetFramesProtocol.h"
 
-@interface RecordingsViewController : UIViewController
+@interface RecordingsViewController : UIViewController <SetFramesProtocol>
 
 @end

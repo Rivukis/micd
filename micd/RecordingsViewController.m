@@ -7,8 +7,11 @@
 //
 
 #import "RecordingsViewController.h"
+#import "UIColor+Palette.h"
 
-@interface RecordingsViewController ()
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -16,22 +19,61 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - SetFramesProtocol
+
+- (void)setInitialStateFrame {
+    self.view.frame = CGRectMake(0,
+                                 (self.view.window.frame.size.height * 1.068f) * -1,
+                                 self.view.window.frame.size.width,
+                                 self.view.window.frame.size.height - 128.0f);
+    self.tableView.frame = self.view.frame;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
+    CGRect frame = self.view.frame;
+    switch (state) {
+        case HomeViewContollerPositionStateHome:
+            frame.origin.y = (self.view.window.frame.size.height * 1.068f) * -1;
+            break;
+        case HomeViewContollerPositionStateRecordings:
+            frame.origin.y = 0;
+            break;
+        case HomeViewContollerPositionStateSettings:
+            
+            break;
+        default:
+            break;
+    }
+    self.view.frame = frame;
 }
-*/
+
+- (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
+    CGRect frame = self.view.frame;
+    frame.origin.y += translation.y;
+    self.view.frame = frame;
+}
+
+#pragma mark - UITableViewDataSource && UITableViewDelegate
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 5;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    
+    cell.textLabel.text = @"fun time with time hisous";
+    cell.backgroundColor = [UIColor clearColor];
+    cell.textLabel.textColor = [UIColor vibrantBlue];
+    cell.layer.borderColor = [[UIColor vibrantBlue] CGColor];
+    cell.layer.borderWidth = 1.0f;
+    
+    return cell;
+}
 
 @end

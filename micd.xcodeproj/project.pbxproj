@@ -9,11 +9,19 @@
 /* Begin PBXBuildFile section */
 		D05D75721A79AAA40050A49C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75711A79AAA40050A49C /* main.m */; };
 		D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75741A79AAA40050A49C /* AppDelegate.m */; };
-		D05D75781A79AAA40050A49C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75771A79AAA40050A49C /* ViewController.m */; };
+		D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75771A79AAA40050A49C /* ParentViewController.m */; };
 		D05D757B1A79AAA40050A49C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05D75791A79AAA40050A49C /* Main.storyboard */; };
 		D05D757D1A79AAA40050A49C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05D757C1A79AAA40050A49C /* Images.xcassets */; };
 		D05D75801A79AAA40050A49C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D05D757E1A79AAA40050A49C /* LaunchScreen.xib */; };
 		D05D758C1A79AAA40050A49C /* micdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D758B1A79AAA40050A49C /* micdTests.m */; };
+		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
+		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
+		D05D75A01A79ADAB0050A49C /* peakaView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759F1A79ADAB0050A49C /* peakaView.m */; };
+		D05D75A61A7B434D0050A49C /* GripperView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75A51A7B434D0050A49C /* GripperView.m */; };
+		D09A69E41A8485B800A2C347 /* HomeScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69E31A8485B800A2C347 /* HomeScreenView.m */; };
+		D09A69EA1A86CE5400A2C347 /* RecordButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69E91A86CE5400A2C347 /* RecordButton.m */; };
+		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
+		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,14 +40,31 @@
 		D05D75711A79AAA40050A49C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D05D75731A79AAA40050A49C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D05D75741A79AAA40050A49C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		D05D75761A79AAA40050A49C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		D05D75771A79AAA40050A49C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		D05D75761A79AAA40050A49C /* ParentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParentViewController.h; sourceTree = "<group>"; };
+		D05D75771A79AAA40050A49C /* ParentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParentViewController.m; sourceTree = "<group>"; };
 		D05D757A1A79AAA40050A49C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D05D757C1A79AAA40050A49C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D05D757F1A79AAA40050A49C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		D05D75851A79AAA40050A49C /* micdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = micdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05D758A1A79AAA40050A49C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05D758B1A79AAA40050A49C /* micdTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = micdTests.m; sourceTree = "<group>"; };
+		D05D75951A79ABDC0050A49C /* WireTapStyleKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WireTapStyleKit.h; path = micd/WireTapStyleKit.h; sourceTree = "<group>"; };
+		D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WireTapStyleKit.m; path = micd/WireTapStyleKit.m; sourceTree = "<group>"; };
+		D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Palette.h"; path = "micd/UIColor+Palette.h"; sourceTree = "<group>"; };
+		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
+		D05D759E1A79ADAB0050A49C /* peakaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = peakaView.h; sourceTree = "<group>"; };
+		D05D759F1A79ADAB0050A49C /* peakaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = peakaView.m; sourceTree = "<group>"; };
+		D05D75A41A7B434D0050A49C /* GripperView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GripperView.h; sourceTree = "<group>"; };
+		D05D75A51A7B434D0050A49C /* GripperView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GripperView.m; sourceTree = "<group>"; };
+		D09A69E21A8485B800A2C347 /* HomeScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenView.h; sourceTree = "<group>"; };
+		D09A69E31A8485B800A2C347 /* HomeScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenView.m; sourceTree = "<group>"; };
+		D09A69E81A86CE5400A2C347 /* RecordButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordButton.h; sourceTree = "<group>"; };
+		D09A69E91A86CE5400A2C347 /* RecordButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordButton.m; sourceTree = "<group>"; };
+		D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsViewController.h; sourceTree = "<group>"; };
+		D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsViewController.m; sourceTree = "<group>"; };
+		D09A69EE1A86EFC500A2C347 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		D09A69EF1A86EFC500A2C347 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		D09A69F11A87060C00A2C347 /* SetFramesProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetFramesProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +88,13 @@
 		D05D75631A79AAA40050A49C = {
 			isa = PBXGroup;
 			children = (
+				D05D75951A79ABDC0050A49C /* WireTapStyleKit.h */,
+				D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */,
+				D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */,
+				D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */,
+				D09A69F11A87060C00A2C347 /* SetFramesProtocol.h */,
 				D05D756E1A79AAA40050A49C /* micd */,
+				D05D756F1A79AAA40050A49C /* Supporting Files */,
 				D05D75881A79AAA40050A49C /* micdTests */,
 				D05D756D1A79AAA40050A49C /* Products */,
 			);
@@ -81,14 +112,14 @@
 		D05D756E1A79AAA40050A49C /* micd */ = {
 			isa = PBXGroup;
 			children = (
-				D05D75731A79AAA40050A49C /* AppDelegate.h */,
-				D05D75741A79AAA40050A49C /* AppDelegate.m */,
-				D05D75761A79AAA40050A49C /* ViewController.h */,
-				D05D75771A79AAA40050A49C /* ViewController.m */,
 				D05D75791A79AAA40050A49C /* Main.storyboard */,
-				D05D757C1A79AAA40050A49C /* Images.xcassets */,
-				D05D757E1A79AAA40050A49C /* LaunchScreen.xib */,
-				D05D756F1A79AAA40050A49C /* Supporting Files */,
+				D05D75761A79AAA40050A49C /* ParentViewController.h */,
+				D05D75771A79AAA40050A49C /* ParentViewController.m */,
+				D09A69EE1A86EFC500A2C347 /* HomeViewController.h */,
+				D09A69EF1A86EFC500A2C347 /* HomeViewController.m */,
+				D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */,
+				D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */,
+				D05D75A71A7B43520050A49C /* Views */,
 			);
 			path = micd;
 			sourceTree = "<group>";
@@ -96,10 +127,15 @@
 		D05D756F1A79AAA40050A49C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D05D75731A79AAA40050A49C /* AppDelegate.h */,
+				D05D75741A79AAA40050A49C /* AppDelegate.m */,
+				D05D757C1A79AAA40050A49C /* Images.xcassets */,
+				D05D757E1A79AAA40050A49C /* LaunchScreen.xib */,
 				D05D75701A79AAA40050A49C /* Info.plist */,
 				D05D75711A79AAA40050A49C /* main.m */,
 			);
 			name = "Supporting Files";
+			path = micd;
 			sourceTree = "<group>";
 		};
 		D05D75881A79AAA40050A49C /* micdTests */ = {
@@ -117,6 +153,21 @@
 				D05D758A1A79AAA40050A49C /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D05D75A71A7B43520050A49C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D09A69E21A8485B800A2C347 /* HomeScreenView.h */,
+				D09A69E31A8485B800A2C347 /* HomeScreenView.m */,
+				D05D759E1A79ADAB0050A49C /* peakaView.h */,
+				D05D759F1A79ADAB0050A49C /* peakaView.m */,
+				D05D75A41A7B434D0050A49C /* GripperView.h */,
+				D05D75A51A7B434D0050A49C /* GripperView.m */,
+				D09A69E81A86CE5400A2C347 /* RecordButton.h */,
+				D09A69E91A86CE5400A2C347 /* RecordButton.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,9 +270,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D05D75781A79AAA40050A49C /* ViewController.m in Sources */,
+				D09A69EA1A86CE5400A2C347 /* RecordButton.m in Sources */,
+				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
+				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
+				D05D75A61A7B434D0050A49C /* GripperView.m in Sources */,
+				D09A69E41A8485B800A2C347 /* HomeScreenView.m in Sources */,
+				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
+				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
+				D05D75A01A79ADAB0050A49C /* peakaView.m in Sources */,
+				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +471,7 @@
 				D05D75911A79AAA40050A49C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D05D75921A79AAA40050A49C /* Build configuration list for PBXNativeTarget "micdTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +480,7 @@
 				D05D75941A79AAA40050A49C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

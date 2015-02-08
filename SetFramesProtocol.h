@@ -1,13 +1,16 @@
-//
-//  SetFramesProtocol.h
-//  micd
-//
-//  Created by Timothy Hise on 2/7/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
+
+typedef NS_ENUM(NSUInteger, HomeViewContollerPositionState) {
+    HomeViewContollerPositionStateRecordings = 0,
+    HomeViewContollerPositionStateHome,
+    HomeViewContollerPositionStateSettings,
+};
 
 @protocol SetFramesProtocol <NSObject>
+
+- (void)setFrameBasedOnState:(HomeViewContollerPositionState)state;
+- (void)setInitialStateFrame;
+- (void)adjustFrameBasedOnTranslation:(CGPoint)translation;
 
 @end
