@@ -16,10 +16,8 @@
 		D05D758C1A79AAA40050A49C /* micdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D758B1A79AAA40050A49C /* micdTests.m */; };
 		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
 		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
-		D05D75A01A79ADAB0050A49C /* peakaView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759F1A79ADAB0050A49C /* peakaView.m */; };
 		D05D75A61A7B434D0050A49C /* GripperView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75A51A7B434D0050A49C /* GripperView.m */; };
 		D09A69E41A8485B800A2C347 /* HomeScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69E31A8485B800A2C347 /* HomeScreenView.m */; };
-		D09A69EA1A86CE5400A2C347 /* RecordButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69E91A86CE5400A2C347 /* RecordButton.m */; };
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
 /* End PBXBuildFile section */
@@ -53,14 +51,10 @@
 		D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WireTapStyleKit.m; path = micd/WireTapStyleKit.m; sourceTree = "<group>"; };
 		D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Palette.h"; path = "micd/UIColor+Palette.h"; sourceTree = "<group>"; };
 		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
-		D05D759E1A79ADAB0050A49C /* peakaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = peakaView.h; sourceTree = "<group>"; };
-		D05D759F1A79ADAB0050A49C /* peakaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = peakaView.m; sourceTree = "<group>"; };
 		D05D75A41A7B434D0050A49C /* GripperView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GripperView.h; sourceTree = "<group>"; };
 		D05D75A51A7B434D0050A49C /* GripperView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GripperView.m; sourceTree = "<group>"; };
 		D09A69E21A8485B800A2C347 /* HomeScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenView.h; sourceTree = "<group>"; };
 		D09A69E31A8485B800A2C347 /* HomeScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenView.m; sourceTree = "<group>"; };
-		D09A69E81A86CE5400A2C347 /* RecordButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordButton.h; sourceTree = "<group>"; };
-		D09A69E91A86CE5400A2C347 /* RecordButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordButton.m; sourceTree = "<group>"; };
 		D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsViewController.h; sourceTree = "<group>"; };
 		D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsViewController.m; sourceTree = "<group>"; };
 		D09A69EE1A86EFC500A2C347 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -160,12 +154,8 @@
 			children = (
 				D09A69E21A8485B800A2C347 /* HomeScreenView.h */,
 				D09A69E31A8485B800A2C347 /* HomeScreenView.m */,
-				D05D759E1A79ADAB0050A49C /* peakaView.h */,
-				D05D759F1A79ADAB0050A49C /* peakaView.m */,
 				D05D75A41A7B434D0050A49C /* GripperView.h */,
 				D05D75A51A7B434D0050A49C /* GripperView.m */,
-				D09A69E81A86CE5400A2C347 /* RecordButton.h */,
-				D09A69E91A86CE5400A2C347 /* RecordButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -270,7 +260,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D09A69EA1A86CE5400A2C347 /* RecordButton.m in Sources */,
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
@@ -279,7 +268,6 @@
 				D09A69E41A8485B800A2C347 /* HomeScreenView.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
-				D05D75A01A79ADAB0050A49C /* peakaView.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

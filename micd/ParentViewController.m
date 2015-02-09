@@ -1,11 +1,13 @@
 #import "ParentViewController.h"
 #import "GripperView.h"
-#import "RecordButton.h"
 #import "RecordingsViewController.h"
 #import "HomeViewController.h"
 #import "SetFramesProtocol.h"
+#import "WireTapStyleKit.h"
+#import "UIColor+Palette.h"
 
 @interface ParentViewController () <SetFramesProtocol, MovementDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
 @end
@@ -27,6 +29,8 @@
     [self addChildViewController:self.recordingsViewController];
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
+    
+    self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackgroundWithColor:[UIColor vibrantBlue]];
 }
 
 -(void)viewDidLayoutSubviews {
@@ -45,7 +49,7 @@
                           delay:0
          usingSpringWithDamping:.7
           initialSpringVelocity:1
-                        options:(UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveEaseIn)
+                        options:(UIViewAnimationOptionAllowUserInteraction)
                      animations: ^{
                          [self setFrameBasedOnState:state];
                      } completion:^(BOOL finished) {

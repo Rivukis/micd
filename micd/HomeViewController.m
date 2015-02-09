@@ -1,19 +1,17 @@
-//
-//  HomeViewController.m
-//  micd
-//
-//  Created by Timothy Hise on 2/7/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
+#import "WireTapStyleKit.h"
+#import "UIColor+Palette.h"
 #import "HomeViewController.h"
-#import "RecordButton.h"
 
 @interface HomeViewController () <UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) RecordButton *recordButton;
+//@property (strong, nonatomic) UIButton *recordButton;
 @property (strong, nonatomic) UIPanGestureRecognizer *panGesture;
 @property (assign, nonatomic) BOOL isMovingDown;
+
+@property (weak, nonatomic) IBOutlet UIImageView *homeImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *homeImageViewVerticalSpaceConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *recordButton;
+
 
 @end
 
@@ -24,10 +22,12 @@
     
     self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     self.panGesture.delegate = self;
-    [self.view addGestureRecognizer:self.panGesture];
+    [self.homeImageView addGestureRecognizer:self.panGesture];
     
-    self.recordButton = [[RecordButton alloc] init];
-    [self.view addSubview:self.recordButton];
+    self.homeImageView.image = [WireTapStyleKit imageOfHomeViewWithColor:[UIColor vibrantBlue]];
+    
+    [self.recordButton setImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
+    self.recordButton.backgroundColor = [UIColor magentaColor];
 }
 
 #pragma mark - PanGestureRecognizer
@@ -75,24 +75,17 @@
 #pragma mark - SetFramesProtocol
 
 - (void)setInitialStateFrame {
-    self.view.frame = CGRectMake((self.view.window.frame.size.width - 375.0f) / 2.0f,
-                                 -1092.0f,
-                                 self.view.window.frame.size.width,
-                                 self.view.window.frame.size.height * 3.13f);
-    self.recordButton.frame = CGRectMake(self.view.window.frame.size.width / 2.0f - 128.0f - self.view.frame.origin.x,
-                                         self.view.window.frame.size.height / 2.0f - 128.0f - self.view.frame.origin.y,
-                                         256.0f,
-                                         256.0f);
+//    self.view.frame = self.view.window.frame;
 }
 
 - (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
     CGRect frame = self.view.frame;
     switch (state) {
         case HomeViewContollerPositionStateHome:
-            frame.origin.y = -1092.0f;
+            frame.origin.y = 0.0f;
             break;
         case HomeViewContollerPositionStateRecordings:
-            frame.origin.y = self.view.window.frame.size.height * -0.57f;
+            frame.origin.y = (self.view.window.frame.size.height * 1.068f);
             break;
         case HomeViewContollerPositionStateSettings:
             
