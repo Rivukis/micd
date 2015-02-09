@@ -26,7 +26,7 @@
 + (void)drawBackgroundCordWithColor: (UIColor*)color;
 + (void)drawRecordButton;
 + (void)drawEmptyCIrcleWithColor: (UIColor*)color;
-+ (void)drawSettingsScreenWithColor: (UIColor*)color;
++ (void)drawSettingsScreenWithColor: (UIColor*)color positiveGearRotation: (CGFloat)positiveGearRotation negativeGearRotation: (CGFloat)negativeGearRotation;
 
 // Generated Images
 + (UIImage*)imageOfHomeViewWithColor: (UIColor*)color;

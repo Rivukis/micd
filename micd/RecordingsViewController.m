@@ -44,7 +44,7 @@
             frame.origin.y = 0;
             break;
         case HomeViewContollerPositionStateSettings:
-            frame.origin.y = (self.view.window.frame.size.height * 1.068f);
+            frame.origin.y = (self.view.window.frame.size.height * -1.068f * 2);
             break;
         default:
             break;

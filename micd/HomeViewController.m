@@ -2,9 +2,8 @@
 #import "UIColor+Palette.h"
 #import "HomeViewController.h"
 
-static CGFloat const kCurrentBackgroundImageHeight = 2088.0f;
+static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
-static CGFloat const kCurrentBackgroundImageInitialYOffsetMultiplier = -0.523f;
 
 @interface HomeViewController () <UIGestureRecognizerDelegate>
 
@@ -14,6 +13,8 @@ static CGFloat const kCurrentBackgroundImageInitialYOffsetMultiplier = -0.523f;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIView *recordingsBottomArrow;
 @property (strong, nonatomic) UIView *recordingsTopArrow;
+@property (strong, nonatomic) UIView *settingsBottomArrow;
+@property (strong, nonatomic) UIView *settingsTopArrow;
 
 @end
 
@@ -22,74 +23,109 @@ static CGFloat const kCurrentBackgroundImageInitialYOffsetMultiplier = -0.523f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self.view.layer setBackgroundColor:[UIColor colorWithPatternImage:[WireTapStyleKit imageOfHomeViewWithColor:[UIColor vibrantBlue]]].CGColor];
     self.backgroundImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfHomeViewWithColor:[UIColor vibrantBlue]]];
     [self.view addSubview:self.backgroundImageView];
-    
-    UIPanGestureRecognizer *panGesture;
-    
-//    [self.view addGestureRecognizer:self.panGesture];
-    
-    self.recordingsBottomArrow = [[UIView alloc] init];
-    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    panGesture.delegate = self;
-    [self.recordingsBottomArrow addGestureRecognizer:panGesture];
-    [self.view addSubview:self.recordingsBottomArrow];
-    self.recordingsBottomArrow.layer.borderColor = [UIColor greenColor].CGColor;
-    self.recordingsBottomArrow.layer.borderWidth = 2.0f;
-    
-    self.recordingsTopArrow = [[UIView alloc] init];
-    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    panGesture.delegate = self;
-    [self.recordingsTopArrow addGestureRecognizer:panGesture];
-    [self.view addSubview:self.recordingsTopArrow];
-    self.recordingsTopArrow.layer.borderColor = [UIColor redColor].CGColor;
-    self.recordingsTopArrow.layer.borderWidth = 2.0f;
     
     self.recordButton = [[UIButton alloc] init];
     [self.recordButton setImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
     [self.view addSubview:self.recordButton];
+    
+    [self setupPanGestures];
+}
+
+- (void)setupPanGestures {
+    UIPanGestureRecognizer *panGesture;
+    
+    self.recordingsTopArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleRecordingsToHomePan:)];
+    panGesture.delegate = self;
+    [self.recordingsTopArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.recordingsTopArrow];
+//    self.recordingsTopArrow.layer.borderColor = [UIColor redColor].CGColor;
+//    self.recordingsTopArrow.layer.borderWidth = 2.0f;
+    
+    
+    self.recordingsBottomArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToRecordingsPan:)];
+    panGesture.delegate = self;
+    [self.recordingsBottomArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.recordingsBottomArrow];
+//    self.recordingsBottomArrow.layer.borderColor = [UIColor greenColor].CGColor;
+//    self.recordingsBottomArrow.layer.borderWidth = 2.0f;
+    
+    self.settingsTopArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToSettingsPan:)];
+    panGesture.delegate = self;
+    [self.settingsTopArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.settingsTopArrow];
+//    self.settingsTopArrow.layer.borderColor = [UIColor magentaColor].CGColor;
+//    self.settingsTopArrow.layer.borderWidth = 2.0f;
+    
+    self.settingsBottomArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSettingsToHomePan:)];
+    panGesture.delegate = self;
+    [self.settingsBottomArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.settingsBottomArrow];
+//    self.settingsBottomArrow.layer.borderColor = [UIColor cyanColor].CGColor;
+//    self.settingsBottomArrow.layer.borderWidth = 2.0f;
 }
 
 #pragma mark - PanGestureRecognizer
 
--(void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
-    switch (gestureRecognizer.state) {
-        case UIGestureRecognizerStateBegan: {
-            if (self.view.frame.origin.y <= self.view.window.frame.size.height * -0.91f) {
-                self.isMovingDown = YES;
-            } else {
-                self.isMovingDown = NO;
-            }
-            break;
+- (void)handleRecordingsToHomePan:(UIPanGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+        [self.movementDelegate shouldMoveWithTranslation:translation];
+        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"%@", NSStringFromCGPoint([gestureRecognizer velocityInView:gestureRecognizer.view]));
+        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
+        } else {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
         }
-        case UIGestureRecognizerStateChanged: {
-            
-            CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-            [self.movementDelegate shouldMoveWithTranslation:translation];
-            [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
-            break;
+    }
+}
+
+- (void)handleHomeToRecordingsPan:(UIPanGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+        [self.movementDelegate shouldMoveWithTranslation:translation];
+        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
+        } else {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         }
-        case UIGestureRecognizerStateEnded: {
-            BOOL didMoveEnough;
-            if (self.isMovingDown) {
-                didMoveEnough = self.view.frame.origin.y <= self.view.window.frame.size.height * -1.6f;
-                if (didMoveEnough) {
-                    [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
-                } else {
-                    [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
-                }
-            } else {
-                didMoveEnough = self.view.frame.origin.y >= self.view.window.frame.size.height * -0.63f;
-                if (didMoveEnough) {
-                    [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
-                } else {
-                    [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
-                }
-            }
+    }
+}
+
+- (void)handleHomeToSettingsPan:(UIPanGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+        [self.movementDelegate shouldMoveWithTranslation:translation];
+        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
+        } else {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         }
-        default:
-            break;
+    }
+}
+
+- (void)handleSettingsToHomePan:(UIPanGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+        [self.movementDelegate shouldMoveWithTranslation:translation];
+        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
+        } else {
+            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
+        }
     }
 }
 
@@ -106,7 +142,7 @@ static CGFloat const kCurrentBackgroundImageInitialYOffsetMultiplier = -0.523f;
     CGFloat backgroundImageWidth = backgroundImageRatio * backgroundImageHeight;
     
     self.view.frame = CGRectMake((windowWidth - backgroundImageWidth)/2.0f,
-                                 backgroundImageHeight * kCurrentBackgroundImageInitialYOffsetMultiplier, //1092
+                                 [self backgroundImageHomeStateYOffset], //1092
                                  backgroundImageRatio * backgroundImageHeight,
                                  backgroundImageHeight);
     
@@ -123,31 +159,51 @@ static CGFloat const kCurrentBackgroundImageInitialYOffsetMultiplier = -0.523f;
                                                   gestureSizeConstant);
     
     self.recordingsTopArrow.frame = CGRectMake(windowWidth/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.x,
-                                               windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707f,
+                                               windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707,
+                                               gestureSizeConstant,
+                                               gestureSizeConstant);
+    
+    self.settingsBottomArrow.frame = CGRectMake(windowWidth/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.x,
+                                               (windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f) + windowHeight * 1.09f,
+                                               gestureSizeConstant,
+                                               gestureSizeConstant);
+    
+    self.settingsTopArrow.frame = CGRectMake(windowWidth/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.x,
+                                               (windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707) + windowHeight * 1.09f,
                                                gestureSizeConstant,
                                                gestureSizeConstant);
 }
 
 - (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
-    CGFloat backgroundImageHeight = self.view.window.frame.size.height * (kCurrentBackgroundImageHeight / 667.0f);
-    CGFloat backgroundImageInitialY = backgroundImageHeight * kCurrentBackgroundImageInitialYOffsetMultiplier;
-    CGFloat backgroundImageYOffsetToNewState = backgroundImageHeight * 0.348f;
-    
     CGRect frame = self.view.frame;
     switch (state) {
         case HomeViewContollerPositionStateHome:
-            frame.origin.y = backgroundImageInitialY;
+            frame.origin.y = [self backgroundImageHomeStateYOffset];
             break;
         case HomeViewContollerPositionStateRecordings:
-            frame.origin.y = backgroundImageInitialY + backgroundImageYOffsetToNewState;
+            frame.origin.y = [self backgroundImageRecordingsStateYOffset];
             break;
         case HomeViewContollerPositionStateSettings:
-            frame.origin.y = backgroundImageInitialY - backgroundImageYOffsetToNewState;
+            frame.origin.y = [self backgroundImageSettingsStateYOffset];
             break;
         default:
             break;
     }
     self.view.frame = frame;
+}
+
+- (CGFloat)backgroundImageHomeStateYOffset {
+    return self.view.window.frame.size.height * -1.637f;
+}
+
+- (CGFloat)backgroundImageRecordingsStateYOffset {
+    CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.09f;
+    return [self backgroundImageHomeStateYOffset] + backgroundImageYOffsetToNewState;
+}
+
+- (CGFloat)backgroundImageSettingsStateYOffset {
+    CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.09f;
+    return [self backgroundImageHomeStateYOffset] - backgroundImageYOffsetToNewState;
 }
 
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
