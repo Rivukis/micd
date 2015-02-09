@@ -34,6 +34,8 @@
 }
 
 -(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
     [self setInitialStateFrame];
 }
 
@@ -44,7 +46,6 @@
 }
 
 - (void)shouldMoveToPositionState:(HomeViewContollerPositionState)state {
-    __typeof(self) __weak weakSelf = self;
     [UIView animateWithDuration:1
                           delay:0
          usingSpringWithDamping:.7
@@ -53,7 +54,7 @@
                      animations: ^{
                          [self setFrameBasedOnState:state];
                      } completion:^(BOOL finished) {
-                         NSLog(@"%@", weakSelf);
+                         
                      }];
 }
 

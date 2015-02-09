@@ -4,8 +4,4 @@
 
 @implementation HomeScreenView
 
--(void)drawRect:(CGRect)rect {
-    [WireTapStyleKit drawHomeViewWithColor:[UIColor vibrantBlue]];
-}
-
 @end

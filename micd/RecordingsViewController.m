@@ -38,13 +38,13 @@
     CGRect frame = self.view.frame;
     switch (state) {
         case HomeViewContollerPositionStateHome:
-            frame.origin.y = (self.view.window.frame.size.height * 1.068f) * -1;
+            frame.origin.y = (self.view.window.frame.size.height * -1.068f);
             break;
         case HomeViewContollerPositionStateRecordings:
             frame.origin.y = 0;
             break;
         case HomeViewContollerPositionStateSettings:
-            
+            frame.origin.y = (self.view.window.frame.size.height * 1.068f);
             break;
         default:
             break;
