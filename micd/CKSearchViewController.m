@@ -7,8 +7,8 @@
 //
 
 #import "CKSearchViewController.h"
-#import "NSString+Score.h"
-#import "CKRecording.h"
+//#import "NSString+Score.h"
+#import "Recording.h"
 #import "FakesForProject.h"
 
 @interface CKSearchViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -34,13 +34,13 @@
     
     NSArray *searchItems = [FakesForProject fakeArrayOfSearchItems];
     
-    for (CKRecording *recording in searchItems) {
-        recording.currentSearchScore = [recording.title scoreAgainst:sender.text fuzziness:@1];
+    for (Recording *recording in searchItems) {
+//        recording.currentSearchScore = [recording.title scoreAgainst:sender.text fuzziness:@1];
     }
     
     NSMutableArray *titleResults = [NSMutableArray array];
     
-    for (CKRecording *recording in searchItems) {
+    for (Recording *recording in searchItems) {
         if (recording.currentSearchScore > 0.4f) {
             [titleResults addObject:recording];
         }
@@ -96,7 +96,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"resultsCell" forIndexPath:indexPath];
-    CKRecording *recording;
+    Recording *recording;
     
     if (indexPath.section == 0) {
         recording = self.titleResults[indexPath.row];

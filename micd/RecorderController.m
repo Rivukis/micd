@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 CleverKnot. All rights reserved.
 //
 
-#import "CKRecorderController.h"
+#import "RecorderController.h"
 #import <AVFoundation/AVFoundation.h>
-#import "CKRecording.h"
-#import "CKConstants.h"
+#import "Recording.h"
+#import "Constants.h"
 
-@interface CKRecorderController () <AVAudioRecorderDelegate>
+@interface RecorderController () <AVAudioRecorderDelegate>
 
-@property (nonatomic, assign, readwrite) CKRecorderControllerState recordingState;
+@property (nonatomic, assign, readwrite) RecorderControllerState recordingState;
 
 @property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioRecorder *audioRecorder;
@@ -33,7 +33,7 @@
 
 BOOL const useEnhancedRecorder = NO;
 
-@implementation CKRecorderController
+@implementation RecorderController
 
 - (instancetype)init {
     AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -47,7 +47,7 @@ BOOL const useEnhancedRecorder = NO;
     if (self) {
         _fileManager = [[NSFileManager alloc] init];
         
-        NSString *documentsDirectory = [CKConstants documentsDirectory];
+        NSString *documentsDirectory = [Constants documentsDirectory];
         _primaryFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderPrimaryAudioFile];
         _savedFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderSavedAudioFileName];
         _concatenatedFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderConcatenatedAudioFileName];
@@ -58,7 +58,7 @@ BOOL const useEnhancedRecorder = NO;
         [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_savedFilePath] error:nil];
         [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_concatenatedFilePath] error:nil];
         
-        _recordingState = CKRecorderControllerStateStopped;
+        _recordingState = RecorderControllerStateStopped;
         _audioSession = session;
         [_audioSession setActive:YES error:nil];
         _audioRecorder = [self customRecorder];
@@ -73,33 +73,33 @@ BOOL const useEnhancedRecorder = NO;
 
 - (void)startRecording {
     // TODO: handle error when setting session to active
-    if (self.recordingState == CKRecorderControllerStateStopped) {
+    if (self.recordingState == RecorderControllerStateStopped) {
         self.currentRecordingStartDate = [NSDate date];
     }
     
-    if (self.recordingState == CKRecorderControllerStatePaused || self.recordingState == CKRecorderControllerStateStopped) {
+    if (self.recordingState == RecorderControllerStatePaused || self.recordingState == RecorderControllerStateStopped) {
         [self.audioSession setActive:YES error:nil];
         [self.audioRecorder record];
-        self.recordingState = CKRecorderControllerStateRecording;
+        self.recordingState = RecorderControllerStateRecording;
     }
 }
 
 - (void)pauseRecording {
     if (useEnhancedRecorder) {
         if (self.audioRecorder.isRecording) {
-            self.recordingState = CKRecorderControllerStatePausing;
+            self.recordingState = RecorderControllerStatePausing;
             [self.audioRecorder stop];
         }
     } else {
-        if (self.recordingState == CKRecorderControllerStateRecording) {
+        if (self.recordingState == RecorderControllerStateRecording) {
             [self.audioRecorder pause];
-            self.recordingState = CKRecorderControllerStatePaused;
+            self.recordingState = RecorderControllerStatePaused;
         }
     }
     
 }
 
-- (void)retrieveRecordingThenDelete:(BOOL)shouldDelete completion:(void(^)(CKRecording *recording, NSError *error))completion {
+- (void)retrieveRecordingThenDelete:(BOOL)shouldDelete completion:(void(^)(Recording *recording, NSError *error))completion {
     // TODO: refactor
     
 //    if (self.audioRecorder.isRecording || self.recordingState == CKRecorderControllerStatePaused) {
@@ -124,8 +124,8 @@ BOOL const useEnhancedRecorder = NO;
     
     
     
-    if (self.audioRecorder.isRecording && self.recordingState != CKRecorderControllerStatePausing && self.recordingState != CKRecorderControllerStateStopping) {
-        self.recordingState = CKRecorderControllerStatePausing;
+    if (self.audioRecorder.isRecording && self.recordingState != RecorderControllerStatePausing && self.recordingState != RecorderControllerStateStopping) {
+        self.recordingState = RecorderControllerStatePausing;
         __weak __typeof(self) weakSelf = self;
         self.blockToExecuteAfterConcatenation = ^void(BOOL successful, NSError *error) {
             if (successful) {
@@ -140,14 +140,14 @@ BOOL const useEnhancedRecorder = NO;
         };
         [self.audioRecorder stop];
         
-    } else if (self.recordingState == CKRecorderControllerStatePaused) {
+    } else if (self.recordingState == RecorderControllerStatePaused) {
         if (useEnhancedRecorder) {
             completion([self generateRecording], nil);
             if (shouldDelete) {
                 [self deleteRecording];
             }
         } else {
-            self.recordingState = CKRecorderControllerStateStopping;
+            self.recordingState = RecorderControllerStateStopping;
             __weak __typeof(self) weakSelf = self;
             self.blockToExecuteAfterConcatenation = ^void(BOOL successful, NSError *error) {
                 if (successful) {
@@ -165,11 +165,11 @@ BOOL const useEnhancedRecorder = NO;
         
     } else {
         NSString *localizedDescription = @"Recorder will not respond to this method when in recording state: ";
-        if (self.recordingState == CKRecorderControllerStatePausing) {
+        if (self.recordingState == RecorderControllerStatePausing) {
             localizedDescription = [localizedDescription stringByAppendingString:@"CKRecorderControllerStatePausing"];
-        } else if (self.recordingState == CKRecorderControllerStateStopped) {
+        } else if (self.recordingState == RecorderControllerStateStopped) {
             localizedDescription = [localizedDescription stringByAppendingString:@"CKRecorderControllerStateStopped"];
-        } else if (self.recordingState == CKRecorderControllerStateRecording) {
+        } else if (self.recordingState == RecorderControllerStateRecording) {
             localizedDescription = [localizedDescription stringByAppendingString:@"CKRecorderControllerStateRecording"];
         }
         
@@ -180,10 +180,10 @@ BOOL const useEnhancedRecorder = NO;
 
 - (void)deleteRecording {
     [self.fileManager removeItemAtURL:[NSURL fileURLWithPath:self.savedFilePath] error:nil];
-    self.recordingState = CKRecorderControllerStateStopped;
+    self.recordingState = RecorderControllerStateStopped;
 }
 
-- (CKRecording *)generateRecording {
+- (Recording *)generateRecording {
     // TODO: setup feature flag
     NSData *data;
     if (useEnhancedRecorder) {
@@ -195,7 +195,7 @@ BOOL const useEnhancedRecorder = NO;
     AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithData:data error:nil];
     NSTimeInterval duration = player.duration;
     player = nil;
-    CKRecording *recording = [[CKRecording alloc] initWithData:data date:self.currentRecordingStartDate length:duration];
+    Recording *recording = [[Recording alloc] initWithData:data date:self.currentRecordingStartDate length:duration];
     return recording;
 }
 
@@ -225,7 +225,7 @@ BOOL const useEnhancedRecorder = NO;
     if (useEnhancedRecorder) {
         [self concatenateSecondaryAndPrimaryAudioFiles];
     } else {
-        self.recordingState = CKRecorderControllerStatePaused;
+        self.recordingState = RecorderControllerStatePaused;
         self.blockToExecuteAfterConcatenation(flag, nil);
     }
     [self.audioRecorder prepareToRecord];
@@ -304,7 +304,7 @@ BOOL const useEnhancedRecorder = NO;
             [self.fileManager removeItemAtPath:self.concatenatedFilePath error:nil];
             
             self.currentRecordingLength = primaryAssetLength + secondaryAssetLength;
-            self.recordingState = CKRecorderControllerStatePaused;
+            self.recordingState = RecorderControllerStatePaused;
             
             if (self.blockToExecuteAfterConcatenation) {
                 self.blockToExecuteAfterConcatenation(YES, exportSession.error);
@@ -321,7 +321,7 @@ BOOL const useEnhancedRecorder = NO;
             
             NSLog(@"AVAssetExportSessionStatusFailed: %@", exportSession.error);
             
-            self.recordingState = CKRecorderControllerStatePaused;
+            self.recordingState = RecorderControllerStatePaused;
             
             if (self.blockToExecuteAfterConcatenation) {
                 self.blockToExecuteAfterConcatenation(NO, exportSession.error);
@@ -332,13 +332,13 @@ BOOL const useEnhancedRecorder = NO;
             // TODO: handle other problems
             NSLog(@"Export Session Status: %ld", exportSession.status);
             
-            self.recordingState = CKRecorderControllerStatePaused;
+            self.recordingState = RecorderControllerStatePaused;
             
             if (self.blockToExecuteAfterConcatenation) {
                 self.blockToExecuteAfterConcatenation(NO, exportSession.error);
             }
         }
-        self.recordingState = CKRecorderControllerStatePaused;
+        self.recordingState = RecorderControllerStatePaused;
     }];
     
     return YES;

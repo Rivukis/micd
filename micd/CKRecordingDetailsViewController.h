@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class CKRecording;
+@class Recording;
 
 @interface CKRecordingDetailsViewController : UIViewController
 
-@property (nonatomic, strong) CKRecording *recording;
+@property (nonatomic, strong) Recording *recording;
 
 @end

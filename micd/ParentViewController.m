@@ -4,17 +4,22 @@
 #import "SetFramesProtocol.h"
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
+#import "DataSource.h"
+#import "Recording.h"
 
-@interface ParentViewController () <SetFramesProtocol, MovementDelegate>
+@interface ParentViewController () <SetFramesProtocol, MovementDelegate, AddNewRecordingDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
+@property (strong, nonatomic) DataSource *dataSource;
 @end
 
 @implementation ParentViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.dataSource = [DataSource sharedInstance];
     
     self.view.backgroundColor = [UIColor blackColor];
     
@@ -23,6 +28,7 @@
     [self.view addSubview:self.homeViewController.view];
     [self.homeViewController didMoveToParentViewController:self];
     self.homeViewController.movementDelegate = self;
+    self.homeViewController.addNewRecordingDelegate = self;
     
     self.recordingsViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([RecordingsViewController class])];
     [self addChildViewController:self.recordingsViewController];
@@ -36,6 +42,13 @@
     [super viewDidLayoutSubviews];
     
     [self setInitialStateFrame];
+}
+
+#pragma mark - AddNewRecordingDelegate
+
+- (void)addNewRecording:(Recording *)recording {
+    [self.dataSource addNewRecording:recording];
+    [self.recordingsViewController reloadData];
 }
 
 #pragma mark - MovementDelegate

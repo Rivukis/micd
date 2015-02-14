@@ -6,11 +6,12 @@
 //  Copyright (c) 2014 CleverKnot. All rights reserved.
 //
 
-#import "CKRecording.h"
-#import "CKConstants.h"
+#import "Recording.h"
+#import "Constants.h"
 
-@interface CKRecording ()
+@interface Recording ()
 
+@property (nonatomic, strong, readwrite) NSString *title;
 @property (nonatomic, strong, readwrite) NSArray *tags;
 
 @property (nonatomic, copy, readwrite) NSData *data;
@@ -18,7 +19,7 @@
 
 @end
 
-@implementation CKRecording
+@implementation Recording
 
 - (instancetype)init {
     [self doesNotRecognizeSelector:_cmd];
@@ -39,6 +40,14 @@
 
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length {
     return [self initWithData:data date:startDate length:length name:nil];
+}
+
+- (BOOL)setTitle:(NSString *)title {
+    if (title.length == 0) {
+        return NO;
+    }
+    self.title = title;
+    return YES;
 }
 
 #pragma mark - tag methods

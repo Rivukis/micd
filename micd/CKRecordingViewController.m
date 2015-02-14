@@ -8,10 +8,10 @@
 
 #import "CKRecordingViewController.h"
 #import <AVFoundation/AVFoundation.h>
-#import "CKRecorderController.h"
-#import "CKPlayerController.h"
-#import "CKRecording.h"
-#import "CKConstants.h"
+#import "RecorderController.h"
+#import "PlayerController.h"
+#import "Recording.h"
+#import "Constants.h"
 
 #import "CKRecordingDetailsViewController.h"
 #import "CKSearchViewController.h"
@@ -21,8 +21,8 @@
 @property (nonatomic, weak) IBOutlet UIButton *recordPauseButton;
 @property (nonatomic, weak) IBOutlet UIButton *saveButton;
 
-@property (nonatomic, strong) CKRecorderController *recorderController;
-@property (nonatomic, strong) CKPlayerController *playerController;
+@property (nonatomic, strong) RecorderController *recorderController;
+@property (nonatomic, strong) PlayerController *playerController;
 @property (nonatomic, assign) BOOL isRecording;
 
 @property (nonatomic, strong) NSMutableArray *recordings; // of CKRecording
@@ -60,8 +60,8 @@
         NSLog(@"error setting session to active: %@", sessionError.localizedDescription);
     }
     
-    self.recorderController = [[CKRecorderController alloc] initWithAudioSession:self.audioSession];
-    self.playerController = [[CKPlayerController alloc] initWithAudioSession:self.audioSession];
+    self.recorderController = [[RecorderController alloc] initWithAudioSession:self.audioSession];
+    self.playerController = [[PlayerController alloc] initWithAudioSession:self.audioSession];
     
     self.isRecording = NO;
     [self configureRecordPauseButton];
@@ -76,7 +76,7 @@
 #pragma mark - Recorder Controller Actions
 
 - (void)configureRecordPauseButton {
-    if (self.recorderController.recordingState == CKRecorderControllerStateRecording) {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         [self.recordPauseButton setTitle:@"Pause" forState:UIControlStateNormal];
         self.recordPauseButton.backgroundColor = [UIColor yellowColor];
     } else {
@@ -107,7 +107,7 @@
 
 - (IBAction)saveButtonPressed:(UIButton *)sender {
     __weak __typeof(self) weakSelf = self;
-    [self.recorderController retrieveRecordingThenDelete:NO completion:^(CKRecording *recording, NSError *error) {
+    [self.recorderController retrieveRecordingThenDelete:NO completion:^(Recording *recording, NSError *error) {
         if (error) {
             NSLog(@"error retrieving recording: %@", error);
             return;
@@ -132,7 +132,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"recordingCell" forIndexPath:indexPath];
-    CKRecording *recording = self.recordings[indexPath.row];
+    Recording *recording = self.recordings[indexPath.row];
     
     NSString *dateYear = [NSString stringWithFormat:@"%ld", (long)recording.recordedDate.year];
     NSString *dateMonth = [self twoNumberStringWithInteger:recording.recordedDate.month];
@@ -160,7 +160,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    CKRecording *recording = (id)self.recordings[indexPath.row];
+    Recording *recording = (id)self.recordings[indexPath.row];
     
     // Load the player
     NSError *loadRecordingError;

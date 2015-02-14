@@ -7,7 +7,7 @@
 //
 
 #import "CKRecordingDetailsViewController.h"
-#import "CKRecording.h"
+#import "Recording.h"
 
 @interface CKRecordingDetailsViewController ()
 
@@ -54,7 +54,7 @@
 }
 
 - (void)saveAndExit {
-    self.recording.title = self.nameTextField.text;
+    [self.recording setRecordingTitle:self.nameTextField.text];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

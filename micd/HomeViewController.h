@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SetFramesProtocol.h"
 
+@class Recording;
+
 @protocol MovementDelegate <NSObject>
 
 - (void)shouldMoveWithTranslation:(CGPoint)translation;
@@ -16,8 +18,15 @@
 
 @end
 
+@protocol AddNewRecordingDelegate <NSObject>
+
+- (void)addNewRecording:(Recording *)recording;
+
+@end
+
 @interface HomeViewController : UIViewController <SetFramesProtocol>
 
 @property (weak, nonatomic) id<MovementDelegate> movementDelegate;
+@property (weak, nonatomic) id<AddNewRecordingDelegate> addNewRecordingDelegate;
 
 @end

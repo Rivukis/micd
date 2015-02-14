@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 CleverKnot. All rights reserved.
 //
 
-#import "CKConstants.h"
+#import "Constants.h"
 
-@implementation CKConstants
+@implementation Constants
 
 + (NSString *)documentsDirectory {
     

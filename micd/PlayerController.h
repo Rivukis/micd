@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @class AVAudioSession;
-@class CKRecording;
+@class Recording;
 
-@interface CKPlayerController : NSObject
+@interface PlayerController : NSObject
 
 - (instancetype)initWithAudioSession:(AVAudioSession *)session;
     // default init calls this init method with shared audio session
@@ -20,7 +20,7 @@
 @property (nonatomic, assign, readonly) NSTimeInterval secondsCompleted;
 @property (nonatomic, assign, readonly) NSTimeInterval duration;
 
-- (BOOL)loadRecording:(CKRecording *)recording error:(NSError * __autoreleasing *)error;
+- (BOOL)loadRecording:(Recording *)recording error:(NSError * __autoreleasing *)error;
 - (BOOL)setPlaybackTimeInterval:(NSTimeInterval)timeInterval error:(NSError * __autoreleasing *)error;
 - (BOOL)playAudioWithError:(NSError * __autoreleasing *)error;
 - (BOOL)pauseAudioWithError:(NSError * __autoreleasing *)error;

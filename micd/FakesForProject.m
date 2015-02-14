@@ -7,20 +7,20 @@
 //
 
 #import "FakesForProject.h"
-#import "CKRecording.h"
+#import "Recording.h"
 
 @implementation FakesForProject
 
 + (NSArray *)fakeArrayOfSearchItems {
     
-    CKRecording *recording1 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"song title 1"];
-    CKRecording *recording2 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"sonetitle2"];
-    CKRecording *recording3 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"song TITLE3"];
-    CKRecording *recording4 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"song TITLE4"];
-    CKRecording *recording5 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_what'sup"];
-    CKRecording *recording6 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_howyoudointitle"];
-    CKRecording *recording7 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_song"];
-    CKRecording *recording8 = [[CKRecording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_songTiTlE"];
+    Recording *recording1 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"song title 1"];
+    Recording *recording2 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"sonetitle2"];
+    Recording *recording3 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"song TITLE3"];
+    Recording *recording4 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"song TITLE4"];
+    Recording *recording5 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_what'sup"];
+    Recording *recording6 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_howyoudointitle"];
+    Recording *recording7 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_song"];
+    Recording *recording8 = [[Recording alloc] initWithData:nil date:nil length:NSNotFound name:@"tag_songTiTlE"];
     
     [recording1 addTag:@"tag"];
     [recording2 addTag:@"title"];

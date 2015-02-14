@@ -8,10 +8,15 @@
 
 #import "RecordingsViewController.h"
 #import "UIColor+Palette.h"
+#import "DataSource.h"
+#import "Recording.h"
+#import "PlayerController.h"
 
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) DataSource *dataSource;
+@property (strong, nonatomic) PlayerController *playerController;
 
 @end
 
@@ -20,8 +25,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.dataSource = [DataSource sharedInstance];
+    self.playerController = [[PlayerController alloc] init];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+}
+
+- (void)reloadData {
+    [self.tableView reloadData];
 }
 
 #pragma mark - SetFramesProtocol
@@ -61,19 +73,27 @@
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return self.dataSource.numberOfRecordings;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
     
-    cell.textLabel.text = @"fun time with Time and B Rad";
+    cell.textLabel.text = recording.uuid.UUIDString;
     cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor vibrantBlue];
     cell.layer.borderColor = [[UIColor vibrantBlue] CGColor];
     cell.layer.borderWidth = 1.0f;
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
+    [self.playerController loadRecording:recording error:nil];
+    [self.playerController playAudioWithError:nil];
 }
 
 @end

@@ -6,18 +6,18 @@
 //  Copyright (c) 2014 CleverKnot. All rights reserved.
 //
 
-#import "CKPlayerController.h"
+#import "PlayerController.h"
 #import <AVFoundation/AVFoundation.h>
-#import "CKRecording.h"
+#import "Recording.h"
 
-@interface CKPlayerController () <AVAudioPlayerDelegate>
+@interface PlayerController () <AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 @end
 
-@implementation CKPlayerController
+@implementation PlayerController
 
 - (instancetype)init {
     AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -36,7 +36,7 @@
 
 #pragma mark - API Methods
 
-- (BOOL)loadRecording:(CKRecording *)recording error:(NSError *__autoreleasing *)error {
+- (BOOL)loadRecording:(Recording *)recording error:(NSError *__autoreleasing *)error {
     NSError *playerError = nil;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:recording.data error:&playerError];
     

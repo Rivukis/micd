@@ -5,6 +5,7 @@
 //#import "GearsView.h"
 #import "GearsImageView.h"
 #import "OBShapedButton.h"
+#import "RecorderController.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -21,6 +22,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (strong, nonatomic) UIView *settingsBottomArrow;
 @property (strong, nonatomic) UIView *settingsTopArrow;
 
+@property (strong, nonatomic) RecorderController *recorderController;
+
 @end
 
 @implementation HomeViewController
@@ -28,12 +31,16 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.recorderController = [[RecorderController alloc] init];
+    
     self.backgroundImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfHomeView]];
     [self.view addSubview:self.backgroundImageView];
     
     self.recordButton = [[OBShapedButton alloc] init];
+    [self.recordButton addTarget:self action:@selector(recordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.recordButton setImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
     [self.view addSubview:self.recordButton];
+
     
 //    self.gearsView = [[GearsView alloc] init];
 //    self.gearsView.positiveGearRotationAngle = 0;
@@ -56,8 +63,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     panGesture.delegate = self;
     [self.recordingsTopArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.recordingsTopArrow];
-//    self.recordingsTopArrow.layer.borderColor = [UIColor redColor].CGColor;
-//    self.recordingsTopArrow.layer.borderWidth = 2.0f;
+    self.recordingsTopArrow.layer.borderColor = [UIColor redColor].CGColor;
+    self.recordingsTopArrow.layer.borderWidth = 2.0f;
     
     
     self.recordingsBottomArrow = [[UIView alloc] init];
@@ -65,24 +72,57 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     panGesture.delegate = self;
     [self.recordingsBottomArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.recordingsBottomArrow];
-//    self.recordingsBottomArrow.layer.borderColor = [UIColor greenColor].CGColor;
-//    self.recordingsBottomArrow.layer.borderWidth = 2.0f;
+    self.recordingsBottomArrow.layer.borderColor = [UIColor greenColor].CGColor;
+    self.recordingsBottomArrow.layer.borderWidth = 2.0f;
     
     self.settingsTopArrow = [[UIView alloc] init];
     panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToSettingsPan:)];
     panGesture.delegate = self;
     [self.settingsTopArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.settingsTopArrow];
-//    self.settingsTopArrow.layer.borderColor = [UIColor magentaColor].CGColor;
-//    self.settingsTopArrow.layer.borderWidth = 2.0f;
+    self.settingsTopArrow.layer.borderColor = [UIColor magentaColor].CGColor;
+    self.settingsTopArrow.layer.borderWidth = 2.0f;
     
     self.settingsBottomArrow = [[UIView alloc] init];
     panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSettingsToHomePan:)];
     panGesture.delegate = self;
     [self.settingsBottomArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.settingsBottomArrow];
-//    self.settingsBottomArrow.layer.borderColor = [UIColor cyanColor].CGColor;
-//    self.settingsBottomArrow.layer.borderWidth = 2.0f;
+    self.settingsBottomArrow.layer.borderColor = [UIColor cyanColor].CGColor;
+    self.settingsBottomArrow.layer.borderWidth = 2.0f;
+}
+
+#pragma mark - User Actions
+
+- (void)recordButtonPressed:(UIButton *)sender {
+    
+    switch (self.recorderController.recordingState) {
+        case RecorderControllerStateStopped:
+        case RecorderControllerStatePaused:
+            // time to record
+            [self.recorderController startRecording];
+            [self.recordButton setBackgroundColor:[UIColor redColor]];
+            break;
+            
+        case RecorderControllerStateRecording: {
+            // time to stop
+            [self.recorderController pauseRecording];
+            [self.recordButton setBackgroundColor:[UIColor clearColor]];
+            __weak __typeof(self) weakSelf = self;
+            [self.recorderController retrieveRecordingThenDelete:NO completion:^(Recording *recording, NSError *error) {
+                if (error) {
+                    NSLog(@"error retrieving recording: %@", error);
+                    return;
+                }
+                [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+            }];
+            break;
+        }
+        case RecorderControllerStatePausing:
+        case RecorderControllerStateStopping:
+            // can't do anything
+            break;
+    }
 }
 
 #pragma mark - PanGestureRecognizer
@@ -225,7 +265,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (CGFloat)backgroundImageRecordingsStateYOffset {
-    CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.07f;
+    CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.06f;
     return [self backgroundImageHomeStateYOffset] + backgroundImageYOffsetToNewState;
 }
 

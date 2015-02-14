@@ -14,7 +14,7 @@ static NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenat
 
 static NSString *const kRecorderFormatTypeAsString = @".m4a";
 
-@interface CKConstants : NSObject
+@interface Constants : NSObject
 
 + (NSString *)documentsDirectory;
 

@@ -16,9 +16,9 @@ struct Length {
     NSInteger centiseconds;
 };
 
-@interface CKRecording : NSObject
+@interface Recording : NSObject
 
-@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong, readonly) NSString *title;
 @property (nonatomic, strong, readonly) NSArray *tags;
 
 @property (nonatomic, copy, readonly) NSData *data;
@@ -38,6 +38,7 @@ struct Length {
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length name:(NSString *)name;
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length;
 
+- (BOOL)setRecordingTitle:(NSString *)title;
 - (BOOL)addTag:(NSString *)tag;
 - (BOOL)removeTag:(NSString *)tag;
 
