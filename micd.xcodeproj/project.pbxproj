@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
+		7AC290B61A8EF0100085B927 /* CKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* CKConstants.m */; };
+		7AC290B71A8EF0100085B927 /* CKPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* CKPlayerController.m */; };
+		7AC290B81A8EF0100085B927 /* CKRecorderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AB1A8EF0100085B927 /* CKRecorderController.m */; };
+		7AC290B91A8EF0100085B927 /* CKRecording.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AD1A8EF0100085B927 /* CKRecording.m */; };
+		7AC290BA1A8EF0100085B927 /* CKRecordingDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AF1A8EF0100085B927 /* CKRecordingDetailsViewController.m */; };
+		7AC290BB1A8EF0100085B927 /* CKRecordingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B11A8EF0100085B927 /* CKRecordingViewController.m */; };
+		7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B31A8EF0100085B927 /* CKSearchViewController.m */; };
+		7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B51A8EF0100085B927 /* FakesForProject.m */; };
 		D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D04240BC1A8B170400130BE6 /* GearBackingLayer.m */; };
 		D05D75721A79AAA40050A49C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75711A79AAA40050A49C /* main.m */; };
 		D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75741A79AAA40050A49C /* AppDelegate.m */; };
@@ -36,6 +44,22 @@
 
 /* Begin PBXFileReference section */
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AC290A61A8EF0100085B927 /* CKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKConstants.h; sourceTree = "<group>"; };
+		7AC290A71A8EF0100085B927 /* CKConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKConstants.m; sourceTree = "<group>"; };
+		7AC290A81A8EF0100085B927 /* CKPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKPlayerController.h; sourceTree = "<group>"; };
+		7AC290A91A8EF0100085B927 /* CKPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKPlayerController.m; sourceTree = "<group>"; };
+		7AC290AA1A8EF0100085B927 /* CKRecorderController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKRecorderController.h; sourceTree = "<group>"; };
+		7AC290AB1A8EF0100085B927 /* CKRecorderController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRecorderController.m; sourceTree = "<group>"; };
+		7AC290AC1A8EF0100085B927 /* CKRecording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKRecording.h; sourceTree = "<group>"; };
+		7AC290AD1A8EF0100085B927 /* CKRecording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRecording.m; sourceTree = "<group>"; };
+		7AC290AE1A8EF0100085B927 /* CKRecordingDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKRecordingDetailsViewController.h; sourceTree = "<group>"; };
+		7AC290AF1A8EF0100085B927 /* CKRecordingDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRecordingDetailsViewController.m; sourceTree = "<group>"; };
+		7AC290B01A8EF0100085B927 /* CKRecordingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKRecordingViewController.h; sourceTree = "<group>"; };
+		7AC290B11A8EF0100085B927 /* CKRecordingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRecordingViewController.m; sourceTree = "<group>"; };
+		7AC290B21A8EF0100085B927 /* CKSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSearchViewController.h; sourceTree = "<group>"; };
+		7AC290B31A8EF0100085B927 /* CKSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSearchViewController.m; sourceTree = "<group>"; };
+		7AC290B41A8EF0100085B927 /* FakesForProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakesForProject.h; sourceTree = "<group>"; };
+		7AC290B51A8EF0100085B927 /* FakesForProject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakesForProject.m; sourceTree = "<group>"; };
 		97CB92049F40C98A8BAF6E34 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D009E0911A874D4700006160 /* SetFramesProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetFramesProtocol.h; sourceTree = "<group>"; };
 		D04240BB1A8B170400130BE6 /* GearBackingLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearBackingLayer.h; sourceTree = "<group>"; };
@@ -131,6 +155,22 @@
 			children = (
 				D05D75791A79AAA40050A49C /* Main.storyboard */,
 				D05D75761A79AAA40050A49C /* ParentViewController.h */,
+				7AC290A61A8EF0100085B927 /* CKConstants.h */,
+				7AC290A71A8EF0100085B927 /* CKConstants.m */,
+				7AC290A81A8EF0100085B927 /* CKPlayerController.h */,
+				7AC290A91A8EF0100085B927 /* CKPlayerController.m */,
+				7AC290AA1A8EF0100085B927 /* CKRecorderController.h */,
+				7AC290AB1A8EF0100085B927 /* CKRecorderController.m */,
+				7AC290AC1A8EF0100085B927 /* CKRecording.h */,
+				7AC290AD1A8EF0100085B927 /* CKRecording.m */,
+				7AC290AE1A8EF0100085B927 /* CKRecordingDetailsViewController.h */,
+				7AC290AF1A8EF0100085B927 /* CKRecordingDetailsViewController.m */,
+				7AC290B01A8EF0100085B927 /* CKRecordingViewController.h */,
+				7AC290B11A8EF0100085B927 /* CKRecordingViewController.m */,
+				7AC290B21A8EF0100085B927 /* CKSearchViewController.h */,
+				7AC290B31A8EF0100085B927 /* CKSearchViewController.m */,
+				7AC290B41A8EF0100085B927 /* FakesForProject.h */,
+				7AC290B51A8EF0100085B927 /* FakesForProject.m */,
 				D05D75771A79AAA40050A49C /* ParentViewController.m */,
 				D09A69EE1A86EFC500A2C347 /* HomeViewController.h */,
 				D09A69EF1A86EFC500A2C347 /* HomeViewController.m */,
@@ -325,16 +365,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AC290BB1A8EF0100085B927 /* CKRecordingViewController.m in Sources */,
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
 				D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */,
+				7AC290B71A8EF0100085B927 /* CKPlayerController.m in Sources */,
+				7AC290B81A8EF0100085B927 /* CKRecorderController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
+				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
 				D0C248461A898FDE00E32954 /* GearsView.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
+				7AC290BA1A8EF0100085B927 /* CKRecordingDetailsViewController.m in Sources */,
+				7AC290B91A8EF0100085B927 /* CKRecording.m in Sources */,
+				7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
+				7AC290B61A8EF0100085B927 /* CKConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
