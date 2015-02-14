@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
+		D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D04240BC1A8B170400130BE6 /* GearBackingLayer.m */; };
 		D05D75721A79AAA40050A49C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75711A79AAA40050A49C /* main.m */; };
 		D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75741A79AAA40050A49C /* AppDelegate.m */; };
 		D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75771A79AAA40050A49C /* ParentViewController.m */; };
@@ -16,10 +18,10 @@
 		D05D758C1A79AAA40050A49C /* micdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D758B1A79AAA40050A49C /* micdTests.m */; };
 		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
 		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
-		D05D75A61A7B434D0050A49C /* GripperView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75A51A7B434D0050A49C /* GripperView.m */; };
-		D09A69E41A8485B800A2C347 /* HomeScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69E31A8485B800A2C347 /* HomeScreenView.m */; };
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
+		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
+		D0C248461A898FDE00E32954 /* GearsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C248451A898FDE00E32954 /* GearsView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,7 +35,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D009E0911A874D4700006160 /* SetFramesProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetFramesProtocol.h; path = micd/SetFramesProtocol.h; sourceTree = "<group>"; };
+		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		97CB92049F40C98A8BAF6E34 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		D009E0911A874D4700006160 /* SetFramesProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetFramesProtocol.h; sourceTree = "<group>"; };
+		D04240BB1A8B170400130BE6 /* GearBackingLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearBackingLayer.h; sourceTree = "<group>"; };
+		D04240BC1A8B170400130BE6 /* GearBackingLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearBackingLayer.m; sourceTree = "<group>"; };
 		D05D756C1A79AAA40050A49C /* micd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = micd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05D75701A79AAA40050A49C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05D75711A79AAA40050A49C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -51,14 +57,15 @@
 		D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WireTapStyleKit.m; path = micd/WireTapStyleKit.m; sourceTree = "<group>"; };
 		D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Palette.h"; path = "micd/UIColor+Palette.h"; sourceTree = "<group>"; };
 		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
-		D05D75A41A7B434D0050A49C /* GripperView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GripperView.h; sourceTree = "<group>"; };
-		D05D75A51A7B434D0050A49C /* GripperView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GripperView.m; sourceTree = "<group>"; };
-		D09A69E21A8485B800A2C347 /* HomeScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenView.h; sourceTree = "<group>"; };
-		D09A69E31A8485B800A2C347 /* HomeScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenView.m; sourceTree = "<group>"; };
 		D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsViewController.h; sourceTree = "<group>"; };
 		D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsViewController.m; sourceTree = "<group>"; };
 		D09A69EE1A86EFC500A2C347 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		D09A69EF1A86EFC500A2C347 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		D0B0DE451A8DA10200C88773 /* GearsImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearsImageView.h; sourceTree = "<group>"; };
+		D0B0DE461A8DA10200C88773 /* GearsImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearsImageView.m; sourceTree = "<group>"; };
+		D0C248441A898FDE00E32954 /* GearsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearsView.h; sourceTree = "<group>"; };
+		D0C248451A898FDE00E32954 /* GearsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearsView.m; sourceTree = "<group>"; };
+		FECB9CE9F42F55800F002CE6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,18 +87,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5382381EB36A40952B91A5F0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FECB9CE9F42F55800F002CE6 /* Pods.debug.xcconfig */,
+				97CB92049F40C98A8BAF6E34 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9608EBA9FD03CB81B731CDFB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2ADDB858B803861D5C14D578 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D05D75631A79AAA40050A49C = {
 			isa = PBXGroup;
 			children = (
-				D05D75951A79ABDC0050A49C /* WireTapStyleKit.h */,
-				D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */,
-				D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */,
-				D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */,
-				D009E0911A874D4700006160 /* SetFramesProtocol.h */,
 				D05D756E1A79AAA40050A49C /* micd */,
+				D0667EFB1A897F3A001A0FC4 /* Styling */,
 				D05D756F1A79AAA40050A49C /* Supporting Files */,
 				D05D75881A79AAA40050A49C /* micdTests */,
 				D05D756D1A79AAA40050A49C /* Products */,
+				5382381EB36A40952B91A5F0 /* Pods */,
+				9608EBA9FD03CB81B731CDFB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,7 +136,12 @@
 				D09A69EF1A86EFC500A2C347 /* HomeViewController.m */,
 				D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */,
 				D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */,
-				D05D75A71A7B43520050A49C /* Views */,
+				D0C248441A898FDE00E32954 /* GearsView.h */,
+				D0C248451A898FDE00E32954 /* GearsView.m */,
+				D04240BB1A8B170400130BE6 /* GearBackingLayer.h */,
+				D04240BC1A8B170400130BE6 /* GearBackingLayer.m */,
+				D0B0DE451A8DA10200C88773 /* GearsImageView.h */,
+				D0B0DE461A8DA10200C88773 /* GearsImageView.m */,
 			);
 			path = micd;
 			sourceTree = "<group>";
@@ -121,6 +149,7 @@
 		D05D756F1A79AAA40050A49C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D009E0911A874D4700006160 /* SetFramesProtocol.h */,
 				D05D75731A79AAA40050A49C /* AppDelegate.h */,
 				D05D75741A79AAA40050A49C /* AppDelegate.m */,
 				D05D757C1A79AAA40050A49C /* Images.xcassets */,
@@ -149,15 +178,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D05D75A71A7B43520050A49C /* Views */ = {
+		D0667EFB1A897F3A001A0FC4 /* Styling */ = {
 			isa = PBXGroup;
 			children = (
-				D09A69E21A8485B800A2C347 /* HomeScreenView.h */,
-				D09A69E31A8485B800A2C347 /* HomeScreenView.m */,
-				D05D75A41A7B434D0050A49C /* GripperView.h */,
-				D05D75A51A7B434D0050A49C /* GripperView.m */,
+				D05D75951A79ABDC0050A49C /* WireTapStyleKit.h */,
+				D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */,
+				D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */,
+				D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */,
 			);
-			name = Views;
+			name = Styling;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,9 +196,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D05D758F1A79AAA40050A49C /* Build configuration list for PBXNativeTarget "micd" */;
 			buildPhases = (
+				127224C1F8A13AF5C447A87F /* Check Pods Manifest.lock */,
 				D05D75681A79AAA40050A49C /* Sources */,
 				D05D75691A79AAA40050A49C /* Frameworks */,
 				D05D756A1A79AAA40050A49C /* Resources */,
+				802943FB87C5BFF9DC29BDD1 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -209,6 +240,7 @@
 				TargetAttributes = {
 					D05D756B1A79AAA40050A49C = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = A57KTL95E8;
 					};
 					D05D75841A79AAA40050A49C = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -255,17 +287,51 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		127224C1F8A13AF5C447A87F /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		802943FB87C5BFF9DC29BDD1 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D05D75681A79AAA40050A49C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
+				D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
+				D0C248461A898FDE00E32954 /* GearsView.m in Sources */,
+				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
-				D05D75A61A7B434D0050A49C /* GripperView.m in Sources */,
-				D09A69E41A8485B800A2C347 /* HomeScreenView.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
@@ -388,6 +454,7 @@
 		};
 		D05D75901A79AAA40050A49C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FECB9CE9F42F55800F002CE6 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = micd/Info.plist;
@@ -398,6 +465,7 @@
 		};
 		D05D75911A79AAA40050A49C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97CB92049F40C98A8BAF6E34 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = micd/Info.plist;

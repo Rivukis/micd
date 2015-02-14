@@ -1,5 +1,4 @@
 #import "ParentViewController.h"
-#import "GripperView.h"
 #import "RecordingsViewController.h"
 #import "HomeViewController.h"
 #import "SetFramesProtocol.h"
@@ -30,7 +29,7 @@
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
     
-    self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackgroundWithColor:[UIColor vibrantBlue]];
+    self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
 }
 
 -(void)viewDidLayoutSubviews {

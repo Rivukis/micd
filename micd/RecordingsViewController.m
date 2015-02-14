@@ -67,7 +67,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
-    cell.textLabel.text = @"fun time with time hisous";
+    cell.textLabel.text = @"fun time with Time and B Rad";
     cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor vibrantBlue];
     cell.layer.borderColor = [[UIColor vibrantBlue] CGColor];

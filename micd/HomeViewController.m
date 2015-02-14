@@ -1,6 +1,10 @@
+
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
 #import "HomeViewController.h"
+//#import "GearsView.h"
+#import "GearsImageView.h"
+#import "OBShapedButton.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -8,9 +12,10 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @interface HomeViewController () <UIGestureRecognizerDelegate>
 
 @property (assign, nonatomic) BOOL isMovingDown;
-@property (strong, nonatomic) UIButton *recordButton;
-
+@property (strong, nonatomic) OBShapedButton *recordButton;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
+//@property (strong, nonatomic) GearsView *gearsView;
+@property (strong, nonatomic) GearsImageView *gearsImageView;
 @property (strong, nonatomic) UIView *recordingsBottomArrow;
 @property (strong, nonatomic) UIView *recordingsTopArrow;
 @property (strong, nonatomic) UIView *settingsBottomArrow;
@@ -23,12 +28,22 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.backgroundImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfHomeViewWithColor:[UIColor vibrantBlue]]];
+    self.backgroundImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfHomeView]];
     [self.view addSubview:self.backgroundImageView];
     
-    self.recordButton = [[UIButton alloc] init];
+    self.recordButton = [[OBShapedButton alloc] init];
     [self.recordButton setImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
     [self.view addSubview:self.recordButton];
+    
+//    self.gearsView = [[GearsView alloc] init];
+//    self.gearsView.positiveGearRotationAngle = 0;
+//    self.gearsView.negativeGearRotationAngle = 0;
+//    self.gearsView.backgroundColor = [UIColor colorWithRed:1.000 green:0.000 blue:0.000 alpha:0.500];
+//    [self.view addSubview:self.gearsView];
+    
+    self.gearsImageView = [[GearsImageView alloc] init];
+//    self.gearsImageView.backgroundColor = [UIColor colorWithRed:1.000 green:0.000 blue:0.000 alpha:0.500];
+    [self.view addSubview:self.gearsImageView];
     
     [self setupPanGestures];
 }
@@ -76,9 +91,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
         [self.movementDelegate shouldMoveWithTranslation:translation];
+        [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        NSLog(@"%@", NSStringFromCGPoint([gestureRecognizer velocityInView:gestureRecognizer.view]));
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         } else {
@@ -91,6 +106,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
         [self.movementDelegate shouldMoveWithTranslation:translation];
+        [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
@@ -105,6 +121,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
         [self.movementDelegate shouldMoveWithTranslation:translation];
+        [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
@@ -119,6 +136,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
         [self.movementDelegate shouldMoveWithTranslation:translation];
+        [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
@@ -134,7 +152,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)setInitialStateFrame {
     CGFloat windowHeight = self.view.window.frame.size.height;
     CGFloat windowWidth = self.view.window.frame.size.width;
-    CGFloat gestureSizeConstant = windowWidth * 0.213f;
+    CGFloat gestureSizeConstant = windowWidth * 0.5f;
     CGFloat buttonSizeConstant = windowHeight * 0.384f; // 256
     // width:height     center on x
     CGFloat backgroundImageRatio = kCurrentBackgroundImageWidth/kCurrentBackgroundImageHeight;
@@ -153,38 +171,48 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                                          buttonSizeConstant,
                                          buttonSizeConstant);
     
-    self.recordingsBottomArrow.frame = CGRectMake(windowWidth/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.x,
+    self.recordingsBottomArrow.frame = CGRectMake(0,
                                                   windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f,
-                                                  gestureSizeConstant,
+                                                  self.view.window.frame.size.width,
                                                   gestureSizeConstant);
     
-    self.recordingsTopArrow.frame = CGRectMake(windowWidth/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.x,
+    self.recordingsTopArrow.frame = CGRectMake(0,
                                                windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707,
-                                               gestureSizeConstant,
+                                               self.view.window.frame.size.width,
                                                gestureSizeConstant);
     
-    self.settingsBottomArrow.frame = CGRectMake(windowWidth/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.x,
+    self.settingsBottomArrow.frame = CGRectMake(0,
                                                (windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f) + windowHeight * 1.09f,
-                                               gestureSizeConstant,
+                                               self.view.window.frame.size.width,
                                                gestureSizeConstant);
     
-    self.settingsTopArrow.frame = CGRectMake(windowWidth/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.x,
+    self.settingsTopArrow.frame = CGRectMake(0,
                                                (windowHeight/2.0f - gestureSizeConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707) + windowHeight * 1.09f,
-                                               gestureSizeConstant,
+                                               self.view.window.frame.size.width,
                                                gestureSizeConstant);
+    
+    CGPoint settingsCircleMidpoint = CGPointMake(self.recordButton.center.x, self.settingsTopArrow.center.y + (self.settingsBottomArrow.center.y - self.settingsTopArrow.center.y)/2);
+    
+    self.gearsImageView.frame = self.recordButton.frame;
+    self.gearsImageView.center = settingsCircleMidpoint;
 }
+
+#pragma mark - Background Home View YOffsets for State
 
 - (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
     CGRect frame = self.view.frame;
     switch (state) {
         case HomeViewContollerPositionStateHome:
             frame.origin.y = [self backgroundImageHomeStateYOffset];
+            
             break;
         case HomeViewContollerPositionStateRecordings:
             frame.origin.y = [self backgroundImageRecordingsStateYOffset];
+            
             break;
         case HomeViewContollerPositionStateSettings:
             frame.origin.y = [self backgroundImageSettingsStateYOffset];
+            
             break;
         default:
             break;
@@ -197,7 +225,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (CGFloat)backgroundImageRecordingsStateYOffset {
-    CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.09f;
+    CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.07f;
     return [self backgroundImageHomeStateYOffset] + backgroundImageYOffsetToNewState;
 }
 
@@ -206,10 +234,21 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     return [self backgroundImageHomeStateYOffset] - backgroundImageYOffsetToNewState;
 }
 
+#pragma mark - Adjusting views during pan Translation
+
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
+}
+
+- (void)rotateGearsWithTranslation:(CGPoint)translation {
+//    self.gearsImageView.positiveGearRotationAngle += translation.y;
+//    self.gearsImageView.negativeGearRotationAngle -= translation.y;
+//    
+//    [self.gearsImageView setNeedsDisplay];
+    
+    [self.gearsImageView moveGearsWithRotationAngle:translation.y];
 }
 
 @end

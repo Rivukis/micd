@@ -58,7 +58,7 @@
                         <viewControllerLayoutGuide type="top" id="hL9-d6-P3V"/>
                         <viewControllerLayoutGuide type="bottom" id="B6Y-Th-E7h"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="7AG-2X-dT2" customClass="HomeScreenView">
+                    <view key="view" contentMode="scaleToFill" id="7AG-2X-dT2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
