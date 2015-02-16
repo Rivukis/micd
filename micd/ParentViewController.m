@@ -1,17 +1,17 @@
 #import "ParentViewController.h"
 #import "RecordingsViewController.h"
 #import "HomeViewController.h"
-#import "SetFramesProtocol.h"
+#import "FramesController.h"
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
-#import "DataSource.h"
+#import "DataSourceController.h"
 #import "Recording.h"
 
-@interface ParentViewController () <SetFramesProtocol, MovementDelegate, AddNewRecordingDelegate>
+@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
-@property (strong, nonatomic) DataSource *dataSource;
+@property (strong, nonatomic) DataSourceController *dataSource;
 @end
 
 @implementation ParentViewController
@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.dataSource = [DataSource sharedInstance];
+    self.dataSource = [DataSourceController sharedInstance];
     
     self.view.backgroundColor = [UIColor blackColor];
     
@@ -70,7 +70,7 @@
                      }];
 }
 
-#pragma mark - SetFramesProtocol
+#pragma mark - FramesBasedOnStateProtocol
 
 - (void)setInitialStateFrame {
     [self.homeViewController setInitialStateFrame];

@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 CleverKnot. All rights reserved.
 //
 
-#import "DataSource.h"
+#import "DataSourceController.h"
 
-@interface DataSource ()
+@interface DataSourceController ()
 
 @property (assign, nonatomic, readwrite) NSUInteger numberOfRecordings;
 
@@ -16,10 +16,10 @@
 
 @end
 
-@implementation DataSource
+@implementation DataSourceController
 
-+ (DataSource *)sharedInstance {
-    static DataSource *sharedDataSource = nil;
++ (DataSourceController *)sharedInstance {
+    static DataSourceController *sharedDataSource = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedDataSource = [[self alloc] init];

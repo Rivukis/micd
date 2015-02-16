@@ -1,4 +1,3 @@
-
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
 #import "HomeViewController.h"
@@ -40,16 +39,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.recordButton addTarget:self action:@selector(recordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.recordButton setImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
     [self.view addSubview:self.recordButton];
-
-    
-//    self.gearsView = [[GearsView alloc] init];
-//    self.gearsView.positiveGearRotationAngle = 0;
-//    self.gearsView.negativeGearRotationAngle = 0;
-//    self.gearsView.backgroundColor = [UIColor colorWithRed:1.000 green:0.000 blue:0.000 alpha:0.500];
-//    [self.view addSubview:self.gearsView];
     
     self.gearsImageView = [[GearsImageView alloc] init];
-//    self.gearsImageView.backgroundColor = [UIColor colorWithRed:1.000 green:0.000 blue:0.000 alpha:0.500];
     [self.view addSubview:self.gearsImageView];
     
     [self setupPanGestures];
@@ -187,7 +178,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     }
 }
 
-#pragma mark - SetFramesProtocol
+#pragma mark - FramesBasedOnStateProtocol
 
 - (void)setInitialStateFrame {
     CGFloat windowHeight = self.view.window.frame.size.height;
@@ -236,8 +227,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     self.gearsImageView.frame = self.recordButton.frame;
     self.gearsImageView.center = settingsCircleMidpoint;
 }
-
-#pragma mark - Background Home View YOffsets for State
 
 - (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
     CGRect frame = self.view.frame;

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SetFramesProtocol.h"
+#import "FramesController.h"
 
 @class Recording;
 
@@ -24,7 +24,7 @@
 
 @end
 
-@interface HomeViewController : UIViewController <SetFramesProtocol>
+@interface HomeViewController : UIViewController <FramesBasedOnStateProtocol>
 
 @property (weak, nonatomic) id<MovementDelegate> movementDelegate;
 @property (weak, nonatomic) id<AddNewRecordingDelegate> addNewRecordingDelegate;

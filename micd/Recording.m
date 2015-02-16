@@ -42,7 +42,7 @@
     return [self initWithData:data date:startDate length:length name:nil];
 }
 
-- (BOOL)setTitle:(NSString *)title {
+- (BOOL)setRecordingTitle:(NSString *)title {
     if (title.length == 0) {
         return NO;
     }

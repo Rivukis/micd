@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SetFramesProtocol.h"
+#import "FramesController.h"
 
-@interface RecordingsViewController : UIViewController <SetFramesProtocol>
+@interface RecordingsViewController : UIViewController <FramesBasedOnStateProtocol>
 
 - (void)reloadData;
 

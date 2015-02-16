@@ -8,7 +8,7 @@
 
 #import "RecordingsViewController.h"
 #import "UIColor+Palette.h"
-#import "DataSource.h"
+#import "DataSourceController.h"
 #import "Recording.h"
 #import "PlayerController.h"
 #import "WireTapStyleKit.h"
@@ -17,7 +17,7 @@
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) DataSource *dataSource;
+@property (strong, nonatomic) DataSourceController *dataSource;
 @property (strong, nonatomic) PlayerController *playerController;
 
 @end
@@ -27,7 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.dataSource = [DataSource sharedInstance];
+    self.dataSource = [DataSourceController sharedInstance];
     self.playerController = [[PlayerController alloc] init];
     
     self.tableView.dataSource = self;
@@ -38,7 +38,7 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - SetFramesProtocol
+#pragma mark - FramesBasedOnStateProtocol
 
 - (void)setInitialStateFrame {
     self.view.frame = CGRectMake(0,
