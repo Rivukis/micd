@@ -31,6 +31,8 @@
 		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
 		D0C248461A898FDE00E32954 /* GearsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C248451A898FDE00E32954 /* GearsView.m */; };
 		D0C67CD01A8EF917000F501A /* DataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSource.m */; };
+		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
+		D0C67CD91A91BADD000F501A /* RecordingContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD81A91BADD000F501A /* RecordingContentView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +94,10 @@
 		D0C248451A898FDE00E32954 /* GearsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearsView.m; sourceTree = "<group>"; };
 		D0C67CCE1A8EF917000F501A /* DataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSource.h; sourceTree = "<group>"; };
 		D0C67CCF1A8EF917000F501A /* DataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSource.m; sourceTree = "<group>"; };
+		D0C67CD41A91B9D4000F501A /* RecordingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCell.h; sourceTree = "<group>"; };
+		D0C67CD51A91B9D4000F501A /* RecordingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCell.m; sourceTree = "<group>"; };
+		D0C67CD71A91BADD000F501A /* RecordingContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingContentView.h; sourceTree = "<group>"; };
+		D0C67CD81A91BADD000F501A /* RecordingContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingContentView.m; sourceTree = "<group>"; };
 		FECB9CE9F42F55800F002CE6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -172,6 +178,10 @@
 				D04240BC1A8B170400130BE6 /* GearBackingLayer.m */,
 				D0B0DE451A8DA10200C88773 /* GearsImageView.h */,
 				D0B0DE461A8DA10200C88773 /* GearsImageView.m */,
+				D0C67CD41A91B9D4000F501A /* RecordingCell.h */,
+				D0C67CD51A91B9D4000F501A /* RecordingCell.m */,
+				D0C67CD71A91BADD000F501A /* RecordingContentView.h */,
+				D0C67CD81A91BADD000F501A /* RecordingContentView.m */,
 			);
 			path = micd;
 			sourceTree = "<group>";
@@ -383,6 +393,7 @@
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
 				D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */,
 				7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */,
+				D0C67CD91A91BADD000F501A /* RecordingContentView.m in Sources */,
 				7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
@@ -390,6 +401,7 @@
 				D0C248461A898FDE00E32954 /* GearsView.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
+				D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */,
 				7AC290BA1A8EF0100085B927 /* CKRecordingDetailsViewController.m in Sources */,
 				D0C67CD01A8EF917000F501A /* DataSource.m in Sources */,
 				7AC290B91A8EF0100085B927 /* Recording.m in Sources */,

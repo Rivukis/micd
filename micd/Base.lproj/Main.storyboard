@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Recordings View Controller-->
@@ -16,17 +17,53 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Agl-fI-Zbv">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Agl-fI-Zbv">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="h6X-Tg-WWs">
+                                    <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="60" id="h6X-Tg-WWs" customClass="RecordingCell">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h6X-Tg-WWs" id="bfh-Da-2Rz">
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IOf-a4-UY8">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uGf-St-bUM">
+                                                    <rect key="frame" x="58" y="16" width="192" height="28"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="20"/>
+                                                    <color key="textColor" red="0.45306846200000001" green="0.77783367560000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="0.0"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rYm-aq-Rem">
+                                                    <rect key="frame" x="264" y="16" width="55" height="28"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="20"/>
+                                                    <color key="textColor" red="0.45306846200000001" green="0.77783367560000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <size key="shadowOffset" width="0.0" height="0.0"/>
+                                                </label>
+                                            </subviews>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="IOf-a4-UY8" firstAttribute="centerY" secondItem="rYm-aq-Rem" secondAttribute="centerY" id="CQd-3b-9qG"/>
+                                                <constraint firstItem="IOf-a4-UY8" firstAttribute="centerY" secondItem="uGf-St-bUM" secondAttribute="centerY" constant="0.5" id="Dby-Wp-Bdl"/>
+                                                <constraint firstItem="IOf-a4-UY8" firstAttribute="leading" secondItem="uGf-St-bUM" secondAttribute="leading" constant="-58" id="Hf1-SE-Raw"/>
+                                                <constraint firstItem="rYm-aq-Rem" firstAttribute="leading" secondItem="uGf-St-bUM" secondAttribute="trailing" constant="14" id="TkW-Fj-8cK"/>
+                                                <constraint firstItem="IOf-a4-UY8" firstAttribute="trailing" secondItem="rYm-aq-Rem" secondAttribute="trailing" constant="56" id="UoZ-o8-pXj"/>
+                                                <constraint firstItem="IOf-a4-UY8" firstAttribute="top" secondItem="bfh-Da-2Rz" secondAttribute="topMargin" constant="-8" id="Vg7-3Q-cUi"/>
+                                                <constraint firstItem="IOf-a4-UY8" firstAttribute="trailing" secondItem="uGf-St-bUM" secondAttribute="trailing" constant="125" id="cD3-0K-hLE"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="IOf-a4-UY8" secondAttribute="bottom" constant="-8" id="ihi-ZS-VuK"/>
+                                                <constraint firstItem="IOf-a4-UY8" firstAttribute="leading" secondItem="bfh-Da-2Rz" secondAttribute="leadingMargin" constant="-8" id="mdw-cG-tWM"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="IOf-a4-UY8" secondAttribute="trailing" constant="-8" id="r9t-Xd-Kze"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="backgroundImageView" destination="IOf-a4-UY8" id="Vt7-gq-TFN"/>
+                                            <outlet property="date" destination="rYm-aq-Rem" id="lFa-59-WC8"/>
+                                            <outlet property="title" destination="uGf-St-bUM" id="9cP-gd-kXJ"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

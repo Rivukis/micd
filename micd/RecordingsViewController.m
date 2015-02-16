@@ -11,6 +11,8 @@
 #import "DataSource.h"
 #import "Recording.h"
 #import "PlayerController.h"
+#import "WireTapStyleKit.h"
+#import "RecordingCell.h"
 
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -77,14 +79,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    RecordingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
-    
-    cell.textLabel.text = recording.uuid.UUIDString;
-    cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor vibrantBlue];
-    cell.layer.borderColor = [[UIColor vibrantBlue] CGColor];
-    cell.layer.borderWidth = 1.0f;
+    cell.title.text = recording.uuid.UUIDString;
+    cell.date.text = @"Feb 15";
     
     return cell;
 }
@@ -94,6 +92,10 @@
     Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
     [self.playerController loadRecording:recording error:nil];
     [self.playerController playAudioWithError:nil];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return tableView.frame.size.width * .16f;
 }
 
 @end
