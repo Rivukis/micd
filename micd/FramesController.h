@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreGraphics/CoreGraphics.h>
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSUInteger, HomeViewContollerPositionState) {
     HomeViewContollerPositionStateRecordings = 0,

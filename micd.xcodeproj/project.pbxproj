@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
-		7AAAC5271A9296D400C4B645 /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAC5261A9296D400C4B645 /* FramesController.m */; };
 		7AC290B61A8EF0100085B927 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* PlayerController.m */; };
 		7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AB1A8EF0100085B927 /* RecorderController.m */; };
@@ -34,6 +33,7 @@
 		D0C67CD01A8EF917000F501A /* DataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSource.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
 		D0C67CD91A91BADD000F501A /* RecordingContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD81A91BADD000F501A /* RecordingContentView.m */; };
+		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,8 +48,6 @@
 
 /* Begin PBXFileReference section */
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		7AAAC5251A9296D400C4B645 /* FramesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FramesController.h; sourceTree = "<group>"; };
-		7AAAC5261A9296D400C4B645 /* FramesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FramesController.m; sourceTree = "<group>"; };
 		7AC290A61A8EF0100085B927 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		7AC290A71A8EF0100085B927 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		7AC290A81A8EF0100085B927 /* PlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerController.h; sourceTree = "<group>"; };
@@ -101,6 +99,8 @@
 		D0C67CD51A91B9D4000F501A /* RecordingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCell.m; sourceTree = "<group>"; };
 		D0C67CD71A91BADD000F501A /* RecordingContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingContentView.h; sourceTree = "<group>"; };
 		D0C67CD81A91BADD000F501A /* RecordingContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingContentView.m; sourceTree = "<group>"; };
+		D0C67CDA1A929A4C000F501A /* FramesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FramesController.h; sourceTree = "<group>"; };
+		D0C67CDB1A929A4C000F501A /* FramesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FramesController.m; sourceTree = "<group>"; };
 		FECB9CE9F42F55800F002CE6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -235,8 +235,8 @@
 		D0C67CCD1A8EF0B7000F501A /* Brians stuff */ = {
 			isa = PBXGroup;
 			children = (
-				7AAAC5251A9296D400C4B645 /* FramesController.h */,
-				7AAAC5261A9296D400C4B645 /* FramesController.m */,
+				D0C67CDA1A929A4C000F501A /* FramesController.h */,
+				D0C67CDB1A929A4C000F501A /* FramesController.m */,
 				7AC290A61A8EF0100085B927 /* Constants.h */,
 				7AC290A71A8EF0100085B927 /* Constants.m */,
 				7AC290A81A8EF0100085B927 /* PlayerController.h */,
@@ -413,6 +413,7 @@
 				7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
+				D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
 				7AC290B61A8EF0100085B927 /* Constants.m in Sources */,
 			);
