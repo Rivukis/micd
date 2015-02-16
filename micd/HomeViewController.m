@@ -63,8 +63,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     panGesture.delegate = self;
     [self.recordingsTopArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.recordingsTopArrow];
-    self.recordingsTopArrow.layer.borderColor = [UIColor redColor].CGColor;
-    self.recordingsTopArrow.layer.borderWidth = 2.0f;
+//    self.recordingsTopArrow.layer.borderColor = [UIColor redColor].CGColor;
+//    self.recordingsTopArrow.layer.borderWidth = 2.0f;
     
     
     self.recordingsBottomArrow = [[UIView alloc] init];
@@ -72,24 +72,24 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     panGesture.delegate = self;
     [self.recordingsBottomArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.recordingsBottomArrow];
-    self.recordingsBottomArrow.layer.borderColor = [UIColor greenColor].CGColor;
-    self.recordingsBottomArrow.layer.borderWidth = 2.0f;
+//    self.recordingsBottomArrow.layer.borderColor = [UIColor greenColor].CGColor;
+//    self.recordingsBottomArrow.layer.borderWidth = 2.0f;
     
     self.settingsTopArrow = [[UIView alloc] init];
     panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToSettingsPan:)];
     panGesture.delegate = self;
     [self.settingsTopArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.settingsTopArrow];
-    self.settingsTopArrow.layer.borderColor = [UIColor magentaColor].CGColor;
-    self.settingsTopArrow.layer.borderWidth = 2.0f;
+//    self.settingsTopArrow.layer.borderColor = [UIColor magentaColor].CGColor;
+//    self.settingsTopArrow.layer.borderWidth = 2.0f;
     
     self.settingsBottomArrow = [[UIView alloc] init];
     panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSettingsToHomePan:)];
     panGesture.delegate = self;
     [self.settingsBottomArrow addGestureRecognizer:panGesture];
     [self.view addSubview:self.settingsBottomArrow];
-    self.settingsBottomArrow.layer.borderColor = [UIColor cyanColor].CGColor;
-    self.settingsBottomArrow.layer.borderWidth = 2.0f;
+//    self.settingsBottomArrow.layer.borderColor = [UIColor cyanColor].CGColor;
+//    self.settingsBottomArrow.layer.borderWidth = 2.0f;
 }
 
 #pragma mark - User Actions
