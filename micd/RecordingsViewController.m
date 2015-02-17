@@ -86,8 +86,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     RecordingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
-    cell.title.text = recording.uuid.UUIDString;
-    cell.date.text = @"Dec 25";
+    cell.title.text = recording.recordedDateAsFullString;
+    int randomNumber = arc4random_uniform(28);
+    cell.date.text = [NSString stringWithFormat:@"Feb %d", randomNumber];
     BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
     
     [cell setPreAnimationConstraintsBasedOnExpansion:expanding];

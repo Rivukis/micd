@@ -90,7 +90,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         case RecorderControllerStatePaused:
             // time to record
             [self.recorderController startRecording];
-            [self.recordButton setBackgroundColor:[UIColor redColor]];
+            [self.recordButton setBackgroundColor:[UIColor recordRed]];
             break;
             
         case RecorderControllerStateRecording: {

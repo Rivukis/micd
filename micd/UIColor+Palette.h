@@ -4,4 +4,6 @@
 
 + (UIColor *)vibrantBlue;
 
++ (UIColor *)recordRed;
+
 @end

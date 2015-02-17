@@ -24,6 +24,8 @@ struct Length {
 @property (nonatomic, copy, readonly) NSData *data;
 @property (nonatomic, strong, readonly) NSDate *recordedDateAsDate;
 @property (nonatomic, strong, readonly) NSDateComponents *recordedDate;
+@property (nonatomic, strong) NSString *recordedDateAsFullString;
+@property (nonatomic, strong) NSString *recordedDateAsShortString;
 @property (nonatomic, assign, readonly) NSTimeInterval lengthAsTimeInterval;
 @property (nonatomic, assign, readonly) struct Length length;
 @property (nonatomic, strong, readonly) NSUUID *uuid;

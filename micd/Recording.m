@@ -13,7 +13,6 @@
 
 @property (nonatomic, strong, readwrite) NSString *title;
 @property (nonatomic, strong, readwrite) NSArray *tags;
-
 @property (nonatomic, copy, readwrite) NSData *data;
 @property (nonatomic, strong, readwrite) NSUUID *uuid;
 
@@ -32,7 +31,7 @@
         _data = data;
         _recordedDateAsDate = recordedDate;
         _lengthAsTimeInterval = length;
-        _title = name ?: @"";
+        _title = name ? name : @"";
         _uuid = [[NSUUID alloc] init];
     }
     return self;
@@ -48,6 +47,26 @@
     }
     self.title = title;
     return YES;
+}
+
+- (NSString *)recordedDateAsFullString {
+    if (!_recordedDateAsFullString) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+        _recordedDateAsFullString = [dateFormatter stringFromDate:self.recordedDateAsDate];
+    }
+    
+    return _recordedDateAsFullString;
+}
+
+- (NSString *)recordedDateAsShortString {
+    if (!_recordedDateAsShortString) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        _recordedDateAsShortString = [dateFormatter stringFromDate:self.recordedDateAsDate];
+    }
+    
+    return _recordedDateAsShortString;
 }
 
 #pragma mark - tag methods
