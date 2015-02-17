@@ -88,8 +88,10 @@
     Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
     cell.title.text = recording.uuid.UUIDString;
     cell.date.text = @"Dec 25";
+    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
     
-    [cell setSlidingBackgroundViewFrameExpanded:[self.expandedRows containsObject:@(indexPath.row)]];
+    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
+    [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
     
     return cell;
 }
@@ -107,10 +109,12 @@
     }
     
     RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
+    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
+    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
     
     [tableView beginUpdates];
     [UIView animateWithDuration:.3f animations:^{
-        [cell setSlidingBackgroundViewFrameExpanded:[self.expandedRows containsObject:@(indexPath.row)]];
+        [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
         [cell layoutIfNeeded];
     }];
     [tableView endUpdates];

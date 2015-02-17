@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UILabel *date;
 
-- (void)setSlidingBackgroundViewFrameExpanded:(BOOL)expanded;
+- (void)setPreAnimationConstraintsBasedOnExpansion:(BOOL)expanded;
+- (void)setPostAnimationConstraintsBasedOnExpansion:(BOOL)expanded;
 
 @end
