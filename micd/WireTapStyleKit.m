@@ -18,6 +18,11 @@
 static UIImage* _imageOfHomeView = nil;
 static UIImage* _imageOfMicdBackground = nil;
 static UIImage* _imageOfSingleRecordingCell = nil;
+static UIImage* _imageOfRecordingsDropdown = nil;
+static UIImage* _imageOfLeftRecordingCellBackground = nil;
+static UIImage* _imageOfRightRecordingCellBackground = nil;
+static UIImage* _imageOfLeftRecordingCellDropdown = nil;
+static UIImage* _imageOfRightRecordingCellDropdown = nil;
 static UIImage* _imageOfRecordButton = nil;
 
 #pragma mark Initialization
@@ -1417,8 +1422,16 @@ static UIImage* _imageOfRecordButton = nil;
     CGSize shadowOffset = CGSizeMake(0.1, -0.1);
     CGFloat shadowBlurRadius = 3;
 
+    //// Rectangle 2 Drawing
+    UIBezierPath* rectangle2Path = [UIBezierPath bezierPathWithRect: CGRectMake(0, 0, 375, 29)];
+    [black setFill];
+    [rectangle2Path fill];
+
+
     //// Rectangle Drawing
     UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(15, 9, 345, 40) cornerRadius: 20];
+    [black setFill];
+    [rectanglePath fill];
     [gradientColor setStroke];
     rectanglePath.lineWidth = 6;
     [rectanglePath stroke];
@@ -1461,6 +1474,155 @@ static UIImage* _imageOfRecordButton = nil;
     [black setStroke];
     oval3Path.lineWidth = 1;
     [oval3Path stroke];
+}
+
++ (void)drawRecordingsDropdown
+{
+    //// Color Declarations
+    UIColor* gradientColor = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
+
+    //// Rectangle 2 Drawing
+    UIBezierPath* rectangle2Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(15, 3, 345, 104) byRoundingCorners: UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii: CGSizeMake(20, 20)];
+    [rectangle2Path closePath];
+    [gradientColor setStroke];
+    rectangle2Path.lineWidth = 6;
+    [rectangle2Path stroke];
+}
+
++ (void)drawLeftRecordingCellBackground
+{
+    //// General Declarations
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    //// Color Declarations
+    UIColor* black = [UIColor colorWithRed: 0 green: 0 blue: 0 alpha: 1];
+    UIColor* gradientColor = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
+
+    //// Shadow Declarations
+    UIColor* shadow = UIColor.blackColor;
+    CGSize shadowOffset = CGSizeMake(0.1, -0.1);
+    CGFloat shadowBlurRadius = 3;
+
+    //// Rectangle 3 Drawing
+    UIBezierPath* rectangle3Path = [UIBezierPath bezierPathWithRect: CGRectMake(0, 0, 375, 29)];
+    [black setFill];
+    [rectangle3Path fill];
+
+
+    //// Rectangle 4 Drawing
+    UIBezierPath* rectangle4Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(15, 9, 345, 40) cornerRadius: 20];
+    [black setFill];
+    [rectangle4Path fill];
+    [gradientColor setStroke];
+    rectangle4Path.lineWidth = 6;
+    [rectangle4Path stroke];
+
+
+    //// Oval 4 Drawing
+    UIBezierPath* oval4Path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(17.5, 10.5, 37, 36)];
+    CGContextSaveGState(context);
+    CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, [shadow CGColor]);
+    [gradientColor setFill];
+    [oval4Path fill];
+    CGContextRestoreGState(context);
+
+    [black setStroke];
+    oval4Path.lineWidth = 1;
+    [oval4Path stroke];
+
+
+    //// Oval 5 Drawing
+    UIBezierPath* oval5Path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(320.5, 10.5, 37, 36)];
+    CGContextSaveGState(context);
+    CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, [shadow CGColor]);
+    [gradientColor setFill];
+    [oval5Path fill];
+    CGContextRestoreGState(context);
+
+    [black setStroke];
+    oval5Path.lineWidth = 1;
+    [oval5Path stroke];
+}
+
++ (void)drawRightRecordingCellBackground
+{
+    //// General Declarations
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    //// Color Declarations
+    UIColor* black = [UIColor colorWithRed: 0 green: 0 blue: 0 alpha: 1];
+    UIColor* gradientColor = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
+
+    //// Shadow Declarations
+    UIColor* shadow = UIColor.blackColor;
+    CGSize shadowOffset = CGSizeMake(0.1, -0.1);
+    CGFloat shadowBlurRadius = 3;
+
+    //// Rectangle 2 Drawing
+    UIBezierPath* rectangle2Path = [UIBezierPath bezierPathWithRect: CGRectMake(-168, 0, 375, 29)];
+    [black setFill];
+    [rectangle2Path fill];
+
+
+    //// Rectangle Drawing
+    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(-153, 9, 345, 40) cornerRadius: 20];
+    [black setFill];
+    [rectanglePath fill];
+    [gradientColor setStroke];
+    rectanglePath.lineWidth = 6;
+    [rectanglePath stroke];
+
+
+    //// Oval Drawing
+    UIBezierPath* ovalPath = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(-150.5, 10.5, 37, 36)];
+    CGContextSaveGState(context);
+    CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, [shadow CGColor]);
+    [gradientColor setFill];
+    [ovalPath fill];
+    CGContextRestoreGState(context);
+
+    [black setStroke];
+    ovalPath.lineWidth = 1;
+    [ovalPath stroke];
+
+
+    //// Oval 3 Drawing
+    UIBezierPath* oval3Path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(152.5, 10.5, 37, 36)];
+    CGContextSaveGState(context);
+    CGContextSetShadowWithColor(context, shadowOffset, shadowBlurRadius, [shadow CGColor]);
+    [gradientColor setFill];
+    [oval3Path fill];
+    CGContextRestoreGState(context);
+
+    [black setStroke];
+    oval3Path.lineWidth = 1;
+    [oval3Path stroke];
+}
+
++ (void)drawLeftRecordingCellDropdown
+{
+    //// Color Declarations
+    UIColor* gradientColor = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
+
+    //// Rectangle 2 Drawing
+    UIBezierPath* rectangle2Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(15, 3, 345, 163) byRoundingCorners: UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii: CGSizeMake(20, 20)];
+    [rectangle2Path closePath];
+    [gradientColor setStroke];
+    rectangle2Path.lineWidth = 6;
+    [rectangle2Path stroke];
+}
+
++ (void)drawRightRecordingCellDropdown
+{
+    //// Color Declarations
+    UIColor* gradientColor = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
+
+    //// Rectangle 2 Drawing
+    UIBezierPath* rectangle2Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(-153, 3, 345, 163) byRoundingCorners: UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii: CGSizeMake(20, 20)];
+    [rectangle2Path closePath];
+    [gradientColor setStroke];
+    rectangle2Path.lineWidth = 6;
+    [rectangle2Path stroke];
 }
 
 + (void)drawRecordButton
@@ -3252,10 +3414,80 @@ static UIImage* _imageOfRecordButton = nil;
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(375, 60), NO, 0.0f);
     [WireTapStyleKit drawSingleRecordingCell];
 
-    _imageOfSingleRecordingCell = [UIGraphicsGetImageFromCurrentImageContext() resizableImageWithCapInsets: UIEdgeInsetsMake(2, 11, 11, 12) resizingMode: UIImageResizingModeTile];
+    _imageOfSingleRecordingCell = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
     return _imageOfSingleRecordingCell;
+}
+
++ (UIImage*)imageOfRecordingsDropdown
+{
+    if (_imageOfRecordingsDropdown)
+        return _imageOfRecordingsDropdown;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(375, 120), NO, 0.0f);
+    [WireTapStyleKit drawRecordingsDropdown];
+
+    _imageOfRecordingsDropdown = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return _imageOfRecordingsDropdown;
+}
+
++ (UIImage*)imageOfLeftRecordingCellBackground
+{
+    if (_imageOfLeftRecordingCellBackground)
+        return _imageOfLeftRecordingCellBackground;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(207, 60), NO, 0.0f);
+    [WireTapStyleKit drawLeftRecordingCellBackground];
+
+    _imageOfLeftRecordingCellBackground = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return _imageOfLeftRecordingCellBackground;
+}
+
++ (UIImage*)imageOfRightRecordingCellBackground
+{
+    if (_imageOfRightRecordingCellBackground)
+        return _imageOfRightRecordingCellBackground;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(207, 60), NO, 0.0f);
+    [WireTapStyleKit drawRightRecordingCellBackground];
+
+    _imageOfRightRecordingCellBackground = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return _imageOfRightRecordingCellBackground;
+}
+
++ (UIImage*)imageOfLeftRecordingCellDropdown
+{
+    if (_imageOfLeftRecordingCellDropdown)
+        return _imageOfLeftRecordingCellDropdown;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(207, 180), NO, 0.0f);
+    [WireTapStyleKit drawLeftRecordingCellDropdown];
+
+    _imageOfLeftRecordingCellDropdown = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return _imageOfLeftRecordingCellDropdown;
+}
+
++ (UIImage*)imageOfRightRecordingCellDropdown
+{
+    if (_imageOfRightRecordingCellDropdown)
+        return _imageOfRightRecordingCellDropdown;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(207, 180), NO, 0.0f);
+    [WireTapStyleKit drawRightRecordingCellDropdown];
+
+    _imageOfRightRecordingCellDropdown = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return _imageOfRightRecordingCellDropdown;
 }
 
 + (UIImage*)imageOfRecordButton
@@ -3307,6 +3539,46 @@ static UIImage* _imageOfRecordButton = nil;
 
     for (id target in self.singleRecordingCellTargets)
         [target setImage: WireTapStyleKit.imageOfSingleRecordingCell];
+}
+
+- (void)setRecordingsDropdownTargets: (NSArray*)recordingsDropdownTargets
+{
+    _recordingsDropdownTargets = recordingsDropdownTargets;
+
+    for (id target in self.recordingsDropdownTargets)
+        [target setImage: WireTapStyleKit.imageOfRecordingsDropdown];
+}
+
+- (void)setLeftRecordingCellBackgroundTargets: (NSArray*)leftRecordingCellBackgroundTargets
+{
+    _leftRecordingCellBackgroundTargets = leftRecordingCellBackgroundTargets;
+
+    for (id target in self.leftRecordingCellBackgroundTargets)
+        [target setImage: WireTapStyleKit.imageOfLeftRecordingCellBackground];
+}
+
+- (void)setRightRecordingCellBackgroundTargets: (NSArray*)rightRecordingCellBackgroundTargets
+{
+    _rightRecordingCellBackgroundTargets = rightRecordingCellBackgroundTargets;
+
+    for (id target in self.rightRecordingCellBackgroundTargets)
+        [target setImage: WireTapStyleKit.imageOfRightRecordingCellBackground];
+}
+
+- (void)setLeftRecordingCellDropdownTargets: (NSArray*)leftRecordingCellDropdownTargets
+{
+    _leftRecordingCellDropdownTargets = leftRecordingCellDropdownTargets;
+
+    for (id target in self.leftRecordingCellDropdownTargets)
+        [target setImage: WireTapStyleKit.imageOfLeftRecordingCellDropdown];
+}
+
+- (void)setRightRecordingCellDropdownTargets: (NSArray*)rightRecordingCellDropdownTargets
+{
+    _rightRecordingCellDropdownTargets = rightRecordingCellDropdownTargets;
+
+    for (id target in self.rightRecordingCellDropdownTargets)
+        [target setImage: WireTapStyleKit.imageOfRightRecordingCellDropdown];
 }
 
 - (void)setRecordButtonTargets: (NSArray*)recordButtonTargets

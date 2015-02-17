@@ -34,6 +34,7 @@
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
 		D0C67CD91A91BADD000F501A /* RecordingContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD81A91BADD000F501A /* RecordingContentView.m */; };
 		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
+		D0F97F541A92A46800F07032 /* NSString+Score.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F97F531A92A46800F07032 /* NSString+Score.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,8 @@
 		D0C67CD81A91BADD000F501A /* RecordingContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingContentView.m; sourceTree = "<group>"; };
 		D0C67CDA1A929A4C000F501A /* FramesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FramesController.h; sourceTree = "<group>"; };
 		D0C67CDB1A929A4C000F501A /* FramesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FramesController.m; sourceTree = "<group>"; };
+		D0F97F521A92A46800F07032 /* NSString+Score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Score.h"; path = "StringScore-master/NSString+Score.h"; sourceTree = "<group>"; };
+		D0F97F531A92A46800F07032 /* NSString+Score.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Score.m"; path = "StringScore-master/NSString+Score.m"; sourceTree = "<group>"; };
 		FECB9CE9F42F55800F002CE6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,8 +169,8 @@
 			isa = PBXGroup;
 			children = (
 				D05D75791A79AAA40050A49C /* Main.storyboard */,
-				D0C67CDE1A929D67000F501A /* Views */,
 				D0C67CDD1A929D51000F501A /* View Controllers */,
+				D0C67CDE1A929D67000F501A /* Views */,
 				D0C67CDF1A929D84000F501A /* Controllers */,
 				D0C67CE01A929E0E000F501A /* Model */,
 			);
@@ -284,6 +287,8 @@
 				7AC290A71A8EF0100085B927 /* Constants.m */,
 				7AC290AC1A8EF0100085B927 /* Recording.h */,
 				7AC290AD1A8EF0100085B927 /* Recording.m */,
+				D0F97F521A92A46800F07032 /* NSString+Score.h */,
+				D0F97F531A92A46800F07032 /* NSString+Score.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -424,6 +429,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0F97F541A92A46800F07032 /* NSString+Score.m in Sources */,
 				7AC290BB1A8EF0100085B927 /* CKRecordingViewController.m in Sources */,
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
 				D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */,

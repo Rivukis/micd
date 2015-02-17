@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface RecordingCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
+
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UILabel *date;
+
+- (void)setSlidingBackgroundViewFrameExpanded:(BOOL)expanded;
+
 @end

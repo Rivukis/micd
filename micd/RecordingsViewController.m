@@ -19,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) DataSourceController *dataSource;
 @property (strong, nonatomic) PlayerController *playerController;
+//@property (strong, nonatomic) NSIndexPath *pleaseExpand;
+@property (strong, nonatomic) NSMutableArray *expandedRows;
 
 @end
 
@@ -32,6 +34,8 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    self.expandedRows = [NSMutableArray array];
 }
 
 - (void)reloadData {
@@ -41,10 +45,11 @@
 #pragma mark - FramesBasedOnStateProtocol
 
 - (void)setInitialStateFrame {
+    CGRect screenSize = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0,
                                  (self.view.window.frame.size.height * 1.068f) * -1,
                                  self.view.window.frame.size.width,
-                                 self.view.window.frame.size.height - 128.0f);
+                                 screenSize.size.height * 0.808f);
     self.tableView.frame = self.view.frame;
 }
 
@@ -82,20 +87,43 @@
     RecordingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
     cell.title.text = recording.uuid.UUIDString;
-    cell.date.text = @"Feb 15";
+    cell.date.text = @"Dec 25";
+    
+    [cell setSlidingBackgroundViewFrameExpanded:[self.expandedRows containsObject:@(indexPath.row)]];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
-    [self.playerController loadRecording:recording error:nil];
-    [self.playerController playAudioWithError:nil];
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
+//    [self.playerController loadRecording:recording error:nil];
+//    [self.playerController playAudioWithError:nil];
+    
+    if ([self.expandedRows containsObject:@(indexPath.row)]) {
+        [self.expandedRows removeObject:@(indexPath.row)];
+    } else {
+        [self.expandedRows addObject:@(indexPath.row)];
+    }
+    
+    RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
+    
+    [tableView beginUpdates];
+    [UIView animateWithDuration:.3f animations:^{
+        [cell setSlidingBackgroundViewFrameExpanded:[self.expandedRows containsObject:@(indexPath.row)]];
+        [cell layoutIfNeeded];
+    }];
+    [tableView endUpdates];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return tableView.frame.size.width * .16f;
+    if ([self.expandedRows containsObject:@(indexPath.row)]) {
+        return 180.0f;
+        return tableView.frame.size.width *.31f;
+    } else {
+        return 60.0f;
+        return tableView.frame.size.width * .16f;
+    }
 }
 
 @end

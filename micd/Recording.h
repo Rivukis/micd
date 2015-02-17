@@ -28,8 +28,6 @@ struct Length {
 @property (nonatomic, assign, readonly) struct Length length;
 @property (nonatomic, strong, readonly) NSUUID *uuid;
 
-@property (nonatomic, assign) CGFloat currentSearchScore;
-
 // time stamp (moment the recording starts - hour and minute (may include seconds)
 // date (to the day only)
 // length nstime (possibly make custom timestamp class)

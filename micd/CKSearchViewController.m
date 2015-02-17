@@ -34,10 +34,6 @@
     
     NSArray *searchItems = [FakesForProject fakeArrayOfSearchItems];
     
-//    for (CKRecording *recording in searchItems) {
-//        recording.currentSearchScore = [recording.title scoreAgainst:sender.text fuzziness:@1];
-//    }
-    
     NSMutableArray *titleResults = [NSMutableArray array];
     for (Recording *recording in searchItems) {
         if ([recording.title scoreAgainst:sender.text fuzziness:@1] > 0.4f) {
@@ -50,18 +46,9 @@
     self.titleResults = [titleResults copy];
     
     // find tag matches
-//    CKRecording recording;
-//    recording.tags
-//    
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY tags]
     
-    
-//    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"SELF   contains '%@'", sender.text];
-//    NSArray *array = [NSArray arrayWithObjects:@" AhfjA ", @"test1", @"best", @"AntA", nil];
-//    NSArray *filteredArray  = [array filteredArrayUsingPredicate:predicate];
-    
-    NSPredicate *otherpredicate = [NSPredicate predicateWithFormat:@"tags contains %@", sender.text];
-    self.tagResults = [searchItems filteredArrayUsingPredicate:otherpredicate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"tags contains %@", sender.text];
+    self.tagResults = [searchItems filteredArrayUsingPredicate:predicate];
     
     [self.tableView reloadData];
 }
@@ -95,7 +82,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"resultsCell" forIndexPath:indexPath];
-    CKRecording *recording;
+    Recording *recording;
     
     if (indexPath.section == 0) {
         recording = self.titleResults[indexPath.row];
@@ -104,7 +91,7 @@
     }
     
     cell.textLabel.text = recording.title;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"search score: %f", recording.currentSearchScore];
+//    cell.detailTextLabel.text = [NSString stringWithFormat:@"search score: %f", recording.currentSearchScore];
     
     return cell;
 }

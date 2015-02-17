@@ -1,7 +1,6 @@
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
 #import "HomeViewController.h"
-//#import "GearsView.h"
 #import "GearsImageView.h"
 #import "OBShapedButton.h"
 #import "RecorderController.h"
@@ -14,7 +13,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (assign, nonatomic) BOOL isMovingDown;
 @property (strong, nonatomic) OBShapedButton *recordButton;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
-//@property (strong, nonatomic) GearsView *gearsView;
 @property (strong, nonatomic) GearsImageView *gearsImageView;
 @property (strong, nonatomic) UIView *recordingsBottomArrow;
 @property (strong, nonatomic) UIView *recordingsTopArrow;

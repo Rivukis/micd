@@ -18,12 +18,22 @@
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* homeViewTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* micdBackgroundTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* singleRecordingCellTargets;
+@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordingsDropdownTargets;
+@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* leftRecordingCellBackgroundTargets;
+@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* rightRecordingCellBackgroundTargets;
+@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* leftRecordingCellDropdownTargets;
+@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* rightRecordingCellDropdownTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonTargets;
 
 // Drawing Methods
 + (void)drawHomeView;
 + (void)drawMicdBackground;
 + (void)drawSingleRecordingCell;
++ (void)drawRecordingsDropdown;
++ (void)drawLeftRecordingCellBackground;
++ (void)drawRightRecordingCellBackground;
++ (void)drawLeftRecordingCellDropdown;
++ (void)drawRightRecordingCellDropdown;
 + (void)drawRecordButton;
 + (void)drawGearsWithPositiveGearRotation: (CGFloat)positiveGearRotation negativeGearRotation: (CGFloat)negativeGearRotation;
 + (void)drawBackgroundCordWithColor: (UIColor*)color;
@@ -33,6 +43,11 @@
 + (UIImage*)imageOfHomeView;
 + (UIImage*)imageOfMicdBackground;
 + (UIImage*)imageOfSingleRecordingCell;
++ (UIImage*)imageOfRecordingsDropdown;
++ (UIImage*)imageOfLeftRecordingCellBackground;
++ (UIImage*)imageOfRightRecordingCellBackground;
++ (UIImage*)imageOfLeftRecordingCellDropdown;
++ (UIImage*)imageOfRightRecordingCellDropdown;
 + (UIImage*)imageOfRecordButton;
 + (UIImage*)imageOfGearsWithPositiveGearRotation: (CGFloat)positiveGearRotation negativeGearRotation: (CGFloat)negativeGearRotation;
 
