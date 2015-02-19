@@ -21,6 +21,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 @property (strong, nonatomic) RecorderController *recorderController;
 
+@property (nonatomic) CGFloat initialY;
+@property (assign, nonatomic) BOOL hasSetInitialY;
+
 @end
 
 @implementation HomeViewController
@@ -42,43 +45,10 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.view addSubview:self.gearsImageView];
     
     [self setupPanGestures];
-}
-
-- (void)setupPanGestures {
-    UIPanGestureRecognizer *panGesture;
     
-    self.recordingsTopArrow = [[UIView alloc] init];
-    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleRecordingsToHomePan:)];
-    panGesture.delegate = self;
-    [self.recordingsTopArrow addGestureRecognizer:panGesture];
-    [self.view addSubview:self.recordingsTopArrow];
-//    self.recordingsTopArrow.layer.borderColor = [UIColor redColor].CGColor;
-//    self.recordingsTopArrow.layer.borderWidth = 2.0f;
-    
-    
-    self.recordingsBottomArrow = [[UIView alloc] init];
-    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToRecordingsPan:)];
-    panGesture.delegate = self;
-    [self.recordingsBottomArrow addGestureRecognizer:panGesture];
-    [self.view addSubview:self.recordingsBottomArrow];
-//    self.recordingsBottomArrow.layer.borderColor = [UIColor greenColor].CGColor;
-//    self.recordingsBottomArrow.layer.borderWidth = 2.0f;
-    
-    self.settingsTopArrow = [[UIView alloc] init];
-    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToSettingsPan:)];
-    panGesture.delegate = self;
-    [self.settingsTopArrow addGestureRecognizer:panGesture];
-    [self.view addSubview:self.settingsTopArrow];
-//    self.settingsTopArrow.layer.borderColor = [UIColor magentaColor].CGColor;
-//    self.settingsTopArrow.layer.borderWidth = 2.0f;
-    
-    self.settingsBottomArrow = [[UIView alloc] init];
-    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSettingsToHomePan:)];
-    panGesture.delegate = self;
-    [self.settingsBottomArrow addGestureRecognizer:panGesture];
-    [self.view addSubview:self.settingsBottomArrow];
-//    self.settingsBottomArrow.layer.borderColor = [UIColor cyanColor].CGColor;
-//    self.settingsBottomArrow.layer.borderWidth = 2.0f;
+    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
+    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    self.displayLink.paused = YES;
 }
 
 #pragma mark - User Actions
@@ -128,6 +98,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
         }
+        self.displayLink.paused = NO;
     }
 }
 
@@ -143,6 +114,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         }
+        self.displayLink.paused = NO;
     }
 }
 
@@ -158,6 +130,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         }
+        self.displayLink.paused = NO;
     }
 }
 
@@ -173,6 +146,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
         }
+        self.displayLink.paused = NO;
     }
 }
 
@@ -270,12 +244,51 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)rotateGearsWithTranslation:(CGPoint)translation {
-//    self.gearsImageView.positiveGearRotationAngle += translation.y;
-//    self.gearsImageView.negativeGearRotationAngle -= translation.y;
-//    
-//    [self.gearsImageView setNeedsDisplay];
-    
     [self.gearsImageView moveGearsWithRotationAngle:translation.y];
 }
+
+- (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
+    CGRect presentationFrame = [self.view.layer.presentationLayer frame];
+    
+    if (!self.hasSetInitialY) {
+        self.initialY = presentationFrame.origin.y;
+        self.hasSetInitialY = YES;
+    }
+    
+    float Ytraveled = fabsf(presentationFrame.origin.y) - fabsf(self.initialY);
+    
+    self.initialY = presentationFrame.origin.y;
+
+    [self.gearsImageView moveGearsWithRotationAngle:-Ytraveled];
+}
+
+- (void)setupPanGestures {
+    UIPanGestureRecognizer *panGesture;
+    
+    self.recordingsTopArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleRecordingsToHomePan:)];
+    panGesture.delegate = self;
+    [self.recordingsTopArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.recordingsTopArrow];
+    
+    self.recordingsBottomArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToRecordingsPan:)];
+    panGesture.delegate = self;
+    [self.recordingsBottomArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.recordingsBottomArrow];
+    
+    self.settingsTopArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleHomeToSettingsPan:)];
+    panGesture.delegate = self;
+    [self.settingsTopArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.settingsTopArrow];
+    
+    self.settingsBottomArrow = [[UIView alloc] init];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleSettingsToHomePan:)];
+    panGesture.delegate = self;
+    [self.settingsBottomArrow addGestureRecognizer:panGesture];
+    [self.view addSubview:self.settingsBottomArrow];
+}
+
 
 @end

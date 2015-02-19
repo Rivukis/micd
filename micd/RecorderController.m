@@ -330,7 +330,7 @@ BOOL const useEnhancedRecorder = NO;
         } else {
             
             // TODO: handle other problems
-            NSLog(@"Export Session Status: %d", exportSession.status);
+            NSLog(@"Export Session Status: %ld", exportSession.status);
             
             self.recordingState = RecorderControllerStatePaused;
             

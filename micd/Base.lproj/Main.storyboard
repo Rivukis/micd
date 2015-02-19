@@ -48,7 +48,7 @@
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Stm-y6-W5k">
-                                                            <rect key="frame" x="82" y="57" width="100" height="63"/>
+                                                            <rect key="frame" x="82" y="97" width="100" height="63"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n3B-Ar-ZP8" userLabel="Date Label">
                                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="22"/>
@@ -89,7 +89,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="Stm-y6-W5k" secondAttribute="trailing" constant="25" id="0fA-Aa-xIu"/>
                                                         <constraint firstAttribute="trailing" secondItem="isN-Px-pWa" secondAttribute="trailing" id="3zm-vp-Lom"/>
-                                                        <constraint firstItem="Stm-y6-W5k" firstAttribute="top" secondItem="BiL-e1-PLK" secondAttribute="top" constant="57" id="5bP-1e-Lru"/>
+                                                        <constraint firstItem="Stm-y6-W5k" firstAttribute="top" secondItem="BiL-e1-PLK" secondAttribute="top" constant="97" id="5bP-1e-Lru"/>
                                                         <constraint firstAttribute="height" constant="180" id="Rq6-Lz-YeK"/>
                                                         <constraint firstItem="isN-Px-pWa" firstAttribute="top" secondItem="BiL-e1-PLK" secondAttribute="top" id="VVo-Cj-LX2"/>
                                                         <constraint firstAttribute="bottom" secondItem="isN-Px-pWa" secondAttribute="bottom" id="Wqi-ni-P2Y"/>

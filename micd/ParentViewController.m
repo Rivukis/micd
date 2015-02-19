@@ -66,7 +66,8 @@
                      animations: ^{
                          [self setFrameBasedOnState:state];
                      } completion:^(BOOL finished) {
-                         
+                         self.homeViewController.displayLink.paused = YES;
+//                         [self.homeViewController.displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
                      }];
 }
 

@@ -28,5 +28,6 @@
 
 @property (weak, nonatomic) id<MovementDelegate> movementDelegate;
 @property (weak, nonatomic) id<AddNewRecordingDelegate> addNewRecordingDelegate;
+@property (strong, nonatomic) CADisplayLink *displayLink;
 
 @end
