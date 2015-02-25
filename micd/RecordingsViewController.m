@@ -32,6 +32,7 @@
     self.dataSource = [DataSourceController sharedInstance];
     self.playerController = [[PlayerController alloc] init];
     
+    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -83,16 +84,21 @@
     return self.dataSource.numberOfRecordings;
 }
 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     RecordingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
-    cell.title.text = recording.recordedDateAsFullString;
-    int randomNumber = arc4random_uniform(28);
-    cell.date.text = [NSString stringWithFormat:@"Feb %d", randomNumber];
-    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
     
-    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
-    [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
+    [cell setValuesForRecording:recording];
+    
+//    cell.title.text = recording.recordedDateAsFullString;
+//    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
+    
+//    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
+//    [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
     
     return cell;
 }
@@ -110,23 +116,46 @@
     }
     
     RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
-    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
-    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
+//    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
+//    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
     
     [tableView beginUpdates];
     [UIView animateWithDuration:.3f animations:^{
-        [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
+//        [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
         [cell layoutIfNeeded];
     }];
     [tableView endUpdates];
+    
+    /* some animation choices
+    [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
+    [cell layoutIfNeeded];
+    
+    [UIView beginAnimations:@"myAnimationId" context:nil];
+    
+    [UIView setAnimationDuration:.3f]; // Set duration here
+    
+    [CATransaction begin];
+    
+    //just in case we want to
+    [CATransaction setCompletionBlock:^{
+        
+    }];
+    
+    [tableView beginUpdates];
+    // my table changes
+    [tableView endUpdates];
+    
+    [CATransaction commit];
+    [UIView commitAnimations];
+     */
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.expandedRows containsObject:@(indexPath.row)]) {
-        return 180.0f;
+        return 150.0f;
         return tableView.frame.size.width *.31f;
     } else {
-        return 60.0f;
+        return 50.0f;
         return tableView.frame.size.width * .16f;
     }
 }

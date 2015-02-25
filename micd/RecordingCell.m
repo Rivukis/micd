@@ -8,65 +8,58 @@
 
 #import "RecordingCell.h"
 #import "WireTapStyleKit.h"
+#import "Recording.h"
 
 @interface RecordingCell ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *leftBackgroundImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *rightBackgroundImageView;
-
-@property (weak, nonatomic) IBOutlet UIImageView *leftSlidingBackgroundImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *rightSlidingBackgroundImageView;
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftSlidingBackgroundImageViewYConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *labelsViewToTopSuperViewConstraint;
+@property (weak, nonatomic) IBOutlet UILabel *title;
+@property (weak, nonatomic) IBOutlet UILabel *recordingLengthLabel;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
 
 @property (weak, nonatomic) IBOutlet UILabel *recordingDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *recordingTimeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *recordingLengthLabel;
 
 @end
 
 @implementation RecordingCell
 
 -(void)layoutSubviews {
+    [super layoutSubviews];
+    
     self.backgroundColor = [UIColor blackColor];
+    self.editButton.backgroundColor = [UIColor blackColor];
     self.layer.masksToBounds = YES;
-    
-    self.leftBackgroundImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.leftBackgroundImageView.image = [WireTapStyleKit imageOfLeftRecordingCellBackground];
-    
-    self.rightBackgroundImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.rightBackgroundImageView.image = [WireTapStyleKit imageOfRightRecordingCellBackground];
-    
-    self.leftSlidingBackgroundImageView.image = [WireTapStyleKit imageOfLeftRecordingCellDropdown];
-    self.rightSlidingBackgroundImageView.image = [WireTapStyleKit imageOfRightRecordingCellDropdown];
-    
+}
+
+- (void)setValuesForRecording:(Recording *)recording {
     self.recordingDateLabel.text = @"Oct 24 2015";
     self.recordingTimeLabel.text = @"12:45PM";
     self.recordingLengthLabel.text = @"4m 35s";
+    
+    switch (self.state) {
+        case CellStateCollapsed:
+            [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+            self.recordingDateLabel.hidden = YES;
+            self.recordingTimeLabel.hidden = YES;
+            break;
+        case CellStateEditing:
+            [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+            self.recordingDateLabel.hidden = NO;
+            self.recordingTimeLabel.hidden = NO;
+            break;
+        case CellStatePlaying:
+            [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+            self.recordingDateLabel.hidden = YES;
+            self.recordingTimeLabel.hidden = YES;
+            break;
+    }
 }
 
-- (void)setPreAnimationConstraintsBasedOnExpansion:(BOOL)expanded {
-    [self setLabelsViewToBottomSuperViewConstraintBasedOnExpansion:expanded];
-}
-
-- (void)setPostAnimationConstraintsBasedOnExpansion:(BOOL)expanded {
-    [self setSlidingBackgroundViewFrameExpanded:expanded];
-}
-
-- (void)setLabelsViewToBottomSuperViewConstraintBasedOnExpansion:(BOOL)expanded {
-    self.labelsViewToTopSuperViewConstraint.constant = 57.0f;
-}
-
-- (void)setSlidingBackgroundViewFrameExpanded:(BOOL)expanded {
-    self.leftSlidingBackgroundImageViewYConstraint.constant = [self slidingBackgroundViewFrameBasedOnExpansion:expanded];
-}
-
-- (float)slidingBackgroundViewFrameBasedOnExpansion:(BOOL)expanded {
-    if (expanded) {
-        return 0.0f;
+- (IBAction)editButtonPressed:(UIButton *)sender {
+    if (self.state == CellStateEditing) {
+        self.state = CellStateCollapsed;
     } else {
-        return -120.0f;
+        self.state = CellStateEditing;
     }
 }
 

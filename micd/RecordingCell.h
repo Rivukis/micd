@@ -8,12 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class Recording;
+
+typedef NS_ENUM(NSUInteger, CellState) {
+    CellStateCollapsed,
+    CellStateEditing,
+    CellStatePlaying,
+};
+
 @interface RecordingCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *title;
-@property (weak, nonatomic) IBOutlet UILabel *date;
+@property (assign, nonatomic) CellState state;
 
-- (void)setPreAnimationConstraintsBasedOnExpansion:(BOOL)expanded;
-- (void)setPostAnimationConstraintsBasedOnExpansion:(BOOL)expanded;
+- (void)setValuesForRecording:(Recording *)recording;
 
 @end

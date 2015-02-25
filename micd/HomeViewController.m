@@ -93,12 +93,12 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        self.displayLink.paused = NO;
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
         }
-        self.displayLink.paused = NO;
     }
 }
 
@@ -109,12 +109,12 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        self.displayLink.paused = NO;
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         }
-        self.displayLink.paused = NO;
     }
 }
 
@@ -125,12 +125,12 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        self.displayLink.paused = NO;
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         }
-        self.displayLink.paused = NO;
     }
 }
 
@@ -141,12 +141,12 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        self.displayLink.paused = NO;
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         } else {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
         }
-        self.displayLink.paused = NO;
     }
 }
 

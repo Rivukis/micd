@@ -65,9 +65,9 @@
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations: ^{
                          [self setFrameBasedOnState:state];
+                         NSLog(@"%d", self.homeViewController.displayLink.paused);
                      } completion:^(BOOL finished) {
                          self.homeViewController.displayLink.paused = YES;
-//                         [self.homeViewController.displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
                      }];
 }
 
