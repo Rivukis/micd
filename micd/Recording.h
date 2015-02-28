@@ -22,10 +22,10 @@ struct Length {
 @property (nonatomic, strong, readonly) NSArray *tags;
 
 @property (nonatomic, copy, readonly) NSData *data;
-@property (nonatomic, strong, readonly) NSDate *recordedDateAsDate;
-@property (nonatomic, strong, readonly) NSDateComponents *recordedDate;
-@property (nonatomic, strong) NSString *recordedDateAsFullString;
-@property (nonatomic, strong) NSString *recordedDateAsShortString;
+@property (nonatomic, strong, readonly) NSDate *date;
+@property (nonatomic, strong, readonly) NSDateComponents *dateComponents;
+@property (nonatomic, strong) NSString *dateAsFullString;
+@property (nonatomic, strong) NSString *dateAsShortString;
 @property (nonatomic, assign, readonly) NSTimeInterval lengthAsTimeInterval;
 @property (nonatomic, assign, readonly) struct Length length;
 @property (nonatomic, strong, readonly) NSUUID *uuid;

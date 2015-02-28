@@ -28,13 +28,13 @@
     
     // TODO: fix weekday issue (comming up as huge number instead of a number 1-7)
 //    NSString *dateWeekday = [NSString stringWithFormat:@"%ld", (long)self.recording.recordedDate.weekday];
-    NSString *dateYear = [NSString stringWithFormat:@"%ld", (long)self.recording.recordedDate.year];
-    NSString *dateMonth = [self twoNumberStringWithInteger:self.recording.recordedDate.month];
-    NSString *dateDay = [self twoNumberStringWithInteger:self.recording.recordedDate.day];
-    NSString *dateHours = [self twoNumberStringWithInteger:self.recording.recordedDate.hour];
-    NSString *dateMinutes = [self twoNumberStringWithInteger:self.recording.recordedDate.minute];
-    NSString *dateSeconds = [self twoNumberStringWithInteger:self.recording.recordedDate.second];
-    NSString *dateTimeZone = [self.recording.recordedDate.timeZone abbreviation];
+    NSString *dateYear = [NSString stringWithFormat:@"%ld", (long)self.recording.dateComponents.year];
+    NSString *dateMonth = [self twoNumberStringWithInteger:self.recording.dateComponents.month];
+    NSString *dateDay = [self twoNumberStringWithInteger:self.recording.dateComponents.day];
+    NSString *dateHours = [self twoNumberStringWithInteger:self.recording.dateComponents.hour];
+    NSString *dateMinutes = [self twoNumberStringWithInteger:self.recording.dateComponents.minute];
+    NSString *dateSeconds = [self twoNumberStringWithInteger:self.recording.dateComponents.second];
+    NSString *dateTimeZone = [self.recording.dateComponents.timeZone abbreviation];
     self.dateTextField.text = [NSString stringWithFormat:@"%@/%@/%@ %@:%@:%@ %@", dateYear, dateMonth, dateDay, dateHours, dateMinutes, dateSeconds, dateTimeZone];
     
     NSString *lengthHours = [self twoNumberStringWithInteger:self.recording.length.hours];

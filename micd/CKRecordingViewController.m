@@ -134,13 +134,13 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"recordingCell" forIndexPath:indexPath];
     Recording *recording = self.recordings[indexPath.row];
     
-    NSString *dateYear = [NSString stringWithFormat:@"%ld", (long)recording.recordedDate.year];
-    NSString *dateMonth = [self twoNumberStringWithInteger:recording.recordedDate.month];
-    NSString *dateDay = [self twoNumberStringWithInteger:recording.recordedDate.day];
-    NSString *dateHours = [self twoNumberStringWithInteger:recording.recordedDate.hour];
-    NSString *dateMinutes = [self twoNumberStringWithInteger:recording.recordedDate.minute];
-    NSString *dateSeconds = [self twoNumberStringWithInteger:recording.recordedDate.second];
-    NSString *dateTimeZone = [recording.recordedDate.timeZone abbreviation];
+    NSString *dateYear = [NSString stringWithFormat:@"%ld", (long)recording.dateComponents.year];
+    NSString *dateMonth = [self twoNumberStringWithInteger:recording.dateComponents.month];
+    NSString *dateDay = [self twoNumberStringWithInteger:recording.dateComponents.day];
+    NSString *dateHours = [self twoNumberStringWithInteger:recording.dateComponents.hour];
+    NSString *dateMinutes = [self twoNumberStringWithInteger:recording.dateComponents.minute];
+    NSString *dateSeconds = [self twoNumberStringWithInteger:recording.dateComponents.second];
+    NSString *dateTimeZone = [recording.dateComponents.timeZone abbreviation];
     NSString *formattedDate = [NSString stringWithFormat:@"%@/%@/%@ %@:%@:%@ %@", dateYear, dateMonth, dateDay, dateHours, dateMinutes, dateSeconds, dateTimeZone];
     
     NSString *lengthHours = [self twoNumberStringWithInteger:recording.length.hours];

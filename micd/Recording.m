@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         _data = data;
-        _recordedDateAsDate = recordedDate;
+        _date = recordedDate;
         _lengthAsTimeInterval = length;
         _title = name ? name : @"";
         _uuid = [[NSUUID alloc] init];
@@ -49,24 +49,24 @@
     return YES;
 }
 
-- (NSString *)recordedDateAsFullString {
-    if (!_recordedDateAsFullString) {
+- (NSString *)dateAsFullString {
+    if (!_dateAsFullString) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-        _recordedDateAsFullString = [dateFormatter stringFromDate:self.recordedDateAsDate];
+        _dateAsFullString = [dateFormatter stringFromDate:self.date];
     }
     
-    return _recordedDateAsFullString;
+    return _dateAsFullString;
 }
 
-- (NSString *)recordedDateAsShortString {
-    if (!_recordedDateAsShortString) {
+- (NSString *)dateAsShortString {
+    if (!_dateAsShortString) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-        _recordedDateAsShortString = [dateFormatter stringFromDate:self.recordedDateAsDate];
+        _dateAsShortString = [dateFormatter stringFromDate:self.date];
     }
     
-    return _recordedDateAsShortString;
+    return _dateAsShortString;
 }
 
 #pragma mark - tag methods
@@ -103,7 +103,7 @@
 
 #pragma mark - time and date methods
 
-- (NSDateComponents *)recordedDate {
+- (NSDateComponents *)dateComponents {
     
     NSCalendar *calender = [NSCalendar currentCalendar];
     NSInteger componentOptions = NSCalendarUnitYear |
@@ -115,7 +115,7 @@
                                  NSCalendarUnitNanosecond |
                                  NSCalendarUnitWeekdayOrdinal |
                                  NSCalendarUnitTimeZone;
-    return [calender components:componentOptions fromDate:self.recordedDateAsDate];
+    return [calender components:componentOptions fromDate:self.date];
 }
 
 - (struct Length)length {

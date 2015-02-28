@@ -52,4 +52,8 @@
     return self.recordings.count;
 }
 
+- (NSArray *)allRecordings {
+    return [self.recordings copy];
+}
+
 @end

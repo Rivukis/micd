@@ -12,6 +12,9 @@
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
 @property (strong, nonatomic) DataSourceController *dataSource;
+
+@property (assign, nonatomic) BOOL didSetInitialFrames;
+
 @end
 
 @implementation ParentViewController
@@ -38,10 +41,13 @@
     self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
 }
 
--(void)viewDidLayoutSubviews {
+- (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    [self setInitialStateFrame];
+    if (!self.didSetInitialFrames) {
+        [self setInitialStateFrame];
+        self.didSetInitialFrames = YES;
+    }
 }
 
 #pragma mark - AddNewRecordingDelegate

@@ -6,4 +6,6 @@
 
 + (UIColor *)recordRed;
 
++ (UIColor *)babyBlue;
+
 @end

@@ -91,7 +91,6 @@
     }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    
     if (self.isThisYear) {
         [formatter setDateFormat:@"MMMM"];
     } else {

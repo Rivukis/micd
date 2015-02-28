@@ -15,9 +15,7 @@
 @property (nonatomic, readonly) NSInteger numberOfRecordings;
 
 + (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings;
-
 - (Recording *)recordingAtIndex:(NSInteger)index;
-
 - (NSString *)dateAsString;
 
 @end

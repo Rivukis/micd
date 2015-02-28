@@ -18,5 +18,6 @@
 - (void)addNewRecording:(Recording *)recording;
 - (Recording *)recordingAtIndex:(NSUInteger)index;
 - (void)deleteRecordingAtIndex:(NSUInteger)index;
+- (NSArray *)allRecordings;
 
 @end
