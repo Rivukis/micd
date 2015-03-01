@@ -6,6 +6,14 @@
     return [UIColor colorWithRed:0.118f green:0.690f blue:0.843f alpha:1.000f];
 }
 
++ (UIColor *)vibrantBlueText {
+    return [UIColor colorWithRed:0.380f green:0.769f blue:0.871f alpha:1.000f];
+}
+
++ (UIColor *)vibrantBlueHalfOpacity {
+    return [UIColor colorWithRed:0.118f green:0.690f blue:0.843f alpha:0.500f];
+}
+
 + (UIColor *)recordRed {
     return [UIColor colorWithRed:0.992f green:0.188f blue:0.110f alpha:1.000f];
 }

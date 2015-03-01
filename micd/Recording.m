@@ -132,6 +132,16 @@
     return length;
 }
 
+- (NSString *)lengthToDiplay {
+    NSString *displayableLength;
+    if (self.length.hours) {
+        displayableLength = [NSString stringWithFormat:@"%ld:%02ld:%02ld", (long)self.length.hours, (long)self.length.minutes, (long)self.length.seconds];
+    } else {
+        displayableLength = [NSString stringWithFormat:@"%ld:%02ld", (long)self.length.minutes, (long)self.length.seconds];
+    }
+    return displayableLength;
+}
+
 #pragma mark - url methods
 
 //- (NSURL *)url {

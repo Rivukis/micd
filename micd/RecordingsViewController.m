@@ -14,10 +14,12 @@
 #import "WireTapStyleKit.h"
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
+#import "FakesForProject.h"
 
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIImageView *tableBottomFaderImageView;
 @property (strong, nonatomic) DataSourceController *dataSource;
 @property (strong, nonatomic) PlayerController *playerController;
 @property (strong, nonatomic) NSMutableArray *expandedRows;
@@ -42,8 +44,12 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, -10, 0, 0);
+    self.tableView.layoutMargins = UIEdgeInsetsZero;
+    self.tableView.separatorColor = [UIColor vibrantBlueHalfOpacity];
     
+    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     
     self.expandedRows = [NSMutableArray array];
     
@@ -57,6 +63,10 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+
+    
+    [self.tableBottomFaderImageView setImage:[WireTapStyleKit imageOfTableviewFader]];
+    self.tableBottomFaderImageView.backgroundColor = [UIColor clearColor];
     
     if (!self.didGetOriginalHeight) {
         self.didGetOriginalHeight = YES;
@@ -66,7 +76,8 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, -10, 0, 0);
+    self.tableView.layoutMargins = UIEdgeInsetsZero;
     if (!self.didGetOriginalTableViewHeight) {
         self.didGetOriginalTableViewHeight = YES;
         self.originalTableViewHeight = self.tableView.frame.size.height;
@@ -80,7 +91,7 @@
     self.view.frame = CGRectMake(0,
                                  (self.view.window.frame.size.height * 1.068f) * -1,
                                  self.view.window.frame.size.width,
-                                 screenSize.size.height * 0.808f);
+                                 screenSize.size.height * 0.82f);
 }
 
 - (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
@@ -133,13 +144,9 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //add code here for when you hit delete
+        NSLog(@"DELETE");
     }
 }
-
-//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return @"deletoooo";
-//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     RecordingsSection *recordingsSection = self.sections[section];
@@ -154,32 +161,47 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 45.0f;
+    return 45;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
     RecordingsSection *recordingsSection = self.sections[section];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 45.0f)];
     
-    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(13.0f, 44.0f, tableView.frame.size.width - 26.f, 1.0f)];
-    bottomBorderView.backgroundColor = [UIColor babyBlue];
+    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 44.0f, tableView.frame.size.width, 1.0f)];
+    bottomBorderView.backgroundColor = [UIColor vibrantBlue];
     [headerView addSubview:bottomBorderView];
     
-    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width - 13, 20.0f)];
+    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width, 20.0f)];
     headerTitleLabel.text = recordingsSection.dateAsString;
-    headerTitleLabel.font = [UIFont fontWithName: @"AvenirNextCondensed-Regular" size:17.0f];
+    headerTitleLabel.font = [UIFont fontWithName: @"AvenirNext-Regular" size:16.0f];
     headerTitleLabel.textAlignment = NSTextAlignmentRight;
-    headerTitleLabel.textColor = [UIColor babyBlue];
+    headerTitleLabel.textColor = [UIColor vibrantBlueText];
     [headerView addSubview:headerTitleLabel];
+    
+    headerView.backgroundColor = [UIColor blackColor];
     
     return headerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0.01f;
+    return 1;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 1.0f)];
+    UIView *borderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0, tableView.frame.size.width, 1.0f)];
+    borderView.backgroundColor = [UIColor vibrantBlueHalfOpacity];
+    [footerView addSubview:borderView];
+    return footerView;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 //    Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
 //    [self.playerController loadRecording:recording error:nil];
@@ -228,10 +250,10 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.expandedRows containsObject:@(indexPath.row)]) {
-        return 150.0f;
+        return 90;
         return tableView.frame.size.width *.31f;
     } else {
-        return 45.0f;
+        return 45;
         return tableView.frame.size.width * .16f;
     }
 }
@@ -252,6 +274,20 @@
             viewFrame.size.height = self.originalHeight - differenceInHeight;
         }
         self.view.frame = viewFrame;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
     }
 }
 

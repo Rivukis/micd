@@ -42,4 +42,6 @@ struct Length {
 - (BOOL)addTag:(NSString *)tag;
 - (BOOL)removeTag:(NSString *)tag;
 
+- (NSString *)lengthToDiplay;
+
 @end

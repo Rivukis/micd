@@ -7,6 +7,7 @@
 //
 
 #import "DataSourceController.h"
+#import "FakesForProject.h"
 
 @interface DataSourceController ()
 
@@ -32,6 +33,8 @@
     self = [super init];
     if (self) {
         _recordings = [NSMutableArray array];
+        NSArray *fakes = [FakesForProject fakeArrayOfSearchItems];
+        [_recordings addObjectsFromArray:fakes];
     }
     return self;
 }

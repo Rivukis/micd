@@ -8,16 +8,14 @@
 
 #import "RecordingCell.h"
 #import "WireTapStyleKit.h"
+#import "UIColor+Palette.h"
 #import "Recording.h"
 
 @interface RecordingCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel *title;
-@property (weak, nonatomic) IBOutlet UILabel *recordingLengthLabel;
+@property (weak, nonatomic) IBOutlet UILabel *length;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
-
-@property (weak, nonatomic) IBOutlet UILabel *recordingDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *recordingTimeLabel;
 
 @end
 
@@ -28,29 +26,37 @@
     
     self.backgroundColor = [UIColor blackColor];
     self.editButton.backgroundColor = [UIColor blackColor];
+    self.title.textColor = [UIColor vibrantBlueText];
+    self.length.textColor = [UIColor vibrantBlueText];
     self.layer.masksToBounds = YES;
+    self.separatorInset = UIEdgeInsetsZero;
 }
 
 - (void)setValuesForRecording:(Recording *)recording {
-    self.recordingDateLabel.text = @"Oct 24 2015";
-    self.recordingTimeLabel.text = @"12:45PM";
-    self.recordingLengthLabel.text = @"4m 35s";
+    
+    self.title.text = recording.title;
+
+//    NSString *length;
+//    if (recording.length.hours) {
+//        length = [NSString stringWithFormat:@"%ld:%ld:%ld", (long)recording.length.hours, (long)recording.length.minutes, (long)recording.length.seconds];
+//    } else if (recording.length.minutes) {
+//        length = [NSString stringWithFormat:@"%ld:%ld", (long)recording.length.minutes, (long)recording.length.seconds];
+//    } else {
+//        length = [NSString stringWithFormat:@"%ld", (long)recording.length.seconds];
+//    }
+//    self.length.text = length;
+    
+    self.length.text = [recording lengthToDiplay];
     
     switch (self.state) {
         case CellStateCollapsed:
             [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
-            self.recordingDateLabel.hidden = YES;
-            self.recordingTimeLabel.hidden = YES;
             break;
         case CellStateEditing:
             [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
-            self.recordingDateLabel.hidden = NO;
-            self.recordingTimeLabel.hidden = NO;
             break;
         case CellStatePlaying:
             [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
-            self.recordingDateLabel.hidden = YES;
-            self.recordingTimeLabel.hidden = YES;
             break;
     }
 }

@@ -4,6 +4,10 @@
 
 + (UIColor *)vibrantBlue;
 
++ (UIColor *)vibrantBlueText;
+
++ (UIColor *)vibrantBlueHalfOpacity;
+
 + (UIColor *)recordRed;
 
 + (UIColor *)babyBlue;
