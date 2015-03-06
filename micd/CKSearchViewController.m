@@ -73,7 +73,7 @@
     if (section == 0) {
         return self.titleResults.count;
     } else if (section == 1) {
-        NSLog(@"%lu", (unsigned long)self.tagResults.count);
+        NSLog(@"%lu number of rows in section", (unsigned long)self.tagResults.count);
         return self.tagResults.count;
     } else {
         return 0;

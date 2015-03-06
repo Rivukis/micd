@@ -8,11 +8,12 @@
 
 #import "RecordingsSection.h"
 #import "Recording.h"
+#import "RecordingCellModel.h"
 
 @interface RecordingsSection ()
 
 @property (nonatomic, strong) NSDateComponents *dateComponents;
-@property (nonatomic, strong) NSMutableArray *recordings;
+@property (nonatomic, strong) NSMutableArray *cellModels;
 @property (nonatomic, assign) BOOL isThisDay;
 @property (nonatomic, assign) BOOL isThisMonth;
 @property (nonatomic, assign) BOOL isThisYear;
@@ -24,7 +25,7 @@
 - (instancetype)initWithYear:(NSInteger)year month:(NSInteger)month {
     self = [super init];
     if (self) {
-        _recordings = [NSMutableArray array];
+        _cellModels = [NSMutableArray array];
         _dateComponents = [[NSDateComponents alloc] init];
         _dateComponents.year = year ?: 1970;
         _dateComponents.month = month ?: 1;
@@ -51,7 +52,8 @@
                 todaySection.isThisDay = YES;
                 [assemblingSections addObject:todaySection];
             }
-            [todaySection.recordings addObject:recording];
+            RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording];
+            [todaySection.cellModels addObject:cellModel];
         } else {
             RecordingsSection *lastAddedMonthSection = assemblingSections.lastObject;
             if (lastAddedMonthSection.isThisDay || lastAddedMonthSection.dateComponents.year != recording.dateComponents.year || lastAddedMonthSection.dateComponents.month != recording.dateComponents.month) {
@@ -68,19 +70,22 @@
                 
                 [assemblingSections addObject:lastAddedMonthSection];
             }
-            [lastAddedMonthSection.recordings addObject:recording];
+            RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording];
+            [lastAddedMonthSection.cellModels addObject:cellModel];
         }
     }
     
     return [assemblingSections copy];
 }
 
-- (Recording *)recordingAtIndex:(NSInteger)index {
-    return self.recordings[index];
+- (RecordingCellModel *)cellModelAtIndex:(NSInteger)index {
+    if (self.cellModels.count == 0) return nil;
+    
+    return self.cellModels[index];
 }
 
-- (NSInteger)numberOfRecordings {
-    return self.recordings.count;
+- (NSInteger)numberOfCellModels {
+    return self.cellModels.count;
 }
 
 - (NSString *)dateAsString {
@@ -102,7 +107,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ - isThisDay:%i isThisMonth:%i \n%@", self.dateAsString, self.isThisDay, self.isThisMonth, self.recordings];
+    return [NSString stringWithFormat:@"%@ - isThisDay:%i isThisMonth:%i \n%@", self.dateAsString, self.isThisDay, self.isThisMonth, self.cellModels];
 }
 
 @end

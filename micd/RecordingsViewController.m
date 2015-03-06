@@ -15,20 +15,30 @@
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
 #import "FakesForProject.h"
+#import "SCWaveformView.h"
+#import "RecordingCellModel.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomFaderImageView;
+@property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentPlaybackTimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *totalPlaybackTimeLabel;
+
 @property (strong, nonatomic) DataSourceController *dataSource;
 @property (strong, nonatomic) PlayerController *playerController;
-@property (strong, nonatomic) NSMutableArray *expandedRows;
+@property (strong, nonatomic) Recording *playbackRecording;
+@property (strong, nonatomic) SCWaveformView *waveformView;
 @property (strong, nonatomic) NSArray *sections;
 
 @property (assign, nonatomic) BOOL didGetOriginalHeight;
 @property (assign, nonatomic) CGFloat originalHeight;
 @property (assign, nonatomic) BOOL didGetOriginalTableViewHeight;
 @property (assign, nonatomic) CGFloat originalTableViewHeight;
+
+@property (strong, nonatomic) CADisplayLink *displayLink;
 
 @end
 
@@ -38,35 +48,55 @@
     [super viewDidLoad];
     
     self.dataSource = [DataSourceController sharedInstance];
-    self.playerController = [[PlayerController alloc] init];
+    self.playerController = [PlayerController sharedPlayer];
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, -10, 0, 0);
-    self.tableView.layoutMargins = UIEdgeInsetsZero;
-    self.tableView.separatorColor = [UIColor vibrantBlueHalfOpacity];
+    self.tableView.scrollsToTop = YES;
     
-    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
+    self.currentPlaybackTimeLabel.textColor = [UIColor vibrantBlueText];
+    self.playbackTitleLabel.textColor = [UIColor vibrantBlueText];
+    self.totalPlaybackTimeLabel.textColor = [UIColor vibrantBlueText];
     
-    self.expandedRows = [NSMutableArray array];
+//    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
+    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    self.displayLink.paused = YES;
     
     [self reloadData];
+    
+    [self readyPlayerWithRecording:[self mostRecentRecording]];
+    
+    self.playerState = PlayerStatePaused;
+    
+    if ([self mostRecentRecording]) {
+        self.tableBottomFaderImageView.hidden = NO;
+        self.playbackTitleLabel.hidden = NO;
+        self.currentPlaybackTimeLabel.hidden = NO;
+        self.totalPlaybackTimeLabel.hidden = NO;
+    }
 }
 
 - (void)reloadData {
     self.sections = [RecordingsSection arrayOfSectionsForRecordings:[self.dataSource allRecordings]];
     [self.tableView reloadData];
+    if (self.tableBottomFaderImageView.hidden == YES && self.dataSource.allRecordings.count) {
+        self.tableBottomFaderImageView.hidden = NO;
+        self.playbackTitleLabel.hidden = NO;
+        self.currentPlaybackTimeLabel.hidden = NO;
+        self.totalPlaybackTimeLabel.hidden = NO;
+        [self readyPlayerWithRecording:[self mostRecentRecording]];
+    }
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    
-    [self.tableBottomFaderImageView setImage:[WireTapStyleKit imageOfTableviewFader]];
-    self.tableBottomFaderImageView.backgroundColor = [UIColor clearColor];
+    self.tableBottomFaderImageView.backgroundColor = [UIColor vibrantBlue];
     
     if (!self.didGetOriginalHeight) {
         self.didGetOriginalHeight = YES;
@@ -76,15 +106,43 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, -10, 0, 0);
-    self.tableView.layoutMargins = UIEdgeInsetsZero;
     if (!self.didGetOriginalTableViewHeight) {
         self.didGetOriginalTableViewHeight = YES;
         self.originalTableViewHeight = self.tableView.frame.size.height;
     }
+    
+    if (!self.waveformView) {
+        self.waveformView = [[SCWaveformView alloc] init];
+        self.waveformView.frame = self.waveformContainerView.bounds;
+        [self.waveformContainerView addSubview:self.waveformView];
+        self.waveformContainerView.layer.masksToBounds = YES;
+        self.waveformContainerView.backgroundColor = [UIColor clearColor];
+        self.waveformView.progressColor = [UIColor vibrantBlue];
+        self.waveformView.precision = 0.20;
+        self.waveformView.lineWidthRatio = 0.6;
+        self.waveformView.channelStartIndex = 0;
+        self.waveformView.channelEndIndex = 0;
+    }
+}
+
+- (Recording *)mostRecentRecording {
+    RecordingsSection *firstRecordingsSection = self.sections.firstObject;
+    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:0];
+    return lastAddedRecordingModel.recording;
 }
 
 #pragma mark - FramesBasedOnStateProtocol
+
+- (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
+    //    CGRect presentationFrame = [self.contentView.layer.presentationLayer frame];
+    
+    if (self.playerController.secondsCompleted >= self.playbackRecording.lengthAsTimeInterval || self.playerController.secondsCompleted == 0) {
+        self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
+        return;
+    }
+    self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
+    self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
+}
 
 - (void)setInitialStateFrame {
     CGRect screenSize = [[UIScreen mainScreen] bounds];
@@ -118,42 +176,116 @@
     self.view.frame = frame;
 }
 
+#pragma mark - AVAudioPlayerDelegate
+
+- (void)readyPlayerWithRecording:(Recording *)recording {
+    if (!recording) return;
+    
+    self.playbackTitleLabel.text = recording.title;
+    self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
+    self.playbackRecording = recording;
+    
+    self.waveformView.asset = recording.avAsset;
+    CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
+    CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
+    self.waveformView.timeRange = displayedTimeRange;
+    self.waveformView.normalColor = [UIColor grayColor];
+    self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
+    
+    [self.playerController loadRecording:recording playerDelegate:self error:nil];
+}
+
+- (void)playRecording {
+    NSError *error;
+    [self.playerController playAudioWithError:&error];
+    if (!error) {
+        [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
+        self.playerState = PlayerStatePlaying;
+        self.displayLink.paused = NO;
+    }
+}
+
+- (void)pauseRecording {
+    NSError *error;
+    [self.playerController pauseAudioWithError:&error];
+    if (!error) {
+        [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
+        self.playerState = PlayerStatePaused;
+        self.displayLink.paused = YES;
+    }
+}
+
+- (void)setPlaybackTimeTo:(NSTimeInterval)time {
+    if (time >= 0 && time <= self.playerController.duration) {
+        [self.playerController setPlaybackTimeInterval:time error:nil];
+        self.waveformView.progressTime = CMTimeMakeWithSeconds(time, 1);
+    }
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    // display link stop
+    self.displayLink.paused = YES;
+    self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
+    [self.waveformView setNeedsLayout];
+    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
+    self.playerState = PlayerStatePaused;
+    NSLog(@"did finish playing");
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
+    // handle error
+    NSLog(@"player had decode error: %@", error.localizedDescription);
+}
+
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RecordingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
-    Recording *recording = [recordingsSection recordingAtIndex:indexPath.row];
+    RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     
-    [cell setValuesForRecording:recording];
+    if (recordingCellModel.state == CellStateDefault) {
+//        recordingCellModel.state = CellStatePlaying;
+        [self readyPlayerWithRecording:recordingCellModel.recording];
+        [self playRecording];
+    }
     
-    //    cell.title.text = recording.recordedDateAsFullString;
-    //    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
-    
-    //    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
-    //    [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
-    
-    return cell;
+    [tableView beginUpdates];
+    [tableView endUpdates];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return YES if you want the specified item to be editable.
     return YES;
 }
 
-// Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSLog(@"DELETE");
     }
 }
 
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    RecordingsSection *recordingsSection = self.sections[indexPath.section];
+    RecordingCellModel *cellModel = [recordingsSection cellModelAtIndex:indexPath.row];
+    return [cellModel heightForState];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    RecordingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    RecordingsSection *recordingsSection = self.sections[indexPath.section];
+    RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
+    [cell bindToModel:recordingCellModel];
+    
+    return cell;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     RecordingsSection *recordingsSection = self.sections[section];
-    
-    NSLog(@"number of cells: %li", (long)recordingsSection.numberOfRecordings); // !!!: remove
-    
-    return [recordingsSection numberOfRecordings];
+    return [recordingsSection numberOfCellModels];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -170,10 +302,10 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 45.0f)];
     
     UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 44.0f, tableView.frame.size.width, 1.0f)];
-    bottomBorderView.backgroundColor = [UIColor vibrantBlue];
+    bottomBorderView.backgroundColor = [UIColor vibrantBlueHalfOpacity];
     [headerView addSubview:bottomBorderView];
     
-    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width, 20.0f)];
+    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width-13.0f, 20.0f)];
     headerTitleLabel.text = recordingsSection.dateAsString;
     headerTitleLabel.font = [UIFont fontWithName: @"AvenirNext-Regular" size:16.0f];
     headerTitleLabel.textAlignment = NSTextAlignmentRight;
@@ -186,109 +318,32 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 1;
+    return 0.001f;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 1.0f)];
     UIView *borderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0, tableView.frame.size.width, 1.0f)];
-    borderView.backgroundColor = [UIColor vibrantBlueHalfOpacity];
+    borderView.backgroundColor = [UIColor clearColor];
     [footerView addSubview:borderView];
     return footerView;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    Recording *recording = [self.dataSource recordingAtIndex:indexPath.row];
-//    [self.playerController loadRecording:recording error:nil];
-//    [self.playerController playAudioWithError:nil];
-    
-    if ([self.expandedRows containsObject:@(indexPath.row)]) {
-        [self.expandedRows removeObject:@(indexPath.row)];
-    } else {
-        [self.expandedRows addObject:@(indexPath.row)];
-    }
-    
-    RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
-//    BOOL expanding = [self.expandedRows containsObject:@(indexPath.row)];
-//    [cell setPreAnimationConstraintsBasedOnExpansion:expanding];
-    
-    [tableView beginUpdates];
-    [UIView animateWithDuration:.3f animations:^{
-//        [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
-        [cell layoutIfNeeded];
-    }];
-    [tableView endUpdates];
-    
-    /* some animation choices
-    [cell setPostAnimationConstraintsBasedOnExpansion:expanding];
-    [cell layoutIfNeeded];
-    
-    [UIView beginAnimations:@"myAnimationId" context:nil];
-    
-    [UIView setAnimationDuration:.3f]; // Set duration here
-    
-    [CATransaction begin];
-    
-    //just in case we want to
-    [CATransaction setCompletionBlock:^{
-        
-    }];
-    
-    [tableView beginUpdates];
-    // my table changes
-    [tableView endUpdates];
-    
-    [CATransaction commit];
-    [UIView commitAnimations];
-     */
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.expandedRows containsObject:@(indexPath.row)]) {
-        return 90;
-        return tableView.frame.size.width *.31f;
-    } else {
-        return 45;
-        return tableView.frame.size.width * .16f;
-    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (!self.didGetOriginalTableViewHeight || !self.didGetOriginalHeight) {
-        return;
-    }
-    
-    if ([keyPath isEqualToString:@"contentSize"]) {
-//        CGSize contentSize = (CGSize)object;
-        NSLog(@"contentSize: %@", object);
-        CGRect viewFrame = self.view.frame;
-        if (self.tableView.contentSize.height >= self.originalTableViewHeight) {
-            viewFrame.size.height = self.originalHeight;
-        } else {
-            CGFloat differenceInHeight = self.originalTableViewHeight - self.tableView.contentSize.height;
-            viewFrame.size.height = self.originalHeight - differenceInHeight;
-        }
-        self.view.frame = viewFrame;
-    }
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [cell setPreservesSuperviewLayoutMargins:NO];
-    }
-    
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-}
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+//    if (!self.didGetOriginalTableViewHeight || !self.didGetOriginalHeight) {
+//        return;
+//    }
+//    
+//    if ([keyPath isEqualToString:@"contentSize"]) {
+//        CGRect viewFrame = self.view.frame;
+//        if (self.tableView.contentSize.height >= self.originalTableViewHeight) {
+//            viewFrame.size.height = self.originalHeight;
+//        } else {
+//            CGFloat differenceInHeight = self.originalTableViewHeight - self.tableView.contentSize.height;
+//            viewFrame.size.height = self.originalHeight - differenceInHeight;
+//        }
+//        self.view.frame = viewFrame;
+//    }
+//}
 
 @end

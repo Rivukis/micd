@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class Recording;
+@class RecordingCellModel;
 
 @interface RecordingsSection : NSObject
 
-@property (nonatomic, readonly) NSInteger numberOfRecordings;
+@property (nonatomic, readonly) NSInteger numberOfCellModels;
 
 + (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings;
-- (Recording *)recordingAtIndex:(NSInteger)index;
+- (RecordingCellModel *)cellModelAtIndex:(NSInteger)index;
 - (NSString *)dateAsString;
 
 @end

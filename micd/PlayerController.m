@@ -1,10 +1,3 @@
-//
-//  CKPlayerController.m
-//  Recorder
-//
-//  Created by Brian Radebaugh on 12/31/14.
-//  Copyright (c) 2014 CleverKnot. All rights reserved.
-//
 
 #import "PlayerController.h"
 #import <AVFoundation/AVFoundation.h>
@@ -20,15 +13,26 @@
 @implementation PlayerController
 
 - (instancetype)init {
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    return [self initWithAudioSession:session];
+    return [PlayerController sharedPlayer];
 }
 
-- (instancetype)initWithAudioSession:(AVAudioSession *)session {
++ (PlayerController *)sharedPlayer {
+    static PlayerController *sharedPlayer = nil;
+    @synchronized(self) {
+        if (!sharedPlayer) {
+            sharedPlayer = [[self alloc] init_common];
+        }
+    }
+    return sharedPlayer;
+}
+
+- (instancetype)init_common {
     self = [super init];
     if (self) {
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+        [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
         _audioSession = session;
     }
     return self;
@@ -36,12 +40,13 @@
 
 #pragma mark - API Methods
 
-- (BOOL)loadRecording:(Recording *)recording error:(NSError *__autoreleasing *)error {
+- (BOOL)loadRecording:(Recording *)recording playerDelegate:(id<AVAudioPlayerDelegate>)playerDelegate error:(NSError *__autoreleasing *)error {
     NSError *playerError = nil;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:recording.data error:&playerError];
+    self.audioPlayer.delegate = (playerDelegate) ?: self;
     
     BOOL successful = (self.audioPlayer != nil);
-    if (!successful) *error = playerError;
+    if (!successful && error != nil) *error = playerError;
     return successful;
 }
 
@@ -58,7 +63,7 @@
     }
     
     BOOL successful = timeIntervalError == nil;
-    if (successful) self.audioPlayer.currentTime = timeInterval;
+    if (successful && error != nil) self.audioPlayer.currentTime = timeInterval;
         else *error = timeIntervalError;
     return successful;
 }
@@ -75,8 +80,11 @@
     }
     
     BOOL successful = playAudioError == nil;
-    if (successful) [self.audioPlayer play];
-        else *error = playAudioError;
+    if (successful) {
+        [self.audioPlayer play];
+    } else if (error != nil) {
+        *error = playAudioError;
+    }
     return successful;
 }
 
@@ -128,6 +136,22 @@
     return self.audioPlayer.currentTime;
 }
 
+- (NSString *)displayableCurrentTime {
+    NSString *displayableLength;
+    NSTimeInterval currentTime = self.audioPlayer.currentTime;
+    NSInteger hours = lround(floor(currentTime / 3600.)) % 100;
+    NSInteger minutes = lround(floor(currentTime / 60.)) % 60;
+    NSInteger seconds = lround(floor(currentTime)) % 60;
+    
+    if (currentTime >= 3600) {
+        displayableLength = [NSString stringWithFormat:@"%ld:%02ld:%02ld", (long)hours, (long)minutes, (long)seconds];
+    } else {
+        displayableLength = [NSString stringWithFormat:@"%ld:%02ld", (long)minutes, (long)seconds];
+    }
+    
+    return displayableLength;
+}
+
 - (NSTimeInterval)duration {
     return self.audioPlayer.duration;
 }
@@ -148,7 +172,6 @@
 
 - (void)setAudioPlayer:(AVAudioPlayer *)player {
     _audioPlayer = player;
-    _audioPlayer.delegate = self;
     [_audioPlayer prepareToPlay];
 }
 

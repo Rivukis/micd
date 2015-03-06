@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CGBase.h>
 
+@class AVAsset;
+
 struct Length {
     NSInteger hours;
     NSInteger minutes;
@@ -18,30 +20,28 @@ struct Length {
 
 @interface Recording : NSObject
 
-@property (nonatomic, strong, readonly) NSString *title;
+@property (nonatomic, strong, readonly) NSUUID *uuid;
+@property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong, readonly) NSArray *tags;
 
 @property (nonatomic, copy, readonly) NSData *data;
+@property (nonatomic, weak, readonly) AVAsset *avAsset;
+
 @property (nonatomic, strong, readonly) NSDate *date;
 @property (nonatomic, strong, readonly) NSDateComponents *dateComponents;
 @property (nonatomic, strong) NSString *dateAsFullString;
-@property (nonatomic, strong) NSString *dateAsShortString;
+@property (nonatomic, strong) NSString *dateAsString;
+
 @property (nonatomic, assign, readonly) NSTimeInterval lengthAsTimeInterval;
 @property (nonatomic, assign, readonly) struct Length length;
-@property (nonatomic, strong, readonly) NSUUID *uuid;
-
-// time stamp (moment the recording starts - hour and minute (may include seconds)
-// date (to the day only)
-// length nstime (possibly make custom timestamp class)
-// tags nsarray of nsstrings (no spaces per tag)
+@property (nonatomic, weak, readonly) NSString *lengthToDiplay;
 
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length name:(NSString *)name;
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length;
 
-- (BOOL)setRecordingTitle:(NSString *)title;
+//TODO: make init method for keyedunarchiver and pass in all archived data (including UUID)
+
 - (BOOL)addTag:(NSString *)tag;
 - (BOOL)removeTag:(NSString *)tag;
-
-- (NSString *)lengthToDiplay;
 
 @end

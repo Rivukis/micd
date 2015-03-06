@@ -12,12 +12,12 @@
 		7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* PlayerController.m */; };
 		7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AB1A8EF0100085B927 /* RecorderController.m */; };
 		7AC290B91A8EF0100085B927 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AD1A8EF0100085B927 /* Recording.m */; };
-		7AC290BA1A8EF0100085B927 /* CKRecordingDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AF1A8EF0100085B927 /* CKRecordingDetailsViewController.m */; };
-		7AC290BB1A8EF0100085B927 /* CKRecordingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B11A8EF0100085B927 /* CKRecordingViewController.m */; };
 		7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B31A8EF0100085B927 /* CKSearchViewController.m */; };
 		7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B51A8EF0100085B927 /* FakesForProject.m */; };
 		D034F0421AA148680059028D /* RecordingsSection.m in Sources */ = {isa = PBXBuildFile; fileRef = D034F0411AA148680059028D /* RecordingsSection.m */; };
 		D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D04240BC1A8B170400130BE6 /* GearBackingLayer.m */; };
+		D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500F71AA7C8F100C71FE1 /* passthroughView.m */; };
+		D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500FA1AA7CAD600C71FE1 /* passthroughImageView.m */; };
 		D05D75721A79AAA40050A49C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75711A79AAA40050A49C /* main.m */; };
 		D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75741A79AAA40050A49C /* AppDelegate.m */; };
 		D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75771A79AAA40050A49C /* ParentViewController.m */; };
@@ -27,13 +27,13 @@
 		D05D758C1A79AAA40050A49C /* micdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D758B1A79AAA40050A49C /* micdTests.m */; };
 		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
 		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
+		D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */; };
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
 		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
 		D0C248461A898FDE00E32954 /* GearsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C248451A898FDE00E32954 /* GearsView.m */; };
 		D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSourceController.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
-		D0C67CD91A91BADD000F501A /* RecordingContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD81A91BADD000F501A /* RecordingContentView.m */; };
 		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
 		D0F97F541A92A46800F07032 /* NSString+Score.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F97F531A92A46800F07032 /* NSString+Score.m */; };
 /* End PBXBuildFile section */
@@ -58,10 +58,6 @@
 		7AC290AB1A8EF0100085B927 /* RecorderController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecorderController.m; sourceTree = "<group>"; };
 		7AC290AC1A8EF0100085B927 /* Recording.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recording.h; sourceTree = "<group>"; };
 		7AC290AD1A8EF0100085B927 /* Recording.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recording.m; sourceTree = "<group>"; };
-		7AC290AE1A8EF0100085B927 /* CKRecordingDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKRecordingDetailsViewController.h; sourceTree = "<group>"; };
-		7AC290AF1A8EF0100085B927 /* CKRecordingDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRecordingDetailsViewController.m; sourceTree = "<group>"; };
-		7AC290B01A8EF0100085B927 /* CKRecordingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKRecordingViewController.h; sourceTree = "<group>"; };
-		7AC290B11A8EF0100085B927 /* CKRecordingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRecordingViewController.m; sourceTree = "<group>"; };
 		7AC290B21A8EF0100085B927 /* CKSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKSearchViewController.h; sourceTree = "<group>"; };
 		7AC290B31A8EF0100085B927 /* CKSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSearchViewController.m; sourceTree = "<group>"; };
 		7AC290B41A8EF0100085B927 /* FakesForProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakesForProject.h; sourceTree = "<group>"; };
@@ -71,6 +67,10 @@
 		D034F0411AA148680059028D /* RecordingsSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsSection.m; sourceTree = "<group>"; };
 		D04240BB1A8B170400130BE6 /* GearBackingLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearBackingLayer.h; sourceTree = "<group>"; };
 		D04240BC1A8B170400130BE6 /* GearBackingLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearBackingLayer.m; sourceTree = "<group>"; };
+		D05500F61AA7C8F100C71FE1 /* passthroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = passthroughView.h; sourceTree = "<group>"; };
+		D05500F71AA7C8F100C71FE1 /* passthroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = passthroughView.m; sourceTree = "<group>"; };
+		D05500F91AA7CAD600C71FE1 /* passthroughImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = passthroughImageView.h; sourceTree = "<group>"; };
+		D05500FA1AA7CAD600C71FE1 /* passthroughImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = passthroughImageView.m; sourceTree = "<group>"; };
 		D05D756C1A79AAA40050A49C /* micd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = micd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05D75701A79AAA40050A49C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05D75711A79AAA40050A49C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -88,6 +88,8 @@
 		D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WireTapStyleKit.m; path = micd/WireTapStyleKit.m; sourceTree = "<group>"; };
 		D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Palette.h"; path = "micd/UIColor+Palette.h"; sourceTree = "<group>"; };
 		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
+		D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCellModel.h; sourceTree = "<group>"; };
+		D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCellModel.m; sourceTree = "<group>"; };
 		D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsViewController.h; sourceTree = "<group>"; };
 		D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsViewController.m; sourceTree = "<group>"; };
 		D09A69EE1A86EFC500A2C347 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -100,8 +102,6 @@
 		D0C67CCF1A8EF917000F501A /* DataSourceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSourceController.m; sourceTree = "<group>"; };
 		D0C67CD41A91B9D4000F501A /* RecordingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCell.h; sourceTree = "<group>"; };
 		D0C67CD51A91B9D4000F501A /* RecordingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCell.m; sourceTree = "<group>"; };
-		D0C67CD71A91BADD000F501A /* RecordingContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingContentView.h; sourceTree = "<group>"; };
-		D0C67CD81A91BADD000F501A /* RecordingContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingContentView.m; sourceTree = "<group>"; };
 		D0C67CDA1A929A4C000F501A /* FramesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FramesController.h; sourceTree = "<group>"; };
 		D0C67CDB1A929A4C000F501A /* FramesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FramesController.m; sourceTree = "<group>"; };
 		D0F97F521A92A46800F07032 /* NSString+Score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Score.h"; path = "StringScore-master/NSString+Score.h"; sourceTree = "<group>"; };
@@ -225,10 +225,6 @@
 		D0C67CCD1A8EF0B7000F501A /* Brians stuff */ = {
 			isa = PBXGroup;
 			children = (
-				7AC290AE1A8EF0100085B927 /* CKRecordingDetailsViewController.h */,
-				7AC290AF1A8EF0100085B927 /* CKRecordingDetailsViewController.m */,
-				7AC290B01A8EF0100085B927 /* CKRecordingViewController.h */,
-				7AC290B11A8EF0100085B927 /* CKRecordingViewController.m */,
 				7AC290B21A8EF0100085B927 /* CKSearchViewController.h */,
 				7AC290B31A8EF0100085B927 /* CKSearchViewController.m */,
 				7AC290B41A8EF0100085B927 /* FakesForProject.h */,
@@ -262,8 +258,10 @@
 				D0B0DE461A8DA10200C88773 /* GearsImageView.m */,
 				D0C67CD41A91B9D4000F501A /* RecordingCell.h */,
 				D0C67CD51A91B9D4000F501A /* RecordingCell.m */,
-				D0C67CD71A91BADD000F501A /* RecordingContentView.h */,
-				D0C67CD81A91BADD000F501A /* RecordingContentView.m */,
+				D05500F61AA7C8F100C71FE1 /* passthroughView.h */,
+				D05500F71AA7C8F100C71FE1 /* passthroughView.m */,
+				D05500F91AA7CAD600C71FE1 /* passthroughImageView.h */,
+				D05500FA1AA7CAD600C71FE1 /* passthroughImageView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -294,6 +292,8 @@
 				D0F97F531A92A46800F07032 /* NSString+Score.m */,
 				D034F0401AA148680059028D /* RecordingsSection.h */,
 				D034F0411AA148680059028D /* RecordingsSection.m */,
+				D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */,
+				D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -435,21 +435,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0F97F541A92A46800F07032 /* NSString+Score.m in Sources */,
-				7AC290BB1A8EF0100085B927 /* CKRecordingViewController.m in Sources */,
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
 				D04240BD1A8B170400130BE6 /* GearBackingLayer.m in Sources */,
+				D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */,
 				7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */,
-				D0C67CD91A91BADD000F501A /* RecordingContentView.m in Sources */,
 				7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
+				D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */,
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
+				D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */,
 				D0C248461A898FDE00E32954 /* GearsView.m in Sources */,
 				D034F0421AA148680059028D /* RecordingsSection.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
 				D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */,
-				7AC290BA1A8EF0100085B927 /* CKRecordingDetailsViewController.m in Sources */,
 				D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */,
 				7AC290B91A8EF0100085B927 /* Recording.m in Sources */,
 				7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */,

@@ -7,11 +7,17 @@
 #import "DataSourceController.h"
 #import "Recording.h"
 
-@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate>
+@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, PlayerControlsDelegate>
+
 @property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
 @property (strong, nonatomic) DataSourceController *dataSource;
+
+@property (weak, nonatomic) IBOutlet UIButton *rewindButton;
+@property (weak, nonatomic) IBOutlet UIButton *forwardButton;
+@property (weak, nonatomic) IBOutlet UIButton *playPauseButton;
+@property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
 
 @property (assign, nonatomic) BOOL didSetInitialFrames;
 
@@ -24,7 +30,11 @@
     
     self.dataSource = [DataSourceController sharedInstance];
     
+    self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
     self.view.backgroundColor = [UIColor blackColor];
+    self.rewindButton.backgroundColor = [UIColor clearColor];
+    self.forwardButton.backgroundColor = [UIColor clearColor];
+    self.playPauseButton.backgroundColor = [UIColor clearColor];
     
     self.homeViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([HomeViewController class])];
     [self addChildViewController:self.homeViewController];
@@ -37,8 +47,13 @@
     [self addChildViewController:self.recordingsViewController];
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
+    self.recordingsViewController.playerControlsDelegate = self;
     
-    self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
+    [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
+    [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
+    [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
+    [self.volumeSlider setThumbImage:[WireTapStyleKit imageOfThumbImage] forState:UIControlStateNormal];
+    self.volumeSlider.minimumTrackTintColor = [UIColor vibrantBlue];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -47,6 +62,28 @@
     if (!self.didSetInitialFrames) {
         [self setInitialStateFrame];
         self.didSetInitialFrames = YES;
+    }
+}
+
+- (IBAction)playPauseButtonPressed:(id)sender {
+    if (self.recordingsViewController.playerState == PlayerStatePaused) {
+        [self.recordingsViewController playRecording];
+    } else {
+        [self.recordingsViewController pauseRecording];
+    }
+    [self shouldUpdatePlayPauseButtonForState:self.recordingsViewController.playerState];
+}
+
+#pragma mark - PlayerControlsDelegate
+
+- (void)shouldUpdatePlayPauseButtonForState:(PlayerState)state {
+    switch (state) {
+        case PlayerStatePaused:
+            [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
+            break;
+        case PlayerStatePlaying:
+            [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
+            break;
     }
 }
 
@@ -64,6 +101,7 @@
 }
 
 - (void)shouldMoveToPositionState:(HomeViewContollerPositionState)state {
+    self.homeViewController.displayLink.paused = NO;
     [UIView animateWithDuration:1
                           delay:0
          usingSpringWithDamping:.7
@@ -71,7 +109,6 @@
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations: ^{
                          [self setFrameBasedOnState:state];
-                         NSLog(@"%d", self.homeViewController.displayLink.paused);
                      } completion:^(BOOL finished) {
                          self.homeViewController.displayLink.paused = YES;
                      }];

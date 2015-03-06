@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <AVFoundation/AVAudioSession.h>
 
 @interface AppDelegate ()
 
@@ -17,6 +18,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
+    [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    [sharedSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+    
     return YES;
 }
 

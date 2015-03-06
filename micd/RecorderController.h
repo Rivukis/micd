@@ -21,8 +21,10 @@ typedef NS_ENUM(NSInteger, RecorderControllerState) {
 
 @interface RecorderController : NSObject
 
-- (instancetype)initWithAudioSession:(AVAudioSession *)session;
-    // default init calls this init method with shared audio session
+//- (instancetype)initWithAudioSession:(AVAudioSession *)session;
+//     //default init calls this init method with shared audio session
+
++ (RecorderController *)sharedRecorder;
 
 @property (nonatomic, assign, readonly) RecorderControllerState recordingState;
 

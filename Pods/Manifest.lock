@@ -1,10 +1,13 @@
 PODS:
   - OBShapedButton (1.0.2)
+  - SCWaveformView (2.0.6)
 
 DEPENDENCIES:
   - OBShapedButton
+  - SCWaveformView
 
 SPEC CHECKSUMS:
   OBShapedButton: 22d7133d3f19083248b95b4d984d5557c49cb390
+  SCWaveformView: 9ce945781ebc9b164ad22dc4961466e80a8c604b
 
 COCOAPODS: 0.35.0

@@ -36,16 +36,27 @@ BOOL const useEnhancedRecorder = NO;
 @implementation RecorderController
 
 - (instancetype)init {
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    return [self initWithAudioSession:session];
+    return [RecorderController sharedRecorder];
 }
 
-- (instancetype)initWithAudioSession:(AVAudioSession *)session {
++ (RecorderController *)sharedRecorder {
+    static RecorderController *sharedRecorder = nil;
+    @synchronized(self) {
+        if (!sharedRecorder) {
+            sharedRecorder = [[self alloc] init_common];
+        }
+    }
+    return sharedRecorder;
+}
+
+- (instancetype)init_common {
     self = [super init];
     if (self) {
-        _fileManager = [[NSFileManager alloc] init];
+//        AVAudioSession *session = [AVAudioSession sharedInstance];
+//        [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+//        [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+//        [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+//        _audioSession = session;
         
         NSString *documentsDirectory = [Constants documentsDirectory];
         _primaryFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderPrimaryAudioFile];
@@ -54,20 +65,57 @@ BOOL const useEnhancedRecorder = NO;
         
         NSLog(@"%@", _primaryFilePath);
         
+        _fileManager = [[NSFileManager alloc] init];
         [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_primaryFilePath] error:nil];
         [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_savedFilePath] error:nil];
         [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_concatenatedFilePath] error:nil];
         
-        _recordingState = RecorderControllerStateStopped;
-        _audioSession = session;
+        _audioSession = [AVAudioSession sharedInstance];
         [_audioSession setActive:YES error:nil];
+        
         _audioRecorder = [self customRecorder];
         _audioRecorder.delegate = self;
+        _recordingState = RecorderControllerStateStopped;
         [_audioRecorder prepareToRecord];
-        
     }
     return self;
 }
+
+//----------------- old stuff
+
+//- (instancetype)init {
+//    AVAudioSession *session = [AVAudioSession sharedInstance];
+//    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+//    [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+//    return [self initWithAudioSession:session];
+//}
+//
+//- (instancetype)initWithAudioSession:(AVAudioSession *)session {
+//    self = [super init];
+//    if (self) {
+//        _fileManager = [[NSFileManager alloc] init];
+//        
+//        NSString *documentsDirectory = [Constants documentsDirectory];
+//        _primaryFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderPrimaryAudioFile];
+//        _savedFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderSavedAudioFileName];
+//        _concatenatedFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderConcatenatedAudioFileName];
+//        
+//        NSLog(@"%@", _primaryFilePath);
+//        
+//        [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_primaryFilePath] error:nil];
+//        [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_savedFilePath] error:nil];
+//        [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_concatenatedFilePath] error:nil];
+//        
+//        _recordingState = RecorderControllerStateStopped;
+//        _audioSession = session;
+//        [_audioSession setActive:YES error:nil];
+//        _audioRecorder = [self customRecorder];
+//        _audioRecorder.delegate = self;
+//        [_audioRecorder prepareToRecord];
+//        
+//    }
+//    return self;
+//}
 
 #pragma mark - Recording Methods
 
@@ -207,6 +255,7 @@ BOOL const useEnhancedRecorder = NO;
     [recorderSettings setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
     [recorderSettings setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
     [recorderSettings setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
+    [recorderSettings setValue:[NSNumber numberWithInteger:AVAudioQualityHigh] forKey:AVEncoderAudioQualityKey];
     NSError *recorderError;
     AVAudioRecorder *recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recorderSettings error:&recorderError];
     

@@ -8,18 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class Recording;
-
-typedef NS_ENUM(NSUInteger, CellState) {
-    CellStateCollapsed,
-    CellStateEditing,
-    CellStatePlaying,
-};
+@class RecordingCellModel;
 
 @interface RecordingCell : UITableViewCell
 
-@property (assign, nonatomic) CellState state;
+@property (nonatomic, strong, readonly) RecordingCellModel *cellModel;
 
-- (void)setValuesForRecording:(Recording *)recording;
+- (void)bindToModel:(RecordingCellModel *)cellModel;
+- (void)setupViewBasedOnState;
 
 @end

@@ -10,12 +10,21 @@
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
 #import "Recording.h"
+#import "OBShapedButton.h"
+#import "SCWaveformView.h"
+#import "RecordingCellModel.h"
+#import "PlayerController.h"
 
 @interface RecordingCell ()
 
+@property (weak, nonatomic) IBOutlet UIView *bottomSeparator;
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UILabel *length;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
+
+@property (nonatomic, strong) UIView *editingContainerView;
+
+@property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
 
 @end
 
@@ -29,44 +38,89 @@
     self.title.textColor = [UIColor vibrantBlueText];
     self.length.textColor = [UIColor vibrantBlueText];
     self.layer.masksToBounds = YES;
-    self.separatorInset = UIEdgeInsetsZero;
+    self.bottomSeparator.backgroundColor = [UIColor vibrantBlueHalfOpacity];
 }
 
-- (void)setValuesForRecording:(Recording *)recording {
+- (void)bindToModel:(RecordingCellModel *)cellModel {
+    _cellModel = cellModel;
     
-    self.title.text = recording.title;
+    [cellModel addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
+    
+    self.title.text = cellModel.title;
+    self.length.text = cellModel.length;
+    [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+    
+    [self setupViewBasedOnState];
+}
 
-//    NSString *length;
-//    if (recording.length.hours) {
-//        length = [NSString stringWithFormat:@"%ld:%ld:%ld", (long)recording.length.hours, (long)recording.length.minutes, (long)recording.length.seconds];
-//    } else if (recording.length.minutes) {
-//        length = [NSString stringWithFormat:@"%ld:%ld", (long)recording.length.minutes, (long)recording.length.seconds];
-//    } else {
-//        length = [NSString stringWithFormat:@"%ld", (long)recording.length.seconds];
-//    }
-//    self.length.text = length;
-    
-    self.length.text = [recording lengthToDiplay];
-    
-    switch (self.state) {
-        case CellStateCollapsed:
-            [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+#pragma mark - State Methods
+
+- (void)setupViewBasedOnState {
+    switch (self.cellModel.state) {
+        case CellStateDefault:
+            [self setupViewForCollapsedState];
             break;
         case CellStateEditing:
-            [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+            [self setupViewForEditingState];
             break;
         case CellStatePlaying:
-            [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+            [self setupViewForPlayingState];
+            break;
+        case CellStatePlayingAndEditing:
+            [self setupViewForEditingWhilePlayingState];
             break;
     }
+}
+
+- (void)setupViewForCollapsedState {
+    if ([self.subviews containsObject:self.editingContainerView]) {
+        [self.editingContainerView removeFromSuperview];
+    }
+}
+
+- (void)setupViewForPlayingState {
+    if ([self.subviews containsObject:self.editingContainerView]) {
+        [self.editingContainerView removeFromSuperview];
+    }
+    
+}
+
+- (void)setupViewForEditingState {
+    
+    //TODO: add editing view
+}
+
+- (void)setupViewForEditingWhilePlayingState {
+    //TODO: add editing and playing view
+}
+
+- (void)playPauseButtonPressed:(UIButton *)sender {
+    
 }
 
 - (IBAction)editButtonPressed:(UIButton *)sender {
-    if (self.state == CellStateEditing) {
-        self.state = CellStateCollapsed;
-    } else {
-        self.state = CellStateEditing;
+    switch (self.cellModel.state) {
+        case CellStateDefault:
+            self.cellModel.state = CellStateEditing;
+            break;
+        case CellStateEditing:
+            self.cellModel.state = CellStateDefault;
+            break;
+        case CellStatePlaying:
+            self.cellModel.state = CellStatePlayingAndEditing;
+            break;
+        case CellStatePlayingAndEditing:
+            self.cellModel.state = CellStatePlaying;
+            break;
     }
+}
+
+- (void)prepareForReuse {
+    [self.cellModel removeObserver:self forKeyPath:@"state"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [self setupViewBasedOnState];
 }
 
 @end
