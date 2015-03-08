@@ -53,6 +53,7 @@
     
     self.dataSource = [DataSourceController sharedInstance];
     self.playerController = [PlayerController sharedPlayer];
+    self.playerController.audioPlayerDelegate = self;
     
     self.isFirstTimeLayingOutSubviews = YES;
     
@@ -210,17 +211,19 @@
     self.waveformView.normalColor = [UIColor grayColor];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
     
-    [self.playerController loadRecording:recording playerDelegate:self error:nil];
+    [self.playerController loadRecording:recording];
 }
 
 - (void)playPlayback {
-    NSError *error;
-    [self.playerController playAudioWithError:&error];
-    if (!error) {
+    //TODO: put player state into the player controller
+    
+    [self.playerController playAudio];
+    
+//    if (!error) {
         [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
         self.playerState = PlayerStatePlaying;
         self.displayLink.paused = NO;
-    }
+//    }
 }
 
 - (void)pausePlayback {
@@ -228,24 +231,14 @@
 }
 
 - (void)pausePlaybackWhilePanning:(BOOL)isPanning {
-    [self.playerController pauseAudioWithError:nil];
+    [self.playerController pauseAudio];
     [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
     self.playerState = PlayerStatePaused;
     self.displayLink.paused = !isPanning;
 }
 
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval {
-    [self setPlaybackTimeTo:self.playerController.secondsCompleted + timeInterval];
-}
-
-- (void)setPlaybackTimeTo:(NSTimeInterval)time {
-    if (time <= 0) {
-        [self.playerController setPlaybackTimeInterval:0.01f error:nil];
-    } else if (time >= self.playerController.duration) {
-        [self.playerController setPlaybackTimeInterval:self.playerController.duration - 0.01f error:nil];
-    } else {
-        [self.playerController setPlaybackTimeInterval:time error:nil];
-    }
+    [self.playerController setPlaybackTimeInterval:self.playerController.secondsCompleted + timeInterval];
 }
 
 - (void)handleWaveFormPanning:(UILongPressGestureRecognizer *)gesture {
@@ -258,8 +251,8 @@
         case UIGestureRecognizerStateChanged: {
             CGPoint translation = [gesture locationInView:self.waveformView];
             float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
-            NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.duration;
-            [self setPlaybackTimeTo:secondsToTouchedLocation];
+            NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.loadedRecordingDuration;
+            [self.playerController setPlaybackTimeInterval:secondsToTouchedLocation];
         }
             break;
         case UIGestureRecognizerStateEnded:
