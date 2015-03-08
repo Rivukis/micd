@@ -15,9 +15,7 @@
 
 + (DataSourceController *)sharedInstance;
 
-- (void)addNewRecording:(Recording *)recording;
-- (Recording *)recordingAtIndex:(NSUInteger)index;
-- (void)deleteRecordingAtIndex:(NSUInteger)index;
+- (void)saveRecording:(Recording *)recording;
 - (NSArray *)allRecordings;
 
 @end

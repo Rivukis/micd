@@ -65,13 +65,23 @@
     }
 }
 
+#pragma mark - Player Controls
+
 - (IBAction)playPauseButtonPressed:(id)sender {
     if (self.recordingsViewController.playerState == PlayerStatePaused) {
-        [self.recordingsViewController playRecording];
+        [self.recordingsViewController playPlayback];
     } else {
-        [self.recordingsViewController pauseRecording];
+        [self.recordingsViewController pausePlayback];
     }
     [self shouldUpdatePlayPauseButtonForState:self.recordingsViewController.playerState];
+}
+
+- (IBAction)rewindButtonPressed:(id)sender {
+    [self.recordingsViewController offsetPlaybackByTimeInterval:-15.0f];
+}
+
+- (IBAction)fastforwardButtonPressed:(id)sender {
+    [self.recordingsViewController offsetPlaybackByTimeInterval:30.0f];
 }
 
 #pragma mark - PlayerControlsDelegate
@@ -90,8 +100,9 @@
 #pragma mark - AddNewRecordingDelegate
 
 - (void)addNewRecording:(Recording *)recording {
-    [self.dataSource addNewRecording:recording];
+    [self.dataSource saveRecording:recording];
     [self.recordingsViewController reloadData];
+    [self.recordingsViewController scrollToMostRecentRecording];
 }
 
 #pragma mark - MovementDelegate

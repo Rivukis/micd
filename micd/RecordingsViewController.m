@@ -40,6 +40,10 @@
 
 @property (strong, nonatomic) CADisplayLink *displayLink;
 
+@property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
+
+@property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
+
 @end
 
 @implementation RecordingsViewController
@@ -49,6 +53,8 @@
     
     self.dataSource = [DataSourceController sharedInstance];
     self.playerController = [PlayerController sharedPlayer];
+    
+    self.isFirstTimeLayingOutSubviews = YES;
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -69,8 +75,6 @@
     
     [self reloadData];
     
-    [self readyPlayerWithRecording:[self mostRecentRecording]];
-    
     self.playerState = PlayerStatePaused;
     
     if ([self mostRecentRecording]) {
@@ -82,7 +86,7 @@
 }
 
 - (void)reloadData {
-    self.sections = [RecordingsSection arrayOfSectionsForRecordings:[self.dataSource allRecordings]];
+    self.sections = [RecordingsSection arrayOfSectionsForRecordings:[self.dataSource allRecordings] ascending:YES];
     [self.tableView reloadData];
     if (self.tableBottomFaderImageView.hidden == YES && self.dataSource.allRecordings.count) {
         self.tableBottomFaderImageView.hidden = NO;
@@ -122,12 +126,26 @@
         self.waveformView.lineWidthRatio = 0.6;
         self.waveformView.channelStartIndex = 0;
         self.waveformView.channelEndIndex = 0;
+        
+        UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
+        gesture.minimumPressDuration = 0.001f;
+        [self.waveformContainerView addGestureRecognizer:gesture];
+    }
+    
+    if (self.isFirstTimeLayingOutSubviews) {
+        [self scrollToMostRecentRecording];
+        self.isFirstTimeLayingOutSubviews = NO;
     }
 }
 
+- (void)scrollToMostRecentRecording {
+    RecordingsSection *lastSection = self.sections.lastObject;
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:lastSection.numberOfCellModels - 1 inSection:self.sections.count - 1] atScrollPosition:UITableViewScrollPositionNone animated:NO];
+}
+
 - (Recording *)mostRecentRecording {
-    RecordingsSection *firstRecordingsSection = self.sections.firstObject;
-    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:0];
+    RecordingsSection *firstRecordingsSection = self.sections.lastObject;
+    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:firstRecordingsSection.numberOfCellModels - 1];
     return lastAddedRecordingModel.recording;
 }
 
@@ -176,7 +194,7 @@
     self.view.frame = frame;
 }
 
-#pragma mark - AVAudioPlayerDelegate
+#pragma mark - PlayerController Methods
 
 - (void)readyPlayerWithRecording:(Recording *)recording {
     if (!recording) return;
@@ -195,7 +213,7 @@
     [self.playerController loadRecording:recording playerDelegate:self error:nil];
 }
 
-- (void)playRecording {
+- (void)playPlayback {
     NSError *error;
     [self.playerController playAudioWithError:&error];
     if (!error) {
@@ -205,22 +223,67 @@
     }
 }
 
-- (void)pauseRecording {
-    NSError *error;
-    [self.playerController pauseAudioWithError:&error];
-    if (!error) {
-        [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
-        self.playerState = PlayerStatePaused;
-        self.displayLink.paused = YES;
-    }
+- (void)pausePlayback {
+    [self pausePlaybackWhilePanning:NO];
+}
+
+- (void)pausePlaybackWhilePanning:(BOOL)isPanning {
+    [self.playerController pauseAudioWithError:nil];
+    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
+    self.playerState = PlayerStatePaused;
+    self.displayLink.paused = !isPanning;
+}
+
+- (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval {
+    [self setPlaybackTimeTo:self.playerController.secondsCompleted + timeInterval];
 }
 
 - (void)setPlaybackTimeTo:(NSTimeInterval)time {
-    if (time >= 0 && time <= self.playerController.duration) {
+    if (time <= 0) {
+        [self.playerController setPlaybackTimeInterval:0.01f error:nil];
+    } else if (time >= self.playerController.duration) {
+        [self.playerController setPlaybackTimeInterval:self.playerController.duration - 0.01f error:nil];
+    } else {
         [self.playerController setPlaybackTimeInterval:time error:nil];
-        self.waveformView.progressTime = CMTimeMakeWithSeconds(time, 1);
     }
 }
+
+- (void)handleWaveFormPanning:(UILongPressGestureRecognizer *)gesture {
+    
+    // pauses while panning and plays when touch ends
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan:
+            self.audioWasPlaying_gestureStateBegan = self.playerState == PlayerStatePlaying;
+            [self pausePlaybackWhilePanning:YES];
+        case UIGestureRecognizerStateChanged: {
+            CGPoint translation = [gesture locationInView:self.waveformView];
+            float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
+            NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.duration;
+            [self setPlaybackTimeTo:secondsToTouchedLocation];
+        }
+            break;
+        case UIGestureRecognizerStateEnded:
+            if (self.audioWasPlaying_gestureStateBegan) {
+                [self playPlayback];
+            } else {
+                [self pausePlaybackWhilePanning:NO];
+            }
+        default:
+            break;
+    }
+    
+    // plays while scrubbing
+    // -----handle issue when scrubbing on a track that is not playing (maybe only before or after track has played)
+    // -----handle issue where audio ends while scrubbing
+//    if (gesture.state == UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged) {
+//        CGPoint translation = [gesture locationInView:self.waveformView];
+//        float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
+//        NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.duration;
+//        [self setPlaybackTimeTo:secondsToTouchedLocation];
+//    }
+}
+
+#pragma mark - AVAudioPlayerDelegate
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     // display link stop
@@ -246,7 +309,7 @@
     if (recordingCellModel.state == CellStateDefault) {
 //        recordingCellModel.state = CellStatePlaying;
         [self readyPlayerWithRecording:recordingCellModel.recording];
-        [self playRecording];
+        [self playPlayback];
     }
     
     [tableView beginUpdates];
