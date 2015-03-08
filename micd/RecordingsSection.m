@@ -33,46 +33,38 @@
     return self;
 }
 
-+ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings {
-    NSDateComponents *nowComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay
+
++ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending {
+    NSDateComponents *nowDateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay
                                                                       fromDate:[NSDate date]];
     
-    NSSortDescriptor* sortByDate = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
+    NSSortDescriptor* sortByDate = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:ascending];
     NSMutableArray *sortedRecordings = [NSMutableArray arrayWithArray:recordings];
-    [sortedRecordings sortUsingDescriptors:[NSArray arrayWithObject:sortByDate]];
+    [sortedRecordings sortUsingDescriptors:@[sortByDate]];
     
     NSMutableArray *assemblingSections = [NSMutableArray array];
     
     for (Recording *recording in sortedRecordings) {
-        if (recording.dateComponents.year == nowComponents.year && recording.dateComponents.month == nowComponents.month && recording.dateComponents.day == nowComponents.day) {
-            RecordingsSection *todaySection = assemblingSections.firstObject;
-            if (todaySection == nil) {
-                todaySection = [[RecordingsSection alloc] initWithYear:recording.dateComponents.year
-                                                                 month:recording.dateComponents.month];
-                todaySection.isThisDay = YES;
-                [assemblingSections addObject:todaySection];
-            }
-            RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording];
-            [todaySection.cellModels addObject:cellModel];
-        } else {
-            RecordingsSection *lastAddedMonthSection = assemblingSections.lastObject;
-            if (lastAddedMonthSection.isThisDay || lastAddedMonthSection.dateComponents.year != recording.dateComponents.year || lastAddedMonthSection.dateComponents.month != recording.dateComponents.month) {
-                lastAddedMonthSection = [[RecordingsSection alloc] initWithYear:recording.dateComponents.year
-                                                                          month:recording.dateComponents.month];
-                
-                if (recording.dateComponents.year == nowComponents.year) {
-                    if (recording.dateComponents.month == nowComponents.month) {
-                        lastAddedMonthSection.isThisMonth = YES;
-                    } else {
-                        lastAddedMonthSection.isThisYear = YES;
-                    }
-                }
-                
-                [assemblingSections addObject:lastAddedMonthSection];
-            }
-            RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording];
-            [lastAddedMonthSection.cellModels addObject:cellModel];
+        RecordingsSection *lastAddedMonthSection = assemblingSections.lastObject;
+        
+        BOOL recordingIsThisYear = (recording.dateComponents.year == nowDateComponents.year);
+        BOOL recordingIsThisMonth = (recording.dateComponents.month == nowDateComponents.month && recordingIsThisYear);
+        BOOL recordingIsThisDay = (recording.dateComponents.day == nowDateComponents.day && recordingIsThisMonth);
+        
+        BOOL sectionAndRecordingIsThisDayMatches = lastAddedMonthSection.isThisDay == recordingIsThisDay;
+        BOOL sectionAndRecordingYearMatches = lastAddedMonthSection.dateComponents.year == recording.dateComponents.year;
+        BOOL sectionAndRecordingMonthMatches = lastAddedMonthSection.dateComponents.month == recording.dateComponents.month;
+        
+        if (lastAddedMonthSection == nil || !sectionAndRecordingIsThisDayMatches || !sectionAndRecordingMonthMatches || !sectionAndRecordingYearMatches) {
+            lastAddedMonthSection = [[RecordingsSection alloc] initWithYear:recording.dateComponents.year month:recording.dateComponents.month];
+            lastAddedMonthSection.isThisDay = recordingIsThisDay;
+            lastAddedMonthSection.isThisMonth = recordingIsThisMonth;
+            lastAddedMonthSection.isThisYear = recordingIsThisYear;
+            [assemblingSections addObject:lastAddedMonthSection];
         }
+        
+        RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording];
+        [lastAddedMonthSection.cellModels addObject:cellModel];
     }
     
     return [assemblingSections copy];

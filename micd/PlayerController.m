@@ -29,11 +29,8 @@
 - (instancetype)init_common {
     self = [super init];
     if (self) {
-        AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-        [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-        [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-        _audioSession = session;
+        _audioSession = [AVAudioSession sharedInstance];
+        [_audioSession setActive:YES error:nil];
     }
     return self;
 }
@@ -63,8 +60,13 @@
     }
     
     BOOL successful = timeIntervalError == nil;
-    if (successful && error != nil) self.audioPlayer.currentTime = timeInterval;
-        else *error = timeIntervalError;
+    
+    if (successful) {
+        self.audioPlayer.currentTime = timeInterval;
+    } else if (error != nil) {
+        *error = timeIntervalError;
+    }
+    
     return successful;
 }
 
@@ -100,8 +102,11 @@
     }
     
     BOOL successful = pauseAudioError == nil;
-    if (successful) [self.audioPlayer pause];
-        else *error = pauseAudioError;
+    if (successful) {
+        [self.audioPlayer pause];
+    } else if (error != nil) {
+        *error = pauseAudioError;
+    }
     return successful;
 }
 

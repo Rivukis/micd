@@ -33,22 +33,14 @@
     self = [super init];
     if (self) {
         _recordings = [NSMutableArray array];
-//        NSArray *fakes = [FakesForProject fakeArrayOfSearchItems];
-//        [_recordings addObjectsFromArray:fakes];
+        NSArray *fakes = [FakesForProject fakeArrayOfSearchItems];
+        [_recordings addObjectsFromArray:fakes];
     }
     return self;
 }
 
-- (void)addNewRecording:(Recording *)recording {
+- (void)saveRecording:(Recording *)recording {
     [self.recordings insertObject:recording atIndex:0];
-}
-
-- (Recording *)recordingAtIndex:(NSUInteger)index {
-    return self.recordings[index];
-}
-
-- (void)deleteRecordingAtIndex:(NSUInteger)index {
-    [self.recordings removeObjectAtIndex:index];
 }
 
 - (NSUInteger)numberOfRecordings {

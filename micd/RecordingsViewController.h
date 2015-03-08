@@ -26,7 +26,11 @@ typedef NS_ENUM(NSUInteger, PlayerState) {
 @property (nonatomic) PlayerState playerState;
 
 - (void)reloadData;
-- (void)playRecording;
-- (void)pauseRecording;
+
+- (void)playPlayback;
+- (void)pausePlayback;
+- (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval;
+
+- (void)scrollToMostRecentRecording;
 
 @end

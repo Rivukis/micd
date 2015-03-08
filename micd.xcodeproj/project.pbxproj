@@ -171,6 +171,8 @@
 		D05D756E1A79AAA40050A49C /* micd */ = {
 			isa = PBXGroup;
 			children = (
+				7AC290B41A8EF0100085B927 /* FakesForProject.h */,
+				7AC290B51A8EF0100085B927 /* FakesForProject.m */,
 				D05D75791A79AAA40050A49C /* Main.storyboard */,
 				D0C67CDD1A929D51000F501A /* View Controllers */,
 				D0C67CDE1A929D67000F501A /* Views */,
@@ -227,8 +229,6 @@
 			children = (
 				7AC290B21A8EF0100085B927 /* CKSearchViewController.h */,
 				7AC290B31A8EF0100085B927 /* CKSearchViewController.m */,
-				7AC290B41A8EF0100085B927 /* FakesForProject.h */,
-				7AC290B51A8EF0100085B927 /* FakesForProject.m */,
 			);
 			name = "Brians stuff";
 			path = micd;

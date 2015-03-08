@@ -52,12 +52,6 @@ BOOL const useEnhancedRecorder = NO;
 - (instancetype)init_common {
     self = [super init];
     if (self) {
-//        AVAudioSession *session = [AVAudioSession sharedInstance];
-//        [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-//        [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-//        [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-//        _audioSession = session;
-        
         NSString *documentsDirectory = [Constants documentsDirectory];
         _primaryFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderPrimaryAudioFile];
         _savedFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderSavedAudioFileName];
