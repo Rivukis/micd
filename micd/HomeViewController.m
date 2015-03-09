@@ -25,6 +25,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (nonatomic) CGFloat initialY;
 @property (assign, nonatomic) BOOL hasSetInitialY;
 
+@property (strong, nonatomic) UIImageView *recordButtonSnapshot;
+@property (strong, nonatomic) UIVisualEffectView *blurView;
+
 @end
 
 @implementation HomeViewController
@@ -57,6 +60,17 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.view addGestureRecognizer:panGesture];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    UIGraphicsBeginImageContextWithOptions(self.recordButton.bounds.size, NO, 0);
+    [self.recordButton drawViewHierarchyInRect:self.recordButton.bounds afterScreenUpdates:YES];
+    UIImage *recordButtonImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    self.recordButtonSnapshot = [[UIImageView alloc] initWithImage:recordButtonImage];
+}
+
 #pragma mark - User Actions
 
 - (void)recordButtonPressed:(UIButton *)sender {
@@ -66,7 +80,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         case RecorderControllerStatePaused:
             // time to record
             [self.recorderController startRecording];
-            [self.recordButton setBackgroundColor:[UIColor recordRed]];
+            
+            [self animateRecordingState];
+            
             break;
             
         case RecorderControllerStateRecording: {
@@ -81,6 +97,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                 }
                 [weakSelf.addNewRecordingDelegate addNewRecording:recording];
             }];
+            
+            [self animatePauseState];
+            
             break;
         }
         case RecorderControllerStatePausing:
@@ -88,6 +107,42 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
             // can't do anything
             break;
     }
+}
+
+- (void)animateRecordingState {
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    self.blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    
+    CGRect blurViewFrame = self.view.bounds;
+    self.blurView.frame = blurViewFrame;
+    [self.view addSubview:self.blurView];
+    self.blurView.alpha = 0.0f;
+    
+    self.recordButtonSnapshot.frame = self.recordButton.frame;
+    [self.view addSubview:self.recordButtonSnapshot];
+    
+    [UIView animateWithDuration:.25f animations:^{
+        self.recordButtonSnapshot.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
+        self.blurView.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        self.recordButton.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
+        [self.blurView.contentView addSubview:self.recordButton];
+        self.displayLink.paused = NO;
+    }];
+}
+
+- (void)animatePauseState {
+    self.displayLink.paused = YES;
+    
+    [UIView animateWithDuration:.25f animations:^{
+        self.recordButtonSnapshot.transform = CGAffineTransformIdentity;
+        self.recordButton.transform = CGAffineTransformIdentity;
+        self.blurView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        [self.view addSubview:self.recordButton];
+        [self.recordButtonSnapshot removeFromSuperview];
+    }];
+    
 }
 
 #pragma mark - PanGestureRecognizer
@@ -100,6 +155,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         // TODO: need to make this work for settings
+        
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
             [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
         } else {
@@ -109,7 +165,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if (touch.view == self.recordButton) {
+    if (touch.view == self.recordButton || self.recorderController.recordingState == RecorderControllerStateRecording) {
         return NO;
     }
     return YES;
@@ -326,10 +382,11 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     }
     
     float Ytraveled = fabsf(presentationFrame.origin.y) - fabsf(self.initialY);
-    
     self.initialY = presentationFrame.origin.y;
-
     [self.gearsImageView moveGearsWithRotationAngle:-Ytraveled];
+    
+    self.recorderController
+    
 }
 
 @end
