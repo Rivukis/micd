@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface Recording ()
+@interface Recording () <NSCoding>
 
 @property (nonatomic, strong, readwrite) NSArray *tags;
 @property (nonatomic, copy, readwrite) NSData *data;
@@ -48,6 +48,27 @@
     return [self initWithData:data date:startDate length:length name:nil];
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        // uuid, title, date, tags, length as time interval
+        _uuid = [aDecoder decodeObjectForKey:@"uuid"];
+        _title = [aDecoder decodeObjectForKey:@"title"];
+        _date = [aDecoder decodeObjectForKey:@"date"];
+        _tags = [aDecoder decodeObjectForKey:@"tags"];
+        _lengthAsTimeInterval = [aDecoder decodeDoubleForKey:@"length"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:_uuid forKey:@"uuid"];
+    [aCoder encodeObject:_title forKey:@"title"];
+    [aCoder encodeObject:_date forKey:@"date"];
+    [aCoder encodeObject:_tags forKey:@"tags"];
+    [aCoder encodeDouble:_lengthAsTimeInterval forKey:@"length"];
+}
+
 - (NSString *)title {
     if (_title.length > 0) {
         return _title;
@@ -68,9 +89,12 @@
 
 - (NSString *)dateAsString {
     if (!_dateAsString) {
+        //TODO: add st, nd, rd, th to day number (even better if superscript)
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MMMM d, h:mma"];
-        _dateAsString = [dateFormatter stringFromDate:self.date];
+        [dateFormatter setDateFormat:@"MMMM d"];
+        NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+        [timeFormatter setDateFormat:@"h:mma"];
+        _dateAsString = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:self.date], [timeFormatter stringFromDate:self.date].lowercaseString];
     }
     
     return _dateAsString;
@@ -152,7 +176,6 @@
 #pragma mark - url methods
 
 - (NSURL *)url {
-    NSURL *fromString = [NSURL URLWithString:self.urlString];
     NSURL *fromFilePath = [NSURL fileURLWithPath:self.urlString];
     return fromFilePath;
 }

@@ -241,6 +241,11 @@ BOOL const useEnhancedRecorder = NO;
     return recording;
 }
 
+- (float)averagePowerForChannelZero {
+    [self.audioRecorder updateMeters];
+    return [self.audioRecorder averagePowerForChannel:0];
+}
+
 #pragma mark - AVAudioRecorder Methods
 
 - (AVAudioRecorder *)customRecorder {

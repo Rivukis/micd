@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.dataSource = [DataSourceController sharedInstance];
+    self.dataSource = [DataSourceController sharedDataSource];
     
     self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
     self.view.backgroundColor = [UIColor blackColor];

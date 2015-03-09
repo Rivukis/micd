@@ -12,10 +12,11 @@
 @interface DataSourceController : NSObject
 
 @property (assign, nonatomic, readonly) NSUInteger numberOfRecordings;
+@property (strong, nonatomic, readonly) NSMutableArray *recordings;
 
-+ (DataSourceController *)sharedInstance;
++ (DataSourceController *)sharedDataSource;
 
 - (void)saveRecording:(Recording *)recording;
-- (NSArray *)allRecordings;
+- (void)deleteRecording:(Recording *)recording;
 
 @end

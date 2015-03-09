@@ -53,9 +53,13 @@
     [self setupViewBasedOnState];
 }
 
+- (void)dealloc {
+    [self.cellModel removeObserver:self forKeyPath:@"state"];
+}
+
 #pragma mark - State Methods
 
-- (void)setupViewBasedOnState {
+- (void)setupViewBasedOnState { 
     switch (self.cellModel.state) {
         case CellStateDefault:
             [self setupViewForCollapsedState];

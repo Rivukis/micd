@@ -36,6 +36,8 @@ struct Length {
 @property (nonatomic, assign, readonly) struct Length length;
 @property (nonatomic, weak, readonly) NSString *lengthToDiplay;
 
+@property (nonatomic, weak, readonly) NSString *urlString;
+
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length name:(NSString *)name;
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length;
 

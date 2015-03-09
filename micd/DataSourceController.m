@@ -8,47 +8,81 @@
 
 #import "DataSourceController.h"
 #import "FakesForProject.h"
+#import "Constants.h"
+
+static NSString *const kRecordingsPlist = @"recordings.plist";
 
 @interface DataSourceController ()
 
 @property (assign, nonatomic, readwrite) NSUInteger numberOfRecordings;
-
 @property (strong, nonatomic) NSMutableArray *recordings;
 
 @end
 
 @implementation DataSourceController
 
-+ (DataSourceController *)sharedInstance {
+- (instancetype)init {
+    return [DataSourceController sharedDataSource];
+}
+
++ (DataSourceController *)sharedDataSource {
     static DataSourceController *sharedDataSource = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedDataSource = [[self alloc] init];
-    });
+    @synchronized(self) {
+        if (!sharedDataSource) {
+            sharedDataSource = [[self alloc] init_common];
+        }
+    }
     return sharedDataSource;
 }
 
-- (instancetype)init
-{
+- (instancetype)init_common {
     self = [super init];
     if (self) {
-        _recordings = [NSMutableArray array];
-        NSArray *fakes = [FakesForProject fakeArrayOfSearchItems];
-        [_recordings addObjectsFromArray:fakes];
+        BOOL useFakes = NO;
+        if (useFakes) {
+            NSArray *fakes = [FakesForProject fakeArrayOfSearchItems];
+            [_recordings addObjectsFromArray:fakes];
+        } else {
+            // do archiver stuff
+        }
     }
     return self;
 }
 
+- (void)saveData {
+    NSString *recordingsPlistPath = [[Constants documentsDirectory] stringByAppendingPathComponent:kRecordingsPlist];
+    [NSKeyedArchiver archiveRootObject:self.recordings toFile:recordingsPlistPath];
+}
+
 - (void)saveRecording:(Recording *)recording {
     [self.recordings insertObject:recording atIndex:0];
+    [self saveData];
+}
+
+- (void)deleteRecording:(Recording *)recording {
+    [self.recordings removeObject:recording];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath:recording.urlString] error:nil];
+    [self saveData];
 }
 
 - (NSUInteger)numberOfRecordings {
     return self.recordings.count;
 }
 
-- (NSArray *)allRecordings {
-    return [self.recordings copy];
+- (NSArray *)recordings {
+    if (!_recordings) {
+        _recordings = [NSMutableArray array];
+        NSString *recordingsPlistPath = [[Constants documentsDirectory] stringByAppendingPathComponent:kRecordingsPlist];
+        if ([DataSourceController isPlistFileInDocs:recordingsPlistPath]) {
+            _recordings = [NSKeyedUnarchiver unarchiveObjectWithFile:recordingsPlistPath];
+        }
+    }
+    return _recordings;
 }
 
++ (BOOL)isPlistFileInDocs:(NSString *)fileName {
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    return [defaultManager fileExistsAtPath:fileName];
+}
 @end

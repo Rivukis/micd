@@ -37,4 +37,6 @@ typedef NS_ENUM(NSInteger, RecorderControllerState) {
 - (void)deleteRecording;
     // will stop if necessary
 
+- (float)averagePowerForChannelZero;
+
 @end

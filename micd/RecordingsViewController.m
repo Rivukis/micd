@@ -51,7 +51,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.dataSource = [DataSourceController sharedInstance];
+    self.dataSource = [DataSourceController sharedDataSource];
     self.playerController = [PlayerController sharedPlayer];
     self.playerController.audioPlayerDelegate = self;
     
@@ -87,9 +87,9 @@
 }
 
 - (void)reloadData {
-    self.sections = [RecordingsSection arrayOfSectionsForRecordings:[self.dataSource allRecordings] ascending:YES];
+    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
     [self.tableView reloadData];
-    if (self.tableBottomFaderImageView.hidden == YES && self.dataSource.allRecordings.count) {
+    if (self.tableBottomFaderImageView.hidden == YES && self.dataSource.recordings.count) {
         self.tableBottomFaderImageView.hidden = NO;
         self.playbackTitleLabel.hidden = NO;
         self.currentPlaybackTimeLabel.hidden = NO;
@@ -141,7 +141,9 @@
 
 - (void)scrollToMostRecentRecording {
     RecordingsSection *lastSection = self.sections.lastObject;
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:lastSection.numberOfCellModels - 1 inSection:self.sections.count - 1] atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    if (lastSection) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:self.sections.count - 1] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
 }
 
 - (Recording *)mostRecentRecording {
@@ -239,6 +241,7 @@
 
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval {
     [self.playerController setPlaybackTimeInterval:self.playerController.secondsCompleted + timeInterval];
+    [self handleDisplayLinkAnimation:nil];
 }
 
 - (void)handleWaveFormPanning:(UILongPressGestureRecognizer *)gesture {
@@ -315,6 +318,18 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        RecordingsSection *recordingSection = self.sections[indexPath.section];
+        RecordingCellModel *cellModel = [recordingSection cellModelAtIndex:indexPath.row];
+        Recording *recording = cellModel.recording;
+        
+        [self.dataSource deleteRecording:recording];
+        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
+        if (self.sections.count == 0) {
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+        } else {
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        
         NSLog(@"DELETE");
     }
 }

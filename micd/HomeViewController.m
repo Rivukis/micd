@@ -28,12 +28,19 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (strong, nonatomic) UIImageView *recordButtonSnapshot;
 @property (strong, nonatomic) UIVisualEffectView *blurView;
 
+@property (assign, nonatomic) NSUInteger animatingPulseCount;
+@property (strong, nonatomic) NSMutableArray *pulsingValues;
+
+@property (assign, nonatomic) BOOL growForLouderNoises;
+
 @end
 
 @implementation HomeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.growForLouderNoises = NO;
     
     self.recorderController = [RecorderController sharedRecorder];
     
@@ -43,7 +50,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     self.recordButton = [[OBShapedButton alloc] init];
     [self.recordButton addTarget:self action:@selector(recordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.recordButton setImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateHighlighted];
     [self.view addSubview:self.recordButton];
     
     self.gearsImageView = [[GearsImageView alloc] init];
@@ -110,6 +118,11 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)animateRecordingState {
+    self.pulsingValues = [NSMutableArray array];
+    for (int i = 0; i < 15; i++) {
+        [self.pulsingValues addObject:(self.growForLouderNoises) ? @1.2 : @1];
+    }
+    
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
     self.blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     
@@ -122,21 +135,32 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.view addSubview:self.recordButtonSnapshot];
     
     [UIView animateWithDuration:.25f animations:^{
-        self.recordButtonSnapshot.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
         self.blurView.alpha = 1.0f;
     } completion:^(BOOL finished) {
-        self.recordButton.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
-        [self.blurView.contentView addSubview:self.recordButton];
         self.displayLink.paused = NO;
+        [self.recordButtonSnapshot removeFromSuperview];
+        [self.blurView.contentView addSubview:self.recordButton];
     }];
 }
 
 - (void)animatePauseState {
     self.displayLink.paused = YES;
     
+    float averagedTransformCoefficient = 0.0f;
+    for (NSNumber *savedPulseCoefficient in self.pulsingValues) {
+        averagedTransformCoefficient += savedPulseCoefficient.floatValue;
+    }
+    
+    averagedTransformCoefficient /= self.pulsingValues.count;
+    
+    self.recordButtonSnapshot.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
+    self.recordButton.transform = CGAffineTransformIdentity;
+    [self.recordButton removeFromSuperview];
+    
+    [self.view addSubview:self.recordButtonSnapshot];
+    
     [UIView animateWithDuration:.25f animations:^{
         self.recordButtonSnapshot.transform = CGAffineTransformIdentity;
-        self.recordButton.transform = CGAffineTransformIdentity;
         self.blurView.alpha = 0.0f;
     } completion:^(BOOL finished) {
         [self.view addSubview:self.recordButton];
@@ -374,19 +398,46 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
-    CGRect presentationFrame = [self.view.layer.presentationLayer frame];
-    
-    if (!self.hasSetInitialY) {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+        
+        float avgDB = [self.recorderController averagePowerForChannelZero];
+        float transformCoefficient = 1.2 - (((avgDB + 40) / 40) * 0.2f);
+        
+        [self.pulsingValues addObject:@(transformCoefficient)];
+        if (self.pulsingValues.count > 4) {
+            [self.pulsingValues removeObjectAtIndex:0];
+        }
+        if (self.pulsingValues.count > 4) {
+            [self.pulsingValues removeObjectAtIndex:0];
+        }
+        
+        float averagedTransformCoefficient = 0.0f;
+        for (NSNumber *savedPulseCoefficient in self.pulsingValues) {
+            averagedTransformCoefficient += savedPulseCoefficient.floatValue;
+        }
+        
+        averagedTransformCoefficient /= self.pulsingValues.count;
+        
+        NSLog(@"%f", averagedTransformCoefficient);
+        
+        if (self.growForLouderNoises) {
+            float difference = 1.2 - averagedTransformCoefficient;
+            averagedTransformCoefficient = 1.0 + difference;
+        }
+        
+        self.recordButton.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
+    } else {
+        CGRect presentationFrame = [self.view.layer.presentationLayer frame];
+        
+        if (!self.hasSetInitialY) {
+            self.initialY = presentationFrame.origin.y;
+            self.hasSetInitialY = YES;
+        }
+        
+        float Ytraveled = fabsf(presentationFrame.origin.y) - fabsf(self.initialY);
         self.initialY = presentationFrame.origin.y;
-        self.hasSetInitialY = YES;
+        [self.gearsImageView moveGearsWithRotationAngle:-Ytraveled];
     }
-    
-    float Ytraveled = fabsf(presentationFrame.origin.y) - fabsf(self.initialY);
-    self.initialY = presentationFrame.origin.y;
-    [self.gearsImageView moveGearsWithRotationAngle:-Ytraveled];
-    
-    self.recorderController
-    
 }
 
 @end
