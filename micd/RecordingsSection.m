@@ -67,7 +67,12 @@
         [lastAddedMonthSection.cellModels addObject:cellModel];
     }
     
-    return [assemblingSections copy];
+    NSMutableArray *reversedOrderArray = [NSMutableArray array];
+    for (id section in assemblingSections) {
+        [reversedOrderArray insertObject:section atIndex:0];
+    }
+    
+    return [reversedOrderArray copy];
 }
 
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index {
