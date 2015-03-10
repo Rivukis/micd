@@ -57,6 +57,7 @@
         _date = [aDecoder decodeObjectForKey:@"date"];
         _tags = [aDecoder decodeObjectForKey:@"tags"];
         _lengthAsTimeInterval = [aDecoder decodeDoubleForKey:@"length"];
+        // TODO: load up the recording data
     }
     return self;
 }

@@ -11,7 +11,6 @@
 @implementation Constants
 
 + (NSString *)documentsDirectory {
-    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     return paths.lastObject;
 }

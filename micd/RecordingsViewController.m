@@ -221,11 +221,9 @@
     
     [self.playerController playAudio];
     
-//    if (!error) {
-        [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
-        self.playerState = PlayerStatePlaying;
-        self.displayLink.paused = NO;
-//    }
+    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
+    self.playerState = PlayerStatePlaying;
+    self.displayLink.paused = NO;
 }
 
 - (void)pausePlayback {
