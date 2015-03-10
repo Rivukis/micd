@@ -312,6 +312,8 @@
     NSInteger nextSelectedSection;
     NSInteger nextSelectedRow;
     
+    //TODO: decisions need to be made as to which is the best next cell to be selected when the previously selected row has been deleted
+    
     if (isSectionDeleted) {
         if (self.sections.count > indexPath.section) {
             // first row in next section
