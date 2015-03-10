@@ -73,32 +73,17 @@
 - (NSString *)title {
     if (_title.length > 0) {
         return _title;
-    } else {
-        return self.dateAsString;
-    }
-}
-
-- (NSString *)dateAsFullString {
-    if (!_dateAsFullString) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-        _dateAsFullString = [dateFormatter stringFromDate:self.date];
     }
     
-    return _dateAsFullString;
+    return self.dateAsString;
 }
 
-- (NSString *)dateAsString {
-    if (!_dateAsString) {
-        //TODO: add st, nd, rd, th to day number (even better if superscript)
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MMMM d"];
-        NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-        [timeFormatter setDateFormat:@"h:mma"];
-        _dateAsString = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:self.date], [timeFormatter stringFromDate:self.date].lowercaseString];
+- (NSData *)data {
+    if (!_data && self.uuid) {
+        _data = [NSData dataWithContentsOfFile:self.urlString];
     }
     
-    return _dateAsString;
+    return _data;
 }
 
 #pragma mark - tag methods
@@ -172,6 +157,30 @@
         displayableLength = [NSString stringWithFormat:@"%ld:%02ld", (long)self.length.minutes, (long)self.length.seconds];
     }
     return displayableLength;
+}
+
+
+- (NSString *)dateAsFullString {
+    if (!_dateAsFullString) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+        _dateAsFullString = [dateFormatter stringFromDate:self.date];
+    }
+    
+    return _dateAsFullString;
+}
+
+- (NSString *)dateAsString {
+    if (!_dateAsString) {
+        //TODO: add st, nd, rd, th to day number (even better if superscript)
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMMM d"];
+        NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+        [timeFormatter setDateFormat:@"h:mma"];
+        _dateAsString = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:self.date], [timeFormatter stringFromDate:self.date].lowercaseString];
+    }
+    
+    return _dateAsString;
 }
 
 #pragma mark - url methods
