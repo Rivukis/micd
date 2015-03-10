@@ -418,8 +418,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         
         averagedTransformCoefficient /= self.pulsingValues.count;
         
-        NSLog(@"%f", averagedTransformCoefficient);
-        
         if (self.growForLouderNoises) {
             float difference = 1.2 - averagedTransformCoefficient;
             averagedTransformCoefficient = 1.0 + difference;

@@ -14,9 +14,11 @@
 @interface PlayerController : NSObject
 
 @property (weak, nonatomic) id<AVAudioPlayerDelegate> audioPlayerDelegate;
-@property (assign, nonatomic, readonly) NSTimeInterval loadedRecordingDuration;
 @property (nonatomic, assign, readonly) NSTimeInterval secondsCompleted;
 @property (nonatomic, assign, readonly) NSString *displayableCurrentTime;
+
+@property (nonatomic, readonly) NSTimeInterval loadedRecordingDuration;
+@property (strong, nonatomic, readonly) NSUUID *loadedRecordingUUID;
 
 + (PlayerController *)sharedPlayer;
 

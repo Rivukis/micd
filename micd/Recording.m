@@ -36,9 +36,6 @@
         
         if (_data) {
             [_data writeToFile:[self urlString] atomically:YES];
-        } else {
-            // possibly get data from url when data has already been saved
-            // _data = [fileManager get data from file]
         }
     }
     return self;

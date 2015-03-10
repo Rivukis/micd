@@ -134,15 +134,18 @@
     }
     
     if (self.isFirstTimeLayingOutSubviews) {
-        [self scrollToMostRecentRecording];
+        [self scrollToAndReadyPlayerWithMostRecentRecording];
         self.isFirstTimeLayingOutSubviews = NO;
     }
 }
 
-- (void)scrollToMostRecentRecording {
+- (void)scrollToAndReadyPlayerWithMostRecentRecording {
     RecordingsSection *lastSection = self.sections.lastObject;
     if (lastSection) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:self.sections.count - 1] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:self.sections.count - 1];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        RecordingCellModel *lastCellModel = [lastSection cellModelAtIndex:0];
+        [self readyPlayerWithRecording:lastCellModel.recording];
     }
 }
 
@@ -200,20 +203,25 @@
 #pragma mark - PlayerController Methods
 
 - (void)readyPlayerWithRecording:(Recording *)recording {
-    if (!recording) return;
-    
+    [self.playerController loadRecording:recording];
     self.playbackTitleLabel.text = recording.title;
     self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
-    self.playbackRecording = recording;
     
-    self.waveformView.asset = recording.avAsset;
-    CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
-    CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
-    self.waveformView.timeRange = displayedTimeRange;
-    self.waveformView.normalColor = [UIColor grayColor];
-    self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
-    
-    [self.playerController loadRecording:recording];
+    if (recording) {
+        self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
+        self.playbackRecording = recording;
+        
+        self.waveformContainerView.hidden = NO;
+        self.waveformView.asset = recording.avAsset;
+        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
+        CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
+        self.waveformView.timeRange = displayedTimeRange;
+        self.waveformView.normalColor = [UIColor grayColor];
+        self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
+    } else {
+        self.waveformContainerView.hidden = YES;
+        self.currentPlaybackTimeLabel.text = @"";
+    }
 }
 
 - (void)playPlayback {
@@ -296,6 +304,47 @@
     NSLog(@"player had decode error: %@", error.localizedDescription);
 }
 
+- (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
+    if (self.sections.count == 0) {
+        return nil;
+    }
+    
+    NSInteger nextSelectedSection;
+    NSInteger nextSelectedRow;
+    
+    if (isSectionDeleted) {
+        if (self.sections.count > indexPath.section) {
+            // first row in next section
+            nextSelectedSection++;
+            nextSelectedRow = 0;
+        } else {
+            // last row in previous section (only when last section was deleted)
+            nextSelectedSection = self.sections.count - 1;
+            RecordingsSection *previousSection = self.sections[nextSelectedSection];
+            nextSelectedRow = previousSection.numberOfCellModels - 1;
+        }
+    } else {
+        RecordingsSection *currentSection = self.sections[indexPath.section];
+        if (currentSection.numberOfCellModels <= indexPath.row) {
+            // no cell models below deleted cell in current section
+            if (self.sections.count > indexPath.section + 1) {
+                // first row in next section
+                nextSelectedSection = indexPath.section + 1;
+                nextSelectedRow = 0;
+            } else {
+                // select previous row of current section (only when in last section)
+                nextSelectedSection = indexPath.section;
+                nextSelectedRow = indexPath.row - 1;
+            }
+        } else {
+            nextSelectedSection = indexPath.section;
+            nextSelectedRow = indexPath.row;
+        }
+    }
+    
+    return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
+}
+
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -318,16 +367,30 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        RecordingsSection *recordingSection = self.sections[indexPath.section];
-        RecordingCellModel *cellModel = [recordingSection cellModelAtIndex:indexPath.row];
-        Recording *recording = cellModel.recording;
+        RecordingsSection *editingRecordingsSection = self.sections[indexPath.section];
+        RecordingCellModel *editingCellModel = [editingRecordingsSection cellModelAtIndex:indexPath.row];
+        Recording *editingRecording = editingCellModel.recording;
         
-        [self.dataSource deleteRecording:recording];
+        BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
+        
+        [self.dataSource deleteRecording:editingRecording];
         self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
-        if (self.sections.count == 0) {
+        
+        if (deletingSection) {
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
         } else {
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        
+        if ([editingRecording.uuid.UUIDString isEqualToString:self.playerController.loadedRecordingUUID.UUIDString]) {
+            NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
+            Recording *toLoadRecording = nil;
+            if (nextToLoadIndexPath != nil) {
+                RecordingsSection *toLoadSection = self.sections[nextToLoadIndexPath.section];
+                RecordingCellModel *toLoadCellModel = [toLoadSection cellModelAtIndex:nextToLoadIndexPath.row];
+                toLoadRecording = toLoadCellModel.recording;
+            }
+            [self readyPlayerWithRecording:toLoadRecording];
         }
         
         NSLog(@"DELETE");

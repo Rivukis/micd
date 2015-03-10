@@ -31,6 +31,6 @@ typedef NS_ENUM(NSUInteger, PlayerState) {
 - (void)pausePlayback;
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval;
 
-- (void)scrollToMostRecentRecording;
+- (void)scrollToAndReadyPlayerWithMostRecentRecording;
 
 @end

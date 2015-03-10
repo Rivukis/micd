@@ -7,6 +7,8 @@
 @property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
+@property (strong, nonatomic, readwrite) NSUUID *loadedRecordingUUID;
+
 @end
 
 @implementation PlayerController
@@ -39,6 +41,7 @@
 - (void)loadRecording:(Recording *)recording {
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:recording.data error:nil];
     self.audioPlayer.delegate = self.audioPlayerDelegate;
+    self.loadedRecordingUUID = recording.uuid;
 }
 
 - (void)playAudio {
@@ -62,10 +65,6 @@
 
 #pragma mark - Public Readonly Properties
 
-- (NSTimeInterval)loadedRecordingDuration {
-    return self.audioPlayer.duration;
-}
-
 - (NSTimeInterval)secondsCompleted {
     return self.audioPlayer.currentTime;
 }
@@ -84,6 +83,10 @@
     }
     
     return displayableLength;
+}
+
+- (NSTimeInterval)loadedRecordingDuration {
+    return self.audioPlayer.duration;
 }
 
 #pragma mark - Custom Setters
