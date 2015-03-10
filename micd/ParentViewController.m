@@ -121,7 +121,9 @@
                      animations: ^{
                          [self setFrameBasedOnState:state];
                      } completion:^(BOOL finished) {
-                         self.homeViewController.displayLink.paused = YES;
+                         if (YES) {
+                             self.homeViewController.displayLink.paused = YES;
+                         }
                      }];
 }
 

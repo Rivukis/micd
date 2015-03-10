@@ -401,7 +401,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         
         float avgDB = [self.recorderController averagePowerForChannelZero];
-        float transformCoefficient = 1.2 - (((avgDB + 40) / 40) * 0.2f);
+        float transformCoefficient = 1.2 - (((avgDB + 40) / 40) * 0.4f);
         
         [self.pulsingValues addObject:@(transformCoefficient)];
         if (self.pulsingValues.count > 4) {

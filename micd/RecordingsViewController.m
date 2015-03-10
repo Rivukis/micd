@@ -22,7 +22,7 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
-@property (weak, nonatomic) IBOutlet UIImageView *tableBottomFaderImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
 @property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentPlaybackTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalPlaybackTimeLabel;
@@ -79,7 +79,7 @@
     self.playerState = PlayerStatePaused;
     
     if ([self mostRecentRecording]) {
-        self.tableBottomFaderImageView.hidden = NO;
+        self.tableBottomBorder.hidden = NO;
         self.playbackTitleLabel.hidden = NO;
         self.currentPlaybackTimeLabel.hidden = NO;
         self.totalPlaybackTimeLabel.hidden = NO;
@@ -89,8 +89,8 @@
 - (void)reloadData {
     self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
     [self.tableView reloadData];
-    if (self.tableBottomFaderImageView.hidden == YES && self.dataSource.recordings.count) {
-        self.tableBottomFaderImageView.hidden = NO;
+    if (self.tableBottomBorder.hidden == YES && self.dataSource.recordings.count) {
+        self.tableBottomBorder.hidden = NO;
         self.playbackTitleLabel.hidden = NO;
         self.currentPlaybackTimeLabel.hidden = NO;
         self.totalPlaybackTimeLabel.hidden = NO;
@@ -101,7 +101,7 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.tableBottomFaderImageView.backgroundColor = [UIColor vibrantBlue];
+    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
     
     if (!self.didGetOriginalHeight) {
         self.didGetOriginalHeight = YES;
@@ -378,7 +378,7 @@
     
     UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width-13.0f, 20.0f)];
     headerTitleLabel.text = recordingsSection.dateAsString;
-    headerTitleLabel.font = [UIFont fontWithName: @"AvenirNext-Regular" size:16.0f];
+    headerTitleLabel.font = [UIFont fontWithName: @"Damascus" size:16.0f]; //AvenirNext-Regular
     headerTitleLabel.textAlignment = NSTextAlignmentRight;
     headerTitleLabel.textColor = [UIColor vibrantBlueText];
     [headerView addSubview:headerTitleLabel];

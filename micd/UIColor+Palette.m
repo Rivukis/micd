@@ -3,7 +3,7 @@
 @implementation UIColor (Palette)
 
 + (UIColor *)vibrantBlue {
-    return [UIColor colorWithRed:0.118f green:0.690f blue:0.843f alpha:1.000f];
+    return [UIColor colorWithRed:0.161f green:0.745f blue:0.867f alpha:1.000f];
 }
 
 + (UIColor *)vibrantBlueText {
@@ -11,7 +11,7 @@
 }
 
 + (UIColor *)vibrantBlueHalfOpacity {
-    return [UIColor colorWithRed:0.118f green:0.690f blue:0.843f alpha:0.500f];
+    return [UIColor colorWithRed:0.161f green:0.745f blue:0.867f alpha:0.500f];
 }
 
 + (UIColor *)recordRed {
