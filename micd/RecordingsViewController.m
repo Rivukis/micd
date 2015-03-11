@@ -21,6 +21,7 @@
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
 @property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
 @property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
@@ -57,15 +58,20 @@
     
     self.isFirstTimeLayingOutSubviews = YES;
     
+    ////this might not end up being used
+    self.roundedTableBackerView.backgroundColor = [UIColor blackColor];
+    self.roundedTableBackerView.clipsToBounds = YES;
+    //    self.roundedTableBackerView.layer.cornerRadius = 14;
+    
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.scrollsToTop = YES;
     
-    self.currentPlaybackTimeLabel.textColor = [UIColor vibrantBlueText];
-    self.playbackTitleLabel.textColor = [UIColor vibrantBlueText];
-    self.totalPlaybackTimeLabel.textColor = [UIColor vibrantBlueText];
+    self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
+    self.playbackTitleLabel.textColor = [UIColor vibrantLightBlueText];
+    self.totalPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     
 //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -101,7 +107,7 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
+    self.tableBottomBorder.backgroundColor = [UIColor vibrantLightBlue];
     
     if (!self.didGetOriginalHeight) {
         self.didGetOriginalHeight = YES;
@@ -122,11 +128,14 @@
         [self.waveformContainerView addSubview:self.waveformView];
         self.waveformContainerView.layer.masksToBounds = YES;
         self.waveformContainerView.backgroundColor = [UIColor clearColor];
+        self.waveformView.normalColor = [UIColor darkGrayColor];
         self.waveformView.progressColor = [UIColor vibrantBlue];
         self.waveformView.precision = 0.20;
         self.waveformView.lineWidthRatio = 0.6;
         self.waveformView.channelStartIndex = 0;
         self.waveformView.channelEndIndex = 0;
+        
+        [self readyPlayerWithRecording:[self mostRecentRecording]];
         
         UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
         gesture.minimumPressDuration = 0.001f;
@@ -148,7 +157,7 @@
 
 - (Recording *)mostRecentRecording {
     RecordingsSection *firstRecordingsSection = self.sections.lastObject;
-    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:firstRecordingsSection.numberOfCellModels - 1];
+    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:0];
     return lastAddedRecordingModel.recording;
 }
 
@@ -210,7 +219,6 @@
     CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
     CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
     self.waveformView.timeRange = displayedTimeRange;
-    self.waveformView.normalColor = [UIColor grayColor];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
     
     [self.playerController loadRecording:recording];
@@ -221,9 +229,11 @@
     
     [self.playerController playAudio];
     
-    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
-    self.playerState = PlayerStatePlaying;
-    self.displayLink.paused = NO;
+//    if (!error) {
+        [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
+        self.playerState = PlayerStatePlaying;
+        self.displayLink.paused = NO;
+//    }
 }
 
 - (void)pausePlayback {
@@ -348,6 +358,7 @@
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     [cell bindToModel:recordingCellModel];
+    cell.backgroundColor = [UIColor backgroundGray];
     
     return cell;
 }
@@ -370,15 +381,16 @@
     RecordingsSection *recordingsSection = self.sections[section];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 45.0f)];
     
-    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 44.0f, tableView.frame.size.width, 1.0f)];
-    bottomBorderView.backgroundColor = [UIColor vibrantBlueHalfOpacity];
-    [headerView addSubview:bottomBorderView];
+//    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 44.0f, tableView.frame.size.width, 2.0f)];
+//    bottomBorderView.backgroundColor = [UIColor blackColor];
+//    bottomBorderView.alpha = .5;
+//    [headerView addSubview:bottomBorderView];
     
     UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width-13.0f, 20.0f)];
     headerTitleLabel.text = recordingsSection.dateAsString;
-    headerTitleLabel.font = [UIFont fontWithName: @"Damascus" size:16.0f]; //AvenirNext-Regular
+    headerTitleLabel.font = [UIFont fontWithName: @"HelveticaNeue-Medium" size:16.0f]; //AvenirNext-Regular
     headerTitleLabel.textAlignment = NSTextAlignmentRight;
-    headerTitleLabel.textColor = [UIColor vibrantBlueText];
+    headerTitleLabel.textColor = [UIColor vibrantLightBlue];
     [headerView addSubview:headerTitleLabel];
     
     headerView.backgroundColor = [UIColor blackColor];

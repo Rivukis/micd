@@ -149,8 +149,8 @@
 			isa = PBXGroup;
 			children = (
 				D05D756E1A79AAA40050A49C /* micd */,
-				D0C67CCD1A8EF0B7000F501A /* Brians stuff */,
 				D0667EFB1A897F3A001A0FC4 /* Styling */,
+				D0C67CCD1A8EF0B7000F501A /* Brians stuff */,
 				D05D756F1A79AAA40050A49C /* Supporting Files */,
 				D05D75881A79AAA40050A49C /* micdTests */,
 				D05D756D1A79AAA40050A49C /* Products */,

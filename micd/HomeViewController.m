@@ -426,6 +426,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         }
         
         self.recordButton.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
+        
     } else {
         CGRect presentationFrame = [self.view.layer.presentationLayer frame];
         

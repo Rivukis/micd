@@ -18,6 +18,7 @@
 @interface RecordingCell ()
 
 @property (weak, nonatomic) IBOutlet UIView *bottomSeparator;
+@property (weak, nonatomic) IBOutlet UIView *roundedBackerView;
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UILabel *length;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
@@ -33,12 +34,25 @@
 -(void)layoutSubviews {
     [super layoutSubviews];
     
-    self.backgroundColor = [UIColor blackColor];
-    self.editButton.backgroundColor = [UIColor blackColor];
-    self.title.textColor = [UIColor vibrantBlueText];
-    self.length.textColor = [UIColor vibrantBlueText];
-    self.layer.masksToBounds = YES;
-    self.bottomSeparator.backgroundColor = [UIColor vibrantBlueHalfOpacity];
+    self.backgroundColor = [UIColor clearColor];
+    self.editButton.backgroundColor = [UIColor clearColor];
+    
+    self.title.textColor = [UIColor vibrantLightBlueText];
+    self.length.textColor = [UIColor vibrantLightBlueText];
+//    self.layer.masksToBounds = YES;
+//    self.bottomSeparator.backgroundColor = [UIColor blackColor];
+//    self.bottomSeparator.alpha = .5f;
+    
+    ////rounded backer view can be deleted if i dont end up using it
+    self.roundedBackerView.backgroundColor = [UIColor blackColor];
+//    self.roundedBackerView.layer.borderWidth = 2;
+//    self.roundedBackerView.layer.borderColor = [UIColor vibrantDarkBlue].CGColor;
+//    self.roundedBackerView.layer.cornerRadius = self.roundedBackerView.frame.size.height/2;
+//    self.roundedBackerView.layer.masksToBounds = YES;
+    
+    self.bottomSeparator.backgroundColor = [UIColor vibrantDarkBlue];
+    self.bottomSeparator.alpha = .5;
+    
 }
 
 - (void)bindToModel:(RecordingCellModel *)cellModel {

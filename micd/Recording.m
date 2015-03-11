@@ -57,7 +57,6 @@
         _date = [aDecoder decodeObjectForKey:@"date"];
         _tags = [aDecoder decodeObjectForKey:@"tags"];
         _lengthAsTimeInterval = [aDecoder decodeDoubleForKey:@"length"];
-        // TODO: load up the recording data
     }
     return self;
 }
@@ -176,8 +175,8 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MMMM d"];
         NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-        [timeFormatter setDateFormat:@"h:mma"];
-        _dateAsString = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:self.date], [timeFormatter stringFromDate:self.date].lowercaseString];
+        [timeFormatter setDateFormat:@"h:mm a"];
+        _dateAsString = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:self.date], [timeFormatter stringFromDate:self.date]];
     }
     
     return _dateAsString;
