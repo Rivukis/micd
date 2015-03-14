@@ -22,7 +22,6 @@ typedef NS_ENUM(NSUInteger, PlayerControllerState) {
 @property (weak, nonatomic) id<PlayerControllerDelegate> delegate;
 @property (assign, nonatomic) PlayerControllerState playerState;
 
-@property (assign, nonatomic, readonly) NSTimeInterval loadedRecordingDuration;
 @property (nonatomic, assign, readonly) NSTimeInterval secondsCompleted;
 @property (nonatomic, assign, readonly) NSString *displayableCurrentTime;
 
