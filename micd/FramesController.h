@@ -9,17 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSUInteger, HomeViewContollerPositionState) {
-    HomeViewContollerPositionStateRecordings = 0,
-    HomeViewContollerPositionStateHome,
-    HomeViewContollerPositionStateSettings,
+typedef NS_ENUM(NSUInteger, PositionState) {
+    PositionStateRecordings = 0,
+    PositionStateHome,
+    PositionStateSettings,
 };
 
 @protocol FramesBasedOnStateProtocol <NSObject>
 
-- (void)setFrameBasedOnState:(HomeViewContollerPositionState)state;
 - (void)setInitialStateFrame;
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation;
+
+@optional
+- (CGRect)frameForState:(PositionState)state;
 
 @end
 

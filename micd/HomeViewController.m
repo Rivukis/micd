@@ -5,6 +5,8 @@
 #import "OBShapedButton.h"
 #import "RecorderController.h"
 #import "passthroughImageView.h"
+#import "ViewAnimator.h"
+#import "DisplayLinkController.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -30,6 +32,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 @property (assign, nonatomic) NSUInteger animatingPulseCount;
 @property (strong, nonatomic) NSMutableArray *pulsingValues;
+
+@property (strong, nonatomic) DisplayLinkController *displayLinkController;
 
 @property (assign, nonatomic) BOOL growForLouderNoises;
 
@@ -59,9 +63,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     [self setupArrowButtons];
     
-    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
-    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    self.displayLink.paused = YES;
+    self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
+    [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGesture.delegate = self;
@@ -137,14 +140,15 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [UIView animateWithDuration:.25f animations:^{
         self.blurView.alpha = 1.0f;
     } completion:^(BOOL finished) {
-        self.displayLink.paused = NO;
+        [self.displayLinkController addSubscriberWithKey:@"recordButton"];
+        
         [self.recordButtonSnapshot removeFromSuperview];
         [self.blurView.contentView addSubview:self.recordButton];
     }];
 }
 
 - (void)animatePauseState {
-    self.displayLink.paused = YES;
+    [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
     
     float averagedTransformCoefficient = 0.0f;
     for (NSNumber *savedPulseCoefficient in self.pulsingValues) {
@@ -169,6 +173,14 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
 }
 
+- (void)popAnimationCompleted {
+    [self.displayLinkController removeSubscriberWithKey:@"gears"];
+}
+
+- (void)animateGearsSpinning {
+    [self.displayLinkController addSubscriberWithKey:@"gears"];
+}
+
 #pragma mark - PanGestureRecognizer
 
 - (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
@@ -177,13 +189,16 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         [self.movementDelegate shouldMoveWithTranslation:translation];
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
+        NSLog(@"%f y postion", self.view.frame.origin.y);
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         // TODO: need to make this work for settings
-        
+//        if (self.view.frame.origin.y > ) {
+//            <#statements#>
+//        }
         if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
-            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
+            [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
         } else {
-            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
+            [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
         }
     }
 }
@@ -282,15 +297,15 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)moveToHomeState {
-    [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
+    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
 }
 
 - (void)moveToPlayerState {
-    [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
+    [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
 }
 
 - (void)moveToSettingState {
-    [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
+    [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
 }
 
 #pragma mark - FramesBasedOnStateProtocol
@@ -350,25 +365,25 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     self.gearsImageView.frame = gearsFrame;
 }
 
-- (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
+- (CGRect)frameForState:(PositionState)state {
     CGRect frame = self.view.frame;
     switch (state) {
-        case HomeViewContollerPositionStateHome:
+        case PositionStateHome:
             frame.origin.y = [self backgroundImageHomeStateYOffset];
             
             break;
-        case HomeViewContollerPositionStateRecordings:
+        case PositionStateRecordings:
             frame.origin.y = [self backgroundImageRecordingsStateYOffset];
             
             break;
-        case HomeViewContollerPositionStateSettings:
+        case PositionStateSettings:
             frame.origin.y = [self backgroundImageSettingsStateYOffset];
             
             break;
         default:
             break;
     }
-    self.view.frame = frame;
+    return frame;
 }
 
 - (CGFloat)backgroundImageHomeStateYOffset {
@@ -400,14 +415,14 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         
-        float avgDB = [self.recorderController averagePowerForChannelZero];
-        float transformCoefficient = 1.2 - (((avgDB + 40) / 40) * 0.4f);
+        CGFloat avgDB = [self.recorderController averagePowerForChannelZero];
+        CGFloat transformCoefficient = 1.2 - (((avgDB + 40) / 40) * 0.4f);
         
         [self.pulsingValues addObject:@(transformCoefficient)];
-        if (self.pulsingValues.count > 4) {
+        if (self.pulsingValues.count > 15) {
             [self.pulsingValues removeObjectAtIndex:0];
         }
-        if (self.pulsingValues.count > 4) {
+        if (self.pulsingValues.count > 15) {
             [self.pulsingValues removeObjectAtIndex:0];
         }
         

@@ -37,15 +37,18 @@
 #pragma mark - API Methods
 
 - (void)loadRecording:(Recording *)recording {
+    self.playerState = PlayerControllerStatePaused;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:recording.data error:nil];
-    self.audioPlayer.delegate = self.audioPlayerDelegate;
+    self.audioPlayer.delegate = self;
 }
 
 - (void)playAudio {
+    self.playerState = PlayerControllerStatePlaying;
     [self.audioPlayer play];
 }
 
 - (void)pauseAudio {
+    self.playerState = PlayerControllerStatePaused;
     [self.audioPlayer pause];
 }
 
@@ -91,6 +94,18 @@
 - (void)setAudioPlayer:(AVAudioPlayer *)player {
     _audioPlayer = player;
     [_audioPlayer prepareToPlay];
+}
+
+#pragma mark - AVAudioPlayerDelegate
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    self.playerState = PlayerControllerStatePaused;
+    [self.delegate playerController:self didFinishPlayingSuccessfully:flag];
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
+    self.playerState = PlayerControllerStatePaused;
+    [self.delegate playerController:self didFinishPlayingSuccessfully:(error == nil)];
 }
 
 @end

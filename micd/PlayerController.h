@@ -1,19 +1,27 @@
-//
-//  CKPlayerController.h
-//  Recorder
-//
-//  Created by Brian Radebaugh on 12/31/14.
-//  Copyright (c) 2014 CleverKnot. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
-#import <AVFoundation/AVFoundation.h>
 
 @class Recording;
+@class PlayerController;
+
+
+typedef NS_ENUM(NSUInteger, PlayerControllerState) {
+    PlayerControllerStatePaused = 0,
+    PlayerControllerStatePlaying
+};
+
+
+@protocol PlayerControllerDelegate <NSObject>
+
+- (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful;
+
+@end
+
 
 @interface PlayerController : NSObject
 
-@property (weak, nonatomic) id<AVAudioPlayerDelegate> audioPlayerDelegate;
+@property (weak, nonatomic) id<PlayerControllerDelegate> delegate;
+@property (assign, nonatomic) PlayerControllerState playerState;
+
 @property (assign, nonatomic, readonly) NSTimeInterval loadedRecordingDuration;
 @property (nonatomic, assign, readonly) NSTimeInterval secondsCompleted;
 @property (nonatomic, assign, readonly) NSString *displayableCurrentTime;
@@ -26,3 +34,4 @@
 - (void)setPlaybackTimeInterval:(NSTimeInterval)timeInterval;
 
 @end
+

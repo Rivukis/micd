@@ -8,22 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "FramesController.h"
-
-typedef NS_ENUM(NSUInteger, PlayerState) {
-    PlayerStatePlaying,
-    PlayerStatePaused
-};
+#import "PlayerController.h"
 
 @protocol PlayerControlsDelegate <NSObject>
 
-- (void)shouldUpdatePlayPauseButtonForState:(PlayerState)state;
+- (void)shouldUpdatePLayPauseButtonForPlayState;
+- (void)shouldUpdatePLayPauseButtonForPauseState;
 
 @end
 
 @interface RecordingsViewController : UIViewController <FramesBasedOnStateProtocol>
 
 @property (weak, nonatomic) id<PlayerControlsDelegate> playerControlsDelegate;
-@property (nonatomic) PlayerState playerState;
+@property (nonatomic, readonly) PlayerControllerState playerState;
 
 - (void)reloadData;
 

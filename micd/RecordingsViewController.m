@@ -1,24 +1,16 @@
-//
-//  RecordingsViewController.m
-//  micd
-//
-//  Created by Timothy Hise on 2/7/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "RecordingsViewController.h"
 #import "UIColor+Palette.h"
 #import "DataSourceController.h"
 #import "Recording.h"
-#import "PlayerController.h"
 #import "WireTapStyleKit.h"
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
 #import "FakesForProject.h"
 #import "SCWaveformView.h"
 #import "RecordingCellModel.h"
+#import "DisplayLinkController.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
@@ -39,7 +31,7 @@
 @property (assign, nonatomic) BOOL didGetOriginalTableViewHeight;
 @property (assign, nonatomic) CGFloat originalTableViewHeight;
 
-@property (strong, nonatomic) CADisplayLink *displayLink;
+@property (strong, nonatomic) DisplayLinkController *displayLinkController;
 
 @property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
 
@@ -54,7 +46,7 @@
     
     self.dataSource = [DataSourceController sharedDataSource];
     self.playerController = [PlayerController sharedPlayer];
-    self.playerController.audioPlayerDelegate = self;
+    self.playerController.delegate = self;
     
     self.isFirstTimeLayingOutSubviews = YES;
     
@@ -76,13 +68,10 @@
 //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
-    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    self.displayLink.paused = YES;
+    self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
+    [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     [self reloadData];
-    
-    self.playerState = PlayerStatePaused;
     
     if ([self mostRecentRecording]) {
         self.tableBottomBorder.hidden = NO;
@@ -182,22 +171,22 @@
                                  screenSize.size.height * 0.82f);
 }
 
-- (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
-    CGRect frame = self.view.frame;
+- (CGRect)frameForState:(PositionState)state {
+    CGRect futureFrame = self.view.frame;
     switch (state) {
-        case HomeViewContollerPositionStateHome:
-            frame.origin.y = (self.view.window.frame.size.height * -1.068f);
+        case PositionStateHome:
+            futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f);
             break;
-        case HomeViewContollerPositionStateRecordings:
-            frame.origin.y = 0;
+        case PositionStateRecordings:
+            futureFrame.origin.y = 0;
             break;
-        case HomeViewContollerPositionStateSettings:
-            frame.origin.y = (self.view.window.frame.size.height * -1.068f * 2);
+        case PositionStateSettings:
+            futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f * 2);
             break;
         default:
             break;
     }
-    self.view.frame = frame;
+    return futureFrame;
 }
 
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
@@ -207,6 +196,10 @@
 }
 
 #pragma mark - PlayerController Methods
+
+- (PlayerControllerState)playerState {
+    return self.playerController.playerState;
+}
 
 - (void)readyPlayerWithRecording:(Recording *)recording {
     if (!recording) return;
@@ -229,11 +222,8 @@
     
     [self.playerController playAudio];
     
-//    if (!error) {
-        [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
-        self.playerState = PlayerStatePlaying;
-        self.displayLink.paused = NO;
-//    }
+    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPlayState];
+    [self.displayLinkController addSubscriberWithKey:@"waveform"];
 }
 
 - (void)pausePlayback {
@@ -242,9 +232,13 @@
 
 - (void)pausePlaybackWhilePanning:(BOOL)isPanning {
     [self.playerController pauseAudio];
-    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
-    self.playerState = PlayerStatePaused;
-    self.displayLink.paused = !isPanning;
+    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPauseState];
+
+    if (isPanning) {
+        [self.displayLinkController addSubscriberWithKey:@"waveform"];
+    } else {
+        [self.displayLinkController removeSubscriberWithKey:@"waveform"];
+    }
 }
 
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval {
@@ -257,7 +251,7 @@
     // pauses while panning and plays when touch ends
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan:
-            self.audioWasPlaying_gestureStateBegan = self.playerState == PlayerStatePlaying;
+            self.audioWasPlaying_gestureStateBegan = self.playerController.playerState == PlayerControllerStatePlaying;
             [self pausePlaybackWhilePanning:YES];
         case UIGestureRecognizerStateChanged: {
             CGPoint translation = [gesture locationInView:self.waveformView];
@@ -279,6 +273,7 @@
     // plays while scrubbing
     // -----handle issue when scrubbing on a track that is not playing (maybe only before or after track has played)
     // -----handle issue where audio ends while scrubbing
+    // ---------- on panning state changed if moved less than 1 horizontally (maybe more/less) then pause otherwise play and set playback at current spot (also if really close to end of track then either pause or rely on the play command to restart the playing
 //    if (gesture.state == UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged) {
 //        CGPoint translation = [gesture locationInView:self.waveformView];
 //        float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
@@ -287,21 +282,14 @@
 //    }
 }
 
-#pragma mark - AVAudioPlayerDelegate
+#pragma mark - PlayerControllerDelegate
 
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    // display link stop
-    self.displayLink.paused = YES;
+- (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
+    [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self.waveformView setNeedsLayout];
-    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
-    self.playerState = PlayerStatePaused;
-    NSLog(@"did finish playing");
-}
-
-- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
-    // handle error
-    NSLog(@"player had decode error: %@", error.localizedDescription);
+    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPauseState];
+    NSLog(@"did finish playing successfully: %i", successful);
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate

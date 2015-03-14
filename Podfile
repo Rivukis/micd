@@ -8,6 +8,7 @@ xcodeproj 'micd'
 
 pod 'OBShapedButton'
 pod "SCWaveformView"
+pod 'pop', '~> 1.0'
 
 post_install do |installer|
     installer.project.targets.each do |target|
