@@ -28,6 +28,9 @@
 		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
 		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
 		D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */; };
+		D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */; };
+		D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BEA1AB27EE300949483 /* ViewAnimator.m */; };
+		D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BF01AB407C400949483 /* DisplayLinkController.m */; };
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
 		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
@@ -90,6 +93,12 @@
 		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
 		D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCellModel.h; sourceTree = "<group>"; };
 		D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCellModel.m; sourceTree = "<group>"; };
+		D08D4BE61AB2748700949483 /* ViewMovementBehavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewMovementBehavior.h; sourceTree = "<group>"; };
+		D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewMovementBehavior.m; sourceTree = "<group>"; };
+		D08D4BE91AB27EE300949483 /* ViewAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewAnimator.h; sourceTree = "<group>"; };
+		D08D4BEA1AB27EE300949483 /* ViewAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewAnimator.m; sourceTree = "<group>"; };
+		D08D4BEF1AB407C400949483 /* DisplayLinkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayLinkController.h; sourceTree = "<group>"; };
+		D08D4BF01AB407C400949483 /* DisplayLinkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayLinkController.m; sourceTree = "<group>"; };
 		D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsViewController.h; sourceTree = "<group>"; };
 		D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsViewController.m; sourceTree = "<group>"; };
 		D09A69EE1A86EFC500A2C347 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -149,8 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				D05D756E1A79AAA40050A49C /* micd */,
-				D0C67CCD1A8EF0B7000F501A /* Brians stuff */,
 				D0667EFB1A897F3A001A0FC4 /* Styling */,
+				D0C67CCD1A8EF0B7000F501A /* Brians stuff */,
 				D05D756F1A79AAA40050A49C /* Supporting Files */,
 				D05D75881A79AAA40050A49C /* micdTests */,
 				D05D756D1A79AAA40050A49C /* Products */,
@@ -277,6 +286,8 @@
 				7AC290A91A8EF0100085B927 /* PlayerController.m */,
 				7AC290AA1A8EF0100085B927 /* RecorderController.h */,
 				7AC290AB1A8EF0100085B927 /* RecorderController.m */,
+				D08D4BE91AB27EE300949483 /* ViewAnimator.h */,
+				D08D4BEA1AB27EE300949483 /* ViewAnimator.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -290,10 +301,14 @@
 				7AC290AD1A8EF0100085B927 /* Recording.m */,
 				D0F97F521A92A46800F07032 /* NSString+Score.h */,
 				D0F97F531A92A46800F07032 /* NSString+Score.m */,
+				D08D4BEF1AB407C400949483 /* DisplayLinkController.h */,
+				D08D4BF01AB407C400949483 /* DisplayLinkController.m */,
 				D034F0401AA148680059028D /* RecordingsSection.h */,
 				D034F0411AA148680059028D /* RecordingsSection.m */,
 				D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */,
 				D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */,
+				D08D4BE61AB2748700949483 /* ViewMovementBehavior.h */,
+				D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -444,9 +459,12 @@
 				D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */,
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
+				D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */,
 				D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */,
 				D0C248461A898FDE00E32954 /* GearsView.m in Sources */,
 				D034F0421AA148680059028D /* RecordingsSection.m in Sources */,
+				D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */,
+				D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
 				D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */,

@@ -1,26 +1,19 @@
-//
-//  RecordingsViewController.m
-//  micd
-//
-//  Created by Timothy Hise on 2/7/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "RecordingsViewController.h"
 #import "UIColor+Palette.h"
 #import "DataSourceController.h"
 #import "Recording.h"
-#import "PlayerController.h"
 #import "WireTapStyleKit.h"
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
 #import "FakesForProject.h"
 #import "SCWaveformView.h"
 #import "RecordingCellModel.h"
+#import "DisplayLinkController.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, AVAudioPlayerDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
 @property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
 @property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
@@ -38,7 +31,7 @@
 @property (assign, nonatomic) BOOL didGetOriginalTableViewHeight;
 @property (assign, nonatomic) CGFloat originalTableViewHeight;
 
-@property (strong, nonatomic) CADisplayLink *displayLink;
+@property (strong, nonatomic) DisplayLinkController *displayLinkController;
 
 @property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
 
@@ -53,9 +46,14 @@
     
     self.dataSource = [DataSourceController sharedDataSource];
     self.playerController = [PlayerController sharedPlayer];
-    self.playerController.audioPlayerDelegate = self;
+    self.playerController.delegate = self;
     
     self.isFirstTimeLayingOutSubviews = YES;
+    
+    ////this might not end up being used
+    self.roundedTableBackerView.backgroundColor = [UIColor blackColor];
+    self.roundedTableBackerView.clipsToBounds = YES;
+    //    self.roundedTableBackerView.layer.cornerRadius = 14;
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -63,20 +61,17 @@
     self.tableView.delegate = self;
     self.tableView.scrollsToTop = YES;
     
-    self.currentPlaybackTimeLabel.textColor = [UIColor vibrantBlueText];
-    self.playbackTitleLabel.textColor = [UIColor vibrantBlueText];
-    self.totalPlaybackTimeLabel.textColor = [UIColor vibrantBlueText];
+    self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
+    self.playbackTitleLabel.textColor = [UIColor vibrantLightBlueText];
+    self.totalPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     
 //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
-    [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    self.displayLink.paused = YES;
+    self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
+    [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     [self reloadData];
-    
-    self.playerState = PlayerStatePaused;
     
     if ([self mostRecentRecording]) {
         self.tableBottomBorder.hidden = NO;
@@ -101,7 +96,7 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
+    self.tableBottomBorder.backgroundColor = [UIColor vibrantLightBlue];
     
     if (!self.didGetOriginalHeight) {
         self.didGetOriginalHeight = YES;
@@ -122,11 +117,14 @@
         [self.waveformContainerView addSubview:self.waveformView];
         self.waveformContainerView.layer.masksToBounds = YES;
         self.waveformContainerView.backgroundColor = [UIColor clearColor];
+        self.waveformView.normalColor = [UIColor darkGrayColor];
         self.waveformView.progressColor = [UIColor vibrantBlue];
         self.waveformView.precision = 0.20;
         self.waveformView.lineWidthRatio = 0.6;
         self.waveformView.channelStartIndex = 0;
         self.waveformView.channelEndIndex = 0;
+        
+        [self readyPlayerWithRecording:[self mostRecentRecording]];
         
         UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
         gesture.minimumPressDuration = 0.001f;
@@ -151,7 +149,7 @@
 
 - (Recording *)mostRecentRecording {
     RecordingsSection *firstRecordingsSection = self.sections.lastObject;
-    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:firstRecordingsSection.numberOfCellModels - 1];
+    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:0];
     return lastAddedRecordingModel.recording;
 }
 
@@ -176,22 +174,22 @@
                                  screenSize.size.height * 0.82f);
 }
 
-- (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
-    CGRect frame = self.view.frame;
+- (CGRect)frameForState:(PositionState)state {
+    CGRect futureFrame = self.view.frame;
     switch (state) {
-        case HomeViewContollerPositionStateHome:
-            frame.origin.y = (self.view.window.frame.size.height * -1.068f);
+        case PositionStateHome:
+            futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f);
             break;
-        case HomeViewContollerPositionStateRecordings:
-            frame.origin.y = 0;
+        case PositionStateRecordings:
+            futureFrame.origin.y = 0;
             break;
-        case HomeViewContollerPositionStateSettings:
-            frame.origin.y = (self.view.window.frame.size.height * -1.068f * 2);
+        case PositionStateSettings:
+            futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f * 2);
             break;
         default:
             break;
     }
-    self.view.frame = frame;
+    return futureFrame;
 }
 
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
@@ -201,6 +199,10 @@
 }
 
 #pragma mark - PlayerController Methods
+
+- (PlayerControllerState)playerState {
+    return self.playerController.playerState;
+}
 
 - (void)readyPlayerWithRecording:(Recording *)recording {
     [self.playerController loadRecording:recording];
@@ -229,9 +231,8 @@
     
     [self.playerController playAudio];
     
-    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePlaying];
-    self.playerState = PlayerStatePlaying;
-    self.displayLink.paused = NO;
+    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPlayState];
+    [self.displayLinkController addSubscriberWithKey:@"waveform"];
 }
 
 - (void)pausePlayback {
@@ -240,9 +241,13 @@
 
 - (void)pausePlaybackWhilePanning:(BOOL)isPanning {
     [self.playerController pauseAudio];
-    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
-    self.playerState = PlayerStatePaused;
-    self.displayLink.paused = !isPanning;
+    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPauseState];
+
+    if (isPanning) {
+        [self.displayLinkController addSubscriberWithKey:@"waveform"];
+    } else {
+        [self.displayLinkController removeSubscriberWithKey:@"waveform"];
+    }
 }
 
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval {
@@ -255,7 +260,7 @@
     // pauses while panning and plays when touch ends
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan:
-            self.audioWasPlaying_gestureStateBegan = self.playerState == PlayerStatePlaying;
+            self.audioWasPlaying_gestureStateBegan = self.playerController.playerState == PlayerControllerStatePlaying;
             [self pausePlaybackWhilePanning:YES];
         case UIGestureRecognizerStateChanged: {
             CGPoint translation = [gesture locationInView:self.waveformView];
@@ -277,6 +282,7 @@
     // plays while scrubbing
     // -----handle issue when scrubbing on a track that is not playing (maybe only before or after track has played)
     // -----handle issue where audio ends while scrubbing
+    // ---------- on panning state changed if moved less than 1 horizontally (maybe more/less) then pause otherwise play and set playback at current spot (also if really close to end of track then either pause or rely on the play command to restart the playing
 //    if (gesture.state == UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged) {
 //        CGPoint translation = [gesture locationInView:self.waveformView];
 //        float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
@@ -285,21 +291,14 @@
 //    }
 }
 
-#pragma mark - AVAudioPlayerDelegate
+#pragma mark - PlayerControllerDelegate
 
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    // display link stop
-    self.displayLink.paused = YES;
+- (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
+    [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self.waveformView setNeedsLayout];
-    [self.playerControlsDelegate shouldUpdatePlayPauseButtonForState:PlayerStatePaused];
-    self.playerState = PlayerStatePaused;
-    NSLog(@"did finish playing");
-}
-
-- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
-    // handle error
-    NSLog(@"player had decode error: %@", error.localizedDescription);
+    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPauseState];
+    NSLog(@"did finish playing successfully: %i", successful);
 }
 
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
@@ -413,6 +412,7 @@
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     [cell bindToModel:recordingCellModel];
+    cell.backgroundColor = [UIColor backgroundGray];
     
     return cell;
 }
@@ -435,15 +435,16 @@
     RecordingsSection *recordingsSection = self.sections[section];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 45.0f)];
     
-    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 44.0f, tableView.frame.size.width, 1.0f)];
-    bottomBorderView.backgroundColor = [UIColor vibrantBlueHalfOpacity];
-    [headerView addSubview:bottomBorderView];
+//    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 44.0f, tableView.frame.size.width, 2.0f)];
+//    bottomBorderView.backgroundColor = [UIColor blackColor];
+//    bottomBorderView.alpha = .5;
+//    [headerView addSubview:bottomBorderView];
     
     UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width-13.0f, 20.0f)];
     headerTitleLabel.text = recordingsSection.dateAsString;
-    headerTitleLabel.font = [UIFont fontWithName: @"Damascus" size:16.0f]; //AvenirNext-Regular
+    headerTitleLabel.font = [UIFont fontWithName: @"HelveticaNeue-Medium" size:16.0f]; //AvenirNext-Regular
     headerTitleLabel.textAlignment = NSTextAlignmentRight;
-    headerTitleLabel.textColor = [UIColor vibrantBlueText];
+    headerTitleLabel.textColor = [UIColor vibrantLightBlue];
     [headerView addSubview:headerTitleLabel];
     
     headerView.backgroundColor = [UIColor blackColor];

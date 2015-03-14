@@ -10,13 +10,16 @@
 #import "FramesController.h"
 
 @class Recording;
+@class DisplayLinkController;
+
 
 @protocol MovementDelegate <NSObject>
 
 - (void)shouldMoveWithTranslation:(CGPoint)translation;
-- (void)shouldMoveToPositionState:(HomeViewContollerPositionState)state;
+- (void)shouldMoveToPositionState:(PositionState)state;
 
 @end
+
 
 @protocol AddNewRecordingDelegate <NSObject>
 
@@ -24,10 +27,13 @@
 
 @end
 
+
 @interface HomeViewController : UIViewController <FramesBasedOnStateProtocol>
 
 @property (weak, nonatomic) id<MovementDelegate> movementDelegate;
 @property (weak, nonatomic) id<AddNewRecordingDelegate> addNewRecordingDelegate;
-@property (strong, nonatomic) CADisplayLink *displayLink;
+
+- (void)popAnimationCompleted;
+- (void)animateGearsSpinning;
 
 @end

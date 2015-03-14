@@ -6,6 +6,7 @@
 #import "UIColor+Palette.h"
 #import "DataSourceController.h"
 #import "Recording.h"
+#import "ViewAnimator.h"
 
 @interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, PlayerControlsDelegate>
 
@@ -20,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
 
 @property (assign, nonatomic) BOOL didSetInitialFrames;
+
+@property (strong, nonatomic) ViewAnimator *viewAnimator;
 
 @end
 
@@ -68,12 +71,11 @@
 #pragma mark - Player Controls
 
 - (IBAction)playPauseButtonPressed:(id)sender {
-    if (self.recordingsViewController.playerState == PlayerStatePaused) {
+    if (self.recordingsViewController.playerState == PlayerControllerStatePaused) {
         [self.recordingsViewController playPlayback];
     } else {
         [self.recordingsViewController pausePlayback];
     }
-    [self shouldUpdatePlayPauseButtonForState:self.recordingsViewController.playerState];
 }
 
 - (IBAction)rewindButtonPressed:(id)sender {
@@ -86,15 +88,12 @@
 
 #pragma mark - PlayerControlsDelegate
 
-- (void)shouldUpdatePlayPauseButtonForState:(PlayerState)state {
-    switch (state) {
-        case PlayerStatePaused:
-            [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
-            break;
-        case PlayerStatePlaying:
-            [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
-            break;
-    }
+- (void)shouldUpdatePLayPauseButtonForPlayState {
+    [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
+}
+
+- (void)shouldUpdatePLayPauseButtonForPauseState {
+    [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
 }
 
 #pragma mark - AddNewRecordingDelegate
@@ -111,20 +110,23 @@
     [self adjustFrameBasedOnTranslation:translation];
 }
 
-- (void)shouldMoveToPositionState:(HomeViewContollerPositionState)state {
-    self.homeViewController.displayLink.paused = NO;
-    [UIView animateWithDuration:1
-                          delay:0
-         usingSpringWithDamping:.7
-          initialSpringVelocity:1
-                        options:(UIViewAnimationOptionAllowUserInteraction)
-                     animations: ^{
-                         [self setFrameBasedOnState:state];
-                     } completion:^(BOOL finished) {
-                         if (YES) {
-                             self.homeViewController.displayLink.paused = YES;
-                         }
-                     }];
+- (void)shouldMoveToPositionState:(PositionState)state {
+    [self.homeViewController animateGearsSpinning];
+    
+    for (UIViewController<FramesBasedOnStateProtocol> *viewController in [self childVCs]) {
+        CGRect fromFrame = viewController.view.frame;
+        CGRect toFrame = [viewController frameForState:state];
+        POPSpringAnimation *animation = [ViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
+        [viewController.view pop_addAnimation:animation forKey:@"state"];
+        
+        [animation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
+            for (UIViewController *viewController in [self childVCs]) {
+                if ([viewController respondsToSelector:@selector(popAnimationCompleted)]) {
+                    [(id)viewController popAnimationCompleted];
+                }
+            }
+        }];
+    }
 }
 
 #pragma mark - FramesBasedOnStateProtocol
@@ -134,15 +136,13 @@
     [self.recordingsViewController setInitialStateFrame];
 }
 
-- (void)setFrameBasedOnState:(HomeViewContollerPositionState)state {
-    [self.homeViewController setFrameBasedOnState:state];
-    [self.recordingsViewController setFrameBasedOnState:state];
-}
-
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
-    // TODO: customize origin per child view
     [self.homeViewController adjustFrameBasedOnTranslation:translation];
     [self.recordingsViewController adjustFrameBasedOnTranslation:translation];
+}
+
+- (NSArray *)childVCs {
+    return @[self.homeViewController, self.recordingsViewController];
 }
 
 @end
