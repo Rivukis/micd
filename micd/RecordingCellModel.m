@@ -28,20 +28,8 @@
 }
 
 - (CGFloat)heightForState {
-    switch (self.state) {
-        case CellStateDefault:
-            return 45.0f;
-        case CellStateEditing:
-            return 120.0f;
-        case CellStatePlaying:
-            return 100.0f;
-        case CellStatePlayingAndEditing:
-            return 145.0f;
-        default:
-            return 45.0f;
-    }
+    return 45.0f;
 }
-
 
 - (NSString *)length {
     return self.recording.lengthToDiplay;

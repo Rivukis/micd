@@ -113,19 +113,25 @@
 - (void)shouldMoveToPositionState:(PositionState)state {
     [self.homeViewController animateGearsSpinning];
     
-    for (UIViewController<FramesBasedOnStateProtocol> *viewController in [self childVCs]) {
-        CGRect fromFrame = viewController.view.frame;
-        CGRect toFrame = [viewController frameForState:state];
+    for (UIViewController<FramesBasedOnStateProtocol> *childViewController in [self primaryChildViewControllers]) {
+        CGRect fromFrame = childViewController.view.frame;
+        CGRect toFrame = [childViewController frameForState:state];
         POPSpringAnimation *animation = [ViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
-        [viewController.view pop_addAnimation:animation forKey:@"state"];
+        [childViewController.view pop_addAnimation:animation forKey:@"state"];
         
         [animation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
-            for (UIViewController *viewController in [self childVCs]) {
+            for (UIViewController *viewController in [self primaryChildViewControllers]) {
                 if ([viewController respondsToSelector:@selector(popAnimationCompleted)]) {
                     [(id)viewController popAnimationCompleted];
                 }
             }
         }];
+    }
+}
+
+- (void)shouldCancelMoveAnimations {
+    for (UIViewController<FramesBasedOnStateProtocol> *viewController in [self primaryChildViewControllers]) {
+        [viewController.view pop_removeAnimationForKey:@"state"];
     }
 }
 
@@ -141,7 +147,7 @@
     [self.recordingsViewController adjustFrameBasedOnTranslation:translation];
 }
 
-- (NSArray *)childVCs {
+- (NSArray *)primaryChildViewControllers {
     return @[self.homeViewController, self.recordingsViewController];
 }
 

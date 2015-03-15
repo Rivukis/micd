@@ -14,7 +14,9 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
+@property (weak, nonatomic) IBOutlet UIView *playbackView;
 @property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
+@property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
 @property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentPlaybackTimeLabel;
@@ -124,11 +126,18 @@
         self.waveformView.channelStartIndex = 0;
         self.waveformView.channelEndIndex = 0;
         
+        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-14.0f, self.waveformContainerView.frame.origin.y, 29.0f, self.waveformView.frame.size.height);
+        self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
+        [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
+//        self.progressTimeIndicatorView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:.5f];
+        self.progressTimeIndicatorView.userInteractionEnabled = YES;
+        [self.playbackView addSubview:self.progressTimeIndicatorView];
+        
         [self readyPlayerWithRecording:[self mostRecentRecording]];
         
         UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
         gesture.minimumPressDuration = 0.001f;
-        [self.waveformContainerView addGestureRecognizer:gesture];
+        [self.progressTimeIndicatorView addGestureRecognizer:gesture];
     }
     
     if (self.isFirstTimeLayingOutSubviews) {
@@ -138,12 +147,12 @@
 }
 
 - (void)scrollToAndReadyPlayerWithMostRecentRecording {
-    RecordingsSection *lastSection = self.sections.lastObject;
-    if (lastSection) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:self.sections.count - 1];
+    RecordingsSection *firstSection = self.sections.firstObject;
+    if (firstSection) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        RecordingCellModel *lastCellModel = [lastSection cellModelAtIndex:0];
-        [self readyPlayerWithRecording:lastCellModel.recording];
+        RecordingCellModel *mostRecentCellModel = [firstSection cellModelAtIndex:0];
+        [self readyPlayerWithRecording:mostRecentCellModel.recording];
     }
 }
 
@@ -156,14 +165,20 @@
 #pragma mark - FramesBasedOnStateProtocol
 
 - (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
-    //    CGRect presentationFrame = [self.contentView.layer.presentationLayer frame];
-    
-    if (self.playerController.secondsCompleted >= self.playbackRecording.lengthAsTimeInterval || self.playerController.secondsCompleted == 0) {
-        self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
-        return;
-    }
-    self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
-    self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
+        
+        if (self.playerController.secondsCompleted == 0.0f) {
+            Recording *recording = self.playerController.loadedRecording;
+            self.waveformView.asset = recording.avAsset;
+            self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
+        } else {
+            self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
+        }
+        
+        CGFloat progressTimeCenterX = self.playerController.percentageCompleted * self.waveformContainerView.frame.size.width;
+        self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
+    }];
 }
 
 - (void)setInitialStateFrame {
@@ -223,6 +238,7 @@
     } else {
         self.waveformContainerView.hidden = YES;
         self.currentPlaybackTimeLabel.text = @"";
+        self.tableBottomBorder.hidden = YES;
     }
 }
 
@@ -265,16 +281,27 @@
         case UIGestureRecognizerStateChanged: {
             CGPoint translation = [gesture locationInView:self.waveformView];
             float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
-            NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.loadedRecordingDuration;
+            NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.loadedRecording.lengthAsTimeInterval;
             [self.playerController setPlaybackTimeInterval:secondsToTouchedLocation];
+            
+            CGFloat progressTimeCenterX = translation.x;
+            if (translation.x < 0) {
+                progressTimeCenterX = 0;
+            } else if (translation.x > self.waveformView.frame.size.width) {
+                progressTimeCenterX = self.waveformView.frame.size.width;
+            }
+            
+            self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
         }
             break;
         case UIGestureRecognizerStateEnded:
-            if (self.audioWasPlaying_gestureStateBegan) {
+            if (self.audioWasPlaying_gestureStateBegan && self.playerController.secondsCompleted != self.playerController.loadedRecording.lengthAsTimeInterval) {
                 [self playPlayback];
             } else {
                 [self pausePlaybackWhilePanning:NO];
             }
+            
+            [self handleDisplayLinkAnimation:nil];
         default:
             break;
     }
@@ -298,10 +325,11 @@
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self.waveformView setNeedsLayout];
     [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPauseState];
-    NSLog(@"did finish playing successfully: %i", successful);
 }
 
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
+    // TODO: tableview is now sorting from newest to oldest top down -- this method needs to reflect the change
+    
     if (self.sections.count == 0) {
         return nil;
     }
@@ -350,10 +378,15 @@
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     
-    if (recordingCellModel.state == CellStateDefault) {
-//        recordingCellModel.state = CellStatePlaying;
-        [self readyPlayerWithRecording:recordingCellModel.recording];
+    [self readyPlayerWithRecording:recordingCellModel.recording];
+    
+    BOOL isLoadedRecording = [self.playerController.loadedRecording.uuid.UUIDString isEqualToString:recordingCellModel.recording.uuid.UUIDString];
+    if (isLoadedRecording && self.playerController.playerState == PlayerControllerStatePlaying) {
+        [self pausePlayback];
+        recordingCellModel.state = CellStateDefault;
+    } else {
         [self playPlayback];
+        recordingCellModel.state = CellStatePlaying;
     }
     
     [tableView beginUpdates];
@@ -381,7 +414,7 @@
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         
-        if ([editingRecording.uuid.UUIDString isEqualToString:self.playerController.loadedRecordingUUID.UUIDString]) {
+        if ([editingRecording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
             NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
             Recording *toLoadRecording = nil;
             if (nextToLoadIndexPath != nil) {
@@ -391,8 +424,6 @@
             }
             [self readyPlayerWithRecording:toLoadRecording];
         }
-        
-        NSLog(@"DELETE");
     }
 }
 

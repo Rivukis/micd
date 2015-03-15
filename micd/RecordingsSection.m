@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSDateComponents *dateComponents;
 @property (nonatomic, strong) NSMutableArray *cellModels;
 @property (nonatomic, assign) BOOL isThisDay;
+@property (nonatomic, assign) BOOL isYesterday;
 @property (nonatomic, assign) BOOL isThisMonth;
 @property (nonatomic, assign) BOOL isThisYear;
 
@@ -47,17 +48,27 @@
     for (Recording *recording in sortedRecordings) {
         RecordingsSection *lastAddedMonthSection = assemblingSections.lastObject;
         
+        NSDateComponents *beginningOfTodayComponents = nowDateComponents;
+        beginningOfTodayComponents.hour = 0;
+        beginningOfTodayComponents.minute = 0;
+        beginningOfTodayComponents.second = 0;
+        NSDate *beginningOfToday = [[NSCalendar currentCalendar] dateFromComponents:beginningOfTodayComponents];
+        NSDate *beginningOfYesterday = [beginningOfToday dateByAddingTimeInterval:-60*60*24];
+        
         BOOL recordingIsThisYear = (recording.dateComponents.year == nowDateComponents.year);
         BOOL recordingIsThisMonth = (recording.dateComponents.month == nowDateComponents.month && recordingIsThisYear);
         BOOL recordingIsThisDay = (recording.dateComponents.day == nowDateComponents.day && recordingIsThisMonth);
+        BOOL recordingIsYesterday = (!recordingIsThisDay && [recording.date compare:beginningOfYesterday] == NSOrderedDescending);
         
         BOOL sectionAndRecordingIsThisDayMatches = lastAddedMonthSection.isThisDay == recordingIsThisDay;
+        BOOL sectionAndRecordingIsYesterdayMatches = lastAddedMonthSection.isYesterday == recordingIsYesterday;
         BOOL sectionAndRecordingYearMatches = lastAddedMonthSection.dateComponents.year == recording.dateComponents.year;
         BOOL sectionAndRecordingMonthMatches = lastAddedMonthSection.dateComponents.month == recording.dateComponents.month;
         
-        if (lastAddedMonthSection == nil || !sectionAndRecordingIsThisDayMatches || !sectionAndRecordingMonthMatches || !sectionAndRecordingYearMatches) {
+        if (lastAddedMonthSection == nil || !sectionAndRecordingIsThisDayMatches || !sectionAndRecordingIsYesterdayMatches || !sectionAndRecordingMonthMatches || !sectionAndRecordingYearMatches) {
             lastAddedMonthSection = [[RecordingsSection alloc] initWithYear:recording.dateComponents.year month:recording.dateComponents.month];
             lastAddedMonthSection.isThisDay = recordingIsThisDay;
+            lastAddedMonthSection.isYesterday = recordingIsYesterday;
             lastAddedMonthSection.isThisMonth = recordingIsThisMonth;
             lastAddedMonthSection.isThisYear = recordingIsThisYear;
             [assemblingSections addObject:lastAddedMonthSection];
@@ -67,12 +78,12 @@
         [lastAddedMonthSection.cellModels addObject:cellModel];
     }
     
-    NSMutableArray *reversedOrderArray = [NSMutableArray array];
-    for (id section in assemblingSections) {
-        [reversedOrderArray insertObject:section atIndex:0];
-    }
+//    NSMutableArray *reversedOrderArray = [NSMutableArray array];
+//    for (id section in assemblingSections) {
+//        [reversedOrderArray insertObject:section atIndex:0];
+//    }
     
-    return [reversedOrderArray copy];
+    return [assemblingSections copy];
 }
 
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index {
@@ -88,6 +99,8 @@
 - (NSString *)dateAsString {
     if (self.isThisDay) {
         return @"Today";
+    } else if (self.isYesterday) {
+        return @"Yesterday";
     } else if (self.isThisMonth) {
         return @"This Month";
     }

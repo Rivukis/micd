@@ -7,6 +7,7 @@
 #import "passthroughImageView.h"
 #import "ViewAnimator.h"
 #import "DisplayLinkController.h"
+#import "PlayerController.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -68,6 +69,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGesture.delegate = self;
+    panGesture.maximumNumberOfTouches = 1;
     [self.view addGestureRecognizer:panGesture];
 }
 
@@ -90,8 +92,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         case RecorderControllerStateStopped:
         case RecorderControllerStatePaused:
             // time to record
+            [[PlayerController sharedPlayer] pauseAudio];
             [self.recorderController startRecording];
-            
             [self animateRecordingState];
             
             break;
@@ -184,7 +186,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 #pragma mark - PanGestureRecognizer
 
 - (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        [self.movementDelegate shouldCancelMoveAnimations];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
         [self.movementDelegate shouldMoveWithTranslation:translation];
         [self rotateGearsWithTranslation:translation];

@@ -202,6 +202,7 @@
                     <connections>
                         <outlet property="currentPlaybackTimeLabel" destination="nM0-BA-DCM" id="Dlg-CO-dmh"/>
                         <outlet property="playbackTitleLabel" destination="Rbp-gB-Lpf" id="BwB-cX-gbw"/>
+                        <outlet property="playbackView" destination="6pK-hO-A7X" id="CiI-El-WTK"/>
                         <outlet property="roundedTableBackerView" destination="P7F-yT-HrD" id="cg6-zG-io2"/>
                         <outlet property="tableBottomBorder" destination="gXm-fX-a1s" id="cdm-S3-9Mg"/>
                         <outlet property="tableView" destination="Agl-fI-Zbv" id="Hp1-TJ-Kl7"/>

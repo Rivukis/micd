@@ -17,6 +17,7 @@
 
 - (void)shouldMoveWithTranslation:(CGPoint)translation;
 - (void)shouldMoveToPositionState:(PositionState)state;
+- (void)shouldCancelMoveAnimations;
 
 @end
 

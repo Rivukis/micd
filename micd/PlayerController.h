@@ -1,8 +1,8 @@
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CGBase.h>
 
 @class Recording;
 @class PlayerController;
-
 
 typedef NS_ENUM(NSUInteger, PlayerControllerState) {
     PlayerControllerStatePaused = 0,
@@ -22,11 +22,10 @@ typedef NS_ENUM(NSUInteger, PlayerControllerState) {
 @property (weak, nonatomic) id<PlayerControllerDelegate> delegate;
 @property (assign, nonatomic) PlayerControllerState playerState;
 
+@property (strong, nonatomic, readonly) Recording *loadedRecording;
 @property (nonatomic, assign, readonly) NSTimeInterval secondsCompleted;
+@property (nonatomic, readonly) CGFloat percentageCompleted;
 @property (nonatomic, assign, readonly) NSString *displayableCurrentTime;
-
-@property (nonatomic, readonly) NSTimeInterval loadedRecordingDuration;
-@property (strong, nonatomic, readonly) NSUUID *loadedRecordingUUID;
 
 + (PlayerController *)sharedPlayer;
 

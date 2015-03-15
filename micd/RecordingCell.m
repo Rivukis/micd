@@ -117,20 +117,20 @@
 }
 
 - (IBAction)editButtonPressed:(UIButton *)sender {
-//    switch (self.cellModel.state) {
-//        case CellStateDefault:
-//            self.cellModel.state = CellStateEditing;
-//            break;
-//        case CellStateEditing:
-//            self.cellModel.state = CellStateDefault;
-//            break;
-//        case CellStatePlaying:
-//            self.cellModel.state = CellStatePlayingAndEditing;
-//            break;
-//        case CellStatePlayingAndEditing:
-//            self.cellModel.state = CellStatePlaying;
-//            break;
-//    }
+    switch (self.cellModel.state) {
+        case CellStateDefault:
+            self.cellModel.state = CellStateEditing;
+            break;
+        case CellStateEditing:
+            self.cellModel.state = CellStateDefault;
+            break;
+        case CellStatePlaying:
+            self.cellModel.state = CellStatePlayingAndEditing;
+            break;
+        case CellStatePlayingAndEditing:
+            self.cellModel.state = CellStatePlaying;
+            break;
+    }
 }
 
 - (void)prepareForReuse {

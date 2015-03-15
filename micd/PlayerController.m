@@ -7,7 +7,8 @@
 @property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
-@property (strong, nonatomic, readwrite) NSUUID *loadedRecordingUUID;
+@property (strong, nonatomic, readwrite) Recording *loadedRecording;
+@property (nonatomic, assign, readwrite) NSTimeInterval secondsCompleted;
 
 @end
 
@@ -39,9 +40,10 @@
 #pragma mark - API Methods
 
 - (void)loadRecording:(Recording *)recording {
+    self.secondsCompleted = 0.0f;
     self.playerState = PlayerControllerStatePaused;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:recording.data error:nil];
-    self.loadedRecordingUUID = recording.uuid;
+    self.loadedRecording = recording;
     self.audioPlayer.delegate = self;
 }
 
@@ -58,9 +60,12 @@
 - (void)setPlaybackTimeInterval:(NSTimeInterval)timeInterval {
     if (timeInterval >= self.audioPlayer.duration) {
         timeInterval = self.audioPlayer.duration - 0.001f;
-    }
-    if (timeInterval <= 0) {
+        self.secondsCompleted = self.loadedRecording.lengthAsTimeInterval;
+    } else if (timeInterval <= 0) {
         timeInterval = 0.001f;
+        self.secondsCompleted = 0.0f;
+    } else {
+        self.secondsCompleted = timeInterval;
     }
     
     self.audioPlayer.currentTime = timeInterval;
@@ -69,12 +74,25 @@
 #pragma mark - Public Readonly Properties
 
 - (NSTimeInterval)secondsCompleted {
-    return self.audioPlayer.currentTime;
+    if (self.playerState == PlayerControllerStatePlaying) {
+        if (self.audioPlayer.currentTime + 0.05 >= self.audioPlayer.duration) {
+            _secondsCompleted = self.loadedRecording.lengthAsTimeInterval;
+            self.playerState = PlayerControllerStatePaused;
+        } else {
+            _secondsCompleted = self.audioPlayer.currentTime;
+        }
+    }
+    
+    return _secondsCompleted;
+}
+
+- (CGFloat)percentageCompleted {
+    return self.secondsCompleted/self.loadedRecording.lengthAsTimeInterval;
 }
 
 - (NSString *)displayableCurrentTime {
     NSString *displayableLength;
-    NSTimeInterval currentTime = self.audioPlayer.currentTime;
+    NSTimeInterval currentTime = self.secondsCompleted;
     NSInteger hours = lround(floor(currentTime / 3600.)) % 100;
     NSInteger minutes = lround(floor(currentTime / 60.)) % 60;
     NSInteger seconds = lround(floor(currentTime)) % 60;
@@ -88,10 +106,6 @@
     return displayableLength;
 }
 
-- (NSTimeInterval)loadedRecordingDuration {
-    return self.audioPlayer.duration;
-}
-
 #pragma mark - Custom Setters
 
 - (void)setAudioPlayer:(AVAudioPlayer *)player {
@@ -102,11 +116,13 @@
 #pragma mark - AVAudioPlayerDelegate
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    self.secondsCompleted = self.loadedRecording.lengthAsTimeInterval;
     self.playerState = PlayerControllerStatePaused;
     [self.delegate playerController:self didFinishPlayingSuccessfully:flag];
 }
 
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
+    self.secondsCompleted = 0.0f;
     self.playerState = PlayerControllerStatePaused;
     [self.delegate playerController:self didFinishPlayingSuccessfully:(error == nil)];
 }
