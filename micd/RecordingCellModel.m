@@ -9,6 +9,7 @@
 #import "RecordingCellModel.h"
 #import "Recording.h"
 #import <UIKit/UIKit.h>
+#import "DataSourceController.h"
 
 @interface RecordingCellModel ()
 
@@ -18,13 +19,40 @@
 
 @implementation RecordingCellModel
 
-- (instancetype)initWithRecording:(Recording *)recording {
+- (instancetype)initWithRecording:(Recording *)recording delegate:(id<EditingStateChangedDelegate>)editingStateDelegate {
     self = [super init];
     if (self) {
         _recording = recording;
         _state = CellStateDefault;
+        _editingStateChangedDelegate = editingStateDelegate;
     }
     return self;
+}
+
+- (void)editingPressed {
+    if ([self.editingStateChangedDelegate shouldGotoEditingStateForCellModel:self]) {
+        switch (self.state) {
+            case CellStateDefault:
+                self.state = CellStateEditing;
+                break;
+            case CellStateEditing:
+                self.state = CellStateDefault;
+                break;
+            case CellStatePlaying:
+                self.state = CellStatePlayingAndEditing;
+                break;
+            case CellStatePlayingAndEditing:
+                self.state = CellStatePlaying;
+                break;
+        }
+    }
+}
+
+- (void)titleDidChange:(NSString *)title {
+    if (title.length > 0 && ![self.recording.title isEqualToString:title]) {
+        self.recording.title = title;
+        [[DataSourceController sharedDataSource] saveData];
+    }
 }
 
 - (CGFloat)heightForState {

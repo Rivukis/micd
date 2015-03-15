@@ -35,7 +35,7 @@
 }
 
 
-+ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending {
++ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending cellModelDelegate:(id<EditingStateChangedDelegate>)cellModelDelegate {
     NSDateComponents *nowDateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay
                                                                       fromDate:[NSDate date]];
     
@@ -74,7 +74,7 @@
             [assemblingSections addObject:lastAddedMonthSection];
         }
         
-        RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording];
+        RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording delegate:cellModelDelegate];
         [lastAddedMonthSection.cellModels addObject:cellModel];
     }
     

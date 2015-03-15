@@ -9,12 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @class RecordingCellModel;
+@protocol EditingStateChangedDelegate;
 
 @interface RecordingsSection : NSObject
 
 @property (nonatomic, readonly) NSInteger numberOfCellModels;
 
-+ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending;
++ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending cellModelDelegate:(id<EditingStateChangedDelegate>)cellModelDelegate;
 
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index;
 - (NSString *)dateAsString;

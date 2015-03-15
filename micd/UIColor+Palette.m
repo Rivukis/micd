@@ -18,6 +18,15 @@
     return [UIColor colorWithRed:2.0f/255.0f green:133.0f/255.0f blue:158.0f/255.0f alpha:1.000f];
 }
 
++ (UIColor *)vibrantDarkBlueHalfOpacity {
+    return [UIColor colorWithRed:2.0f/255.0f green:133.0f/255.0f blue:158.0f/255.0f alpha:0.5f];
+}
+
+// just like vibrantDarkBlueHalfOpacity but without the alpha actually being lowered
++ (UIColor *)vibrantVeryDarkBlue {
+    return [UIColor colorWithRed:1.0f/255.0f green:67.0f/255.0f blue:79.0f/255.0f alpha:1.000f];
+}
+
 + (UIColor *)vibrantBlueText {
     return [UIColor colorWithRed:0.380f green:0.769f blue:0.871f alpha:1.000f];
 }

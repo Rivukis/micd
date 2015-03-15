@@ -10,7 +10,7 @@
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, EditingStateChangedDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
@@ -38,6 +38,9 @@
 @property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
 
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
+
+@property (strong, nonatomic) RecordingCellModel *cellModelBeingEdited;
+
 
 @end
 
@@ -84,7 +87,7 @@
 }
 
 - (void)reloadData {
-    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
+    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
     [self.tableView reloadData];
     if (self.tableBottomBorder.hidden == YES && self.dataSource.recordings.count) {
         self.tableBottomBorder.hidden = NO;
@@ -126,7 +129,7 @@
         self.waveformView.channelStartIndex = 0;
         self.waveformView.channelEndIndex = 0;
         
-        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-14.0f, self.waveformContainerView.frame.origin.y, 29.0f, self.waveformView.frame.size.height);
+        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-22.0f, self.waveformContainerView.frame.origin.y, 44.0f, self.waveformView.frame.size.height);
         self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
         [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
 //        self.progressTimeIndicatorView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:.5f];
@@ -372,26 +375,71 @@
     return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
 }
 
+#pragma mark - EditingStateChangedDelegate
+
+- (BOOL)shouldGotoEditingStateForCellModel:(RecordingCellModel *)cellModel {
+    BOOL allowEditingStateChange;
+    
+    if (self.cellModelBeingEdited) {
+        BOOL isSameModel = [self.cellModelBeingEdited isEqual:cellModel];
+        if (isSameModel) {
+            allowEditingStateChange = YES;
+        } else {
+            [self.cellModelBeingEdited editingPressed];
+            allowEditingStateChange = NO;
+        }
+        self.cellModelBeingEdited = nil;
+    } else {
+        self.cellModelBeingEdited = cellModel;
+        allowEditingStateChange = YES;
+    }
+    
+    return allowEditingStateChange;
+}
+
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    RecordingsSection *recordingsSection = self.sections[indexPath.section];
-    RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
-    
-    [self readyPlayerWithRecording:recordingCellModel.recording];
-    
-    BOOL isLoadedRecording = [self.playerController.loadedRecording.uuid.UUIDString isEqualToString:recordingCellModel.recording.uuid.UUIDString];
-    if (isLoadedRecording && self.playerController.playerState == PlayerControllerStatePlaying) {
-        [self pausePlayback];
-        recordingCellModel.state = CellStateDefault;
+    if (self.cellModelBeingEdited) {
+        self.cellModelBeingEdited.state = CellStateDefault;
+        self.cellModelBeingEdited = nil;
     } else {
-        [self playPlayback];
-        recordingCellModel.state = CellStatePlaying;
+        RecordingsSection *recordingsSection = self.sections[indexPath.section];
+        RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
+        
+        [self readyPlayerWithRecording:recordingCellModel.recording];
+        
+        BOOL isLoadedRecording = [self.playerController.loadedRecording.uuid.UUIDString isEqualToString:recordingCellModel.recording.uuid.UUIDString];
+        if (isLoadedRecording && self.playerController.playerState == PlayerControllerStatePlaying) {
+            [self pausePlayback];
+            recordingCellModel.state = CellStateDefault;
+        } else {
+            [self playPlayback];
+            recordingCellModel.state = CellStatePlaying;
+        }
     }
     
     [tableView beginUpdates];
     [tableView endUpdates];
 }
+
+//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+//    
+//    if (!self.view.isUserInteractionEnabled || self.view.isHidden || self.view.alpha <= 0.01) {
+//        return nil;
+//    }
+//    if ([self.tableView pointInside:point withEvent:event]) {
+//        for (UIView *subview in [self.view.subviews reverseObjectEnumerator]) {
+//            CGPoint convertedPoint = [subview convertPoint:point fromView:self.view];
+//            UIView *hitTestView = [subview hitTest:convertedPoint withEvent:event];
+//            if (hitTestView) {
+//                return hitTestView;
+//            }
+//        }
+//        return self.view;
+//    }
+//    return nil;
+//}
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -406,7 +454,7 @@
         BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
         
         [self.dataSource deleteRecording:editingRecording];
-        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
+        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
         
         if (deletingSection) {
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -494,6 +542,7 @@
     [footerView addSubview:borderView];
     return footerView;
 }
+
 
 //- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 //    if (!self.didGetOriginalTableViewHeight || !self.didGetOriginalHeight) {

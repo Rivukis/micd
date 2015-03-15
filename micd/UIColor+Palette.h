@@ -10,6 +10,11 @@
 
 + (UIColor *)vibrantDarkBlue;
 
++ (UIColor *)vibrantDarkBlueHalfOpacity;
+
+// just like vibrantDarkBlueHalfOpacity but without the alpha actually being lowered
++ (UIColor *)vibrantVeryDarkBlue;
+
 + (UIColor *)vibrantBlueText;
 
 + (UIColor *)vibrantBlueHalfOpacity;

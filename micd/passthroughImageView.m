@@ -15,7 +15,7 @@
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     BOOL isPointVisible = [self isAlphaVisibleAtPoint:point forImage:self.image];    
-    if (!self.hidden && isPointVisible > 0 && self.userInteractionEnabled) {
+    if (!self.hidden && isPointVisible && self.userInteractionEnabled) {
         return YES;
     }
     return NO;

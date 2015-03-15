@@ -38,6 +38,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 @property (assign, nonatomic) BOOL growForLouderNoises;
 
+@property (assign, nonatomic) PositionState currentPositionState;
+
 @end
 
 @implementation HomeViewController
@@ -188,22 +190,90 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.movementDelegate shouldCancelMoveAnimations];
+        
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
         [self.movementDelegate shouldMoveWithTranslation:translation];
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
-        NSLog(@"%f y postion", self.view.frame.origin.y);
+        NSLog(@"%f y velocity", [gestureRecognizer velocityInView:gestureRecognizer.view].y);
+        
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        // TODO: need to make this work for settings
-//        if (self.view.frame.origin.y > ) {
-//            <#statements#>
-//        }
-        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
-            [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
-        } else {
+        NSInteger velocityHorizon = 200;
+        CGPoint velocity = [gestureRecognizer velocityInView:gestureRecognizer.view];
+        BOOL isPanningUp = velocity.y < 0;
+        CGFloat currentY = self.view.frame.origin.y;
+        
+        if (currentY > [self backgroundImageRecordingsStateYOffset]) {
             [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
+        } else if (currentY > [self backgroundImageHomeStateYOffset]) {
+            // in between recordings and home
+            if (abs(velocity.y) < velocityHorizon) {
+                // move based on location
+                if (abs(currentY - [self backgroundImageRecordingsStateYOffset]) < abs(currentY - [self backgroundImageHomeStateYOffset])) {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
+                } else {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                }
+            } else {
+                // move based on velocity direction
+                if (isPanningUp) {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                } else {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
+                }
+            }
+        } else if (currentY > [self backgroundImageSettingsStateYOffset]) {
+            //in between home and settings
+            if (abs(velocity.y) < velocityHorizon) {
+                // move based on location
+                
+                if (abs(currentY - [self backgroundImageHomeStateYOffset]) < abs(currentY - [self backgroundImageSettingsStateYOffset])) {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                } else {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
+                }
+                
+            } else {
+                // move based on velocity direction
+                if (isPanningUp) {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
+                } else {
+                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                }
+            }
+        } else {
+            [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
         }
+        
+        
+        
+//        [self.movementDelegate shouldMoveToPositionState:[self nextPositionStateWhenMovingUp:isMovingUp fromState:NSNotFound]];
+    }
+}
+
+- (PositionState)nextPositionStateWhenMovingUp:(BOOL)isMovingUp fromState:(PositionState)fromState {
+    switch (self.currentPositionState) {
+        case PositionStateSettings:
+            if (isMovingUp) {
+                return PositionStateHome;
+            } else {
+                return self.currentPositionState;
+            }
+        case PositionStateHome:
+            if (isMovingUp) {
+                return PositionStateRecordings;
+            } else {
+                return PositionStateSettings;
+            }
+        case PositionStateRecordings:
+            if (isMovingUp) {
+                return self.currentPositionState;
+            } else {
+                return PositionStateHome;
+            }
+        default:
+            break;
     }
 }
 
@@ -367,9 +437,13 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     CGRect gearsFrame = self.recordButton.frame;
     gearsFrame.origin.y += windowHeight/2.0f * 1.1f;
     self.gearsImageView.frame = gearsFrame;
+    
+    self.currentPositionState = PositionStateHome;
 }
 
 - (CGRect)frameForState:(PositionState)state {
+    self.currentPositionState = state;
+    
     CGRect frame = self.view.frame;
     switch (state) {
         case PositionStateHome:
