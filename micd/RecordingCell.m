@@ -14,6 +14,7 @@
 #import "SCWaveformView.h"
 #import "RecordingCellModel.h"
 #import "PlayerController.h"
+#import "DataSourceController.h"
 
 @interface RecordingCell ()
 
@@ -23,7 +24,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *length;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 
-@property (nonatomic, strong) UIView *editingContainerView;
+@property (strong, nonatomic) UIView *titleEditingBackingView;
+@property (strong, nonatomic) UITextField *titleEditingTextField;
 
 @property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
 
@@ -52,7 +54,6 @@
     
     self.bottomSeparator.backgroundColor = [UIColor vibrantDarkBlue];
     self.bottomSeparator.alpha = .5;
-    
 }
 
 - (void)bindToModel:(RecordingCellModel *)cellModel {
@@ -76,7 +77,7 @@
 - (void)setupViewBasedOnState { 
     switch (self.cellModel.state) {
         case CellStateDefault:
-            [self setupViewForCollapsedState];
+            [self setupViewForDefaultState];
             break;
         case CellStateEditing:
             [self setupViewForEditingState];
@@ -90,33 +91,68 @@
     }
 }
 
-- (void)setupViewForCollapsedState {
-    if ([self.subviews containsObject:self.editingContainerView]) {
-        [self.editingContainerView removeFromSuperview];
+- (void)setupViewForDefaultState {
+    self.title.hidden = NO;
+    if (![self.titleEditingTextField.text isEqualToString:self.cellModel.title] && self.titleEditingTextField.text.length > 0) {
+        self.cellModel.recording.title = self.titleEditingTextField.text;
     }
-}
-
-- (void)setupViewForPlayingState {
-    if ([self.subviews containsObject:self.editingContainerView]) {
-        [self.editingContainerView removeFromSuperview];
-    }
-    
+    [self.titleEditingTextField removeFromSuperview];
+    [self.titleEditingBackingView removeFromSuperview];
 }
 
 - (void)setupViewForEditingState {
-    
-    //TODO: add editing view
+    self.title.hidden = YES;
+    self.titleEditingTextField.text = self.cellModel.title;
+    [self addSubview:self.titleEditingBackingView];
+    [self addSubview:self.titleEditingTextField];
+    [self.titleEditingTextField becomeFirstResponder];
+}
+
+- (void)setupViewForPlayingState {
+    self.title.hidden = NO;
+    if ([self.titleEditingTextField.text isEqualToString:self.cellModel.title]) {
+        self.cellModel.recording.title = self.titleEditingTextField.text;
+    }
+    [self.titleEditingTextField removeFromSuperview];
+    [self.titleEditingBackingView removeFromSuperview];
 }
 
 - (void)setupViewForEditingWhilePlayingState {
-    //TODO: add editing and playing view
-}
-
-- (void)playPauseButtonPressed:(UIButton *)sender {
-    
+    self.title.hidden = YES;
+    self.titleEditingTextField.text = self.cellModel.title;
+    [self addSubview:self.titleEditingBackingView];
+    [self addSubview:self.titleEditingTextField];
+    [self.titleEditingTextField becomeFirstResponder];
 }
 
 - (IBAction)editButtonPressed:(UIButton *)sender {
+    if (!self.titleEditingTextField) {
+        
+        CGFloat multiplier = 1.5f;
+        CGFloat leftShift = 7.0f;
+        
+        CGRect backingViewFrame = self.title.frame;
+        
+        backingViewFrame.size.height *= multiplier;
+        backingViewFrame.size.width += (multiplier - 1) * self.title.frame.size.height / 2.0f;
+        
+        self.titleEditingBackingView = [[UIView alloc] initWithFrame:backingViewFrame];
+        self.titleEditingBackingView.center = self.title.center;
+        
+        backingViewFrame = self.titleEditingBackingView.frame;
+        backingViewFrame.origin.x -= leftShift;
+        backingViewFrame.size.width += leftShift;
+        self.titleEditingBackingView.frame = backingViewFrame; // again
+        
+        self.titleEditingTextField = [[UITextField alloc] initWithFrame:self.title.frame];
+        
+        self.titleEditingBackingView.layer.cornerRadius = self.titleEditingBackingView.frame.size.height/2;
+        self.titleEditingBackingView.backgroundColor = [UIColor vibrantDarkBlue];
+        self.titleEditingTextField.clearButtonMode = UITextFieldViewModeAlways;
+        self.titleEditingTextField.font = self.title.font;
+        self.titleEditingTextField.textColor = self.title.textColor;
+    }
+    
     switch (self.cellModel.state) {
         case CellStateDefault:
             self.cellModel.state = CellStateEditing;
@@ -131,6 +167,10 @@
             self.cellModel.state = CellStatePlaying;
             break;
     }
+    
+    [self bindToModel:self.cellModel];
+    
+    [[DataSourceController sharedDataSource] saveData];
 }
 
 - (void)prepareForReuse {

@@ -19,4 +19,6 @@
 - (void)saveRecording:(Recording *)recording;
 - (void)deleteRecording:(Recording *)recording;
 
+- (void)saveData;
+
 @end

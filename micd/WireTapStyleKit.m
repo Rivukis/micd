@@ -3066,7 +3066,7 @@ static UIImage* _imageOfReverseDoubleArrow = nil;
     UIColor* red = [UIColor colorWithRed: 0.992 green: 0.188 blue: 0.11 alpha: 1];
 
     //// Rectangle Drawing
-    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(14, 0, 1, 30) cornerRadius: 0.5];
+    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(14, 0, 2, 30) cornerRadius: 1];
     [red setFill];
     [rectanglePath fill];
 }
