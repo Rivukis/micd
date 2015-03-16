@@ -33,6 +33,7 @@
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
 		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
+		D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BD55821AB6690600A73485 /* RecordingsView.m */; };
 		D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSourceController.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
 		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
@@ -101,6 +102,8 @@
 		D09A69EF1A86EFC500A2C347 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		D0B0DE451A8DA10200C88773 /* GearsImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearsImageView.h; sourceTree = "<group>"; };
 		D0B0DE461A8DA10200C88773 /* GearsImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearsImageView.m; sourceTree = "<group>"; };
+		D0BD55811AB6690600A73485 /* RecordingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsView.h; sourceTree = "<group>"; };
+		D0BD55821AB6690600A73485 /* RecordingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsView.m; sourceTree = "<group>"; };
 		D0C67CCE1A8EF917000F501A /* DataSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSourceController.h; sourceTree = "<group>"; };
 		D0C67CCF1A8EF917000F501A /* DataSourceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSourceController.m; sourceTree = "<group>"; };
 		D0C67CD41A91B9D4000F501A /* RecordingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCell.h; sourceTree = "<group>"; };
@@ -253,6 +256,8 @@
 		D0C67CDE1A929D67000F501A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D0BD55811AB6690600A73485 /* RecordingsView.h */,
+				D0BD55821AB6690600A73485 /* RecordingsView.m */,
 				D0B0DE451A8DA10200C88773 /* GearsImageView.h */,
 				D0B0DE461A8DA10200C88773 /* GearsImageView.m */,
 				D0C67CD41A91B9D4000F501A /* RecordingCell.h */,
@@ -462,6 +467,7 @@
 				7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
+				D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */,
 				D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
 				7AC290B61A8EF0100085B927 /* Constants.m in Sources */,

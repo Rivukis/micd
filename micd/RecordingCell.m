@@ -117,7 +117,7 @@
     self.title.hidden = NO;
     [self.titleEditingTextField removeFromSuperview];
     [self.titleEditingBackingView removeFromSuperview];
-    self.contentView.backgroundColor = [UIColor clearColor];
+    self.contentView.backgroundColor = [UIColor cyanColor];
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
 }
 
@@ -125,7 +125,7 @@
     self.title.hidden = YES;
     [self addSubview:self.titleEditingBackingView];
     [self addSubview:self.titleEditingTextField];
-    self.contentView.backgroundColor = [UIColor vibrantDarkBlue];
+    self.contentView.backgroundColor = [UIColor magentaColor];
 }
 
 - (IBAction)editButtonPressed:(UIButton *)sender {
@@ -137,7 +137,7 @@
         [self setupEditingViews];
     }
     
-    [self.cellModel editingPressed];
+    [self.cellModel editModeToggled];
 }
 
 - (void)prepareForReuse {
@@ -149,6 +149,7 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [self.cellModel titleDidChange:self.titleEditingTextField.text];
     [self bindToModel:object];
 }
 
@@ -180,10 +181,9 @@
     [self.titleEditingTextField setTintColor:self.title.textColor];
 }
 
-#pragma mark - UITextFieldDelegate
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [self.cellModel titleDidChange:textField.text];
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.cellModel turnOffEditingState];
+    return YES;
 }
 
 @end

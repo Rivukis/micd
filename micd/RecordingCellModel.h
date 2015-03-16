@@ -15,7 +15,9 @@
 
 @protocol EditingStateChangedDelegate <NSObject>
 
-- (BOOL)shouldGotoEditingStateForCellModel:(RecordingCellModel *)cellModel;
+//- (BOOL)shouldChangeEditingStateForCellModel:(RecordingCellModel *)cellModel;
+- (void)editingModeTurnedOn:(RecordingCellModel *)cellModel;
+- (void)editingModeTurnedOff:(RecordingCellModel *)cellModel;
 
 @end
 
@@ -28,7 +30,7 @@ typedef NS_ENUM(NSUInteger, CellState) {
 
 @interface RecordingCellModel : NSObject
 
-@property (nonatomic, assign) CellState state;
+@property (nonatomic, assign, readonly) CellState state;
 @property (nonatomic, weak) id<EditingStateChangedDelegate> editingStateChangedDelegate;
 
 @property (nonatomic, strong, readonly) Recording *recording;
@@ -41,7 +43,14 @@ typedef NS_ENUM(NSUInteger, CellState) {
 - (instancetype)initWithRecording:(Recording *)recording delegate:(id<EditingStateChangedDelegate>)editingStateDelegate;
 - (CGFloat)heightForState;
 
-- (void)editingPressed;
+- (void)editModeToggled;
+//- (void)playModeToggled;
+
+- (void)turnOffEditingState;
+- (void)turnOnEditingState;
+- (void)turnOnPlayingState;
+- (void)turnOffPlayingState;
+
 - (void)titleDidChange:(NSString *)title;
 
 @end

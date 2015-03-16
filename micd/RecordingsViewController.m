@@ -9,6 +9,7 @@
 #import "SCWaveformView.h"
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
+#import "RecordingsView.h"
 
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, EditingStateChangedDelegate>
 
@@ -40,6 +41,7 @@
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
 
 @property (strong, nonatomic) RecordingCellModel *cellModelBeingEdited;
+@property (strong, nonatomic) RecordingCellModel *cellModelBeingPlayed;
 
 
 @end
@@ -135,6 +137,8 @@
 //        self.progressTimeIndicatorView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:.5f];
         self.progressTimeIndicatorView.userInteractionEnabled = YES;
         [self.playbackView addSubview:self.progressTimeIndicatorView];
+        ((RecordingsView *)self.view).progressTimeIndicatorView = self.progressTimeIndicatorView;
+        ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
         
         [self readyPlayerWithRecording:[self mostRecentRecording]];
         
@@ -324,6 +328,11 @@
 #pragma mark - PlayerControllerDelegate
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
+    if (self.cellModelBeingPlayed) {
+        [self.cellModelBeingPlayed turnOffPlayingState];
+        self.cellModelBeingPlayed = nil;
+    }
+    
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self.waveformView setNeedsLayout];
@@ -377,46 +386,61 @@
 
 #pragma mark - EditingStateChangedDelegate
 
-- (BOOL)shouldGotoEditingStateForCellModel:(RecordingCellModel *)cellModel {
-    BOOL allowEditingStateChange;
+- (void)editingModeTurnedOn:(RecordingCellModel *)cellModel {
+    if (self.cellModelBeingEdited && ![self.cellModelBeingEdited isEqual:cellModel]) {
+        [self.cellModelBeingEdited turnOffEditingState];
+    }
+    self.cellModelBeingEdited = cellModel;
     
-    if (self.cellModelBeingEdited) {
-        BOOL isSameModel = [self.cellModelBeingEdited isEqual:cellModel];
-        if (isSameModel) {
-            allowEditingStateChange = YES;
+    if (self.cellModelBeingPlayed) {
+        if ([self.cellModelBeingPlayed isEqual:cellModel]) {
+            [self pausePlayback];
         } else {
-            [self.cellModelBeingEdited editingPressed];
-            allowEditingStateChange = NO;
+            self.cellModelBeingPlayed = cellModel;
+            [self readyPlayerWithRecording:cellModel.recording];
         }
-        self.cellModelBeingEdited = nil;
-    } else {
-        self.cellModelBeingEdited = cellModel;
-        allowEditingStateChange = YES;
+        
+        [self.cellModelBeingPlayed turnOffPlayingState];
     }
     
-    return allowEditingStateChange;
+}
+
+- (void)editingModeTurnedOff:(RecordingCellModel *)cellModel {
+    self.cellModelBeingEdited = nil;
+    self.playbackTitleLabel.text = cellModel.title;
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.cellModelBeingEdited) {
-        self.cellModelBeingEdited.state = CellStateDefault;
-        self.cellModelBeingEdited = nil;
-    } else {
-        RecordingsSection *recordingsSection = self.sections[indexPath.section];
-        RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
-        
-        [self readyPlayerWithRecording:recordingCellModel.recording];
-        
-        BOOL isLoadedRecording = [self.playerController.loadedRecording.uuid.UUIDString isEqualToString:recordingCellModel.recording.uuid.UUIDString];
-        if (isLoadedRecording && self.playerController.playerState == PlayerControllerStatePlaying) {
+        [self.cellModelBeingEdited turnOffEditingState];
+    }
+    
+    RecordingsSection *recordingsSection = self.sections[indexPath.section];
+    RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
+    
+    if (self.cellModelBeingPlayed) {
+        if ([self.cellModelBeingPlayed isEqual:recordingCellModel]) {
+            [self.cellModelBeingPlayed turnOffPlayingState]; // might want to make a paused state
+            self.cellModelBeingPlayed = nil;
             [self pausePlayback];
-            recordingCellModel.state = CellStateDefault;
         } else {
+            [self.cellModelBeingPlayed turnOffPlayingState];
+            self.cellModelBeingPlayed = recordingCellModel;
+            [self readyPlayerWithRecording:recordingCellModel.recording];
+            [recordingCellModel turnOnPlayingState];
+            
             [self playPlayback];
-            recordingCellModel.state = CellStatePlaying;
         }
+    } else {
+        
+        if (![self.playerController.loadedRecording.uuid.UUIDString isEqualToString:recordingCellModel.recording.uuid.UUIDString]) {
+            [self readyPlayerWithRecording:recordingCellModel.recording];
+        }
+        self.cellModelBeingPlayed = recordingCellModel;
+        [recordingCellModel turnOnPlayingState];
+        [self playPlayback];
     }
     
     [tableView beginUpdates];
@@ -543,6 +567,11 @@
     return footerView;
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (self.cellModelBeingEdited) {
+        [self.cellModelBeingEdited turnOffEditingState];
+    }
+}
 
 //- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 //    if (!self.didGetOriginalTableViewHeight || !self.didGetOriginalHeight) {

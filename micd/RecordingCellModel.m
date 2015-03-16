@@ -14,6 +14,7 @@
 @interface RecordingCellModel ()
 
 @property (nonatomic, strong, readwrite) Recording *recording;
+@property (nonatomic, assign, readwrite) CellState state;
 
 @end
 
@@ -29,23 +30,82 @@
     return self;
 }
 
-- (void)editingPressed {
-    if ([self.editingStateChangedDelegate shouldGotoEditingStateForCellModel:self]) {
-        switch (self.state) {
-            case CellStateDefault:
-                self.state = CellStateEditing;
-                break;
-            case CellStateEditing:
-                self.state = CellStateDefault;
-                break;
-            case CellStatePlaying:
-                self.state = CellStatePlayingAndEditing;
-                break;
-            case CellStatePlayingAndEditing:
-                self.state = CellStatePlaying;
-                break;
-        }
+- (void)turnOnEditingState {
+    if (self.state == CellStateDefault) {
+        self.state = CellStateEditing;
+    } else if (self.state == CellStatePlaying) {
+        self.state = CellStatePlayingAndEditing;
     }
+}
+
+- (void)turnOffEditingState {
+    if (self.state == CellStateEditing) {
+        self.state = CellStateDefault;
+    } else if (self.state == CellStatePlayingAndEditing) {
+        self.state = CellStatePlaying;
+    }
+}
+
+- (void)turnOnPlayingState {
+    if (self.state == CellStateDefault) {
+        self.state = CellStatePlaying;
+    } else if (self.state == CellStateEditing) {
+        self.state = CellStatePlayingAndEditing;
+    }
+}
+
+- (void)turnOffPlayingState {
+    if (self.state == CellStatePlaying) {
+        self.state = CellStateDefault;
+    } else if (self.state == CellStatePlayingAndEditing) {
+        self.state = CellStateEditing;
+    }
+}
+
+//- (void)playModeToggled {
+//    switch (self.state) {
+//        case CellStateDefault:
+//            self.state = CellStatePlaying;
+//            break;
+//        case CellStateEditing:
+//            self.state = CellStatePlayingAndEditing;
+//            break;
+//        case CellStatePlaying:
+//            self.state = CellStateDefault;
+//            break;
+//        case CellStatePlayingAndEditing:
+//            self.state = CellStateEditing;
+//            break;
+//    }
+//}
+//
+- (void)editModeToggled {
+//    if ([self.editingStateChangedDelegate shouldChangeEditingStateForCellModel:self]) {
+    
+    
+    if (self.state == CellStateEditing || self.state == CellStatePlayingAndEditing) {
+        [self turnOffEditingState];
+        [self.editingStateChangedDelegate editingModeTurnedOff:self];
+    } else {
+        [self turnOnEditingState];
+        [self.editingStateChangedDelegate editingModeTurnedOn:self];
+    }
+        
+//        switch (self.state) {
+//            case CellStateDefault:
+//                self.state = CellStateEditing;
+//                break;
+//            case CellStateEditing:
+//                self.state = CellStateDefault;
+//                break;
+//            case CellStatePlaying:
+//                self.state = CellStatePlayingAndEditing;
+//                break;
+//            case CellStatePlayingAndEditing:
+//                self.state = CellStatePlaying;
+//                break;
+//        }
+//    }
 }
 
 - (void)titleDidChange:(NSString *)title {

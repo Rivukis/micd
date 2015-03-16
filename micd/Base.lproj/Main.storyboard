@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="top" id="HUp-Tr-j8A"/>
                         <viewControllerLayoutGuide type="bottom" id="Hku-At-2C4"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="DM3-9W-e1B" customClass="passthroughView">
+                    <view key="view" contentMode="scaleToFill" id="DM3-9W-e1B" customClass="RecordingsView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -24,7 +24,7 @@
                                     <constraint firstAttribute="height" constant="1" id="xq3-K3-TV0"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pK-hO-A7X" userLabel="Playback View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pK-hO-A7X" userLabel="Playback Container View">
                                 <rect key="frame" x="0.0" y="567" width="375" height="100"/>
                                 <subviews>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="950" verticalHuggingPriority="251" horizontalCompressionResistancePriority="975" text="14:03" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5cl-Sb-pmr">
