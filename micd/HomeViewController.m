@@ -71,7 +71,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGesture.delegate = self;
-    panGesture.maximumNumberOfTouches = 1;
     [self.view addGestureRecognizer:panGesture];
 }
 
