@@ -34,14 +34,13 @@
 
 @implementation RecordingCell
 
--(void)layoutSubviews {
+- (void)layoutSubviews {
     [super layoutSubviews];
     
     self.backgroundColor = [UIColor clearColor];
     self.editButton.backgroundColor = [UIColor clearColor];
-    
     self.title.textColor = [UIColor vibrantLightBlueText];
-    self.length.textColor = [UIColor vibrantLightBlueText];
+    
 //    self.layer.masksToBounds = YES;
 //    self.bottomSeparator.backgroundColor = [UIColor blackColor];
 //    self.bottomSeparator.alpha = .5f;
@@ -98,34 +97,43 @@
 }
 
 - (void)setupViewForDefaultState {
-    self.title.hidden = NO;
-    [self.titleEditingTextField removeFromSuperview];
-    [self.titleEditingBackingView removeFromSuperview];
-    self.contentView.backgroundColor = [UIColor clearColor];
-    [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
+    [UIView animateWithDuration:.25 animations:^{
+        self.title.alpha = 1;
+//        self.length.textColor = [UIColor vibrantLightBlueText];
+        self.titleEditingTextField.alpha = 0;
+        self.titleEditingBackingView.alpha = 0;
+        self.contentView.backgroundColor = [UIColor clearColor];
+        [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
+    }];
+    [UIView transitionWithView:self.length duration:0.25 options:UIViewAnimationOptionCurveLinear animations:^{
+        self.length.textColor = [UIColor vibrantLightBlueText];
+    } completion:^(BOOL finished) {
+    }];
 }
 
 - (void)setupViewForEditingState {
-    self.title.hidden = YES;
-    [self addSubview:self.titleEditingBackingView];
-    [self addSubview:self.titleEditingTextField];
-    self.contentView.backgroundColor = [UIColor vibrantVeryDarkBlue];
-    [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantDarkBlueHalfOpacity]] forState:UIControlStateNormal];
+    [UIView animateWithDuration:.25f animations:^{
+        self.title.alpha = 0;
+        [self.length setTextColor:[UIColor vibrantVeryDarkBlue]];
+        self.titleEditingTextField.alpha = 1;
+        self.titleEditingBackingView.alpha = 1;
+        //    self.contentView.backgroundColor = [UIColor vibrantVeryDarkBlue];
+        [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantLightBlue]] forState:UIControlStateNormal];
+    }];
 }
 
 - (void)setupViewForPlayingState {
-    self.title.hidden = NO;
-    [self.titleEditingTextField removeFromSuperview];
-    [self.titleEditingBackingView removeFromSuperview];
-    self.contentView.backgroundColor = [UIColor cyanColor];
+    self.title.alpha = 1;
+    self.titleEditingTextField.alpha = 0;
+    self.titleEditingBackingView.alpha = 0;
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
 }
 
 - (void)setupViewForEditingWhilePlayingState {
-    self.title.hidden = YES;
-    [self addSubview:self.titleEditingBackingView];
-    [self addSubview:self.titleEditingTextField];
-    self.contentView.backgroundColor = [UIColor magentaColor];
+    self.title.alpha = 0;
+    self.titleEditingTextField.alpha = 1;
+    self.titleEditingBackingView.alpha = 1;
+//    self.contentView.backgroundColor = [UIColor magentaColor];
 }
 
 - (IBAction)editButtonPressed:(UIButton *)sender {
@@ -174,11 +182,19 @@
     self.titleEditingTextField.delegate = self;
     
     self.titleEditingBackingView.layer.cornerRadius = self.titleEditingBackingView.frame.size.height/2;
-    self.titleEditingBackingView.backgroundColor = [UIColor vibrantBlueHalfOpacity];
+    self.titleEditingBackingView.backgroundColor = [UIColor clearColor];
+    self.titleEditingBackingView.layer.borderColor = [UIColor vibrantLightBlue].CGColor;
+    self.titleEditingBackingView.layer.borderWidth = 1;
     self.titleEditingTextField.clearButtonMode = UITextFieldViewModeAlways;
+
     self.titleEditingTextField.font = self.title.font;
     self.titleEditingTextField.textColor = self.title.textColor;
     [self.titleEditingTextField setTintColor:self.title.textColor];
+    
+    [self addSubview:self.titleEditingBackingView];
+    [self addSubview:self.titleEditingTextField];
+    self.titleEditingBackingView.alpha = 0;
+    self.titleEditingTextField.alpha = 0;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

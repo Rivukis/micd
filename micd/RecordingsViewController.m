@@ -103,7 +103,7 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.tableBottomBorder.backgroundColor = [UIColor vibrantLightBlue];
+    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
     
     if (!self.didGetOriginalHeight) {
         self.didGetOriginalHeight = YES;
@@ -134,7 +134,6 @@
         CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-22.0f, self.waveformContainerView.frame.origin.y, 44.0f, self.waveformView.frame.size.height);
         self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
         [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
-//        self.progressTimeIndicatorView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:.5f];
         self.progressTimeIndicatorView.userInteractionEnabled = YES;
         [self.playbackView addSubview:self.progressTimeIndicatorView];
         ((RecordingsView *)self.view).progressTimeIndicatorView = self.progressTimeIndicatorView;
@@ -515,7 +514,6 @@
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     [cell bindToModel:recordingCellModel];
-    cell.backgroundColor = [UIColor backgroundGray];
     
     return cell;
 }
@@ -530,20 +528,19 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 45;
+    return 44;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     RecordingsSection *recordingsSection = self.sections[section];
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 45.0f)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44.0f)];
     
-//    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 44.0f, tableView.frame.size.width, 2.0f)];
-//    bottomBorderView.backgroundColor = [UIColor blackColor];
-//    bottomBorderView.alpha = .5;
-//    [headerView addSubview:bottomBorderView];
+    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 42.0f, tableView.frame.size.width, 2.0f)];
+    bottomBorderView.backgroundColor = [UIColor vibrantBlue];
+    [headerView addSubview:bottomBorderView];
     
-    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.tableView.frame.size.width-13.0f, 20.0f)];
+    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, self.tableView.frame.size.width-7.0f, 20.0f)];
     headerTitleLabel.text = recordingsSection.dateAsString;
     headerTitleLabel.font = [UIFont fontWithName: @"HelveticaNeue-Medium" size:16.0f]; //AvenirNext-Regular
     headerTitleLabel.textAlignment = NSTextAlignmentRight;
