@@ -33,9 +33,9 @@ typedef NS_ENUM(NSUInteger, CellState) {
 
 @property (nonatomic, weak) id<RecordingCellModelDelegate> delegate;
 @property (nonatomic, assign, readonly) CellState state;
-@property (nonatomic, assign, getter=isPlaying) BOOL playing;
-@property (nonatomic, assign, getter=isPaused) BOOL paused;
-@property (nonatomic, assign, getter=isEditing) BOOL editing;
+@property (nonatomic, assign) BOOL playing;
+@property (nonatomic, assign) BOOL paused;
+@property (nonatomic, assign) BOOL editing;
 
 @property (nonatomic, strong, readonly) Recording *recording;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;

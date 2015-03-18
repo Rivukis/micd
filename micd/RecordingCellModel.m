@@ -30,13 +30,13 @@
 }
 
 - (CellState)state {
-    if (self.isEditing) {
+    if (self.editing) {
         return CellStateEditing;
     }
-    if (self.isPlaying) {
+    if (self.playing) {
         return CellStatePlaying;
     }
-    if (self.isPaused) {
+    if (self.paused) {
         return CellStatePaused;
     }
     
@@ -45,9 +45,9 @@
 
 + (NSSet *)keyPathsForValuesAffectingState {
     return [NSSet setWithArray:
-            @[MTK_VALID_KEY(RecordingCellModel, isPlaying),
-              MTK_VALID_KEY(RecordingCellModel, isPaused),
-              MTK_VALID_KEY(RecordingCellModel, isEditing)
+            @[MTK_VALID_KEY(RecordingCellModel, playing),
+              MTK_VALID_KEY(RecordingCellModel, paused),
+              MTK_VALID_KEY(RecordingCellModel, editing)
               ]];
 }
 

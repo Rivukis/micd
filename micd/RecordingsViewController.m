@@ -156,9 +156,11 @@
     RecordingsSection *firstSection = self.sections.firstObject;
     if (firstSection) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
         RecordingCellModel *mostRecentCellModel = [firstSection cellModelAtIndex:0];
         [self readyPlayerWithRecording:mostRecentCellModel.recording];
+        self.cellModelBeingPlayedOrPaused = mostRecentCellModel;
+        mostRecentCellModel.paused = YES;
     }
 }
 
@@ -328,8 +330,7 @@
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
     if (self.cellModelBeingPlayedOrPaused) {
-        // change state
-        self.cellModelBeingPlayedOrPaused = nil;
+        self.cellModelBeingPlayedOrPaused.paused = YES;;
     }
     
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
@@ -386,7 +387,17 @@
 #pragma mark - EditingStateChangedDelegate
 
 - (void)editingPressedOnCellModel:(RecordingCellModel *)cellModel {
+    BOOL isSameCellModel = self.cellModelBeingEdited == cellModel;
     
+    if (self.cellModelBeingEdited) {
+        self.cellModelBeingEdited.editing = NO;
+        self.cellModelBeingEdited = nil;
+    }
+    
+    if (!isSameCellModel) {
+        self.cellModelBeingEdited = cellModel;
+        cellModel.editing = YES;
+    }
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate
@@ -395,10 +406,25 @@
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     
-    
-    
-    [tableView beginUpdates];
-    [tableView endUpdates];
+    if (self.cellModelBeingPlayedOrPaused == recordingCellModel) {
+        if (self.playerController.playerState == PlayerControllerStatePlaying) {
+            [self pausePlayback];
+            self.cellModelBeingPlayedOrPaused.paused = YES;
+        } else {
+            [self playPlayback];
+            self.cellModelBeingPlayedOrPaused.playing = YES;
+        }
+    } else {
+        if (self.cellModelBeingPlayedOrPaused) {
+            self.cellModelBeingPlayedOrPaused.playing = NO;
+            self.cellModelBeingPlayedOrPaused.paused = NO;
+        }
+        
+        self.cellModelBeingPlayedOrPaused = recordingCellModel;
+        [self readyPlayerWithRecording:recordingCellModel.recording];
+        [self playPlayback];
+        recordingCellModel.playing = YES;
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -452,6 +478,10 @@
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     [cell bindToModel:recordingCellModel];
     
+    if (self.cellModelBeingEdited) {
+        [cell changeViewForCellBeingEdited];
+    }
+    
     return cell;
 }
 
@@ -502,7 +532,10 @@
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    // maybe stop editing cell when scroll begins
+//    if (self.cellModelBeingEdited) {
+//        self.cellModelBeingEdited.editing = NO;
+//        self.cellModelBeingEdited = nil;
+//    }
 }
 
 // ----- use for resizing the tableview -----

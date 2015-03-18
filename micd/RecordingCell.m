@@ -117,7 +117,7 @@
         [self.length setTextColor:[UIColor vibrantVeryDarkBlue]];
         self.titleEditingTextField.alpha = 1;
         self.titleEditingBackingView.alpha = 1;
-        //    self.contentView.backgroundColor = [UIColor vibrantVeryDarkBlue];
+        self.contentView.backgroundColor = [UIColor orangeColor];
         [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantLightBlue]] forState:UIControlStateNormal];
     }];
 }
@@ -126,6 +126,7 @@
     self.title.alpha = 1;
     self.titleEditingTextField.alpha = 0;
     self.titleEditingBackingView.alpha = 0;
+    self.contentView.backgroundColor = [UIColor blueColor];
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
 }
 
@@ -133,8 +134,18 @@
     self.title.alpha = 0;
     self.titleEditingTextField.alpha = 1;
     self.titleEditingBackingView.alpha = 1;
-//    self.contentView.backgroundColor = [UIColor magentaColor];
+    self.contentView.backgroundColor = [UIColor cyanColor];
 }
+
+- (void)changeViewForCellBeingEdited {
+    [self bindToModel:self.cellModel];
+    
+    if (self.cellModel.state != CellStateEditing) {
+        self.contentView.backgroundColor = [UIColor yellowColor];
+    }
+}
+
+#pragma mark - User Actions
 
 - (IBAction)editButtonPressed:(UIButton *)sender {
     if ([self.titleEditingTextField isFirstResponder]) {
@@ -154,11 +165,6 @@
         self.isObserving = NO;
     }
     self.cellModel = nil;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [self.cellModel titleDidChange:self.titleEditingTextField.text];
-    [self bindToModel:object];
 }
 
 - (void)setupEditingViews {
@@ -198,8 +204,14 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
     [self.cellModel editingPressed];
     return YES;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [self.cellModel titleDidChange:self.titleEditingTextField.text];
+    [self bindToModel:object];
 }
 
 @end
