@@ -10,102 +10,59 @@
 #import "Recording.h"
 #import <UIKit/UIKit.h>
 #import "DataSourceController.h"
+#import "MTKValidKeyPath.h"
 
 @interface RecordingCellModel ()
 
 @property (nonatomic, strong, readwrite) Recording *recording;
-@property (nonatomic, assign, readwrite) CellState state;
 
 @end
 
 @implementation RecordingCellModel
 
-- (instancetype)initWithRecording:(Recording *)recording delegate:(id<EditingStateChangedDelegate>)editingStateDelegate {
+- (instancetype)initWithRecording:(Recording *)recording delegate:(id<RecordingCellModelDelegate>)editingStateDelegate {
     self = [super init];
     if (self) {
         _recording = recording;
-        _state = CellStateDefault;
-        _editingStateChangedDelegate = editingStateDelegate;
+        _delegate = editingStateDelegate;
     }
     return self;
 }
 
-- (void)turnOnEditingState {
-    if (self.state == CellStateDefault) {
-        self.state = CellStateEditing;
-    } else if (self.state == CellStatePlaying) {
-        self.state = CellStatePlayingAndEditing;
+- (CellState)state {
+    if (self.isEditing) {
+        return CellStateEditing;
     }
-}
-
-- (void)turnOffEditingState {
-    if (self.state == CellStateEditing) {
-        self.state = CellStateDefault;
-    } else if (self.state == CellStatePlayingAndEditing) {
-        self.state = CellStatePlaying;
+    if (self.isPlaying) {
+        return CellStatePlaying;
     }
-}
-
-- (void)turnOnPlayingState {
-    if (self.state == CellStateDefault) {
-        self.state = CellStatePlaying;
-    } else if (self.state == CellStateEditing) {
-        self.state = CellStatePlayingAndEditing;
+    if (self.isPaused) {
+        return CellStatePaused;
     }
-}
-
-- (void)turnOffPlayingState {
-    if (self.state == CellStatePlaying) {
-        self.state = CellStateDefault;
-    } else if (self.state == CellStatePlayingAndEditing) {
-        self.state = CellStateEditing;
-    }
-}
-
-//- (void)playModeToggled {
-//    switch (self.state) {
-//        case CellStateDefault:
-//            self.state = CellStatePlaying;
-//            break;
-//        case CellStateEditing:
-//            self.state = CellStatePlayingAndEditing;
-//            break;
-//        case CellStatePlaying:
-//            self.state = CellStateDefault;
-//            break;
-//        case CellStatePlayingAndEditing:
-//            self.state = CellStateEditing;
-//            break;
-//    }
-//}
-//
-- (void)editModeToggled {
-//    if ([self.editingStateChangedDelegate shouldChangeEditingStateForCellModel:self]) {
     
-    
-    if (self.state == CellStateEditing || self.state == CellStatePlayingAndEditing) {
-        [self turnOffEditingState];
-        [self.editingStateChangedDelegate editingModeTurnedOff:self];
-    } else {
-        [self turnOnEditingState];
-        [self.editingStateChangedDelegate editingModeTurnedOn:self];
-    }
-        
-//        switch (self.state) {
-//            case CellStateDefault:
-//                self.state = CellStateEditing;
-//                break;
-//            case CellStateEditing:
-//                self.state = CellStateDefault;
-//                break;
-//            case CellStatePlaying:
-//                self.state = CellStatePlayingAndEditing;
-//                break;
-//            case CellStatePlayingAndEditing:
-//                self.state = CellStatePlaying;
-//                break;
-//        }
-//    }
+    return CellStateDefault;
+}
+
++ (NSSet *)keyPathsForValuesAffectingState {
+    return [NSSet setWithArray:
+            @[MTK_VALID_KEY(RecordingCellModel, isPlaying),
+              MTK_VALID_KEY(RecordingCellModel, isPaused),
+              MTK_VALID_KEY(RecordingCellModel, isEditing)
+              ]];
+}
+
+- (void)setPlaying:(BOOL)playing {
+    _paused = NO;
+    _playing = playing;
+}
+
+- (void)setPaused:(BOOL)paused {
+    _playing = NO;
+    _paused = paused;
+}
+
+- (void)editingPressed {
+    [self.delegate editingPressedOnCellModel:self];
 }
 
 - (void)titleDidChange:(NSString *)title {
@@ -119,28 +76,8 @@
     return 45.0f;
 }
 
-- (NSString *)length {
-    return self.recording.lengthToDiplay;
-}
-
-- (NSString *)date {
-    return self.recording.dateAsString;
-}
-
-- (NSString *)title {
-    return self.recording.title;
-}
-
-- (NSArray *)tags {
-    return self.recording.tags;
-}
-
-- (AVAsset *)avAsset {
-    return self.recording.avAsset;
-}
-
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ - %@", self.title, self.recording];
+    return [NSString stringWithFormat:@"%@ - %@", self.recording.title, self.recording];
 }
 
 @end

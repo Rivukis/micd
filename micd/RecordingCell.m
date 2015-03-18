@@ -63,9 +63,9 @@
         self.isObserving = YES;
     }
     
-    self.title.text = cellModel.title;
-    self.titleEditingTextField.text = cellModel.title;
-    self.length.text = cellModel.length;
+    self.title.text = cellModel.recording.title;
+    self.titleEditingTextField.text = cellModel.recording.title;
+    self.length.text = cellModel.recording.lengthToDiplay;
     
     [self setupViewBasedOnState];
 }
@@ -87,11 +87,11 @@
         case CellStateEditing:
             [self setupViewForEditingState];
             break;
+        case CellStatePaused:
+            [self setupViewForPausedState];
+            break;
         case CellStatePlaying:
             [self setupViewForPlayingState];
-            break;
-        case CellStatePlayingAndEditing:
-            [self setupViewForEditingWhilePlayingState];
             break;
     }
 }
@@ -129,7 +129,7 @@
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
 }
 
-- (void)setupViewForEditingWhilePlayingState {
+- (void)setupViewForPausedState {
     self.title.alpha = 0;
     self.titleEditingTextField.alpha = 1;
     self.titleEditingBackingView.alpha = 1;
@@ -145,7 +145,7 @@
         [self setupEditingViews];
     }
     
-    [self.cellModel editModeToggled];
+    [self.cellModel editingPressed];
 }
 
 - (void)prepareForReuse {
@@ -198,7 +198,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.cellModel turnOffEditingState];
+    [self.cellModel editingPressed];
     return YES;
 }
 

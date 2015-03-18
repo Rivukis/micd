@@ -11,7 +11,7 @@
 #import "DisplayLinkController.h"
 #import "RecordingsView.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, EditingStateChangedDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, RecordingCellModelDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
@@ -41,7 +41,7 @@
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
 
 @property (strong, nonatomic) RecordingCellModel *cellModelBeingEdited;
-@property (strong, nonatomic) RecordingCellModel *cellModelBeingPlayed;
+@property (strong, nonatomic) RecordingCellModel *cellModelBeingPlayedOrPaused;
 
 
 @end
@@ -327,9 +327,9 @@
 #pragma mark - PlayerControllerDelegate
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
-    if (self.cellModelBeingPlayed) {
-        [self.cellModelBeingPlayed turnOffPlayingState];
-        self.cellModelBeingPlayed = nil;
+    if (self.cellModelBeingPlayedOrPaused) {
+        // change state
+        self.cellModelBeingPlayedOrPaused = nil;
     }
     
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
@@ -385,84 +385,21 @@
 
 #pragma mark - EditingStateChangedDelegate
 
-- (void)editingModeTurnedOn:(RecordingCellModel *)cellModel {
-    if (self.cellModelBeingEdited && ![self.cellModelBeingEdited isEqual:cellModel]) {
-        [self.cellModelBeingEdited turnOffEditingState];
-    }
-    self.cellModelBeingEdited = cellModel;
+- (void)editingPressedOnCellModel:(RecordingCellModel *)cellModel {
     
-    if (self.cellModelBeingPlayed) {
-        if ([self.cellModelBeingPlayed isEqual:cellModel]) {
-            [self pausePlayback];
-        } else {
-            self.cellModelBeingPlayed = cellModel;
-            [self readyPlayerWithRecording:cellModel.recording];
-        }
-        
-        [self.cellModelBeingPlayed turnOffPlayingState];
-    }
-    
-}
-
-- (void)editingModeTurnedOff:(RecordingCellModel *)cellModel {
-    self.cellModelBeingEdited = nil;
-    self.playbackTitleLabel.text = cellModel.title;
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.cellModelBeingEdited) {
-        [self.cellModelBeingEdited turnOffEditingState];
-    }
-    
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     
-    if (self.cellModelBeingPlayed) {
-        if ([self.cellModelBeingPlayed isEqual:recordingCellModel]) {
-            [self.cellModelBeingPlayed turnOffPlayingState]; // might want to make a paused state
-            self.cellModelBeingPlayed = nil;
-            [self pausePlayback];
-        } else {
-            [self.cellModelBeingPlayed turnOffPlayingState];
-            self.cellModelBeingPlayed = recordingCellModel;
-            [self readyPlayerWithRecording:recordingCellModel.recording];
-            [recordingCellModel turnOnPlayingState];
-            
-            [self playPlayback];
-        }
-    } else {
-        
-        if (![self.playerController.loadedRecording.uuid.UUIDString isEqualToString:recordingCellModel.recording.uuid.UUIDString]) {
-            [self readyPlayerWithRecording:recordingCellModel.recording];
-        }
-        self.cellModelBeingPlayed = recordingCellModel;
-        [recordingCellModel turnOnPlayingState];
-        [self playPlayback];
-    }
+    
     
     [tableView beginUpdates];
     [tableView endUpdates];
 }
-
-//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-//    
-//    if (!self.view.isUserInteractionEnabled || self.view.isHidden || self.view.alpha <= 0.01) {
-//        return nil;
-//    }
-//    if ([self.tableView pointInside:point withEvent:event]) {
-//        for (UIView *subview in [self.view.subviews reverseObjectEnumerator]) {
-//            CGPoint convertedPoint = [subview convertPoint:point fromView:self.view];
-//            UIView *hitTestView = [subview hitTest:convertedPoint withEvent:event];
-//            if (hitTestView) {
-//                return hitTestView;
-//            }
-//        }
-//        return self.view;
-//    }
-//    return nil;
-//}
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -565,10 +502,10 @@
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.cellModelBeingEdited) {
-        [self.cellModelBeingEdited turnOffEditingState];
-    }
+    // maybe stop editing cell when scroll begins
 }
+
+// ----- use for resizing the tableview -----
 
 //- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 //    if (!self.didGetOriginalTableViewHeight || !self.didGetOriginalHeight) {

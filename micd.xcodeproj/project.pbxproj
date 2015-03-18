@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
+		7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */; };
 		7AC290B61A8EF0100085B927 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* PlayerController.m */; };
 		7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AB1A8EF0100085B927 /* RecorderController.m */; };
@@ -52,6 +53,8 @@
 
 /* Begin PBXFileReference section */
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTKValidKeyPath.h; sourceTree = "<group>"; };
+		7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTKValidKeyPath.m; sourceTree = "<group>"; };
 		7AC290A61A8EF0100085B927 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		7AC290A71A8EF0100085B927 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		7AC290A81A8EF0100085B927 /* PlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerController.h; sourceTree = "<group>"; };
@@ -304,6 +307,8 @@
 				D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */,
 				D08D4BE61AB2748700949483 /* ViewMovementBehavior.h */,
 				D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */,
+				7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */,
+				7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -448,6 +453,7 @@
 				D0F97F541A92A46800F07032 /* NSString+Score.m in Sources */,
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
 				D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */,
+				7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */,
 				7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */,
 				7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
