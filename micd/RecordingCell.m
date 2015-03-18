@@ -117,7 +117,7 @@
         [self.length setTextColor:[UIColor vibrantVeryDarkBlue]];
         self.titleEditingTextField.alpha = 1;
         self.titleEditingBackingView.alpha = 1;
-        self.contentView.backgroundColor = [UIColor orangeColor];
+//        self.contentView.backgroundColor = [UIColor orangeColor];
         [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantLightBlue]] forState:UIControlStateNormal];
     }];
 }
@@ -126,7 +126,7 @@
     self.title.alpha = 1;
     self.titleEditingTextField.alpha = 0;
     self.titleEditingBackingView.alpha = 0;
-    self.contentView.backgroundColor = [UIColor blueColor];
+//    self.contentView.backgroundColor = [UIColor blueColor];
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
 }
 
@@ -134,14 +134,14 @@
     self.title.alpha = 0;
     self.titleEditingTextField.alpha = 1;
     self.titleEditingBackingView.alpha = 1;
-    self.contentView.backgroundColor = [UIColor cyanColor];
+//    self.contentView.backgroundColor = [UIColor cyanColor];
 }
 
 - (void)changeViewForCellBeingEdited {
     [self bindToModel:self.cellModel];
     
     if (self.cellModel.state != CellStateEditing) {
-        self.contentView.backgroundColor = [UIColor yellowColor];
+//        self.contentView.backgroundColor = [UIColor yellowColor];
     }
 }
 
