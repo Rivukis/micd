@@ -21,9 +21,7 @@
     
     CGPoint convertedPointForProgessTimeIndicatorView = [self.progressTimeIndicatorView convertPoint:point fromView:self];
     BOOL isInsideProgressTimeIndicatorView = [self.progressTimeIndicatorView pointInside:convertedPointForProgessTimeIndicatorView withEvent:event];
-    
-    NSLog(@"play: %i, progress: %i", isInsidePlaybackContainerView, isInsideProgressTimeIndicatorView);
-    
+        
     if (isInsidePlaybackContainerView && !isInsideProgressTimeIndicatorView) {
         return NO;
     }

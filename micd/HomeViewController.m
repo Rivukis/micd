@@ -17,6 +17,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (assign, nonatomic) BOOL isMovingDown;
 @property (strong, nonatomic) OBShapedButton *recordButton;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
+@property (strong, nonatomic) UIImageView *gearsCircleImageView;
 @property (strong, nonatomic) GearsImageView *gearsImageView;
 @property (strong, nonatomic) UIButton *recordingsBottomArrowButton;
 @property (strong, nonatomic) UIButton *recordingsTopArrowButton;
@@ -40,6 +41,10 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 @property (assign, nonatomic) PositionState currentPositionState;
 
+@property (strong, nonatomic) UIView *transitionView;
+@property (nonatomic) CGRect recordButtonOriginalFrame;
+@property (nonatomic) BOOL recordButtonEnabled;
+
 @end
 
 @implementation HomeViewController
@@ -48,6 +53,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [super viewDidLoad];
     
     self.growForLouderNoises = NO;
+    self.recordButtonEnabled = YES;
     
     self.recorderController = [RecorderController sharedRecorder];
     
@@ -61,8 +67,10 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateHighlighted];
     [self.view addSubview:self.recordButton];
     
+    self.gearsCircleImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfGearsCircle]];
+    [self.view addSubview:self.gearsCircleImageView];
     self.gearsImageView = [[GearsImageView alloc] init];
-    [self.view addSubview:self.gearsImageView];
+    [self.gearsCircleImageView addSubview:self.gearsImageView];
     
     [self setupArrowButtons];
     
@@ -88,66 +96,70 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 #pragma mark - User Actions
 
 - (void)recordButtonPressed:(UIButton *)sender {
-    
-    switch (self.recorderController.recordingState) {
-        case RecorderControllerStateStopped:
-        case RecorderControllerStatePaused:
-            // time to record
-            [[PlayerController sharedPlayer] pauseAudio];
-            [self.recorderController startRecording];
-            [self animateRecordingState];
-            
-            break;
-            
-        case RecorderControllerStateRecording: {
-            // time to stop
-            [self.recorderController pauseRecording];
-            [self.recordButton setBackgroundColor:[UIColor clearColor]];
-            __weak __typeof(self) weakSelf = self;
-            [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
-                if (error) {
-                    NSLog(@"error retrieving recording: %@", error);
-                    return;
-                }
-                [weakSelf.addNewRecordingDelegate addNewRecording:recording];
-            }];
-            
-            [self animatePauseState];
-            
-            break;
+    if (self.recordButtonEnabled) {
+        switch (self.recorderController.recordingState) {
+            case RecorderControllerStateStopped:
+            case RecorderControllerStatePaused:
+                // time to record
+                [[PlayerController sharedPlayer] pauseAudio];
+                [self.recorderController startRecording];
+                [self animateRecordingState];
+                
+                break;
+                
+            case RecorderControllerStateRecording: {
+                // time to stop
+                [self.recorderController pauseRecording];
+                [self.recordButton setBackgroundColor:[UIColor clearColor]];
+                __weak __typeof(self) weakSelf = self;
+                [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
+                    if (error) {
+                        NSLog(@"error retrieving recording: %@", error);
+                        return;
+                    }
+                    [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+                }];
+                
+                [self animatePauseState];
+                
+                break;
+            }
+            case RecorderControllerStatePausing:
+            case RecorderControllerStateStopping:
+                // can't do anything
+                break;
         }
-        case RecorderControllerStatePausing:
-        case RecorderControllerStateStopping:
-            // can't do anything
-            break;
     }
 }
 
 - (void)animateRecordingState {
+    self.recordButtonOriginalFrame = self.recordButton.frame;
+    
     self.pulsingValues = [NSMutableArray array];
     for (int i = 0; i < 15; i++) {
         [self.pulsingValues addObject:(self.growForLouderNoises) ? @1.2 : @1];
     }
     
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    self.blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    //setup transition view to hold record button stationary
+    self.transitionView = [[UIView alloc] initWithFrame:self.view.window.bounds];
+    [self.view addSubview:self.transitionView];
+    self.transitionView.center = self.recordButton.center;
+    [self.transitionView addSubview:self.recordButton];
+    self.recordButton.center = self.view.window.center;//CGRectMake(0, 0, 256, 256);
     
-    CGRect blurViewFrame = self.view.bounds;
-    self.blurView.frame = blurViewFrame;
-    [self.view addSubview:self.blurView];
-    self.blurView.alpha = 0.0f;
-    
-    self.recordButtonSnapshot.frame = self.recordButton.frame;
-    [self.view addSubview:self.recordButtonSnapshot];
+    //now take these views and make animation magic
+    CGFloat fullCircle = self.gearsCircleImageView.frame.size.height;
+    CGRect mainFrame = self.backgroundImageView.frame;
+    mainFrame.origin.y -= fullCircle;
+    CGRect gearFrame = self.gearsCircleImageView.frame;
+    gearFrame.origin.y += fullCircle;
     
     [UIView animateWithDuration:.25f animations:^{
-        self.blurView.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        [self.displayLinkController addSubscriberWithKey:@"recordButton"];
-        
-        [self.recordButtonSnapshot removeFromSuperview];
-        [self.blurView.contentView addSubview:self.recordButton];
+        self.backgroundImageView.frame = mainFrame;
+        self.gearsCircleImageView.frame = gearFrame;
     }];
+    
+    [self.displayLinkController addSubscriberWithKey:@"recordButton"];
 }
 
 - (void)animatePauseState {
@@ -160,20 +172,26 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     averagedTransformCoefficient /= self.pulsingValues.count;
     
-    self.recordButtonSnapshot.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
-    self.recordButton.transform = CGAffineTransformIdentity;
-    [self.recordButton removeFromSuperview];
-    
-    [self.view addSubview:self.recordButtonSnapshot];
+    CGFloat fullCircle = self.gearsCircleImageView.frame.size.height;
+    CGRect mainFrame = self.backgroundImageView.frame;
+    mainFrame.origin.y += fullCircle;
+    CGRect gearFrame = self.gearsCircleImageView.frame;
+    gearFrame.origin.y -= fullCircle;
     
     [UIView animateWithDuration:.25f animations:^{
-        self.recordButtonSnapshot.transform = CGAffineTransformIdentity;
-        self.blurView.alpha = 0.0f;
-    } completion:^(BOOL finished) {
-        [self.view addSubview:self.recordButton];
-        [self.recordButtonSnapshot removeFromSuperview];
+        self.backgroundImageView.frame = mainFrame;
+        self.gearsCircleImageView.frame = gearFrame;
     }];
     
+    self.recordButton.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
+    
+    [UIView animateWithDuration:.25f animations:^{
+        self.recordButton.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        [self.view addSubview:self.recordButton];
+        self.recordButton.frame = self.recordButtonOriginalFrame;
+        [self.transitionView removeFromSuperview];
+    }];
 }
 
 - (void)popAnimationCompleted {
@@ -187,39 +205,43 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 #pragma mark - PanGestureRecognizer
 
 - (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
+    
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        
         [self.movementDelegate shouldCancelMoveAnimations];
+        self.recordButtonEnabled = NO;
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
         [self.movementDelegate shouldMoveWithTranslation:translation];
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
-        NSLog(@"%f y velocity", [gestureRecognizer velocityInView:gestureRecognizer.view].y);
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        
         NSInteger velocityHorizon = 200;
         CGPoint velocity = [gestureRecognizer velocityInView:gestureRecognizer.view];
         BOOL isPanningUp = velocity.y < 0;
         CGFloat currentY = self.view.frame.origin.y;
         
         if (currentY > [self backgroundImageRecordingsStateYOffset]) {
-            [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
+            [self moveToPlayerState];
         } else if (currentY > [self backgroundImageHomeStateYOffset]) {
             // in between recordings and home
             if (abs(velocity.y) < velocityHorizon) {
                 // move based on location
                 if (abs(currentY - [self backgroundImageRecordingsStateYOffset]) < abs(currentY - [self backgroundImageHomeStateYOffset])) {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
+                    [self moveToPlayerState];
                 } else {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                    [self moveToHomeState];
                 }
             } else {
                 // move based on velocity direction
                 if (isPanningUp) {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                    [self moveToHomeState];
                 } else {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
+                    [self moveToPlayerState];
                 }
             }
         } else if (currentY > [self backgroundImageSettingsStateYOffset]) {
@@ -228,26 +250,22 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                 // move based on location
                 
                 if (abs(currentY - [self backgroundImageHomeStateYOffset]) < abs(currentY - [self backgroundImageSettingsStateYOffset])) {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                    [self moveToHomeState];
                 } else {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
+                    [self moveToSettingState];
                 }
                 
             } else {
                 // move based on velocity direction
                 if (isPanningUp) {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
+                    [self moveToSettingState];
                 } else {
-                    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+                    [self moveToHomeState];
                 }
             }
         } else {
-            [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
+            [self moveToSettingState];
         }
-        
-        
-        
-//        [self.movementDelegate shouldMoveToPositionState:[self nextPositionStateWhenMovingUp:isMovingUp fromState:NSNotFound]];
     }
 }
 
@@ -272,6 +290,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                 return PositionStateHome;
             }
         default:
+            return PositionStateHome;
             break;
     }
 }
@@ -287,89 +306,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     return [self.backgroundImageView pointInside:[gestureRecognizer locationInView:self.backgroundImageView] withEvent:UIEventTypeTouches];
 }
 
-//- (void)handleRecordingsToHomeTap:(UITapGestureRecognizer *)gestureRecognizer {
-//    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-//        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-//        [self.movementDelegate shouldMoveWithTranslation:translation];
-//        [self rotateGearsWithTranslation:translation];
-//        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
-//    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-//        self.displayLink.paused = NO;
-//        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
-//        } else {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
-//        }
-//    }
-//}
-//
-//- (void)handleHomeToRecordingsTap:(UITapGestureRecognizer *)gestureRecognizer {
-//    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-//        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-//        [self.movementDelegate shouldMoveWithTranslation:translation];
-//        [self rotateGearsWithTranslation:translation];
-//        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
-//    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-//        self.displayLink.paused = NO;
-//        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateRecordings];
-//        } else {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
-//        }
-//    }
-//}
-//
-//- (void)handleHomeToSettingsTap:(UITapGestureRecognizer *)gestureRecognizer {
-//    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-//        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-//        [self.movementDelegate shouldMoveWithTranslation:translation];
-//        [self rotateGearsWithTranslation:translation];
-//        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
-//    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-//        self.displayLink.paused = NO;
-//        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y < 0) {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
-//        } else {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
-//        }
-//    }
-//}
-//
-//- (void)handleSettingsToHomeTap:(UITapGestureRecognizer *)gestureRecognizer {
-//    if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-//        CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-//        [self.movementDelegate shouldMoveWithTranslation:translation];
-//        [self rotateGearsWithTranslation:translation];
-//        [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
-//    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-//        self.displayLink.paused = NO;
-//        if ([gestureRecognizer velocityInView:gestureRecognizer.view].y > 0) {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateHome];
-//        } else {
-//            [self.movementDelegate shouldMoveToPositionState:HomeViewContollerPositionStateSettings];
-//        }
-//    }
-//}
-
-- (void)setupArrowButtons {
-    self.recordingsTopArrowButton= [[UIButton alloc] init];
-    [self.view addSubview:self.recordingsTopArrowButton];
-    [self.recordingsTopArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.recordingsBottomArrowButton = [[UIButton alloc] init];
-    [self.view addSubview:self.recordingsBottomArrowButton];
-    [self.recordingsBottomArrowButton addTarget:self action:@selector(moveToPlayerState) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.settingsTopArrowButton = [[UIButton alloc] init];
-    [self.view addSubview:self.settingsTopArrowButton];
-    [self.settingsTopArrowButton addTarget:self action:@selector(moveToSettingState) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.settingsBottomArrowButton = [[UIButton alloc] init];
-    [self.view addSubview:self.settingsBottomArrowButton];
-    [self.settingsBottomArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
-}
-
 - (void)moveToHomeState {
+    self.recordButtonEnabled = YES;
     [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
 }
 
@@ -426,18 +364,30 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                                              gestureSizeWidthConstant,
                                              gestureSizeHeightConstant);
     
-//    self.recordingsBottomArrowButton.backgroundColor = [UIColor redColor];
-//    self.recordingsBottomArrowButton.alpha = .5;
-//    self.recordingsBottomArrowButton.layer.cornerRadius = 20;
-//    self.recordingsTopArrowButton.backgroundColor = [UIColor redColor];
-//    self.settingsBottomArrowButton.backgroundColor = [UIColor redColor];
-//    self.settingsTopArrowButton.backgroundColor = [UIColor redColor];
-    
     CGRect gearsFrame = self.recordButton.frame;
     gearsFrame.origin.y += windowHeight/2.0f * 1.1f;
-    self.gearsImageView.frame = gearsFrame;
+    self.gearsCircleImageView.frame = gearsFrame;
+    self.gearsImageView.frame = self.gearsCircleImageView.bounds;
     
     self.currentPositionState = PositionStateHome;
+}
+
+- (void)setupArrowButtons {
+    self.recordingsTopArrowButton= [[UIButton alloc] init];
+    [self.view addSubview:self.recordingsTopArrowButton];
+    [self.recordingsTopArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.recordingsBottomArrowButton = [[UIButton alloc] init];
+    [self.view addSubview:self.recordingsBottomArrowButton];
+    [self.recordingsBottomArrowButton addTarget:self action:@selector(moveToPlayerState) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.settingsTopArrowButton = [[UIButton alloc] init];
+    [self.view addSubview:self.settingsTopArrowButton];
+    [self.settingsTopArrowButton addTarget:self action:@selector(moveToSettingState) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.settingsBottomArrowButton = [[UIButton alloc] init];
+    [self.view addSubview:self.settingsBottomArrowButton];
+    [self.settingsBottomArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (CGRect)frameForState:(PositionState)state {
@@ -474,6 +424,11 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 - (CGFloat)backgroundImageSettingsStateYOffset {
     CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.09f;
+    return [self backgroundImageHomeStateYOffset] - backgroundImageYOffsetToNewState;
+}
+
+- (CGFloat)backgroundImageCurrentlyRecordingStateYOffset {
+    CGFloat backgroundImageYOffsetToNewState = self.recordButton.frame.size.height/2;
     return [self backgroundImageHomeStateYOffset] - backgroundImageYOffsetToNewState;
 }
 
