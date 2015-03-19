@@ -13,43 +13,37 @@
 @class Recording;
 @class AVAsset;
 
-@protocol EditingStateChangedDelegate <NSObject>
-
-//- (BOOL)shouldChangeEditingStateForCellModel:(RecordingCellModel *)cellModel;
-- (void)editingModeTurnedOn:(RecordingCellModel *)cellModel;
-- (void)editingModeTurnedOff:(RecordingCellModel *)cellModel;
-
-@end
 
 typedef NS_ENUM(NSUInteger, CellState) {
     CellStateDefault = 1,
     CellStateEditing,
-    CellStatePlaying,
-    CellStatePlayingAndEditing
+    CellStatePaused,
+    CellStatePlaying
 };
+
+
+@protocol RecordingCellModelDelegate <NSObject>
+
+- (void)editingPressedOnCellModel:(RecordingCellModel *)cellModel;
+
+@end
+
 
 @interface RecordingCellModel : NSObject
 
+@property (nonatomic, weak) id<RecordingCellModelDelegate> delegate;
 @property (nonatomic, assign, readonly) CellState state;
-@property (nonatomic, weak) id<EditingStateChangedDelegate> editingStateChangedDelegate;
+@property (nonatomic, assign) BOOL playing;
+@property (nonatomic, assign) BOOL paused;
+@property (nonatomic, assign) BOOL editing;
 
 @property (nonatomic, strong, readonly) Recording *recording;
-@property (nonatomic, weak ,readonly) NSString *length;
-@property (nonatomic, weak ,readonly) NSString *date;
-@property (nonatomic, weak ,readonly) NSString *title;
-@property (nonatomic, weak, readonly) NSArray *tags;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;
 
-- (instancetype)initWithRecording:(Recording *)recording delegate:(id<EditingStateChangedDelegate>)editingStateDelegate;
+- (instancetype)initWithRecording:(Recording *)recording delegate:(id<RecordingCellModelDelegate>)editingStateDelegate;
 - (CGFloat)heightForState;
 
-- (void)editModeToggled;
-//- (void)playModeToggled;
-
-- (void)turnOffEditingState;
-- (void)turnOnEditingState;
-- (void)turnOnPlayingState;
-- (void)turnOffPlayingState;
+- (void)editingPressed;
 
 - (void)titleDidChange:(NSString *)title;
 

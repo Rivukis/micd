@@ -63,9 +63,9 @@
         self.isObserving = YES;
     }
     
-    self.title.text = cellModel.title;
-    self.titleEditingTextField.text = cellModel.title;
-    self.length.text = cellModel.length;
+    self.title.text = cellModel.recording.title;
+    self.titleEditingTextField.text = cellModel.recording.title;
+    self.length.text = cellModel.recording.lengthToDiplay;
     
     [self setupViewBasedOnState];
 }
@@ -87,11 +87,11 @@
         case CellStateEditing:
             [self setupViewForEditingState];
             break;
+        case CellStatePaused:
+            [self setupViewForPausedState];
+            break;
         case CellStatePlaying:
             [self setupViewForPlayingState];
-            break;
-        case CellStatePlayingAndEditing:
-            [self setupViewForEditingWhilePlayingState];
             break;
     }
 }
@@ -117,7 +117,7 @@
         [self.length setTextColor:[UIColor vibrantVeryDarkBlue]];
         self.titleEditingTextField.alpha = 1;
         self.titleEditingBackingView.alpha = 1;
-        //    self.contentView.backgroundColor = [UIColor vibrantVeryDarkBlue];
+//        self.contentView.backgroundColor = [UIColor orangeColor];
         [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantLightBlue]] forState:UIControlStateNormal];
     }];
 }
@@ -126,15 +126,26 @@
     self.title.alpha = 1;
     self.titleEditingTextField.alpha = 0;
     self.titleEditingBackingView.alpha = 0;
+//    self.contentView.backgroundColor = [UIColor blueColor];
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
 }
 
-- (void)setupViewForEditingWhilePlayingState {
+- (void)setupViewForPausedState {
     self.title.alpha = 0;
     self.titleEditingTextField.alpha = 1;
     self.titleEditingBackingView.alpha = 1;
-//    self.contentView.backgroundColor = [UIColor magentaColor];
+//    self.contentView.backgroundColor = [UIColor cyanColor];
 }
+
+- (void)changeViewForCellBeingEdited {
+    [self bindToModel:self.cellModel];
+    
+    if (self.cellModel.state != CellStateEditing) {
+//        self.contentView.backgroundColor = [UIColor yellowColor];
+    }
+}
+
+#pragma mark - User Actions
 
 - (IBAction)editButtonPressed:(UIButton *)sender {
     if ([self.titleEditingTextField isFirstResponder]) {
@@ -145,7 +156,7 @@
         [self setupEditingViews];
     }
     
-    [self.cellModel editModeToggled];
+    [self.cellModel editingPressed];
 }
 
 - (void)prepareForReuse {
@@ -154,11 +165,6 @@
         self.isObserving = NO;
     }
     self.cellModel = nil;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [self.cellModel titleDidChange:self.titleEditingTextField.text];
-    [self bindToModel:object];
 }
 
 - (void)setupEditingViews {
@@ -198,8 +204,14 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.cellModel turnOffEditingState];
+    [textField resignFirstResponder];
+    [self.cellModel editingPressed];
     return YES;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [self.cellModel titleDidChange:self.titleEditingTextField.text];
+    [self bindToModel:object];
 }
 
 @end

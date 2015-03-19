@@ -15,6 +15,6 @@
 @property (nonatomic, strong, readonly) RecordingCellModel *cellModel;
 
 - (void)bindToModel:(RecordingCellModel *)cellModel;
-- (void)setupViewBasedOnState;
+- (void)changeViewForCellBeingEdited;
 
 @end
