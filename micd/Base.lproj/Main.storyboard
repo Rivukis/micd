@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -81,22 +81,8 @@
                                                             <rect key="frame" x="1" y="2" width="367" height="41"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
-                                                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JC1-Zx-PeM">
-                                                            <rect key="frame" x="329" y="8" width="46" height="30"/>
-                                                            <color key="backgroundColor" red="0.34509803919999998" green="0.75686274509999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="46" id="Z7Y-Rp-eO2"/>
-                                                                <constraint firstAttribute="height" constant="30" id="esV-R9-ph4"/>
-                                                            </constraints>
-                                                            <state key="normal" title="Button">
-                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                            </state>
-                                                            <connections>
-                                                                <action selector="editButtonPressed:" destination="h6X-Tg-WWs" eventType="touchUpInside" id="jWu-9r-CUA"/>
-                                                            </connections>
-                                                        </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="Confrontation with pops" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BN1-qM-S08">
-                                                            <rect key="frame" x="13" y="11" width="270" height="24"/>
+                                                            <rect key="frame" x="13" y="11" width="308" height="24"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" priority="100" constant="258" id="urS-PM-Z0c"/>
@@ -106,7 +92,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="24:36" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8S-eY-TQI">
-                                                            <rect key="frame" x="291" y="8" width="38" height="30"/>
+                                                            <rect key="frame" x="329" y="14.5" width="38" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" priority="200" constant="54" id="Pet-1s-Vhf"/>
@@ -131,16 +117,13 @@
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstItem="c8S-eY-TQI" firstAttribute="centerY" secondItem="BN1-qM-S08" secondAttribute="centerY" id="5Ez-NF-btV"/>
+                                                        <constraint firstAttribute="trailing" secondItem="c8S-eY-TQI" secondAttribute="trailing" constant="8" id="6IX-T7-Qu3"/>
                                                         <constraint firstItem="a6e-35-vIJ" firstAttribute="top" secondItem="bfh-Da-2Rz" secondAttribute="top" constant="2" id="7zv-Th-ZtA"/>
                                                         <constraint firstAttribute="centerY" secondItem="a6e-35-vIJ" secondAttribute="centerY" id="81s-4I-p7U"/>
-                                                        <constraint firstItem="JC1-Zx-PeM" firstAttribute="centerY" secondItem="c8S-eY-TQI" secondAttribute="centerY" id="954-qs-vcd"/>
                                                         <constraint firstItem="BN1-qM-S08" firstAttribute="leading" secondItem="bfh-Da-2Rz" secondAttribute="leading" constant="13" id="9mu-Py-ucv"/>
-                                                        <constraint firstItem="c8S-eY-TQI" firstAttribute="height" secondItem="JC1-Zx-PeM" secondAttribute="height" id="E7Y-qY-F6V"/>
                                                         <constraint firstItem="c8S-eY-TQI" firstAttribute="leading" secondItem="BN1-qM-S08" secondAttribute="trailing" constant="8" id="Ep5-QN-Mo2"/>
                                                         <constraint firstAttribute="bottom" secondItem="a6e-35-vIJ" secondAttribute="bottom" constant="2" id="HUh-jb-Qz7"/>
-                                                        <constraint firstAttribute="trailing" secondItem="JC1-Zx-PeM" secondAttribute="trailing" id="Hus-rT-5Ly"/>
                                                         <constraint firstItem="BN1-qM-S08" firstAttribute="top" secondItem="bfh-Da-2Rz" secondAttribute="top" constant="11" id="QEd-30-mlb"/>
-                                                        <constraint firstItem="JC1-Zx-PeM" firstAttribute="leading" secondItem="c8S-eY-TQI" secondAttribute="trailing" id="fRC-DA-FL3"/>
                                                         <constraint firstAttribute="trailing" secondItem="a6e-35-vIJ" secondAttribute="trailing" constant="7" id="gkl-U4-CRV"/>
                                                         <constraint firstAttribute="centerY" secondItem="BN1-qM-S08" secondAttribute="centerY" id="mg2-kz-X4t"/>
                                                         <constraint firstAttribute="bottom" secondItem="OOq-uT-06l" secondAttribute="bottom" id="p7x-XF-fzV"/>
@@ -154,7 +137,6 @@
                                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 <connections>
                                                     <outlet property="bottomSeparator" destination="OOq-uT-06l" id="lrf-nC-HdM"/>
-                                                    <outlet property="editButton" destination="JC1-Zx-PeM" id="q3y-uy-dIe"/>
                                                     <outlet property="length" destination="c8S-eY-TQI" id="I18-lU-FCA"/>
                                                     <outlet property="roundedBackerView" destination="a6e-35-vIJ" id="UvL-tm-WOk"/>
                                                     <outlet property="title" destination="BN1-qM-S08" id="Pb8-XK-Oxg"/>

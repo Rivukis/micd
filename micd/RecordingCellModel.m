@@ -8,8 +8,6 @@
 
 #import "RecordingCellModel.h"
 #import "Recording.h"
-#import <UIKit/UIKit.h>
-#import "DataSourceController.h"
 #import "MTKValidKeyPath.h"
 
 @interface RecordingCellModel ()
@@ -20,56 +18,12 @@
 
 @implementation RecordingCellModel
 
-- (instancetype)initWithRecording:(Recording *)recording delegate:(id<RecordingCellModelDelegate>)editingStateDelegate {
+- (instancetype)initWithRecording:(Recording *)recording {
     self = [super init];
     if (self) {
         _recording = recording;
-        _delegate = editingStateDelegate;
     }
     return self;
-}
-
-- (CellState)state {
-    if (self.editing) {
-        return CellStateEditing;
-    }
-    if (self.playing) {
-        return CellStatePlaying;
-    }
-    if (self.paused) {
-        return CellStatePaused;
-    }
-    
-    return CellStateDefault;
-}
-
-+ (NSSet *)keyPathsForValuesAffectingState {
-    return [NSSet setWithArray:
-            @[MTK_VALID_KEY(RecordingCellModel, playing),
-              MTK_VALID_KEY(RecordingCellModel, paused),
-              MTK_VALID_KEY(RecordingCellModel, editing)
-              ]];
-}
-
-- (void)setPlaying:(BOOL)playing {
-    _paused = NO;
-    _playing = playing;
-}
-
-- (void)setPaused:(BOOL)paused {
-    _playing = NO;
-    _paused = paused;
-}
-
-- (void)editingPressed {
-    [self.delegate editingPressedOnCellModel:self];
-}
-
-- (void)titleDidChange:(NSString *)title {
-    if (title.length > 0 && ![self.recording.title isEqualToString:title]) {
-        self.recording.title = title;
-        [[DataSourceController sharedDataSource] saveData];
-    }
 }
 
 - (CGFloat)heightForState {

@@ -11,7 +11,7 @@
 #import "DisplayLinkController.h"
 #import "RecordingsView.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, RecordingCellModelDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
@@ -40,8 +40,7 @@
 
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
 
-@property (strong, nonatomic) RecordingCellModel *cellModelBeingEdited;
-@property (strong, nonatomic) RecordingCellModel *cellModelBeingPlayedOrPaused;
+@property (strong, nonatomic) RecordingCellModel *focusedCellModel;
 
 
 @end
@@ -89,7 +88,7 @@
 }
 
 - (void)reloadData {
-    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
+    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
     [self.tableView reloadData];
     if (self.tableBottomBorder.hidden == YES && self.dataSource.recordings.count) {
         self.tableBottomBorder.hidden = NO;
@@ -158,9 +157,10 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
         RecordingCellModel *mostRecentCellModel = [firstSection cellModelAtIndex:0];
-        [self readyPlayerWithRecording:mostRecentCellModel.recording];
-        self.cellModelBeingPlayedOrPaused = mostRecentCellModel;
-        mostRecentCellModel.paused = YES;
+        self.focusedCellModel = mostRecentCellModel;
+        
+        [self readyPlayerWithRecording:self.focusedCellModel.recording];
+        self.focusedCellModel.state = CellStatePaused;
     }
 }
 
@@ -329,9 +329,7 @@
 #pragma mark - PlayerControllerDelegate
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
-    if (self.cellModelBeingPlayedOrPaused) {
-        self.cellModelBeingPlayedOrPaused.paused = YES;;
-    }
+    self.focusedCellModel.state = CellStatePaused;
     
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
@@ -384,52 +382,27 @@
     return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
 }
 
-#pragma mark - EditingStateChangedDelegate
-
-- (void)editingPressedOnCellModel:(RecordingCellModel *)cellModel {
-    BOOL turningOffEditingMode = self.cellModelBeingEdited == cellModel;
-    
-    if (self.cellModelBeingEdited) {
-        self.cellModelBeingEdited.editing = NO;
-        self.cellModelBeingEdited = nil;
-    }
-    
-    if (!turningOffEditingMode) {
-        self.cellModelBeingEdited = cellModel;
-        cellModel.editing = YES;
-    }
-    
-    for (RecordingCell *cell in self.tableView.visibleCells) {
-        [cell changeViewForCellBeingEdited:!turningOffEditingMode];
-    }
-    
-    [self.tableView reloadData];
-}
-
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     
-    if (self.cellModelBeingPlayedOrPaused == recordingCellModel) {
-        if (self.playerController.playerState == PlayerControllerStatePlaying) {
+    if (self.focusedCellModel == recordingCellModel) {
+        if (self.focusedCellModel.state == CellStatePlaying) {
+            self.focusedCellModel.state = CellStatePaused;
             [self pausePlayback];
-            self.cellModelBeingPlayedOrPaused.paused = YES;
         } else {
+            self.focusedCellModel.state = CellStatePlaying;
             [self playPlayback];
-            self.cellModelBeingPlayedOrPaused.playing = YES;
         }
     } else {
-        if (self.cellModelBeingPlayedOrPaused) {
-            self.cellModelBeingPlayedOrPaused.playing = NO;
-            self.cellModelBeingPlayedOrPaused.paused = NO;
-        }
+        self.focusedCellModel.state = CellStateDefault;
+        self.focusedCellModel = recordingCellModel;
         
-        self.cellModelBeingPlayedOrPaused = recordingCellModel;
-        [self readyPlayerWithRecording:recordingCellModel.recording];
+        [self readyPlayerWithRecording:self.focusedCellModel.recording];
         [self playPlayback];
-        recordingCellModel.playing = YES;
+        self.focusedCellModel.state = CellStatePlaying;
     }
 }
 
@@ -441,12 +414,11 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         RecordingsSection *editingRecordingsSection = self.sections[indexPath.section];
         RecordingCellModel *editingCellModel = [editingRecordingsSection cellModelAtIndex:indexPath.row];
-        Recording *editingRecording = editingCellModel.recording;
         
         BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
         
-        [self.dataSource deleteRecording:editingRecording];
-        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
+        [self.dataSource deleteRecording:editingCellModel.recording];
+        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
         
         if (deletingSection) {
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -454,15 +426,15 @@
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         
-        if ([editingRecording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
+        if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
             NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
-            Recording *toLoadRecording = nil;
             if (nextToLoadIndexPath != nil) {
                 RecordingsSection *toLoadSection = self.sections[nextToLoadIndexPath.section];
-                RecordingCellModel *toLoadCellModel = [toLoadSection cellModelAtIndex:nextToLoadIndexPath.row];
-                toLoadRecording = toLoadCellModel.recording;
+                self.focusedCellModel = [toLoadSection cellModelAtIndex:nextToLoadIndexPath.row];
+                
+                self.focusedCellModel.state = CellStatePaused;
+                [self readyPlayerWithRecording:self.focusedCellModel.recording];
             }
-            [self readyPlayerWithRecording:toLoadRecording];
         }
     }
 }
@@ -483,8 +455,6 @@
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     [cell bindToModel:recordingCellModel];
-    
-    [cell changeViewForCellBeingEdited:(self.cellModelBeingEdited != nil)];
     
     return cell;
 }
@@ -520,12 +490,6 @@
     
     headerView.backgroundColor = [UIColor blackColor];
     
-    if (self.cellModelBeingEdited) {
-//        headerView.backgroundColor = [UIColor yellowColor];
-        headerTitleLabel.textColor = [UIColor vibrantDarkBlue];
-        bottomBorderView.backgroundColor = [UIColor vibrantDarkBlue];
-    }
-    
     return headerView;
 }
 
@@ -539,13 +503,6 @@
     borderView.backgroundColor = [UIColor clearColor];
     [footerView addSubview:borderView];
     return footerView;
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-//    if (self.cellModelBeingEdited) {
-//        self.cellModelBeingEdited.editing = NO;
-//        self.cellModelBeingEdited = nil;
-//    }
 }
 
 // ----- use for resizing the tableview -----
