@@ -34,6 +34,7 @@
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
 		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
+		D0BA6D031AB906D800F6B3FF /* icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D0BA6D021AB906D800F6B3FF /* icon.pdf */; };
 		D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BD55821AB6690600A73485 /* RecordingsView.m */; };
 		D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSourceController.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
@@ -105,6 +106,7 @@
 		D09A69EF1A86EFC500A2C347 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		D0B0DE451A8DA10200C88773 /* GearsImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearsImageView.h; sourceTree = "<group>"; };
 		D0B0DE461A8DA10200C88773 /* GearsImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearsImageView.m; sourceTree = "<group>"; };
+		D0BA6D021AB906D800F6B3FF /* icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = icon.pdf; sourceTree = "<group>"; };
 		D0BD55811AB6690600A73485 /* RecordingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsView.h; sourceTree = "<group>"; };
 		D0BD55821AB6690600A73485 /* RecordingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsView.m; sourceTree = "<group>"; };
 		D0C67CCE1A8EF917000F501A /* DataSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSourceController.h; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 			children = (
 				D05D75731A79AAA40050A49C /* AppDelegate.h */,
 				D05D75741A79AAA40050A49C /* AppDelegate.m */,
+				D0BA6D021AB906D800F6B3FF /* icon.pdf */,
 				D05D757C1A79AAA40050A49C /* Images.xcassets */,
 				D05D757E1A79AAA40050A49C /* LaunchScreen.xib */,
 				D05D75701A79AAA40050A49C /* Info.plist */,
@@ -409,6 +412,7 @@
 			files = (
 				D05D757B1A79AAA40050A49C /* Main.storyboard in Resources */,
 				D05D75801A79AAA40050A49C /* LaunchScreen.xib in Resources */,
+				D0BA6D031AB906D800F6B3FF /* icon.pdf in Resources */,
 				D05D757D1A79AAA40050A49C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
