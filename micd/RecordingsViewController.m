@@ -387,17 +387,23 @@
 #pragma mark - EditingStateChangedDelegate
 
 - (void)editingPressedOnCellModel:(RecordingCellModel *)cellModel {
-    BOOL isSameCellModel = self.cellModelBeingEdited == cellModel;
+    BOOL turningOffEditingMode = self.cellModelBeingEdited == cellModel;
     
     if (self.cellModelBeingEdited) {
         self.cellModelBeingEdited.editing = NO;
         self.cellModelBeingEdited = nil;
     }
     
-    if (!isSameCellModel) {
+    if (!turningOffEditingMode) {
         self.cellModelBeingEdited = cellModel;
         cellModel.editing = YES;
     }
+    
+    for (RecordingCell *cell in self.tableView.visibleCells) {
+        [cell changeViewForCellBeingEdited:!turningOffEditingMode];
+    }
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate
@@ -478,9 +484,7 @@
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     [cell bindToModel:recordingCellModel];
     
-    if (self.cellModelBeingEdited) {
-        [cell changeViewForCellBeingEdited];
-    }
+    [cell changeViewForCellBeingEdited:(self.cellModelBeingEdited != nil)];
     
     return cell;
 }
@@ -515,6 +519,12 @@
     [headerView addSubview:headerTitleLabel];
     
     headerView.backgroundColor = [UIColor blackColor];
+    
+    if (self.cellModelBeingEdited) {
+//        headerView.backgroundColor = [UIColor yellowColor];
+        headerTitleLabel.textColor = [UIColor vibrantDarkBlue];
+        bottomBorderView.backgroundColor = [UIColor vibrantDarkBlue];
+    }
     
     return headerView;
 }
