@@ -362,8 +362,6 @@
 }
 
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
-    // TODO: tableview is now sorting from newest to oldest top down -- this method needs to reflect the change
-    
     if (self.sections.count == 0) {
         return nil;
     }
@@ -371,35 +369,39 @@
     NSInteger nextSelectedSection;
     NSInteger nextSelectedRow;
     
-    //TODO: decisions need to be made as to which is the best next cell to be selected when the previously selected row has been deleted
-    
     if (isSectionDeleted) {
-        if (self.sections.count > indexPath.section) {
-            // first row in next section
-            nextSelectedSection++;
+        BOOL isSectionAfterDeletedSection = indexPath.section >= self.sections.count;
+        
+        if (isSectionAfterDeletedSection) {
+            // select first object of next section
+            nextSelectedSection = indexPath.section;
             nextSelectedRow = 0;
         } else {
-            // last row in previous section (only when last section was deleted)
-            nextSelectedSection = self.sections.count - 1;
+            // else select last object of previous section
+            nextSelectedSection = indexPath.section - 1;
             RecordingsSection *previousSection = self.sections[nextSelectedSection];
             nextSelectedRow = previousSection.numberOfCellModels - 1;
         }
     } else {
         RecordingsSection *currentSection = self.sections[indexPath.section];
-        if (currentSection.numberOfCellModels <= indexPath.row) {
-            // no cell models below deleted cell in current section
-            if (self.sections.count > indexPath.section + 1) {
-                // first row in next section
+        BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
+        
+        if (isRowAfterDeletedRow) {
+            // select next cell
+            nextSelectedSection = indexPath.section;
+            nextSelectedRow = indexPath.row;
+        } else {
+            BOOL isSectionAfterCurrentSection = indexPath.section >= self.sections.count - 1;
+            
+            if (isSectionAfterCurrentSection) {
+                // else select first cell of next section
                 nextSelectedSection = indexPath.section + 1;
                 nextSelectedRow = 0;
             } else {
-                // select previous row of current section (only when in last section)
+                // else select previous cell
                 nextSelectedSection = indexPath.section;
                 nextSelectedRow = indexPath.row - 1;
             }
-        } else {
-            nextSelectedSection = indexPath.section;
-            nextSelectedRow = indexPath.row;
         }
     }
     
