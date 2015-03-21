@@ -13,23 +13,27 @@
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     
     if (![super pointInside:point withEvent:event]) {
-        //not the right parent view
+        NSLog(@"not even");
         return NO;
     }
     
     CGPoint convertedPointForPlaybackContainerView = [self.playbackContainerView convertPoint:point fromView:self];
     BOOL isInsidePlaybackContainerView = [self.playbackContainerView pointInside:convertedPointForPlaybackContainerView withEvent:event];
     
+    if (!isInsidePlaybackContainerView) {
+        return YES;
+    }
+    
     for (UIView *playerControl in self.playerControlElements) {
         CGPoint convertedPointForPlayerControl = [playerControl convertPoint:point fromView:self];
         BOOL isInsidePlayerControl = [playerControl pointInside:convertedPointForPlayerControl withEvent:event];
         
         if (isInsidePlaybackContainerView && isInsidePlayerControl) {
-            //hit button
+            NSLog(@"hit button");
             return YES;
         }
     }
-    //allow pan
+    NSLog(@"allow pan");
     return NO;
 }
 
