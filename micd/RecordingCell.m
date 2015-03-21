@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UIView *roundedBackerView;
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UILabel *length;
-@property (weak, nonatomic) IBOutlet UIButton *editButton;
 
 @property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
 @property (assign, nonatomic) BOOL isObserving;
@@ -44,8 +43,8 @@
     _cellModel = cellModel;
     
     self.backgroundColor = [UIColor clearColor];
-    self.editButton.backgroundColor = [UIColor clearColor];
     self.title.textColor = [UIColor vibrantLightBlueText];
+    self.length.textColor = [UIColor vibrantLightBlueText];
     
     if (!self.isObserving) {
         [cellModel addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];

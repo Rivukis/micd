@@ -8,17 +8,12 @@
 #import "Recording.h"
 #import "ViewAnimator.h"
 
-@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, PlayerControlsDelegate>
+@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
 @property (strong, nonatomic) DataSourceController *dataSource;
-
-@property (weak, nonatomic) IBOutlet UIButton *rewindButton;
-@property (weak, nonatomic) IBOutlet UIButton *forwardButton;
-@property (weak, nonatomic) IBOutlet UIButton *playPauseButton;
-@property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
 
 @property (assign, nonatomic) BOOL didSetInitialFrames;
 
@@ -35,9 +30,6 @@
     
     self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
     self.view.backgroundColor = [UIColor blackColor];
-    self.rewindButton.backgroundColor = [UIColor clearColor];
-    self.forwardButton.backgroundColor = [UIColor clearColor];
-    self.playPauseButton.backgroundColor = [UIColor clearColor];
     
     self.homeViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([HomeViewController class])];
     [self addChildViewController:self.homeViewController];
@@ -50,13 +42,6 @@
     [self addChildViewController:self.recordingsViewController];
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
-    self.recordingsViewController.playerControlsDelegate = self;
-    
-    [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
-    [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
-    [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
-    [self.volumeSlider setThumbImage:[WireTapStyleKit imageOfThumbImage] forState:UIControlStateNormal];
-    self.volumeSlider.minimumTrackTintColor = [UIColor vibrantBlue];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -66,34 +51,6 @@
         [self setInitialStateFrame];
         self.didSetInitialFrames = YES;
     }
-}
-
-#pragma mark - Player Controls
-
-- (IBAction)playPauseButtonPressed:(id)sender {
-    if (self.recordingsViewController.playerState == PlayerControllerStatePaused) {
-        [self.recordingsViewController playPlayback];
-    } else {
-        [self.recordingsViewController pausePlayback];
-    }
-}
-
-- (IBAction)rewindButtonPressed:(id)sender {
-    [self.recordingsViewController offsetPlaybackByTimeInterval:-15.0f];
-}
-
-- (IBAction)fastforwardButtonPressed:(id)sender {
-    [self.recordingsViewController offsetPlaybackByTimeInterval:30.0f];
-}
-
-#pragma mark - PlayerControlsDelegate
-
-- (void)shouldUpdatePLayPauseButtonForPlayState {
-    [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
-}
-
-- (void)shouldUpdatePLayPauseButtonForPauseState {
-    [self.playPauseButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
 }
 
 #pragma mark - AddNewRecordingDelegate

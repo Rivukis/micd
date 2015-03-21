@@ -10,7 +10,7 @@
 
 @interface RecordingsView : UIView
 
-@property (weak, nonatomic) UIView *progressTimeIndicatorView;
+@property (strong, nonatomic) NSArray *playerControlElements;
 @property (weak, nonatomic) UIView *playbackContainerView;
 
 @end

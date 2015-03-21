@@ -11,18 +11,22 @@
 #import "DisplayLinkController.h"
 #import "RecordingsView.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
 
 @property (weak, nonatomic) IBOutlet UIView *playbackView;
 @property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentPlaybackTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalPlaybackTimeLabel;
+
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (weak, nonatomic) IBOutlet UIButton *rewindButton;
+@property (weak, nonatomic) IBOutlet UIButton *forwardButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
+
 @property (strong, nonatomic) PlayerController *playerController;
 @property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
 @property (strong, nonatomic) SCWaveformView *waveformView;
@@ -55,14 +59,8 @@
     
     self.dataSource = [DataSourceController sharedDataSource];
     self.playerController = [PlayerController sharedPlayer];
-    self.playerController.delegate = self;
     
     self.isFirstTimeLayingOutSubviews = YES;
-    
-    ////this might not end up being used
-    self.roundedTableBackerView.backgroundColor = [UIColor blackColor];
-    self.roundedTableBackerView.clipsToBounds = YES;
-    //    self.roundedTableBackerView.layer.cornerRadius = 14;
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -74,6 +72,13 @@
     self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     self.playbackTitleLabel.textColor = [UIColor vibrantLightBlueText];
     self.totalPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
+    
+    [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
+    [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
+    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
+    self.rewindButton.backgroundColor = [UIColor clearColor];
+    self.forwardButton.backgroundColor = [UIColor clearColor];
+    self.playButton.backgroundColor = [UIColor clearColor];
     
     [self.editButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
@@ -90,9 +95,7 @@
     
     if ([self mostRecentRecording]) {
         self.tableBottomBorder.hidden = NO;
-        self.playbackTitleLabel.hidden = NO;
-        self.currentPlaybackTimeLabel.hidden = NO;
-        self.totalPlaybackTimeLabel.hidden = NO;
+        self.playbackView.hidden = NO;
     }
 }
 
@@ -101,9 +104,7 @@
     [self.tableView reloadData];
     if (self.tableBottomBorder.hidden == YES && self.dataSource.recordings.count) {
         self.tableBottomBorder.hidden = NO;
-        self.playbackTitleLabel.hidden = NO;
-        self.currentPlaybackTimeLabel.hidden = NO;
-        self.totalPlaybackTimeLabel.hidden = NO;
+        self.playbackView.hidden = NO;
         [self readyPlayerWithRecording:[self mostRecentRecording]];
     }
 }
@@ -144,7 +145,7 @@
         [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
         self.progressTimeIndicatorView.userInteractionEnabled = YES;
         [self.playbackView addSubview:self.progressTimeIndicatorView];
-        ((RecordingsView *)self.view).progressTimeIndicatorView = self.progressTimeIndicatorView;
+        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton];
         ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
         
         [self readyPlayerWithRecording:[self mostRecentRecording]];
@@ -203,7 +204,7 @@
     self.view.frame = CGRectMake(0,
                                  (self.view.window.frame.size.height * 1.068f) * -1,
                                  self.view.window.frame.size.width,
-                                 screenSize.size.height * 0.82f);
+                                 screenSize.size.height);
 }
 
 - (CGRect)frameForState:(PositionState)state {
@@ -228,6 +229,24 @@
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
+}
+
+#pragma mark - Player Buttons
+
+- (IBAction)playPauseButtonPressed:(id)sender {
+    if (self.playerState == PlayerControllerStatePaused) {
+        [self playPlayback];
+    } else {
+        [self pausePlayback];
+    }
+}
+
+- (IBAction)rewindButtonPressed:(id)sender {
+    [self offsetPlaybackByTimeInterval:-15.0f];
+}
+
+- (IBAction)fastforwardButtonPressed:(id)sender {
+    [self offsetPlaybackByTimeInterval:30.0f];
 }
 
 #pragma mark - PlayerController Methods
@@ -263,8 +282,6 @@
     //TODO: put player state into the player controller
     
     [self.playerController playAudio];
-    
-    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPlayState];
     [self.displayLinkController addSubscriberWithKey:@"waveform"];
 }
 
@@ -274,7 +291,6 @@
 
 - (void)pausePlaybackWhilePanning:(BOOL)isPanning {
     [self.playerController pauseAudio];
-    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPauseState];
 
     if (isPanning) {
         [self.displayLinkController addSubscriberWithKey:@"waveform"];
@@ -343,7 +359,6 @@
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self.waveformView setNeedsLayout];
-    [self.playerControlsDelegate shouldUpdatePLayPauseButtonForPauseState];
 }
 
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {

@@ -13,20 +13,24 @@
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     
     if (![super pointInside:point withEvent:event]) {
+        //not the right parent view
         return NO;
     }
     
     CGPoint convertedPointForPlaybackContainerView = [self.playbackContainerView convertPoint:point fromView:self];
     BOOL isInsidePlaybackContainerView = [self.playbackContainerView pointInside:convertedPointForPlaybackContainerView withEvent:event];
     
-    CGPoint convertedPointForProgessTimeIndicatorView = [self.progressTimeIndicatorView convertPoint:point fromView:self];
-    BOOL isInsideProgressTimeIndicatorView = [self.progressTimeIndicatorView pointInside:convertedPointForProgessTimeIndicatorView withEvent:event];
+    for (UIView *playerControl in self.playerControlElements) {
+        CGPoint convertedPointForPlayerControl = [playerControl convertPoint:point fromView:self];
+        BOOL isInsidePlayerControl = [playerControl pointInside:convertedPointForPlayerControl withEvent:event];
         
-    if (isInsidePlaybackContainerView && !isInsideProgressTimeIndicatorView) {
-        return NO;
+        if (isInsidePlaybackContainerView && isInsidePlayerControl) {
+            //hit button
+            return YES;
+        }
     }
-    
-    return YES;
+    //allow pan
+    return NO;
 }
 
 @end

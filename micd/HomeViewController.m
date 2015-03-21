@@ -57,7 +57,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     self.recorderController = [RecorderController sharedRecorder];
     
-    self.backgroundImageView = [[passthroughImageView alloc] initWithImage:[WireTapStyleKit imageOfHomeView]];
+    self.backgroundImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfHomeView]];
     [self.view addSubview:self.backgroundImageView];
     self.backgroundImageView.userInteractionEnabled = YES;
     
@@ -72,7 +72,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     self.gearsImageView = [[GearsImageView alloc] init];
     [self.gearsCircleImageView addSubview:self.gearsImageView];
     
-    [self setupArrowButtons];
+//    [self setupArrowButtons];
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
@@ -344,25 +344,25 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                                          buttonSizeConstant,
                                          buttonSizeConstant);
     
-    self.recordingsBottomArrowButton.frame = CGRectMake(windowWidth/2.0f - gestureSizeWidthConstant/2,
-                                                  windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f,
-                                                  gestureSizeWidthConstant,
-                                                  gestureSizeHeightConstant);
-    
-    self.recordingsTopArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
-                                               windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707,
-                                               gestureSizeWidthConstant,
-                                               gestureSizeHeightConstant);
-    
-    self.settingsBottomArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
-                                               (windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f) + windowHeight * 1.09f,
-                                               gestureSizeWidthConstant,
-                                               gestureSizeHeightConstant);
-    
-    self.settingsTopArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
-                                             (windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707) + windowHeight * 1.09f,
-                                             gestureSizeWidthConstant,
-                                             gestureSizeHeightConstant);
+//    self.recordingsBottomArrowButton.frame = CGRectMake(windowWidth/2.0f - gestureSizeWidthConstant/2,
+//                                                  windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f,
+//                                                  gestureSizeWidthConstant,
+//                                                  gestureSizeHeightConstant);
+//    
+//    self.recordingsTopArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
+//                                               windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707,
+//                                               gestureSizeWidthConstant,
+//                                               gestureSizeHeightConstant);
+//    
+//    self.settingsBottomArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
+//                                               (windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f) + windowHeight * 1.09f,
+//                                               gestureSizeWidthConstant,
+//                                               gestureSizeHeightConstant);
+//    
+//    self.settingsTopArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
+//                                             (windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707) + windowHeight * 1.09f,
+//                                             gestureSizeWidthConstant,
+//                                             gestureSizeHeightConstant);
     
     CGRect gearsFrame = self.recordButton.frame;
     gearsFrame.origin.y += windowHeight/2.0f * 1.1f;
@@ -371,24 +371,24 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     self.currentPositionState = PositionStateHome;
 }
-
-- (void)setupArrowButtons {
-    self.recordingsTopArrowButton= [[UIButton alloc] init];
-    [self.view addSubview:self.recordingsTopArrowButton];
-    [self.recordingsTopArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.recordingsBottomArrowButton = [[UIButton alloc] init];
-    [self.view addSubview:self.recordingsBottomArrowButton];
-    [self.recordingsBottomArrowButton addTarget:self action:@selector(moveToPlayerState) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.settingsTopArrowButton = [[UIButton alloc] init];
-    [self.view addSubview:self.settingsTopArrowButton];
-    [self.settingsTopArrowButton addTarget:self action:@selector(moveToSettingState) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.settingsBottomArrowButton = [[UIButton alloc] init];
-    [self.view addSubview:self.settingsBottomArrowButton];
-    [self.settingsBottomArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
-}
+//
+//- (void)setupArrowButtons {
+//    self.recordingsTopArrowButton= [[UIButton alloc] init];
+//    [self.view addSubview:self.recordingsTopArrowButton];
+//    [self.recordingsTopArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    self.recordingsBottomArrowButton = [[UIButton alloc] init];
+//    [self.view addSubview:self.recordingsBottomArrowButton];
+//    [self.recordingsBottomArrowButton addTarget:self action:@selector(moveToPlayerState) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    self.settingsTopArrowButton = [[UIButton alloc] init];
+//    [self.view addSubview:self.settingsTopArrowButton];
+//    [self.settingsTopArrowButton addTarget:self action:@selector(moveToSettingState) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    self.settingsBottomArrowButton = [[UIButton alloc] init];
+//    [self.view addSubview:self.settingsBottomArrowButton];
+//    [self.settingsBottomArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
+//}
 
 - (CGRect)frameForState:(PositionState)state {
     self.currentPositionState = state;
@@ -424,11 +424,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 - (CGFloat)backgroundImageSettingsStateYOffset {
     CGFloat backgroundImageYOffsetToNewState = self.view.window.frame.size.height * 1.09f;
-    return [self backgroundImageHomeStateYOffset] - backgroundImageYOffsetToNewState;
-}
-
-- (CGFloat)backgroundImageCurrentlyRecordingStateYOffset {
-    CGFloat backgroundImageYOffsetToNewState = self.recordButton.frame.size.height/2;
     return [self backgroundImageHomeStateYOffset] - backgroundImageYOffsetToNewState;
 }
 
