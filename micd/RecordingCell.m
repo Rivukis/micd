@@ -1,11 +1,3 @@
-//
-//  RecordingCell.m
-//  micd
-//
-//  Created by Timothy Hise on 2/15/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "RecordingCell.h"
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
@@ -16,16 +8,13 @@
 #import "PlayerController.h"
 #import "DataSourceController.h"
 
-@interface RecordingCell () <UITextFieldDelegate>
+@interface RecordingCell ()
 
 @property (weak, nonatomic) IBOutlet UIView *bottomSeparator;
 @property (weak, nonatomic) IBOutlet UIView *roundedBackerView;
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UILabel *length;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
-
-@property (strong, nonatomic) UIView *titleEditingBackingView;
-@property (strong, nonatomic) UITextField *titleEditingTextField;
 
 @property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
 @property (assign, nonatomic) BOOL isObserving;
@@ -36,10 +25,6 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    self.backgroundColor = [UIColor clearColor];
-    self.editButton.backgroundColor = [UIColor clearColor];
-    self.title.textColor = [UIColor vibrantLightBlueText];
     
 //    self.layer.masksToBounds = YES;
 //    self.bottomSeparator.backgroundColor = [UIColor blackColor];
@@ -58,13 +43,16 @@
 - (void)bindToModel:(RecordingCellModel *)cellModel {
     _cellModel = cellModel;
     
+    self.backgroundColor = [UIColor clearColor];
+    self.editButton.backgroundColor = [UIColor clearColor];
+    self.title.textColor = [UIColor vibrantLightBlueText];
+    
     if (!self.isObserving) {
         [cellModel addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
         self.isObserving = YES;
     }
     
     self.title.text = cellModel.recording.title;
-    self.titleEditingTextField.text = cellModel.recording.title;
     self.length.text = cellModel.recording.lengthToDiplay;
     
     [self setupViewBasedOnState];
@@ -84,9 +72,6 @@
         case CellStateDefault:
             [self setupViewForDefaultState];
             break;
-        case CellStateEditing:
-            [self setupViewForEditingState];
-            break;
         case CellStatePaused:
             [self setupViewForPausedState];
             break;
@@ -97,63 +82,15 @@
 }
 
 - (void)setupViewForDefaultState {
-    [UIView animateWithDuration:.25 animations:^{
-        self.title.alpha = 1;
-//        self.length.textColor = [UIColor vibrantLightBlueText];
-        self.titleEditingTextField.alpha = 0;
-        self.titleEditingBackingView.alpha = 0;
-        self.contentView.backgroundColor = [UIColor clearColor];
-    }];
-    [UIView transitionWithView:self.length duration:0.25 options:UIViewAnimationOptionCurveLinear animations:^{
-        self.length.textColor = [UIColor vibrantLightBlueText];
-    } completion:^(BOOL finished) {
-    }];
-}
-
-- (void)setupViewForEditingState {
-    [UIView animateWithDuration:.25f animations:^{
-        self.title.alpha = 0;
-        [self.length setTextColor:[UIColor vibrantVeryDarkBlue]];
-        self.titleEditingTextField.alpha = 1;
-        self.titleEditingBackingView.alpha = 1;
-//        self.contentView.backgroundColor = [UIColor orangeColor];
-    }];
+    self.contentView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)setupViewForPlayingState {
-    self.title.alpha = 1;
-    self.titleEditingTextField.alpha = 0;
-    self.titleEditingBackingView.alpha = 0;
 //    self.contentView.backgroundColor = [UIColor blueColor];
 }
 
 - (void)setupViewForPausedState {
-    self.title.alpha = 0;
-    self.titleEditingTextField.alpha = 1;
-    self.titleEditingBackingView.alpha = 1;
 //    self.contentView.backgroundColor = [UIColor cyanColor];
-}
-
-- (void)changeViewForCellBeingEdited {
-    [self bindToModel:self.cellModel];
-    
-    if (self.cellModel.state != CellStateEditing) {
-//        self.contentView.backgroundColor = [UIColor yellowColor];
-    }
-}
-
-#pragma mark - User Actions
-
-- (IBAction)editButtonPressed:(UIButton *)sender {
-    if ([self.titleEditingTextField isFirstResponder]) {
-        [self.titleEditingTextField resignFirstResponder];
-    }
-    
-    if (!self.titleEditingTextField) {
-        [self setupEditingViews];
-    }
-    
-    [self.cellModel editingPressed];
 }
 
 - (void)prepareForReuse {
@@ -164,50 +101,7 @@
     self.cellModel = nil;
 }
 
-- (void)setupEditingViews {
-    CGFloat multiplier = 1.5f;
-    CGFloat leftShift = 7.0f;
-    
-    CGRect backingViewFrame = self.title.frame;
-    
-    backingViewFrame.size.height *= multiplier;
-    backingViewFrame.size.width += (multiplier - 1) * self.title.frame.size.height / 2.0f;
-    
-    self.titleEditingBackingView = [[UIView alloc] initWithFrame:backingViewFrame];
-    self.titleEditingBackingView.center = self.title.center;
-    
-    backingViewFrame = self.titleEditingBackingView.frame;
-    backingViewFrame.origin.x -= leftShift;
-    backingViewFrame.size.width += leftShift;
-    self.titleEditingBackingView.frame = backingViewFrame; // again
-    
-    self.titleEditingTextField = [[UITextField alloc] initWithFrame:self.title.frame];
-    self.titleEditingTextField.delegate = self;
-    
-    self.titleEditingBackingView.layer.cornerRadius = self.titleEditingBackingView.frame.size.height/2;
-    self.titleEditingBackingView.backgroundColor = [UIColor clearColor];
-    self.titleEditingBackingView.layer.borderColor = [UIColor vibrantLightBlue].CGColor;
-    self.titleEditingBackingView.layer.borderWidth = 1;
-    self.titleEditingTextField.clearButtonMode = UITextFieldViewModeAlways;
-
-    self.titleEditingTextField.font = self.title.font;
-    self.titleEditingTextField.textColor = self.title.textColor;
-    [self.titleEditingTextField setTintColor:self.title.textColor];
-    
-    [self addSubview:self.titleEditingBackingView];
-    [self addSubview:self.titleEditingTextField];
-    self.titleEditingBackingView.alpha = 0;
-    self.titleEditingTextField.alpha = 0;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    [self.cellModel editingPressed];
-    return YES;
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [self.cellModel titleDidChange:self.titleEditingTextField.text];
     [self bindToModel:object];
 }
 

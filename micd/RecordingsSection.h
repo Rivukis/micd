@@ -15,7 +15,7 @@
 
 @property (nonatomic, readonly) NSInteger numberOfCellModels;
 
-+ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending cellModelDelegate:(id<RecordingCellModelDelegate>)cellModelDelegate;
++ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending;
 
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index;
 - (NSString *)dateAsString;
