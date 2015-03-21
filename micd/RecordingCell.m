@@ -103,7 +103,6 @@
         self.titleEditingTextField.alpha = 0;
         self.titleEditingBackingView.alpha = 0;
         self.contentView.backgroundColor = [UIColor clearColor];
-        [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
     }];
     [UIView transitionWithView:self.length duration:0.25 options:UIViewAnimationOptionCurveLinear animations:^{
         self.length.textColor = [UIColor vibrantLightBlueText];
@@ -118,7 +117,6 @@
         self.titleEditingTextField.alpha = 1;
         self.titleEditingBackingView.alpha = 1;
 //        self.contentView.backgroundColor = [UIColor orangeColor];
-        [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantLightBlue]] forState:UIControlStateNormal];
     }];
 }
 
@@ -127,7 +125,6 @@
     self.titleEditingTextField.alpha = 0;
     self.titleEditingBackingView.alpha = 0;
 //    self.contentView.backgroundColor = [UIColor blueColor];
-    [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircleWithVeryDarkBlue:[UIColor vibrantVeryDarkBlue]] forState:UIControlStateNormal];
 }
 
 - (void)setupViewForPausedState {

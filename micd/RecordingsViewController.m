@@ -15,18 +15,21 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *roundedTableBackerView;
-@property (weak, nonatomic) IBOutlet UIView *playbackView;
-@property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
-@property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
+
+@property (weak, nonatomic) IBOutlet UIView *playbackView;
 @property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentPlaybackTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalPlaybackTimeLabel;
-
-@property (strong, nonatomic) DataSourceController *dataSource;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (strong, nonatomic) PlayerController *playerController;
-@property (strong, nonatomic) Recording *playbackRecording;
+@property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
 @property (strong, nonatomic) SCWaveformView *waveformView;
+@property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
+
+@property (strong, nonatomic) Recording *playbackRecording;
+@property (strong, nonatomic) DataSourceController *dataSource;
 @property (strong, nonatomic) NSArray *sections;
 
 @property (assign, nonatomic) BOOL didGetOriginalHeight;
@@ -67,10 +70,16 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.scrollsToTop = YES;
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(45, 0, 0, 0);
     
     self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     self.playbackTitleLabel.textColor = [UIColor vibrantLightBlueText];
     self.totalPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
+    
+    [self.editButton setTitle:@"" forState:UIControlStateNormal];
+    [self.shareButton setTitle:@"" forState:UIControlStateNormal];
+    [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+    [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
     
 //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
