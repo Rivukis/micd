@@ -11,6 +11,7 @@
 #import "Constants.h"
 
 static NSString *const kRecordingsPlist = @"recordings.plist";
+static BOOL const kUseFakes = NO;
 
 @interface DataSourceController ()
 
@@ -38,18 +39,16 @@ static NSString *const kRecordingsPlist = @"recordings.plist";
 - (instancetype)init_common {
     self = [super init];
     if (self) {
-        BOOL useFakes = NO;
-        if (useFakes) {
-            NSArray *fakes = [FakesForProject fakeArrayOfSearchItems];
-            [_recordings addObjectsFromArray:fakes];
-        } else {
-            // do archiver stuff
+        if (kUseFakes) {
+            _recordings = [[FakesForProject fakeArrayOfSearchItems] mutableCopy];
         }
     }
     return self;
 }
 
 - (void)saveData {
+    if (kUseFakes) return;
+    
     NSString *recordingsPlistPath = [[Constants documentsDirectory] stringByAppendingPathComponent:kRecordingsPlist];
     [NSKeyedArchiver archiveRootObject:self.recordings toFile:recordingsPlistPath];
 }

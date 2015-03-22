@@ -1,11 +1,3 @@
-//
-//  RecordingsSection.m
-//  micd
-//
-//  Created by Timothy Hise on 2/27/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "RecordingsSection.h"
 #import "Recording.h"
 #import "RecordingCellModel.h"
@@ -14,8 +6,7 @@
 
 @property (nonatomic, strong) NSDateComponents *dateComponents;
 @property (nonatomic, strong) NSMutableArray *cellModels;
-@property (nonatomic, assign) BOOL isThisDay;
-@property (nonatomic, assign) BOOL isYesterday;
+@property (nonatomic, assign) NSInteger daysAgo;
 @property (nonatomic, assign) BOOL isThisMonth;
 @property (nonatomic, assign) BOOL isThisYear;
 
@@ -53,35 +44,48 @@
         beginningOfTodayComponents.minute = 0;
         beginningOfTodayComponents.second = 0;
         NSDate *beginningOfToday = [[NSCalendar currentCalendar] dateFromComponents:beginningOfTodayComponents];
-        NSDate *beginningOfYesterday = [beginningOfToday dateByAddingTimeInterval:-60*60*24];
+        NSDate *beginningOf6DaysAgo = [beginningOfToday dateByAddingTimeInterval:-60*60*24*6];
         
         BOOL recordingIsThisYear = (recording.dateComponents.year == nowDateComponents.year);
         BOOL recordingIsThisMonth = (recording.dateComponents.month == nowDateComponents.month && recordingIsThisYear);
-        BOOL recordingIsThisDay = (recording.dateComponents.day == nowDateComponents.day && recordingIsThisMonth);
-        BOOL recordingIsYesterday = (!recordingIsThisDay && [recording.date compare:beginningOfYesterday] == NSOrderedDescending);
+        BOOL recordingIsWithin6DaysAgo = [recording.date compare:beginningOf6DaysAgo] == NSOrderedDescending;
         
-        BOOL sectionAndRecordingIsThisDayMatches = lastAddedMonthSection.isThisDay == recordingIsThisDay;
-        BOOL sectionAndRecordingIsYesterdayMatches = lastAddedMonthSection.isYesterday == recordingIsYesterday;
+        NSInteger recordingDaysAgo = NSNotFound;
+        
+        if (recordingIsWithin6DaysAgo) {
+            for (NSInteger daysAgo = 6; daysAgo >= 0; daysAgo--) {
+                /*
+                 would think that it should just be daysAgo and not daysAgo-1 but everything is shifted up a day otherwise (compare: acts weird)
+                 when getting a dates components enter 252 on components parameter to get year, month, day, hour, minute, second
+                 */
+                NSDate *beginningOfDay = [beginningOfToday dateByAddingTimeInterval:-60*60*24*(daysAgo-1)];
+                if ([recording.date compare:beginningOfDay] == NSOrderedAscending) {
+                    recordingDaysAgo = daysAgo;
+                    break;
+                }
+            }
+        }
+        
         BOOL sectionAndRecordingYearMatches = lastAddedMonthSection.dateComponents.year == recording.dateComponents.year;
         BOOL sectionAndRecordingMonthMatches = lastAddedMonthSection.dateComponents.month == recording.dateComponents.month;
+        BOOL sectionAndRecordingDayAgoMatches = lastAddedMonthSection.daysAgo == recordingDaysAgo;
+        BOOL shouldCreateNewSection = lastAddedMonthSection == nil
+                                      || !sectionAndRecordingDayAgoMatches
+                                      || !sectionAndRecordingMonthMatches
+                                      || !sectionAndRecordingYearMatches;
         
-        if (lastAddedMonthSection == nil || !sectionAndRecordingIsThisDayMatches || !sectionAndRecordingIsYesterdayMatches || !sectionAndRecordingMonthMatches || !sectionAndRecordingYearMatches) {
+        if (shouldCreateNewSection) {
             lastAddedMonthSection = [[RecordingsSection alloc] initWithYear:recording.dateComponents.year month:recording.dateComponents.month];
-            lastAddedMonthSection.isThisDay = recordingIsThisDay;
-            lastAddedMonthSection.isYesterday = recordingIsYesterday;
+            lastAddedMonthSection.daysAgo = recordingDaysAgo;
             lastAddedMonthSection.isThisMonth = recordingIsThisMonth;
             lastAddedMonthSection.isThisYear = recordingIsThisYear;
+            
             [assemblingSections addObject:lastAddedMonthSection];
         }
         
         RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording];
         [lastAddedMonthSection.cellModels addObject:cellModel];
     }
-    
-//    NSMutableArray *reversedOrderArray = [NSMutableArray array];
-//    for (id section in assemblingSections) {
-//        [reversedOrderArray insertObject:section atIndex:0];
-//    }
     
     return [assemblingSections copy];
 }
@@ -97,10 +101,17 @@
 }
 
 - (NSString *)dateAsString {
-    if (self.isThisDay) {
-        return @"Today";
-    } else if (self.isYesterday) {
-        return @"Yesterday";
+    if (self.daysAgo != NSNotFound) {
+        if (self.daysAgo == 0) {
+            return @"Today";
+        } else if (self.daysAgo == 1) {
+            return @"Yesterday";
+        } else {
+            NSInteger weekDay = [[NSCalendar currentCalendar] component:NSCalendarUnitWeekday
+                                                               fromDate:[[NSDate date] dateByAddingTimeInterval:-60*60*24*self.daysAgo]];
+            return [self weekDayStringFromInteger:weekDay];
+        }
+        
     } else if (self.isThisMonth) {
         return @"This Month";
     }
@@ -116,8 +127,21 @@
     return [formatter stringFromDate:date];
 }
 
+- (NSString *)weekDayStringFromInteger:(NSInteger)weekDayInteger {
+    switch (weekDayInteger) {
+        case 1:     return @"Sunday";
+        case 2:     return @"Monday";
+        case 3:     return @"Tuesday";
+        case 4:     return @"Wednesday";
+        case 5:     return @"Thursday";
+        case 6:     return @"Friday";
+        case 7:     return @"Saturday";
+        default:    return @"invalid weekday";
+    }
+}
+
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ - isThisDay:%i isThisMonth:%i \n%@", self.dateAsString, self.isThisDay, self.isThisMonth, self.cellModels];
+    return [NSString stringWithFormat:@"%@ - daysAgo:%li isThisMonth:%i \n%@", self.dateAsString, self.daysAgo, self.isThisMonth, self.cellModels];
 }
 
 @end
