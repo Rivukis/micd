@@ -8,6 +8,7 @@
 #import "ViewAnimator.h"
 #import "DisplayLinkController.h"
 #import "PlayerController.h"
+#import "Constants.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -48,6 +49,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToAppWillResignActive:) name:kAppWillResignActiveNotification object:nil];
+    
     self.growForLouderNoises = NO;
     self.recordButtonEnabled = YES;
     
@@ -74,6 +77,14 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGesture.delegate = self;
     [self.view addGestureRecognizer:panGesture];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kAppWillResignActiveNotification object:nil];
+}
+
+- (void)responseToAppWillResignActive:(NSNotification *)notification {
+    [self recordButtonPressed:nil];
 }
 
 #pragma mark - User Actions

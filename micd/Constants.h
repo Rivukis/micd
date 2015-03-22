@@ -12,6 +12,9 @@ static NSString *const kRecorderPrimaryAudioFile = @"RecorderPrimaryAudioFile.m4
 static NSString *const kRecorderSavedAudioFileName = @"RecorderSavedAudioFileName.m4a";
 static NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenatedAudioFileName.m4a";
 static NSString *const kRecorderFormatTypeAsString = @".m4a";
+
+static NSString *const kAppWillResignActiveNotification = @"AppWillResignActiveNotification";
+
 static NSString *const kMainColorUserDefaultsKey = @"MainColorUserDefaultsKey";
 
 @interface Constants : NSObject
