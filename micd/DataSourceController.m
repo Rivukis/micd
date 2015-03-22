@@ -11,7 +11,7 @@
 #import "Constants.h"
 
 static NSString *const kRecordingsPlist = @"recordings.plist";
-static BOOL const kUseFakes = YES;
+static BOOL const kUseFakes = NO;
 
 @interface DataSourceController ()
 
