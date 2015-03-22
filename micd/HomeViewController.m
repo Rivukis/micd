@@ -29,18 +29,14 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (nonatomic) CGFloat initialY;
 @property (assign, nonatomic) BOOL hasSetInitialY;
 
-@property (strong, nonatomic) UIImageView *recordButtonSnapshot;
-@property (strong, nonatomic) UIVisualEffectView *blurView;
-
-@property (assign, nonatomic) NSUInteger animatingPulseCount;
-@property (strong, nonatomic) NSMutableArray *pulsingValues;
+@property (assign, nonatomic) PositionState currentPositionState;
 
 @property (strong, nonatomic) DisplayLinkController *displayLinkController;
 
+@property (assign, nonatomic) NSUInteger animatingPulseCount;
+@property (strong, nonatomic) NSMutableArray *pulsingValues;
 @property (assign, nonatomic) BOOL growForLouderNoises;
-
-@property (assign, nonatomic) PositionState currentPositionState;
-
+@property (nonatomic) CGFloat arcAngleShrinkCount;
 @property (strong, nonatomic) UIView *transitionView;
 @property (nonatomic) CGRect recordButtonOriginalFrame;
 @property (nonatomic) BOOL recordButtonEnabled;
@@ -63,8 +59,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     self.recordButton = [[OBShapedButton alloc] init];
     [self.recordButton addTarget:self action:@selector(recordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
-    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateHighlighted];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:10] forState:UIControlStateNormal];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:5] forState:UIControlStateHighlighted];
     [self.view addSubview:self.recordButton];
     
     self.gearsCircleImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfGearsCircle]];
@@ -72,25 +68,12 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     self.gearsImageView = [[GearsImageView alloc] init];
     [self.gearsCircleImageView addSubview:self.gearsImageView];
     
-//    [self setupArrowButtons];
-    
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGesture.delegate = self;
     [self.view addGestureRecognizer:panGesture];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    UIGraphicsBeginImageContextWithOptions(self.recordButton.bounds.size, NO, 0);
-    [self.recordButton drawViewHierarchyInRect:self.recordButton.bounds afterScreenUpdates:YES];
-    UIImage *recordButtonImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    self.recordButtonSnapshot = [[UIImageView alloc] initWithImage:recordButtonImage];
 }
 
 #pragma mark - User Actions
@@ -159,18 +142,13 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         self.gearsCircleImageView.frame = gearFrame;
     }];
     
+    self.arcAngleShrinkCount = 0;
     [self.displayLinkController addSubscriberWithKey:@"recordButton"];
 }
 
 - (void)animatePauseState {
     [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
-    
-    float averagedTransformCoefficient = 0.0f;
-    for (NSNumber *savedPulseCoefficient in self.pulsingValues) {
-        averagedTransformCoefficient += savedPulseCoefficient.floatValue;
-    }
-    
-    averagedTransformCoefficient /= self.pulsingValues.count;
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:10] forState:UIControlStateNormal];
     
     CGFloat fullCircle = self.gearsCircleImageView.frame.size.height;
     CGRect mainFrame = self.backgroundImageView.frame;
@@ -182,8 +160,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         self.backgroundImageView.frame = mainFrame;
         self.gearsCircleImageView.frame = gearFrame;
     }];
-    
-    self.recordButton.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
     
     [UIView animateWithDuration:.25f animations:^{
         self.recordButton.transform = CGAffineTransformIdentity;
@@ -324,8 +300,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)setInitialStateFrame {
     CGFloat windowHeight = self.view.window.frame.size.height;
     CGFloat windowWidth = self.view.window.frame.size.width;
-    CGFloat gestureSizeHeightConstant = windowWidth * 0.1f;
-    CGFloat gestureSizeWidthConstant = windowWidth * 0.143;
     CGFloat buttonSizeConstant = windowHeight * 0.384f; // 256
     // width:height     center on x
     CGFloat backgroundImageRatio = kCurrentBackgroundImageWidth/kCurrentBackgroundImageHeight;
@@ -344,26 +318,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                                          buttonSizeConstant,
                                          buttonSizeConstant);
     
-//    self.recordingsBottomArrowButton.frame = CGRectMake(windowWidth/2.0f - gestureSizeWidthConstant/2,
-//                                                  windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f,
-//                                                  gestureSizeWidthConstant,
-//                                                  gestureSizeHeightConstant);
-//    
-//    self.recordingsTopArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
-//                                               windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707,
-//                                               gestureSizeWidthConstant,
-//                                               gestureSizeHeightConstant);
-//    
-//    self.settingsBottomArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
-//                                               (windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.36f) + windowHeight * 1.09f,
-//                                               gestureSizeWidthConstant,
-//                                               gestureSizeHeightConstant);
-//    
-//    self.settingsTopArrowButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
-//                                             (windowHeight/2.0f - gestureSizeHeightConstant/2.0f - self.view.frame.origin.y - windowHeight * 0.707) + windowHeight * 1.09f,
-//                                             gestureSizeWidthConstant,
-//                                             gestureSizeHeightConstant);
-    
     CGRect gearsFrame = self.recordButton.frame;
     gearsFrame.origin.y += windowHeight/2.0f * 1.1f;
     self.gearsCircleImageView.frame = gearsFrame;
@@ -371,24 +325,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     self.currentPositionState = PositionStateHome;
 }
-//
-//- (void)setupArrowButtons {
-//    self.recordingsTopArrowButton= [[UIButton alloc] init];
-//    [self.view addSubview:self.recordingsTopArrowButton];
-//    [self.recordingsTopArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    self.recordingsBottomArrowButton = [[UIButton alloc] init];
-//    [self.view addSubview:self.recordingsBottomArrowButton];
-//    [self.recordingsBottomArrowButton addTarget:self action:@selector(moveToPlayerState) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    self.settingsTopArrowButton = [[UIButton alloc] init];
-//    [self.view addSubview:self.settingsTopArrowButton];
-//    [self.settingsTopArrowButton addTarget:self action:@selector(moveToSettingState) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    self.settingsBottomArrowButton = [[UIButton alloc] init];
-//    [self.view addSubview:self.settingsBottomArrowButton];
-//    [self.settingsBottomArrowButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
-//}
 
 - (CGRect)frameForState:(PositionState)state {
     self.currentPositionState = state;
@@ -466,6 +402,13 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         }
         
         self.recordButton.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
+        
+        self.arcAngleShrinkCount --;
+        if (self.arcAngleShrinkCount > -300) {
+            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:0 strokeWidth:10] forState:UIControlStateNormal];
+        } else {
+            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:self.arcAngleShrinkCount+300 strokeWidth:10] forState:UIControlStateNormal];
+        }
         
     } else {
         CGRect presentationFrame = [self.view.layer.presentationLayer frame];

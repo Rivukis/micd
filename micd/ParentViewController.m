@@ -76,7 +76,14 @@
         POPSpringAnimation *animation = [ViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
         [childViewController.view pop_addAnimation:animation forKey:@"state"];
         
+        if (state == PositionStateRecordings) {
+            [self.recordingsViewController showPlayerButtons];
+        } else {
+            [self.recordingsViewController hidePlayerButtons];
+        }
+        
         [animation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
+            
             for (UIViewController *viewController in [self primaryChildViewControllers]) {
                 if ([viewController respondsToSelector:@selector(popAnimationCompleted)]) {
                     [(id)viewController popAnimationCompleted];

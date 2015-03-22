@@ -10,6 +10,8 @@
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
 #import "RecordingsView.h"
+#import "ViewAnimator.h"
+#import "NSObject+Blocks.h"
 
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -36,10 +38,10 @@
 @property (strong, nonatomic) DataSourceController *dataSource;
 @property (strong, nonatomic) NSArray *sections;
 
-@property (assign, nonatomic) BOOL didGetOriginalHeight;
-@property (assign, nonatomic) CGFloat originalHeight;
-@property (assign, nonatomic) BOOL didGetOriginalTableViewHeight;
-@property (assign, nonatomic) CGFloat originalTableViewHeight;
+//@property (assign, nonatomic) BOOL didGetOriginalHeight;
+//@property (assign, nonatomic) CGFloat originalHeight;
+//@property (assign, nonatomic) BOOL didGetOriginalTableViewHeight;
+//@property (assign, nonatomic) CGFloat originalTableViewHeight;
 
 @property (strong, nonatomic) DisplayLinkController *displayLinkController;
 
@@ -79,6 +81,9 @@
     self.rewindButton.backgroundColor = [UIColor clearColor];
     self.forwardButton.backgroundColor = [UIColor clearColor];
     self.playButton.backgroundColor = [UIColor clearColor];
+    self.rewindButton.hidden = YES;
+    self.playButton.hidden = YES;
+    self.forwardButton.hidden = YES;
     
     [self.editButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
@@ -114,18 +119,18 @@
 
     self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
     
-    if (!self.didGetOriginalHeight) {
-        self.didGetOriginalHeight = YES;
-        self.originalHeight = self.view.frame.size.height;
-    }
+//    if (!self.didGetOriginalHeight) {
+//        self.didGetOriginalHeight = YES;
+//        self.originalHeight = self.view.frame.size.height;
+//    }
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    if (!self.didGetOriginalTableViewHeight) {
-        self.didGetOriginalTableViewHeight = YES;
-        self.originalTableViewHeight = self.tableView.frame.size.height;
-    }
+//    if (!self.didGetOriginalTableViewHeight) {
+//        self.didGetOriginalTableViewHeight = YES;
+//        self.originalTableViewHeight = self.tableView.frame.size.height;
+//    }
     
     if (!self.waveformView) {
         self.waveformView = [[SCWaveformView alloc] init];
@@ -236,17 +241,64 @@
 - (IBAction)playPauseButtonPressed:(id)sender {
     if (self.playerState == PlayerControllerStatePaused) {
         [self playPlayback];
+        [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
     } else {
         [self pausePlayback];
+        [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
     }
+    [self addButtonBounceAnimationToView:self.playButton];
 }
 
 - (IBAction)rewindButtonPressed:(id)sender {
     [self offsetPlaybackByTimeInterval:-15.0f];
+    [self addButtonBounceAnimationToView:self.rewindButton];
 }
 
 - (IBAction)fastforwardButtonPressed:(id)sender {
     [self offsetPlaybackByTimeInterval:30.0f];
+    [self addButtonBounceAnimationToView:self.forwardButton];
+}
+
+- (IBAction)shareButtonPressed:(id)sender {
+    [self addButtonBounceAnimationToView:self.shareButton];
+}
+
+- (IBAction)editButtonPressed:(id)sender {
+    [self addButtonBounceAnimationToView:self.editButton];
+}
+
+- (void)showPlayerButtons {
+    [self performBlock:^{
+        [self showAndAddSpringAnimationToButton:self.playButton];
+    } afterDelay:.3];
+    
+    [self performBlock:^{
+        [self showAndAddSpringAnimationToButton:self.rewindButton];
+    } afterDelay:.5];
+    
+    [self performBlock:^{
+        [self showAndAddSpringAnimationToButton:self.forwardButton];
+    } afterDelay:.5];
+}
+
+- (void)hidePlayerButtons {
+    self.playButton.hidden = YES;
+    self.rewindButton.hidden = YES;
+    self.forwardButton.hidden = YES;
+}
+
+- (void)addButtonBounceAnimationToView:(UIView *)view {
+    [view pop_removeAnimationForKey:@"buttonBounce"];
+    view.transform = CGAffineTransformIdentity;
+    POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationBounce];
+    [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
+}
+
+- (void)showAndAddSpringAnimationToButton:(UIButton *)button {
+    button.hidden = NO;
+    button.transform = CGAffineTransformIdentity;
+    POPSpringAnimation *showButtonAnimation = [ViewAnimator springAnimationGrowFromNothing];
+    [button pop_addAnimation:showButtonAnimation forKey:@"showButton"];
 }
 
 #pragma mark - PlayerController Methods
@@ -280,7 +332,6 @@
 
 - (void)playPlayback {
     //TODO: put player state into the player controller
-    
     [self.playerController playAudio];
     [self.displayLinkController addSubscriberWithKey:@"waveform"];
 }

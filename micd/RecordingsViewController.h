@@ -19,6 +19,8 @@
 - (void)playPlayback;
 - (void)pausePlayback;
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval;
+- (void)showPlayerButtons;
+- (void)hidePlayerButtons;
 
 - (void)scrollToAndReadyPlayerWithMostRecentRecording;
 

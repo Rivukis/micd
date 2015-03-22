@@ -13,7 +13,7 @@
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     
     if (![super pointInside:point withEvent:event]) {
-        NSLog(@"not even");
+        //not the view we are concerned with
         return NO;
     }
     
@@ -29,11 +29,11 @@
         BOOL isInsidePlayerControl = [playerControl pointInside:convertedPointForPlayerControl withEvent:event];
         
         if (isInsidePlaybackContainerView && isInsidePlayerControl) {
-            NSLog(@"hit button");
+            //hit button
             return YES;
         }
     }
-    NSLog(@"allow pan");
+    //allow pan
     return NO;
 }
 
