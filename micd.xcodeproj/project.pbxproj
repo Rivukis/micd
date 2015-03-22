@@ -36,6 +36,7 @@
 		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
 		D0BA6D031AB906D800F6B3FF /* icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D0BA6D021AB906D800F6B3FF /* icon.pdf */; };
 		D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BD55821AB6690600A73485 /* RecordingsView.m */; };
+		D0BFAD291ABE351A0051F0CF /* NSObject+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */; };
 		D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSourceController.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
 		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
@@ -109,6 +110,8 @@
 		D0BA6D021AB906D800F6B3FF /* icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = icon.pdf; sourceTree = "<group>"; };
 		D0BD55811AB6690600A73485 /* RecordingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsView.h; sourceTree = "<group>"; };
 		D0BD55821AB6690600A73485 /* RecordingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsView.m; sourceTree = "<group>"; };
+		D0BFAD271ABE351A0051F0CF /* NSObject+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Blocks.h"; path = "micd/NSObject+Blocks.h"; sourceTree = "<group>"; };
+		D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Blocks.m"; path = "micd/NSObject+Blocks.m"; sourceTree = "<group>"; };
 		D0C67CCE1A8EF917000F501A /* DataSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSourceController.h; sourceTree = "<group>"; };
 		D0C67CCF1A8EF917000F501A /* DataSourceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSourceController.m; sourceTree = "<group>"; };
 		D0C67CD41A91B9D4000F501A /* RecordingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCell.h; sourceTree = "<group>"; };
@@ -175,6 +178,8 @@
 		D05D75631A79AAA40050A49C = {
 			isa = PBXGroup;
 			children = (
+				D0BFAD271ABE351A0051F0CF /* NSObject+Blocks.h */,
+				D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */,
 				D05D756E1A79AAA40050A49C /* micd */,
 				D0C67CCD1A8EF0B7000F501A /* Brians stuff */,
 				D05D756F1A79AAA40050A49C /* Supporting Files */,
@@ -469,6 +474,7 @@
 				D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */,
 				7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */,
 				7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */,
+				D0BFAD291ABE351A0051F0CF /* NSObject+Blocks.m in Sources */,
 				7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */,

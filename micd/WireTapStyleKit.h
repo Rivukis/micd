@@ -24,7 +24,6 @@
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* rightRecordingCellBackgroundTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* leftRecordingCellDropdownTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* rightRecordingCellDropdownTargets;
-@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* pencilTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* progressTimeIndicatorViewTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* tableviewFaderTargets;
@@ -50,7 +49,7 @@
 + (void)drawRightRecordingCellDropdown;
 + (void)drawCanvas1;
 + (void)drawCanvas2;
-+ (void)drawRecordButton;
++ (void)drawRecordButtonWithArcEndAngle: (CGFloat)arcEndAngle arcStartAngle: (CGFloat)arcStartAngle strokeWidth: (CGFloat)strokeWidth;
 + (void)drawGearsWithPositiveGearRotation: (CGFloat)positiveGearRotation negativeGearRotation: (CGFloat)negativeGearRotation;
 + (void)drawBackgroundCordWithColor: (UIColor*)color;
 + (void)drawGripCircle;
@@ -81,7 +80,7 @@
 + (UIImage*)imageOfRightRecordingCellBackground;
 + (UIImage*)imageOfLeftRecordingCellDropdown;
 + (UIImage*)imageOfRightRecordingCellDropdown;
-+ (UIImage*)imageOfRecordButton;
++ (UIImage*)imageOfRecordButtonWithArcEndAngle: (CGFloat)arcEndAngle arcStartAngle: (CGFloat)arcStartAngle strokeWidth: (CGFloat)strokeWidth;
 + (UIImage*)imageOfGearsWithPositiveGearRotation: (CGFloat)positiveGearRotation negativeGearRotation: (CGFloat)negativeGearRotation;
 + (UIImage*)imageOfPencil;
 + (UIImage*)imageOfPlayAssetWithVeryDarkBlue: (UIColor*)veryDarkBlue arcStart: (CGFloat)arcStart arcEnd: (CGFloat)arcEnd;
