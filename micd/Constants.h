@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 static NSString *const kRecorderPrimaryAudioFile = @"RecorderPrimaryAudioFile.m4a";
-static NSString *const kRecorderSavedAudioFileName = @"kRecorderSavedAudioFileName.m4a";
+static NSString *const kRecorderSavedAudioFileName = @"RecorderSavedAudioFileName.m4a";
 static NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenatedAudioFileName.m4a";
-
 static NSString *const kRecorderFormatTypeAsString = @".m4a";
+static NSString *const kMainColorUserDefaultsKey = @"MainColorUserDefaultsKey";
 
 @interface Constants : NSObject
 

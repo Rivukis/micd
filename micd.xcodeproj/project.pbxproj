@@ -15,6 +15,7 @@
 		7AC290B91A8EF0100085B927 /* Recording.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AD1A8EF0100085B927 /* Recording.m */; };
 		7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B31A8EF0100085B927 /* CKSearchViewController.m */; };
 		7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B51A8EF0100085B927 /* FakesForProject.m */; };
+		7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */; };
 		D034F0421AA148680059028D /* RecordingsSection.m in Sources */ = {isa = PBXBuildFile; fileRef = D034F0411AA148680059028D /* RecordingsSection.m */; };
 		D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500F71AA7C8F100C71FE1 /* passthroughView.m */; };
 		D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500FA1AA7CAD600C71FE1 /* passthroughImageView.m */; };
@@ -69,6 +70,8 @@
 		7AC290B31A8EF0100085B927 /* CKSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKSearchViewController.m; sourceTree = "<group>"; };
 		7AC290B41A8EF0100085B927 /* FakesForProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakesForProject.h; sourceTree = "<group>"; };
 		7AC290B51A8EF0100085B927 /* FakesForProject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakesForProject.m; sourceTree = "<group>"; };
+		7AFC16761ABE6C8600B5B7F8 /* UIColor+PalettePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+PalettePicker.h"; path = "micd/UIColor+PalettePicker.h"; sourceTree = "<group>"; };
+		7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+PalettePicker.m"; path = "micd/UIColor+PalettePicker.m"; sourceTree = "<group>"; };
 		97CB92049F40C98A8BAF6E34 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D034F0401AA148680059028D /* RecordingsSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsSection.h; sourceTree = "<group>"; };
 		D034F0411AA148680059028D /* RecordingsSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsSection.m; sourceTree = "<group>"; };
@@ -158,8 +161,12 @@
 				7AC290A71A8EF0100085B927 /* Constants.m */,
 				7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */,
 				7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */,
+				D0BFAD271ABE351A0051F0CF /* NSObject+Blocks.h */,
+				D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */,
 				D0F97F521A92A46800F07032 /* NSString+Score.h */,
 				D0F97F531A92A46800F07032 /* NSString+Score.m */,
+				7AFC16761ABE6C8600B5B7F8 /* UIColor+PalettePicker.h */,
+				7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */,
 				D08D4BE91AB27EE300949483 /* ViewAnimator.h */,
 				D08D4BEA1AB27EE300949483 /* ViewAnimator.m */,
 			);
@@ -178,8 +185,6 @@
 		D05D75631A79AAA40050A49C = {
 			isa = PBXGroup;
 			children = (
-				D0BFAD271ABE351A0051F0CF /* NSObject+Blocks.h */,
-				D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */,
 				D05D756E1A79AAA40050A49C /* micd */,
 				D0C67CCD1A8EF0B7000F501A /* Brians stuff */,
 				D05D756F1A79AAA40050A49C /* Supporting Files */,
@@ -492,6 +497,7 @@
 				7AC290B91A8EF0100085B927 /* Recording.m in Sources */,
 				7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
+				7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
 				D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */,
 				D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */,
