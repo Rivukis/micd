@@ -268,17 +268,19 @@
 }
 
 - (void)showPlayerButtons {
-    [self performBlock:^{
-        [self showAndAddSpringAnimationToButton:self.playButton];
-    } afterDelay:.3];
-    
-    [self performBlock:^{
-        [self showAndAddSpringAnimationToButton:self.rewindButton];
-    } afterDelay:.5];
-    
-    [self performBlock:^{
-        [self showAndAddSpringAnimationToButton:self.forwardButton];
-    } afterDelay:.5];
+    if (self.playButton.hidden == YES) {
+        [self performBlock:^{
+            [self showAndAddSpringAnimationToButton:self.playButton];
+        } afterDelay:.2];
+        
+        [self performBlock:^{
+            [self showAndAddSpringAnimationToButton:self.rewindButton];
+        } afterDelay:.25];
+        
+        [self performBlock:^{
+            [self showAndAddSpringAnimationToButton:self.forwardButton];
+        } afterDelay:.25];
+    }
 }
 
 - (void)hidePlayerButtons {
