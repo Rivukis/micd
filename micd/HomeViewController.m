@@ -84,7 +84,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)responseToAppWillResignActive:(NSNotification *)notification {
-    [self recordButtonPressed:nil];
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+        [self recordButtonPressed:nil];
+    }
 }
 
 #pragma mark - User Actions
