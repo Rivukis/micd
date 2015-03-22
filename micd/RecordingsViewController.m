@@ -241,10 +241,8 @@
 - (IBAction)playPauseButtonPressed:(id)sender {
     if (self.playerState == PlayerControllerStatePaused) {
         [self playPlayback];
-        [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
     } else {
         [self pausePlayback];
-        [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
     }
     [self addButtonBounceAnimationToView:self.playButton];
 }
@@ -268,17 +266,19 @@
 }
 
 - (void)showPlayerButtons {
-    [self performBlock:^{
-        [self showAndAddSpringAnimationToButton:self.playButton];
-    } afterDelay:.3];
-    
-    [self performBlock:^{
-        [self showAndAddSpringAnimationToButton:self.rewindButton];
-    } afterDelay:.5];
-    
-    [self performBlock:^{
-        [self showAndAddSpringAnimationToButton:self.forwardButton];
-    } afterDelay:.5];
+    if (self.playButton.hidden == YES) {
+        [self performBlock:^{
+            [self showAndAddSpringAnimationToButton:self.playButton];
+        } afterDelay:.2];
+        
+        [self performBlock:^{
+            [self showAndAddSpringAnimationToButton:self.rewindButton];
+        } afterDelay:.25];
+        
+        [self performBlock:^{
+            [self showAndAddSpringAnimationToButton:self.forwardButton];
+        } afterDelay:.25];
+    }
 }
 
 - (void)hidePlayerButtons {
@@ -333,11 +333,13 @@
 - (void)playPlayback {
     //TODO: put player state into the player controller
     [self.playerController playAudio];
+    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
     [self.displayLinkController addSubscriberWithKey:@"waveform"];
 }
 
 - (void)pausePlayback {
     [self pausePlaybackWhilePanning:NO];
+    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
 }
 
 - (void)pausePlaybackWhilePanning:(BOOL)isPanning {
