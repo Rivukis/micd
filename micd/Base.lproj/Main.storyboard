@@ -146,6 +146,9 @@
                                         <state key="normal" title="Edit">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="editButtonPressed:" destination="t5E-Iw-Z4F" eventType="touchUpInside" id="D8i-xf-hMJ"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nvw-ve-Wjb">
                                         <rect key="frame" x="8" y="207" width="40" height="40"/>
@@ -156,6 +159,9 @@
                                         <state key="normal" title="Share">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="shareButtonPressed:" destination="t5E-Iw-Z4F" eventType="touchUpInside" id="JtZ-OO-rbS"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x4o-WT-nwi" userLabel="Play Button">
                                         <rect key="frame" x="162" y="202" width="50" height="50"/>

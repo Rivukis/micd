@@ -41,8 +41,8 @@
 
 + (POPSpringAnimation *)springAnimationBounce {
     POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
-    animation.velocity = [NSValue valueWithCGPoint:CGPointMake(10, 10)];
-    animation.springBounciness = 20.f;
+    animation.velocity = [NSValue valueWithCGPoint:CGPointMake(-10, -10)];
+    animation.springBounciness = 16.f;
     
     return animation;
 }

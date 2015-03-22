@@ -239,7 +239,6 @@
 #pragma mark - Player Buttons
 
 - (IBAction)playPauseButtonPressed:(id)sender {
-    [self addButtonBounceAnimationToView:self.playButton];
     if (self.playerState == PlayerControllerStatePaused) {
         [self playPlayback];
         [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
@@ -247,14 +246,25 @@
         [self pausePlayback];
         [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
     }
+    [self addButtonBounceAnimationToView:self.playButton];
 }
 
 - (IBAction)rewindButtonPressed:(id)sender {
     [self offsetPlaybackByTimeInterval:-15.0f];
+    [self addButtonBounceAnimationToView:self.rewindButton];
 }
 
 - (IBAction)fastforwardButtonPressed:(id)sender {
     [self offsetPlaybackByTimeInterval:30.0f];
+    [self addButtonBounceAnimationToView:self.forwardButton];
+}
+
+- (IBAction)shareButtonPressed:(id)sender {
+    [self addButtonBounceAnimationToView:self.shareButton];
+}
+
+- (IBAction)editButtonPressed:(id)sender {
+    [self addButtonBounceAnimationToView:self.editButton];
 }
 
 - (void)showPlayerButtons {
@@ -279,13 +289,14 @@
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
     [view pop_removeAnimationForKey:@"buttonBounce"];
+    view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
 
 - (void)showAndAddSpringAnimationToButton:(UIButton *)button {
     button.hidden = NO;
-
+    button.transform = CGAffineTransformIdentity;
     POPSpringAnimation *showButtonAnimation = [ViewAnimator springAnimationGrowFromNothing];
     [button pop_addAnimation:showButtonAnimation forKey:@"showButton"];
 }
