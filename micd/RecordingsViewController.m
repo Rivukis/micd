@@ -12,8 +12,11 @@
 #import "RecordingsView.h"
 #import "ViewAnimator.h"
 #import "NSObject+Blocks.h"
+#import "RenameRecordingViewController.h"
+#import "PresentingAnimationController.h"
+#import "DismissingAnimationController.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, UIViewControllerTransitioningDelegate, RenameRecordingsViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
@@ -51,6 +54,8 @@
 
 @property (strong, nonatomic) RecordingCellModel *focusedCellModel;
 
+@property (strong, nonatomic) UIVisualEffectView *blurView;
+
 
 @end
 
@@ -61,6 +66,7 @@
     
     self.dataSource = [DataSourceController sharedDataSource];
     self.playerController = [PlayerController sharedPlayer];
+    self.playerController.delegate = self;
     
     self.isFirstTimeLayingOutSubviews = YES;
     
@@ -70,28 +76,31 @@
     self.tableView.delegate = self;
     self.tableView.scrollsToTop = YES;
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(45, 0, 0, 0);
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    longPressGestureRecognizer.minimumPressDuration = 1.0;
+    longPressGestureRecognizer.delegate = self;
+    [self.tableView addGestureRecognizer:longPressGestureRecognizer];
+    //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     
     self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     self.playbackTitleLabel.textColor = [UIColor vibrantLightBlueText];
     self.totalPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     
+    self.playButton.backgroundColor = [UIColor clearColor];
+    self.playButton.hidden = YES;
+    self.rewindButton.backgroundColor = [UIColor clearColor];
+    self.rewindButton.hidden = YES;
+    self.forwardButton.backgroundColor = [UIColor clearColor];
+    self.forwardButton.hidden = YES;
+    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
     [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
     [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
-    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
-    self.rewindButton.backgroundColor = [UIColor clearColor];
-    self.forwardButton.backgroundColor = [UIColor clearColor];
-    self.playButton.backgroundColor = [UIColor clearColor];
-    self.rewindButton.hidden = YES;
-    self.playButton.hidden = YES;
-    self.forwardButton.hidden = YES;
     
     [self.editButton setTitle:@"" forState:UIControlStateNormal];
-    [self.shareButton setTitle:@"" forState:UIControlStateNormal];
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+    [self.shareButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
-    
-//    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
@@ -136,12 +145,12 @@
         self.waveformView = [[SCWaveformView alloc] init];
         self.waveformView.frame = self.waveformContainerView.bounds;
         [self.waveformContainerView addSubview:self.waveformView];
-        self.waveformContainerView.layer.masksToBounds = YES;
+//        self.waveformContainerView.layer.masksToBounds = YES;
         self.waveformContainerView.backgroundColor = [UIColor clearColor];
-        self.waveformView.normalColor = [UIColor darkGrayColor];
+        self.waveformView.normalColor = [UIColor vibrantVeryDarkBlue];
         self.waveformView.progressColor = [UIColor vibrantBlue];
-        self.waveformView.precision = 0.20;
-        self.waveformView.lineWidthRatio = 0.6;
+        self.waveformView.precision = 0.15;
+        self.waveformView.lineWidthRatio = 0.7;
         self.waveformView.channelStartIndex = 0;
         self.waveformView.channelEndIndex = 0;
         
@@ -244,7 +253,6 @@
     } else {
         [self pausePlayback];
     }
-    [self addButtonBounceAnimationToView:self.playButton];
 }
 
 - (IBAction)rewindButtonPressed:(id)sender {
@@ -288,7 +296,7 @@
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
-    [view pop_removeAnimationForKey:@"buttonBounce"];
+//    [view pop_removeAnimationForKey:@"buttonBounce"];
     view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
@@ -321,7 +329,6 @@
         CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
         CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
         self.waveformView.timeRange = displayedTimeRange;
-        self.waveformView.normalColor = [UIColor grayColor];
         self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
     } else {
         self.waveformContainerView.hidden = YES;
@@ -334,12 +341,14 @@
     //TODO: put player state into the player controller
     [self.playerController playAudio];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
+    [self addButtonBounceAnimationToView:self.playButton];
     [self.displayLinkController addSubscriberWithKey:@"waveform"];
 }
 
 - (void)pausePlayback {
     [self pausePlaybackWhilePanning:NO];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
+    [self addButtonBounceAnimationToView:self.playButton];
 }
 
 - (void)pausePlaybackWhilePanning:(BOOL)isPanning {
@@ -411,6 +420,7 @@
     
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
+    [self pausePlayback];
     [self.waveformView setNeedsLayout];
 }
 
@@ -459,6 +469,56 @@
     }
     
     return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
+}
+
+#pragma mark - LongPress for Tableview Delegate
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
+    CGPoint point = [gestureRecognizer locationInView:self.tableView];
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    if (indexPath == nil) {
+        NSLog(@"long press on table view but not on a row");
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        [self presentRenameRecordingViewController];
+        NSLog(@"long press on table view at row %ld", (long)indexPath.row);
+    } else {
+        NSLog(@"gestureRecognizer.state = %ld", gestureRecognizer.state);
+    }
+}
+
+#pragma mark - UIViewControllerTransitionDelegate -
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+{
+    return [[PresentingAnimationController alloc] init];
+}
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return [[DismissingAnimationController alloc] init];
+}
+
+- (void)presentRenameRecordingViewController {
+//    UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+//    self.blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+//    self.blurView.frame = self.view.bounds;
+//    [UIView transitionWithView:self.view duration:5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//        [self.view addSubview:self.blurView];
+//    } completion:^(BOOL finished) {
+//    }];
+    
+    RenameRecordingViewController *modalVC = [self.storyboard instantiateViewControllerWithIdentifier:@"renameRecordings"];
+    modalVC.transitioningDelegate = self;
+    modalVC.renameRecordingsViewDelegate = self;
+    modalVC.modalPresentationStyle = UIModalPresentationCustom;
+    [self presentViewController:modalVC animated:YES completion:^{
+        
+    }];
+}
+
+- (void)didFinishRenaming {
+//    [self.blurView removeFromSuperview];
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate

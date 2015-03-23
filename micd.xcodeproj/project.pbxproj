@@ -38,6 +38,9 @@
 		D0BA6D031AB906D800F6B3FF /* icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D0BA6D021AB906D800F6B3FF /* icon.pdf */; };
 		D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BD55821AB6690600A73485 /* RecordingsView.m */; };
 		D0BFAD291ABE351A0051F0CF /* NSObject+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */; };
+		D0BFAD2D1ABF736E0051F0CF /* RenameRecordingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD2B1ABF736E0051F0CF /* RenameRecordingViewController.m */; };
+		D0BFAD311ABF785D0051F0CF /* PresentingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD301ABF785D0051F0CF /* PresentingAnimationController.m */; };
+		D0BFAD341ABF78F90051F0CF /* DismissingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD331ABF78F90051F0CF /* DismissingAnimationController.m */; };
 		D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSourceController.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
 		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
@@ -115,6 +118,12 @@
 		D0BD55821AB6690600A73485 /* RecordingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsView.m; sourceTree = "<group>"; };
 		D0BFAD271ABE351A0051F0CF /* NSObject+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Blocks.h"; path = "micd/NSObject+Blocks.h"; sourceTree = "<group>"; };
 		D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Blocks.m"; path = "micd/NSObject+Blocks.m"; sourceTree = "<group>"; };
+		D0BFAD2A1ABF736E0051F0CF /* RenameRecordingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenameRecordingViewController.h; sourceTree = "<group>"; };
+		D0BFAD2B1ABF736E0051F0CF /* RenameRecordingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenameRecordingViewController.m; sourceTree = "<group>"; };
+		D0BFAD2F1ABF785D0051F0CF /* PresentingAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentingAnimationController.h; sourceTree = "<group>"; };
+		D0BFAD301ABF785D0051F0CF /* PresentingAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentingAnimationController.m; sourceTree = "<group>"; };
+		D0BFAD321ABF78F90051F0CF /* DismissingAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DismissingAnimationController.h; sourceTree = "<group>"; };
+		D0BFAD331ABF78F90051F0CF /* DismissingAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DismissingAnimationController.m; sourceTree = "<group>"; };
 		D0C67CCE1A8EF917000F501A /* DataSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSourceController.h; sourceTree = "<group>"; };
 		D0C67CCF1A8EF917000F501A /* DataSourceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSourceController.m; sourceTree = "<group>"; };
 		D0C67CD41A91B9D4000F501A /* RecordingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCell.h; sourceTree = "<group>"; };
@@ -283,6 +292,8 @@
 				D05D75771A79AAA40050A49C /* ParentViewController.m */,
 				D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */,
 				D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */,
+				D0BFAD2A1ABF736E0051F0CF /* RenameRecordingViewController.h */,
+				D0BFAD2B1ABF736E0051F0CF /* RenameRecordingViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -317,6 +328,10 @@
 				7AC290A91A8EF0100085B927 /* PlayerController.m */,
 				7AC290AA1A8EF0100085B927 /* RecorderController.h */,
 				7AC290AB1A8EF0100085B927 /* RecorderController.m */,
+				D0BFAD2F1ABF785D0051F0CF /* PresentingAnimationController.h */,
+				D0BFAD301ABF785D0051F0CF /* PresentingAnimationController.m */,
+				D0BFAD321ABF78F90051F0CF /* DismissingAnimationController.h */,
+				D0BFAD331ABF78F90051F0CF /* DismissingAnimationController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -484,6 +499,7 @@
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */,
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
+				D0BFAD311ABF785D0051F0CF /* PresentingAnimationController.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
 				D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */,
 				D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */,
@@ -492,10 +508,12 @@
 				D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
+				D0BFAD2D1ABF736E0051F0CF /* RenameRecordingViewController.m in Sources */,
 				D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */,
 				D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */,
 				7AC290B91A8EF0100085B927 /* Recording.m in Sources */,
 				7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */,
+				D0BFAD341ABF78F90051F0CF /* DismissingAnimationController.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,

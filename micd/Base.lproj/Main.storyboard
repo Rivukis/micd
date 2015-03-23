@@ -300,6 +300,50 @@
             </objects>
             <point key="canvasLocation" x="648.5" y="-369.5"/>
         </scene>
+        <!--Rename Recording View Controller-->
+        <scene sceneID="f40-yt-Y0I">
+            <objects>
+                <viewController storyboardIdentifier="renameRecordings" id="X0a-Ed-Xeb" customClass="RenameRecordingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MUo-t1-LCh"/>
+                        <viewControllerLayoutGuide type="bottom" id="PaV-io-NT6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" restorationIdentifier="renameRecordings" id="xUk-Mr-AQv">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="baE-71-IN3" customClass="UIImageView">
+                                <rect key="frame" x="16" y="283" width="343" height="100"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vbj-M8-h2g">
+                                        <rect key="frame" x="144" y="35" width="54" height="30"/>
+                                        <state key="normal" title="Dismiss">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="dismissPressed:" destination="X0a-Ed-Xeb" eventType="touchUpInside" id="u81-5C-pgz"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.96400447550000001" blue="0.36938670309999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="baE-71-IN3" firstAttribute="leading" secondItem="xUk-Mr-AQv" secondAttribute="leadingMargin" id="2K1-ba-hm0"/>
+                            <constraint firstItem="baE-71-IN3" firstAttribute="top" secondItem="MUo-t1-LCh" secondAttribute="bottom" constant="263" id="8cg-dr-Ccu"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="baE-71-IN3" secondAttribute="trailing" id="x2C-kg-gfE"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="dismissButton" destination="vbj-M8-h2g" id="dBK-pc-ffa"/>
+                        <outlet property="textfieldBacker" destination="baE-71-IN3" id="kvk-Za-R3V"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sPO-3J-A4E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1052.5" y="-369.5"/>
+        </scene>
         <!--Home View Controller-->
         <scene sceneID="BbU-8e-joB">
             <objects>
