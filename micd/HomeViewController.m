@@ -49,7 +49,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToAppWillResignActive:) name:kAppWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToAppWillResignActive:) name:kNotificationKeyAppWillResignActive object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToWatchDidFinishRecording:) name:kNotificationKeyDidFinishRecordingFromWatch object:nil];
     
     self.growForLouderNoises = NO;
     self.recordButtonEnabled = YES;
@@ -79,13 +80,41 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.view addGestureRecognizer:panGesture];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    // for launching the app while recording
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+        [self animateRecordingState];
+    }
+}
+
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kAppWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)responseToAppWillResignActive:(NSNotification *)notification {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         [self recordButtonPressed:nil];
+    }
+}
+
+- (void)responseToWatchDidFinishRecording:(NSNotification *)notification {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+        [self.recorderController pauseRecording];
+        __weak __typeof(self) weakSelf = self;
+        [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
+            if (error) {
+                NSLog(@"error retrieving recording: %@", error);
+                return;
+            }
+            [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+        }];
+    } else {
+        [[PlayerController sharedPlayer] pauseAudio];
+        [self.recorderController startRecording];
+    }
+    
+    if (self.view.frame.origin.y != [self backgroundImageHomeStateYOffset]) {
+        [self moveToHomeState];
     }
 }
 
@@ -106,7 +135,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
             case RecorderControllerStateRecording: {
                 // time to stop
                 [self.recorderController pauseRecording];
-                [self.recordButton setBackgroundColor:[UIColor clearColor]];
                 __weak __typeof(self) weakSelf = self;
                 [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
                     if (error) {
@@ -184,6 +212,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)popAnimationCompleted {
+//    if (self.recorderController.recordingState == RecorderControllerStateRecording && self.view.frame.origin.y == [self backgroundImageHomeStateYOffset]) {
+//        [self performSelector:@selector(animateRecordingState) withObject:nil afterDelay:1.0f];
+//    }
     [self.displayLinkController removeSubscriberWithKey:@"gears"];
 }
 

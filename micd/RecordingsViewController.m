@@ -15,6 +15,7 @@
 #import "RenameRecordingViewController.h"
 #import "PresentingAnimationController.h"
 #import "DismissingAnimationController.h"
+#import "Constants.h"
 
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, UIViewControllerTransitioningDelegate, RenameRecordingsViewDelegate>
 
@@ -105,7 +106,7 @@
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
-    [self reloadData];
+    [self reloadDataForNewRecording:NO];
     
     if ([self mostRecentRecording]) {
         self.tableBottomBorder.hidden = NO;
@@ -113,9 +114,13 @@
     }
 }
 
-- (void)reloadData {
+- (void)reloadDataForNewRecording:(BOOL)isNewRecording {
     self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
-    [self.tableView reloadData];
+    if (isNewRecording) {
+        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else {
+        [self.tableView reloadData];
+    }
     if (self.tableBottomBorder.hidden == YES && self.dataSource.recordings.count) {
         self.tableBottomBorder.hidden = NO;
         self.playbackView.hidden = NO;
@@ -145,7 +150,6 @@
         self.waveformView = [[SCWaveformView alloc] init];
         self.waveformView.frame = self.waveformContainerView.bounds;
         [self.waveformContainerView addSubview:self.waveformView];
-//        self.waveformContainerView.layer.masksToBounds = YES;
         self.waveformContainerView.backgroundColor = [UIColor clearColor];
         self.waveformView.normalColor = [UIColor vibrantVeryDarkBlue];
         self.waveformView.progressColor = [UIColor vibrantBlue];

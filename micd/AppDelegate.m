@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import <AVFoundation/AVAudioSession.h>
 #import "Constants.h"
+#import "RecorderController.h"
+#import "DataSourceController.h"
 
 @implementation AppDelegate
 
@@ -28,7 +30,7 @@
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     
-    NSNotification *notification = [NSNotification notificationWithName:kAppWillResignActiveNotification
+    NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyAppWillResignActive
                                                                  object:nil
                                                                userInfo:@{@"application": application}];
     
@@ -50,6 +52,28 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark - WatchKit Methods
+
+- (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void(^)(NSDictionary *replyInfo))reply {
+    NSLog(@"recieved message");
+    
+    RecorderController *recorderController = [RecorderController sharedRecorder];
+    BOOL isRecording = NO;
+    if (recorderController.recordingState == RecorderControllerStateRecording) {
+        isRecording = YES;
+    }
+    
+    NSString *messageType = userInfo[kWatchExtKeyMessageType];
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypeRecordButtonPressed]) {
+        // start or stop recording
+        NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyDidFinishRecordingFromWatch object:nil];
+        [[NSNotificationCenter defaultCenter] postNotification:notification];
+        isRecording = !isRecording;
+    }
+    
+    reply(@{kWatchExtKeyIsRecording : @(isRecording)});
 }
 
 @end

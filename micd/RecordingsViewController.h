@@ -14,8 +14,7 @@
 
 @property (nonatomic, readonly) PlayerControllerState playerState;
 
-- (void)reloadData;
-
+- (void)reloadDataForNewRecording:(BOOL)isNewRecording;
 - (void)playPlayback;
 - (void)pausePlayback;
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval;

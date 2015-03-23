@@ -41,6 +41,12 @@
 		D0BFAD2D1ABF736E0051F0CF /* RenameRecordingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD2B1ABF736E0051F0CF /* RenameRecordingViewController.m */; };
 		D0BFAD311ABF785D0051F0CF /* PresentingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD301ABF785D0051F0CF /* PresentingAnimationController.m */; };
 		D0BFAD341ABF78F90051F0CF /* DismissingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD331ABF78F90051F0CF /* DismissingAnimationController.m */; };
+		D0BFAD3F1ABF9C9B0051F0CF /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD3E1ABF9C9B0051F0CF /* InterfaceController.m */; };
+		D0BFAD411ABF9C9B0051F0CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD401ABF9C9B0051F0CF /* Images.xcassets */; };
+		D0BFAD451ABF9C9B0051F0CF /* micd WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD441ABF9C9B0051F0CF /* micd WatchKit App.app */; };
+		D0BFAD4D1ABF9C9B0051F0CF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD4B1ABF9C9B0051F0CF /* Interface.storyboard */; };
+		D0BFAD4F1ABF9C9B0051F0CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD4E1ABF9C9B0051F0CF /* Images.xcassets */; };
+		D0BFAD521ABF9C9B0051F0CF /* micd WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0BFAD391ABF9C9B0051F0CF /* micd WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSourceController.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
 		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
@@ -55,7 +61,35 @@
 			remoteGlobalIDString = D05D756B1A79AAA40050A49C;
 			remoteInfo = micd;
 		};
+		D0BFAD461ABF9C9B0051F0CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D05D75641A79AAA40050A49C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D0BFAD431ABF9C9B0051F0CF;
+			remoteInfo = "micd WatchKit App";
+		};
+		D0BFAD501ABF9C9B0051F0CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D05D75641A79AAA40050A49C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D0BFAD381ABF9C9B0051F0CF;
+			remoteInfo = "micd WatchKit Extension";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D0BFAD591ABF9C9B0051F0CF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D0BFAD521ABF9C9B0051F0CF /* micd WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +158,15 @@
 		D0BFAD301ABF785D0051F0CF /* PresentingAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentingAnimationController.m; sourceTree = "<group>"; };
 		D0BFAD321ABF78F90051F0CF /* DismissingAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DismissingAnimationController.h; sourceTree = "<group>"; };
 		D0BFAD331ABF78F90051F0CF /* DismissingAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DismissingAnimationController.m; sourceTree = "<group>"; };
+		D0BFAD391ABF9C9B0051F0CF /* micd WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "micd WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0BFAD3C1ABF9C9B0051F0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0BFAD3D1ABF9C9B0051F0CF /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		D0BFAD3E1ABF9C9B0051F0CF /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		D0BFAD401ABF9C9B0051F0CF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		D0BFAD441ABF9C9B0051F0CF /* micd WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "micd WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0BFAD4A1ABF9C9B0051F0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0BFAD4C1ABF9C9B0051F0CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		D0BFAD4E1ABF9C9B0051F0CF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D0C67CCE1A8EF917000F501A /* DataSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSourceController.h; sourceTree = "<group>"; };
 		D0C67CCF1A8EF917000F501A /* DataSourceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSourceController.m; sourceTree = "<group>"; };
 		D0C67CD41A91B9D4000F501A /* RecordingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCell.h; sourceTree = "<group>"; };
@@ -145,6 +188,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D05D75821A79AAA40050A49C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0BFAD361ABF9C9B0051F0CF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -198,6 +248,8 @@
 				D0C67CCD1A8EF0B7000F501A /* Brians stuff */,
 				D05D756F1A79AAA40050A49C /* Supporting Files */,
 				D05D75881A79AAA40050A49C /* micdTests */,
+				D0BFAD3A1ABF9C9B0051F0CF /* micd WatchKit Extension */,
+				D0BFAD481ABF9C9B0051F0CF /* micd WatchKit App */,
 				D05D756D1A79AAA40050A49C /* Products */,
 				5382381EB36A40952B91A5F0 /* Pods */,
 				9608EBA9FD03CB81B731CDFB /* Frameworks */,
@@ -209,6 +261,8 @@
 			children = (
 				D05D756C1A79AAA40050A49C /* micd.app */,
 				D05D75851A79AAA40050A49C /* micdTests.xctest */,
+				D0BFAD391ABF9C9B0051F0CF /* micd WatchKit Extension.appex */,
+				D0BFAD441ABF9C9B0051F0CF /* micd WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -271,6 +325,43 @@
 			);
 			name = Styling;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		D0BFAD3A1ABF9C9B0051F0CF /* micd WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D0BFAD3D1ABF9C9B0051F0CF /* InterfaceController.h */,
+				D0BFAD3E1ABF9C9B0051F0CF /* InterfaceController.m */,
+				D0BFAD401ABF9C9B0051F0CF /* Images.xcassets */,
+				D0BFAD3B1ABF9C9B0051F0CF /* Supporting Files */,
+			);
+			path = "micd WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		D0BFAD3B1ABF9C9B0051F0CF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D0BFAD3C1ABF9C9B0051F0CF /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D0BFAD481ABF9C9B0051F0CF /* micd WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				D0BFAD4B1ABF9C9B0051F0CF /* Interface.storyboard */,
+				D0BFAD4E1ABF9C9B0051F0CF /* Images.xcassets */,
+				D0BFAD491ABF9C9B0051F0CF /* Supporting Files */,
+			);
+			path = "micd WatchKit App";
+			sourceTree = "<group>";
+		};
+		D0BFAD491ABF9C9B0051F0CF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D0BFAD4A1ABF9C9B0051F0CF /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		D0C67CCD1A8EF0B7000F501A /* Brians stuff */ = {
@@ -363,10 +454,12 @@
 				D05D75691A79AAA40050A49C /* Frameworks */,
 				D05D756A1A79AAA40050A49C /* Resources */,
 				802943FB87C5BFF9DC29BDD1 /* Copy Pods Resources */,
+				D0BFAD591ABF9C9B0051F0CF /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D0BFAD511ABF9C9B0051F0CF /* PBXTargetDependency */,
 			);
 			name = micd;
 			productName = micd;
@@ -391,6 +484,39 @@
 			productReference = D05D75851A79AAA40050A49C /* micdTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D0BFAD381ABF9C9B0051F0CF /* micd WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0BFAD561ABF9C9B0051F0CF /* Build configuration list for PBXNativeTarget "micd WatchKit Extension" */;
+			buildPhases = (
+				D0BFAD351ABF9C9B0051F0CF /* Sources */,
+				D0BFAD361ABF9C9B0051F0CF /* Frameworks */,
+				D0BFAD371ABF9C9B0051F0CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D0BFAD471ABF9C9B0051F0CF /* PBXTargetDependency */,
+			);
+			name = "micd WatchKit Extension";
+			productName = "micd WatchKit Extension";
+			productReference = D0BFAD391ABF9C9B0051F0CF /* micd WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		D0BFAD431ABF9C9B0051F0CF /* micd WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0BFAD531ABF9C9B0051F0CF /* Build configuration list for PBXNativeTarget "micd WatchKit App" */;
+			buildPhases = (
+				D0BFAD421ABF9C9B0051F0CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "micd WatchKit App";
+			productName = "micd WatchKit App";
+			productReference = D0BFAD441ABF9C9B0051F0CF /* micd WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -409,6 +535,13 @@
 						DevelopmentTeam = A57KTL95E8;
 						TestTargetID = D05D756B1A79AAA40050A49C;
 					};
+					D0BFAD381ABF9C9B0051F0CF = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = A57KTL95E8;
+					};
+					D0BFAD431ABF9C9B0051F0CF = {
+						CreatedOnToolsVersion = 6.2;
+					};
 				};
 			};
 			buildConfigurationList = D05D75671A79AAA40050A49C /* Build configuration list for PBXProject "micd" */;
@@ -426,6 +559,8 @@
 			targets = (
 				D05D756B1A79AAA40050A49C /* micd */,
 				D05D75841A79AAA40050A49C /* micdTests */,
+				D0BFAD381ABF9C9B0051F0CF /* micd WatchKit Extension */,
+				D0BFAD431ABF9C9B0051F0CF /* micd WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -446,6 +581,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0BFAD371ABF9C9B0051F0CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0BFAD411ABF9C9B0051F0CF /* Images.xcassets in Resources */,
+				D0BFAD451ABF9C9B0051F0CF /* micd WatchKit App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0BFAD421ABF9C9B0051F0CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0BFAD4D1ABF9C9B0051F0CF /* Interface.storyboard in Resources */,
+				D0BFAD4F1ABF9C9B0051F0CF /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +685,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0BFAD351ABF9C9B0051F0CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0BFAD3F1ABF9C9B0051F0CF /* InterfaceController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -539,6 +700,16 @@
 			isa = PBXTargetDependency;
 			target = D05D756B1A79AAA40050A49C /* micd */;
 			targetProxy = D05D75861A79AAA40050A49C /* PBXContainerItemProxy */;
+		};
+		D0BFAD471ABF9C9B0051F0CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D0BFAD431ABF9C9B0051F0CF /* micd WatchKit App */;
+			targetProxy = D0BFAD461ABF9C9B0051F0CF /* PBXContainerItemProxy */;
+		};
+		D0BFAD511ABF9C9B0051F0CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D0BFAD381ABF9C9B0051F0CF /* micd WatchKit Extension */;
+			targetProxy = D0BFAD501ABF9C9B0051F0CF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -557,6 +728,14 @@
 				D05D757F1A79AAA40050A49C /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		D0BFAD4B1ABF9C9B0051F0CF /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D0BFAD4C1ABF9C9B0051F0CF /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -700,6 +879,70 @@
 			};
 			name = Release;
 		};
+		D0BFAD541ABF9C9B0051F0CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IBSC_MODULE = micd_WatchKit_Extension;
+				INFOPLIST_FILE = "micd WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		D0BFAD551ABF9C9B0051F0CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COPY_PHASE_STRIP = NO;
+				IBSC_MODULE = micd_WatchKit_Extension;
+				INFOPLIST_FILE = "micd WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
+		D0BFAD571ABF9C9B0051F0CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "micd WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		D0BFAD581ABF9C9B0051F0CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = "micd WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -729,6 +972,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		D0BFAD531ABF9C9B0051F0CF /* Build configuration list for PBXNativeTarget "micd WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0BFAD541ABF9C9B0051F0CF /* Debug */,
+				D0BFAD551ABF9C9B0051F0CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		D0BFAD561ABF9C9B0051F0CF /* Build configuration list for PBXNativeTarget "micd WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0BFAD571ABF9C9B0051F0CF /* Debug */,
+				D0BFAD581ABF9C9B0051F0CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

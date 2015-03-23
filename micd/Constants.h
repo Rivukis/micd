@@ -8,14 +8,25 @@
 
 #import <Foundation/Foundation.h>
 
+// Recording shit
 static NSString *const kRecorderPrimaryAudioFile = @"RecorderPrimaryAudioFile.m4a";
 static NSString *const kRecorderSavedAudioFileName = @"RecorderSavedAudioFileName.m4a";
 static NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenatedAudioFileName.m4a";
 static NSString *const kRecorderFormatTypeAsString = @".m4a";
 
-static NSString *const kAppWillResignActiveNotification = @"AppWillResignActiveNotification";
+// Notification shit
+static NSString *const kNotificationKeyAppWillResignActive = @"NotificationKeyAppWillResignActive";
+static NSString *const kNotificationKeyDidFinishRecordingFromWatch = @"NotificationKeyDidFinishRecordingFromWatch";
 
-static NSString *const kMainColorUserDefaultsKey = @"MainColorUserDefaultsKey";
+// UserDefaults shit
+static NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";
+
+// WatchKit shit
+static NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
+static NSString *const kWatchExtKeyMessageTypeWillActivate = @"WatchExtKeyMessageTypeWillActivate";
+static NSString *const kWatchExtKeyMessageTypeRecordButtonPressed = @"WatchExtKeyMessageTypeRecordButtonPressed";
+static NSString *const kWatchExtKeyIsRecording = @"kWatchExtKeyIsRecording";
+
 
 @interface Constants : NSObject
 

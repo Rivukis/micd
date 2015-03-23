@@ -7,6 +7,7 @@
 #import "DataSourceController.h"
 #import "Recording.h"
 #import "ViewAnimator.h"
+#import "Constants.h"
 
 @interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate>
 
@@ -57,7 +58,7 @@
 
 - (void)addNewRecording:(Recording *)recording {
     [self.dataSource saveRecording:recording];
-    [self.recordingsViewController reloadData];
+    [self.recordingsViewController reloadDataForNewRecording:YES];
     [self.recordingsViewController scrollToAndReadyPlayerWithMostRecentRecording];
 }
 
