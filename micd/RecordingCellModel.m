@@ -13,6 +13,7 @@
 @interface RecordingCellModel ()
 
 @property (nonatomic, strong, readwrite) Recording *recording;
+@property (nonatomic, strong, readwrite) NSString *title;
 
 @end
 
@@ -27,11 +28,20 @@
 }
 
 - (CGFloat)heightForState {
-    return 45.0f;
+    return 50.0f;
 }
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"%@ - %@", self.recording.title, self.recording];
+}
+
+- (NSString *)title {
+    self.title = self.recording.title;
+    if ([_title isEqualToString:self.recording.dateAsString]) {
+        return @"Tap and hold to edit";
+    }
+    
+    return _title;
 }
 
 @end

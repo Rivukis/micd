@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, CellState) {
 
 @property (nonatomic, assign) CellState state;
 @property (nonatomic, strong, readonly) Recording *recording;
+@property (nonatomic, strong, readonly) NSString *title;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;
 
 - (instancetype)initWithRecording:(Recording *)recording;

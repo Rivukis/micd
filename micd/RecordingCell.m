@@ -8,12 +8,13 @@
 #import "PlayerController.h"
 #import "DataSourceController.h"
 
-@interface RecordingCell ()
+@interface RecordingCell () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *bottomSeparator;
 @property (weak, nonatomic) IBOutlet UIView *roundedBackerView;
-@property (weak, nonatomic) IBOutlet UILabel *title;
+@property (weak, nonatomic) IBOutlet UITextField *title;
 @property (weak, nonatomic) IBOutlet UILabel *length;
+@property (weak, nonatomic) IBOutlet UILabel *date;
 
 @property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
 @property (assign, nonatomic) BOOL isObserving;
@@ -43,18 +44,35 @@
     _cellModel = cellModel;
     
     self.backgroundColor = [UIColor clearColor];
-    self.title.textColor = [UIColor vibrantLightBlueText];
     self.length.textColor = [UIColor vibrantLightBlueText];
+    self.date.textColor = [UIColor vibrantDarkBlue];
+    self.title.textColor = [UIColor vibrantLightBlueText];
+    self.title.tintColor = [UIColor vibrantLightBlueText];
     
     if (!self.isObserving) {
         [cellModel addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
         self.isObserving = YES;
     }
     
-    self.title.text = cellModel.recording.title;
+    self.title.text = cellModel.title;
     self.length.text = cellModel.recording.lengthToDiplay;
+    self.date.text = cellModel.recording.dateAsString;
     
     [self setupViewBasedOnState];
+    
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    longPressGestureRecognizer.minimumPressDuration = 1.0;
+    longPressGestureRecognizer.delegate = self;
+    [self.contentView addGestureRecognizer:longPressGestureRecognizer];
+
+    self.title.delegate = self;
+    self.title.userInteractionEnabled = NO;
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setImage:[WireTapStyleKit imageOfClearButton] forState:UIControlStateNormal];
+    [button setFrame:CGRectMake(0.0f, 0.0f, 15.0f, 15.0f)]; // Required for iOS7
+    self.title.rightView = button;
+    self.title.rightViewMode = UITextFieldViewModeWhileEditing;
+    [button addTarget:self action:@selector(clearText) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)dealloc {
@@ -102,6 +120,35 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     [self bindToModel:object];
+}
+
+#pragma mark - UITextfield Delegate and Gesture Recognizer
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self saveTitleAndResignResponder];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self saveTitleAndResignResponder];
+    return YES;
+}
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        self.title.userInteractionEnabled = YES;
+        [self.title becomeFirstResponder];
+    }
+}
+
+- (void)saveTitleAndResignResponder {
+    self.title.userInteractionEnabled = NO;
+    self.cellModel.recording.title = self.title.text;
+    [[DataSourceController sharedDataSource] saveData];
+    [self.title resignFirstResponder];
+}
+
+- (void)clearText {
+    self.title.text = @"";
 }
 
 @end
