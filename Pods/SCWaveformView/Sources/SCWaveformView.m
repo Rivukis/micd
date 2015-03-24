@@ -200,7 +200,7 @@
         CGFloat heightPerChannel = (size.height - _channelsPadding * (numberOfChannels - 1)) / numberOfChannels;
         CGFloat halfHeightPerChannel = heightPerChannel / 2;
         CGFloat bandWidth = 1 / pixelRatio;
-        CGFloat pointSize = 1.0 / scale / 2;
+        CGFloat pointSize = 1.0 / scale * 2;
         CMTime assetDuration = [_cache actualAssetDuration];
         
         [_cache readRange:dirtyRange atTime:_timeRange.start handler:^(int channel, int idx, float sample, CMTime time) {

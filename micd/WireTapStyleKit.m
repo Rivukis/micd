@@ -772,28 +772,6 @@ static UIImage* _imageOfMicdAppIcon = nil;
     UIColor* vibrantBlue = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
     UIColor* black = [UIColor colorWithRed: 0 green: 0 blue: 0 alpha: 1];
 
-    //// Rectangle Drawing
-    UIBezierPath* rectanglePath = UIBezierPath.bezierPath;
-    [rectanglePath moveToPoint: CGPointMake(168.62, 58.51)];
-    [rectanglePath addCurveToPoint: CGPointMake(153.93, 67.25) controlPoint1: CGPointMake(169.52, 63.19) controlPoint2: CGPointMake(155.37, 59.3)];
-    [rectanglePath addCurveToPoint: CGPointMake(163.23, 75.53) controlPoint1: CGPointMake(153.33, 70.53) controlPoint2: CGPointMake(164.45, 73.03)];
-    [rectanglePath addCurveToPoint: CGPointMake(147.11, 81.34) controlPoint1: CGPointMake(162.34, 77.35) controlPoint2: CGPointMake(148.16, 79.29)];
-    [rectanglePath addCurveToPoint: CGPointMake(149, 102) controlPoint1: CGPointMake(144.53, 86.34) controlPoint2: CGPointMake(147.3, 95.71)];
-    [rectanglePath addCurveToPoint: CGPointMake(150, 109) controlPoint1: CGPointMake(150.02, 105.77) controlPoint2: CGPointMake(150.06, 107.66)];
-    [rectanglePath addCurveToPoint: CGPointMake(153, 110) controlPoint1: CGPointMake(149.78, 114.14) controlPoint2: CGPointMake(149.84, 115.31)];
-    [rectanglePath addCurveToPoint: CGPointMake(152, 100) controlPoint1: CGPointMake(153.67, 108.88) controlPoint2: CGPointMake(153.17, 103.6)];
-    [rectanglePath addCurveToPoint: CGPointMake(150, 83) controlPoint1: CGPointMake(149.99, 93.8) controlPoint2: CGPointMake(147.94, 87.2)];
-    [rectanglePath addCurveToPoint: CGPointMake(165.6, 76.16) controlPoint1: CGPointMake(145.42, 83.17) controlPoint2: CGPointMake(163.98, 79.62)];
-    [rectanglePath addCurveToPoint: CGPointMake(156.54, 67.25) controlPoint1: CGPointMake(166.88, 73.41) controlPoint2: CGPointMake(158.01, 70.1)];
-    [rectanglePath addCurveToPoint: CGPointMake(172.7, 58.88) controlPoint1: CGPointMake(153.27, 60.88) controlPoint2: CGPointMake(172.42, 63.75)];
-    [rectanglePath addCurveToPoint: CGPointMake(177.05, 49.83) controlPoint1: CGPointMake(173.09, 52.3) controlPoint2: CGPointMake(177.05, 49.83)];
-    [rectanglePath addLineToPoint: CGPointMake(168.2, 49.83)];
-    [rectanglePath addCurveToPoint: CGPointMake(168.62, 58.51) controlPoint1: CGPointMake(168.2, 49.83) controlPoint2: CGPointMake(167.31, 51.66)];
-    [rectanglePath closePath];
-    [vibrantBlue setFill];
-    [rectanglePath fill];
-
-
     //// micd title Drawing
     UIBezierPath* micdTitlePath = UIBezierPath.bezierPath;
     [micdTitlePath moveToPoint: CGPointMake(166.55, 39.73)];
@@ -1217,18 +1195,6 @@ static UIImage* _imageOfMicdAppIcon = nil;
     [micdTitle3Path fill];
 
     CGContextRestoreGState(context);
-
-
-    //// Rectangle 7 Drawing
-    UIBezierPath* rectangle7Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(148, 108, 8, 26) cornerRadius: 3];
-    [vibrantBlue setFill];
-    [rectangle7Path fill];
-
-
-    //// Rectangle 8 Drawing
-    UIBezierPath* rectangle8Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(150, 127, 4, 20) cornerRadius: 2];
-    [vibrantBlue setFill];
-    [rectangle8Path fill];
 }
 
 + (void)drawRecordButtonWithArcEndAngle: (CGFloat)arcEndAngle arcStartAngle: (CGFloat)arcStartAngle strokeWidth: (CGFloat)strokeWidth

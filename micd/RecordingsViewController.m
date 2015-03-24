@@ -147,6 +147,11 @@
 //    }
     
     if (!self.waveformView) {
+        //after pod install need to change
+        //CGFloat pointSize = 1.0 / scale / 2;
+        //to
+        //CGFloat pointSize = 1.0 / scale * 2;
+        //this makes the minimum line height big enough to still see
         self.waveformView = [[SCWaveformView alloc] init];
         self.waveformView.frame = self.waveformContainerView.bounds;
         [self.waveformContainerView addSubview:self.waveformView];

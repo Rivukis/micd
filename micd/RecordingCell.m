@@ -61,7 +61,7 @@
     [self setupViewBasedOnState];
     
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longPressGestureRecognizer.minimumPressDuration = 1.0;
+    longPressGestureRecognizer.minimumPressDuration = 0.8;
     longPressGestureRecognizer.delegate = self;
     [self.contentView addGestureRecognizer:longPressGestureRecognizer];
 
