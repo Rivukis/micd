@@ -7,9 +7,9 @@
 
 @property (nonatomic, readonly) NSInteger numberOfCellModels;
 
-+ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending;
-
++ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending cellModelDelegate:(id<RecordingCellModelDelegate>)cellModelDelegate;
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index;
+- (BOOL)isToday;
 - (NSString *)dateAsString;
 
 @end

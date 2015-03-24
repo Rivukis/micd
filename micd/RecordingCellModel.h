@@ -9,8 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CGBase.h>
 
+@class RecordingCellModel;
 @class Recording;
 @class AVAsset;
+
+@protocol RecordingCellModelDelegate <NSObject>
+
+- (void)cellModel:(RecordingCellModel *)cellModel shouldChangeRecordingTitle:(NSString *)title;
+
+@end
 
 typedef NS_ENUM(NSUInteger, CellState) {
     CellStateDefault = 1,
@@ -26,7 +33,10 @@ typedef NS_ENUM(NSUInteger, CellState) {
 @property (nonatomic, strong, readonly) NSString *title;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;
 
-- (instancetype)initWithRecording:(Recording *)recording;
+- (instancetype)initWithRecording:(Recording *)recording delegate:(id<RecordingCellModelDelegate>)delegate;
 - (CGFloat)heightForState;
+- (void)changeRecordingTitle:(NSString *)title;
+
++ (NSString *)titlePlaceholderText;
 
 @end

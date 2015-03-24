@@ -25,13 +25,13 @@
     abort();
 }
 
-- (instancetype)initWithData:(NSData *)data date:(NSDate *)recordedDate length:(NSTimeInterval)length name:(NSString *)name {
+- (instancetype)initWithData:(NSData *)data date:(NSDate *)recordedDate length:(NSTimeInterval)length title:(NSString *)title {
     self = [super init];
     if (self) {
         _data = data;
         _date = recordedDate;
         _lengthAsTimeInterval = length;
-        _title = name ? name : @"";
+        _title = title ? title : @"";
         _uuid = [[NSUUID alloc] init];
         
         if (_data) {
@@ -42,7 +42,7 @@
 }
 
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length {
-    return [self initWithData:data date:startDate length:length name:nil];
+    return [self initWithData:data date:startDate length:length title:nil];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -64,14 +64,6 @@
     [aCoder encodeObject:_date forKey:@"date"];
     [aCoder encodeObject:_tags forKey:@"tags"];
     [aCoder encodeDouble:_lengthAsTimeInterval forKey:@"length"];
-}
-
-- (NSString *)title {
-    if (_title.length > 0) {
-        return _title;
-    }
-    
-    return self.dateAsString;
 }
 
 - (NSData *)data {

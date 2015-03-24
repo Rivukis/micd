@@ -12,12 +12,11 @@
 #import "RecordingsView.h"
 #import "ViewAnimator.h"
 #import "NSObject+Blocks.h"
-#import "RenameRecordingViewController.h"
 #import "PresentingAnimationController.h"
 #import "DismissingAnimationController.h"
 #import "Constants.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, UIViewControllerTransitioningDelegate, RenameRecordingsViewDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, RecordingCellModelDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
@@ -78,10 +77,6 @@
     self.tableView.scrollsToTop = YES;
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(45, 0, 0, 0);
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longPressGestureRecognizer.minimumPressDuration = 1.0;
-    longPressGestureRecognizer.delegate = self;
-    [self.tableView addGestureRecognizer:longPressGestureRecognizer];
     //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     
     self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
@@ -115,9 +110,15 @@
 }
 
 - (void)reloadDataForNewRecording:(BOOL)isNewRecording {
-    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
+    RecordingsSection *firstSection = self.sections.firstObject;
+    BOOL firstSectionIsToday = firstSection.isToday;
+    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
     if (isNewRecording) {
-        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (firstSectionIsToday) {
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        } else {
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     } else {
         [self.tableView reloadData];
     }
@@ -201,6 +202,17 @@
     RecordingsSection *firstRecordingsSection = self.sections.lastObject;
     RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:0];
     return lastAddedRecordingModel.recording;
+}
+
+#pragma mark - RecordingCellModelDelegate
+
+- (void)cellModel:(RecordingCellModel *)cellModel shouldChangeRecordingTitle:(NSString *)title {
+    if (title.length > 0 && cellModel.recording.title != title) {
+        cellModel.recording.title = title;
+        if (cellModel == self.focusedCellModel) {
+            [self setplaybackTitleLabelText:title];
+        }
+    }
 }
 
 #pragma mark - FramesBasedOnStateProtocol
@@ -326,7 +338,7 @@
 
 - (void)readyPlayerWithRecording:(Recording *)recording {
     [self.playerController loadRecording:recording];
-    self.playbackTitleLabel.text = recording.title;
+    [self setplaybackTitleLabelText:recording.title];
     self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
     
     if (recording) {
@@ -343,6 +355,14 @@
         self.waveformContainerView.hidden = YES;
         self.currentPlaybackTimeLabel.text = @"";
         self.tableBottomBorder.hidden = YES;
+    }
+}
+
+- (void)setplaybackTitleLabelText:(NSString *)title {
+    if (title.length > 0) {
+        self.playbackTitleLabel.text = title;
+    } else {
+        self.playbackTitleLabel.text = self.focusedCellModel.recording.dateAsString;
     }
 }
 
@@ -442,7 +462,7 @@
     NSInteger nextSelectedRow;
     
     if (isSectionDeleted) {
-        BOOL isSectionAfterDeletedSection = indexPath.section >= self.sections.count;
+        BOOL isSectionAfterDeletedSection = indexPath.section <= self.sections.count - 1;
         
         if (isSectionAfterDeletedSection) {
             // select first object of next section
@@ -478,56 +498,6 @@
     }
     
     return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
-}
-
-#pragma mark - LongPress for Tableview Delegate
-
-- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
-    CGPoint point = [gestureRecognizer locationInView:self.tableView];
-    
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
-    if (indexPath == nil) {
-        NSLog(@"long press on table view but not on a row");
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        [self presentRenameRecordingViewController];
-        NSLog(@"long press on table view at row %ld", (long)indexPath.row);
-    } else {
-        NSLog(@"gestureRecognizer.state = %ld", gestureRecognizer.state);
-    }
-}
-
-#pragma mark - UIViewControllerTransitionDelegate -
-
-- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
-{
-    return [[PresentingAnimationController alloc] init];
-}
-
-- (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-{
-    return [[DismissingAnimationController alloc] init];
-}
-
-- (void)presentRenameRecordingViewController {
-//    UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-//    self.blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-//    self.blurView.frame = self.view.bounds;
-//    [UIView transitionWithView:self.view duration:5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-//        [self.view addSubview:self.blurView];
-//    } completion:^(BOOL finished) {
-//    }];
-    
-    RenameRecordingViewController *modalVC = [self.storyboard instantiateViewControllerWithIdentifier:@"renameRecordings"];
-    modalVC.transitioningDelegate = self;
-    modalVC.renameRecordingsViewDelegate = self;
-    modalVC.modalPresentationStyle = UIModalPresentationCustom;
-    [self presentViewController:modalVC animated:YES completion:^{
-        
-    }];
-}
-
-- (void)didFinishRenaming {
-//    [self.blurView removeFromSuperview];
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate
@@ -566,7 +536,7 @@
         BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
         
         [self.dataSource deleteRecording:editingCellModel.recording];
-        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO];
+        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
         
         if (deletingSection) {
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];

@@ -38,7 +38,7 @@ struct Length {
 
 @property (nonatomic, weak, readonly) NSString *urlString;
 
-- (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length name:(NSString *)name;
+- (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length title:(NSString *)title;
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)startDate length:(NSTimeInterval)length;
 
 //TODO: make init method for keyedunarchiver and pass in all archived data (including UUID)

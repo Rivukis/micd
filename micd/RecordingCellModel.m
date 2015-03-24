@@ -9,9 +9,11 @@
 #import "RecordingCellModel.h"
 #import "Recording.h"
 #import "MTKValidKeyPath.h"
+#import "DataSourceController.h"
 
 @interface RecordingCellModel ()
 
+@property (nonatomic, weak) id<RecordingCellModelDelegate> delegate;
 @property (nonatomic, strong, readwrite) Recording *recording;
 @property (nonatomic, strong, readwrite) NSString *title;
 
@@ -19,10 +21,11 @@
 
 @implementation RecordingCellModel
 
-- (instancetype)initWithRecording:(Recording *)recording {
+- (instancetype)initWithRecording:(Recording *)recording delegate:(id<RecordingCellModelDelegate>)delegate {
     self = [super init];
     if (self) {
         _recording = recording;
+        _delegate = delegate;
     }
     return self;
 }
@@ -31,17 +34,24 @@
     return 50.0f;
 }
 
+- (void)changeRecordingTitle:(NSString *)title {
+    [self.delegate cellModel:self shouldChangeRecordingTitle:title];
+}
+
 - (NSString *)description {
     return [NSString stringWithFormat:@"%@ - %@", self.recording.title, self.recording];
 }
 
 - (NSString *)title {
-    self.title = self.recording.title;
-    if ([_title isEqualToString:self.recording.dateAsString]) {
-        return @"Tap and hold to edit";
+    if (self.recording.title.length > 0) {
+        return self.recording.title;
+    } else {
+        return [RecordingCellModel titlePlaceholderText];
     }
-    
-    return _title;
+}
+
++ (NSString *)titlePlaceholderText {
+    return @"Tap and hold to edit";
 }
 
 @end

@@ -5,8 +5,11 @@
 #import "OBShapedButton.h"
 #import "SCWaveformView.h"
 #import "RecordingCellModel.h"
-#import "PlayerController.h"
-#import "DataSourceController.h"
+
+/*
+ self.recording.title = title;
+ [[DataSourceController sharedDataSource] saveData];
+ */
 
 @interface RecordingCell () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -69,7 +72,7 @@
     self.title.userInteractionEnabled = NO;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setImage:[WireTapStyleKit imageOfClearButton] forState:UIControlStateNormal];
-    [button setFrame:CGRectMake(0.0f, 0.0f, 15.0f, 15.0f)]; // Required for iOS7
+    [button setFrame:CGRectMake(0.0f, 0.0f, 15.0f, 15.0f)];
     self.title.rightView = button;
     self.title.rightViewMode = UITextFieldViewModeWhileEditing;
     [button addTarget:self action:@selector(clearText) forControlEvents:UIControlEventTouchUpInside];
@@ -135,6 +138,9 @@
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        if ([self.title.text isEqualToString:[RecordingCellModel titlePlaceholderText]]) {
+            self.title.text = @"";
+        }
         self.title.userInteractionEnabled = YES;
         [self.title becomeFirstResponder];
     }
@@ -142,9 +148,11 @@
 
 - (void)saveTitleAndResignResponder {
     self.title.userInteractionEnabled = NO;
-    self.cellModel.recording.title = self.title.text;
-    [[DataSourceController sharedDataSource] saveData];
+    [self.cellModel changeRecordingTitle:self.title.text];
     [self.title resignFirstResponder];
+    if (self.title.text.length == 0) {
+        self.title.text = self.cellModel.title;
+    }
 }
 
 - (void)clearText {
