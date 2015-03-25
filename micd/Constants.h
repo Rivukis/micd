@@ -15,7 +15,6 @@ static NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenat
 static NSString *const kRecorderFormatTypeAsString = @".m4a";
 
 // Notification shit
-static NSString *const kNotificationKeyAppWillResignActive = @"NotificationKeyAppWillResignActive";
 static NSString *const kNotificationKeyDidFinishRecordingFromWatch = @"NotificationKeyDidFinishRecordingFromWatch";
 
 // UserDefaults shit
