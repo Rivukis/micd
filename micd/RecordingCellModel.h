@@ -10,6 +10,7 @@
 #import <CoreGraphics/CGBase.h>
 
 @class RecordingCellModel;
+@class RecordingCell;
 @class Recording;
 @class AVAsset;
 

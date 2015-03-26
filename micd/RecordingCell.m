@@ -60,7 +60,7 @@
     [self setupViewBasedOnState];
     
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longPressGestureRecognizer.minimumPressDuration = 0.8;
+    longPressGestureRecognizer.minimumPressDuration = 0.5;
     longPressGestureRecognizer.delegate = self;
     [self.contentView addGestureRecognizer:longPressGestureRecognizer];
 
@@ -192,6 +192,7 @@
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        [self.delegate cellDidBecomeFirstResponer:self];
         if ([self.title.text isEqualToString:[RecordingCellModel titlePlaceholderText]]) {
             self.title.text = @"";
         }
@@ -211,6 +212,13 @@
 
 - (void)clearText {
     self.title.text = @"";
+}
+
+- (BOOL)resignFirstResponder {
+    if ([self.title isFirstResponder]) {
+        [self.title resignFirstResponder];
+    }
+    return YES;
 }
 
 @end

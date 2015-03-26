@@ -16,7 +16,7 @@
 #import "DismissingAnimationController.h"
 #import "Constants.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, RecordingCellModelDelegate>
+@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, RecordingCellModelDelegate, RecordingCellDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
@@ -53,6 +53,7 @@
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
 
 @property (strong, nonatomic) RecordingCellModel *focusedCellModel;
+@property (strong, nonatomic) RecordingCell *editingCell;
 
 @property (strong, nonatomic) UIVisualEffectView *blurView;
 
@@ -200,6 +201,12 @@
     RecordingsSection *firstRecordingsSection = self.sections.lastObject;
     RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:0];
     return lastAddedRecordingModel.recording;
+}
+
+#pragma mark - RecordingCellDelegate
+
+- (void)cellDidBecomeFirstResponer:(RecordingCell *)cell {
+    self.editingCell = cell;
 }
 
 #pragma mark - RecordingCellModelDelegate
@@ -522,18 +529,27 @@
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     
-    if (self.focusedCellModel == recordingCellModel) {
-        if (self.focusedCellModel.state == CellStatePlaying) {
-            [self pausePlayback];
+    if (self.editingCell) {
+        if (self.editingCell.cellModel == recordingCellModel) {
+            return;
         } else {
-            [self playPlayback];
+            [self.editingCell resignFirstResponder];
+            self.editingCell = nil;
         }
     } else {
-        self.focusedCellModel.state = CellStateDefault;
-        self.focusedCellModel = recordingCellModel;
-        
-        [self readyPlayerWithRecording:self.focusedCellModel.recording];
-        [self playPlayback];
+        if (self.focusedCellModel == recordingCellModel) {
+            if (self.focusedCellModel.state == CellStatePlaying) {
+                [self pausePlayback];
+            } else {
+                [self playPlayback];
+            }
+        } else {
+            self.focusedCellModel.state = CellStateDefault;
+            self.focusedCellModel = recordingCellModel;
+            
+            [self readyPlayerWithRecording:self.focusedCellModel.recording];
+            [self playPlayback];
+        }
     }
 }
 
@@ -585,6 +601,7 @@
     RecordingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
+    cell.delegate = self;
     [cell bindToModel:recordingCellModel];
     
     return cell;
