@@ -103,15 +103,10 @@
 }
 
 - (void)setupViewForDefaultState {
-//    if (self.length.hidden) {
-//        self.length.hidden = NO;
-//    }
     if (self.length.hidden) {
         [self.timer invalidate];
         [UIView transitionFromView:self.playPauseImageView toView:self.length duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews completion:nil];
     }
-//    [UIView transitionFromView:self.pauseImageView toView:self.length duration:1 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews completion:^(BOOL finished) {
-//    }];
 }
 
 - (void)setupViewForPlayingState {
@@ -121,27 +116,39 @@
         [UIView transitionWithView:self.playPauseImageView duration:.4 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
             self.playPauseImageView.image = self.playPauseImageView.image;
         } completion:^(BOOL finished) {
-            self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
-                                                 target:self
-                                               selector:@selector(drivePlayButtonAnimation)
-                                               userInfo:nil
-                                                repeats:YES];
-            
-            [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
-            
-            [self.timer fire];
+            //due to animation time, if the duration of the recording is shorter then we need to check
+            //state again
+            if (self.cellModel.state == CellStatePaused || self.cellModel.state == CellStateDefault) {
+                [self setupViewBasedOnState];
+            } else {
+                self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
+                                                     target:self
+                                                   selector:@selector(drivePlayButtonAnimation)
+                                                   userInfo:nil
+                                                    repeats:YES];
+                
+                [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+                
+                [self.timer fire];
+            }
         }];
     } else {
         [UIView transitionFromView:self.length toView:self.playPauseImageView duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews completion:^(BOOL finished) {
-            self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
-                                                 target:self
-                                               selector:@selector(drivePlayButtonAnimation)
-                                               userInfo:nil
-                                                repeats:YES];
-            
-            [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
-            
-            [self.timer fire];
+            //due to animation time, if the duration of the recording is shorter then we need to check
+            //state again
+            if (self.cellModel.state == CellStatePaused || self.cellModel.state == CellStateDefault) {
+                [self setupViewBasedOnState];
+            } else {
+                self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
+                                                     target:self
+                                                   selector:@selector(drivePlayButtonAnimation)
+                                                   userInfo:nil
+                                                    repeats:YES];
+                
+                [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+                
+                [self.timer fire];
+            }
         }];
     }
 }
