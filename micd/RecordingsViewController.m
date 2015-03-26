@@ -476,7 +476,7 @@
         }
     } else {
         RecordingsSection *currentSection = self.sections[indexPath.section];
-        BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
+        BOOL isRowAfterDeletedRow = indexPath.row <= currentSection.numberOfCellModels - 1;
         
         if (isRowAfterDeletedRow) {
             // select next cell
