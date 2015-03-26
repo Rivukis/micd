@@ -20,7 +20,7 @@
 @end
 
 typedef NS_ENUM(NSUInteger, CellState) {
-    CellStateDefault = 1,
+    CellStateDefault,
     CellStatePaused,
     CellStatePlaying
 };

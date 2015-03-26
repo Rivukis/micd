@@ -100,13 +100,11 @@
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+//    
+//    self.playbackView.hidden = YES;
+//    self.tableBottomBorder.hidden = YES;
     
     [self reloadDataForNewRecording:NO];
-    
-    if ([self mostRecentRecording]) {
-        self.tableBottomBorder.hidden = NO;
-        self.playbackView.hidden = NO;
-    }
 }
 
 - (void)reloadDataForNewRecording:(BOOL)isNewRecording {
@@ -122,7 +120,7 @@
     } else {
         [self.tableView reloadData];
     }
-    if (self.tableBottomBorder.hidden == YES && self.dataSource.recordings.count) {
+    if (self.playbackView.hidden == YES && self.dataSource.recordings.count) {
         self.tableBottomBorder.hidden = NO;
         self.playbackView.hidden = NO;
         [self readyPlayerWithRecording:[self mostRecentRecording]];
@@ -231,6 +229,7 @@
         
         CGFloat progressTimeCenterX = self.playerController.percentageCompleted * self.waveformContainerView.frame.size.width;
         self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
+  
     }];
 }
 
@@ -274,6 +273,21 @@
     } else {
         [self pausePlayback];
     }
+}
+
+- (void)playPlayback {
+    //TODO: put player state into the player controller
+    [self.playerController playAudio];
+    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
+    [self addButtonBounceAnimationToView:self.playButton];
+    self.focusedCellModel.state = CellStatePlaying;
+    [self.displayLinkController addSubscriberWithKey:@"waveform"];
+}
+
+- (void)pausePlayback {
+    [self pausePlaybackWhilePanning:NO];
+    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
+    [self addButtonBounceAnimationToView:self.playButton];
 }
 
 - (IBAction)rewindButtonPressed:(id)sender {
@@ -337,24 +351,21 @@
 }
 
 - (void)readyPlayerWithRecording:(Recording *)recording {
-    [self.playerController loadRecording:recording];
-    [self setplaybackTitleLabelText:recording.title];
-    self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
-    
     if (recording) {
+        [self setplaybackTitleLabelText:recording.title];
+        self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         self.playbackRecording = recording;
+        [self.playerController loadRecording:recording];
         
-        self.waveformContainerView.hidden = NO;
         self.waveformView.asset = recording.avAsset;
         CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
         CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
         self.waveformView.timeRange = displayedTimeRange;
         self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
     } else {
-        self.waveformContainerView.hidden = YES;
-        self.currentPlaybackTimeLabel.text = @"";
         self.tableBottomBorder.hidden = YES;
+        self.playbackView.hidden = YES;
     }
 }
 
@@ -364,20 +375,6 @@
     } else {
         self.playbackTitleLabel.text = self.focusedCellModel.recording.dateAsString;
     }
-}
-
-- (void)playPlayback {
-    //TODO: put player state into the player controller
-    [self.playerController playAudio];
-    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
-    [self addButtonBounceAnimationToView:self.playButton];
-    [self.displayLinkController addSubscriberWithKey:@"waveform"];
-}
-
-- (void)pausePlayback {
-    [self pausePlaybackWhilePanning:NO];
-    [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
-    [self addButtonBounceAnimationToView:self.playButton];
 }
 
 - (void)pausePlaybackWhilePanning:(BOOL)isPanning {
@@ -508,10 +505,8 @@
     
     if (self.focusedCellModel == recordingCellModel) {
         if (self.focusedCellModel.state == CellStatePlaying) {
-            self.focusedCellModel.state = CellStatePaused;
             [self pausePlayback];
         } else {
-            self.focusedCellModel.state = CellStatePlaying;
             [self playPlayback];
         }
     } else {
@@ -520,7 +515,6 @@
         
         [self readyPlayerWithRecording:self.focusedCellModel.recording];
         [self playPlayback];
-        self.focusedCellModel.state = CellStatePlaying;
     }
 }
 
