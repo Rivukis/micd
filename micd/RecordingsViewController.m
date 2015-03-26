@@ -456,6 +456,8 @@
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
     if (self.sections.count == 0) {
         return nil;
+    } else {
+        return [NSIndexPath indexPathForRow:0 inSection:0];
     }
     
     NSInteger nextSelectedSection;
@@ -476,6 +478,19 @@
         }
     } else {
         RecordingsSection *currentSection = self.sections[indexPath.section];
+        
+        BOOL isCellAboveInCurrentSection = indexPath.row != 0;
+        
+        if (isCellAboveInCurrentSection) {
+            // select cell above deleted cell
+        }
+        
+        
+        
+        
+        
+        
+        
         BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
         
         if (isRowAfterDeletedRow) {
@@ -546,20 +561,20 @@
             if (nextToLoadIndexPath != nil) {
                 RecordingsSection *toLoadSection = self.sections[nextToLoadIndexPath.section];
                 self.focusedCellModel = [toLoadSection cellModelAtIndex:nextToLoadIndexPath.row];
-                
                 self.focusedCellModel.state = CellStatePaused;
-                [self readyPlayerWithRecording:self.focusedCellModel.recording];
+            } else {
+                self.focusedCellModel = nil;
             }
+            [self readyPlayerWithRecording:self.focusedCellModel.recording];
         }
     }
 }
 
--(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewCellEditingStyleDelete;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *cellModel = [recordingsSection cellModelAtIndex:indexPath.row];
     return [cellModel heightForState];
@@ -579,7 +594,7 @@
     return [recordingsSection numberOfCellModels];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.sections.count;
 }
 
