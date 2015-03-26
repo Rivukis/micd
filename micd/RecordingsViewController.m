@@ -205,8 +205,9 @@
 #pragma mark - RecordingCellModelDelegate
 
 - (void)cellModel:(RecordingCellModel *)cellModel shouldChangeRecordingTitle:(NSString *)title {
-    if (title.length > 0 && cellModel.recording.title != title) {
+    if (title.length > 0 && [cellModel.recording.title isEqualToString:title]) {
         cellModel.recording.title = title;
+        [self.dataSource saveData];
         if (cellModel == self.focusedCellModel) {
             [self setplaybackTitleLabelText:title];
         }

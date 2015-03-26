@@ -6,11 +6,6 @@
 #import "SCWaveformView.h"
 #import "RecordingCellModel.h"
 
-/*
- self.recording.title = title;
- [[DataSourceController sharedDataSource] saveData];
- */
-
 #define kUpdateInterval             0.02
 
 @interface RecordingCell () <UITextFieldDelegate, UIGestureRecognizerDelegate>
@@ -191,7 +186,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self saveTitleAndResignResponder];
+    [self.title resignFirstResponder];
     return YES;
 }
 
