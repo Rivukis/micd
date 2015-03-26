@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, CellState) {
 @property (nonatomic, strong, readonly) Recording *recording;
 @property (nonatomic, strong, readonly) NSString *title;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;
+@property (nonatomic, assign) CGFloat angle;
 
 - (instancetype)initWithRecording:(Recording *)recording delegate:(id<RecordingCellModelDelegate>)delegate;
 - (CGFloat)heightForState;

@@ -287,6 +287,7 @@
 - (void)pausePlayback {
     [self pausePlaybackWhilePanning:NO];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
+    self.focusedCellModel.state = CellStatePaused;
     [self addButtonBounceAnimationToView:self.playButton];
 }
 
@@ -363,6 +364,8 @@
         CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
         self.waveformView.timeRange = displayedTimeRange;
         self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
+        self.tableBottomBorder.hidden = NO;
+        self.playbackView.hidden = NO;
     } else {
         self.tableBottomBorder.hidden = YES;
         self.playbackView.hidden = YES;

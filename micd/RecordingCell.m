@@ -27,7 +27,6 @@
 @property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
 @property (assign, nonatomic) BOOL isObserving;
 @property (strong, nonatomic) NSTimer *timer;
-@property (nonatomic) CGFloat angle;
 
 @end
 
@@ -52,7 +51,7 @@
     self.title.textColor = [UIColor vibrantLightBlueText];
     self.title.tintColor = [UIColor vibrantLightBlueText];
     self.lengthContainerView.backgroundColor = [UIColor clearColor];
-    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.angle+90 arcEnd:self.angle];
+    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
     
     if (!self.isObserving) {
         [cellModel addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
@@ -117,8 +116,7 @@
 
 - (void)setupViewForPlayingState {
     [self.timer invalidate];
-    self.angle = 0;
-    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.angle+90 arcEnd:self.angle];
+    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
     if (self.length.hidden) {
         [UIView transitionWithView:self.playPauseImageView duration:.4 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
             self.playPauseImageView.image = self.playPauseImageView.image;
@@ -161,9 +159,9 @@
 }
 
 - (void)drivePlayButtonAnimation {
-    NSLog(@"driving %f", self.angle);
-    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.angle+90 arcEnd:self.angle];
-    self.angle = self.angle - 3;
+    NSLog(@"driving %f", self.cellModel.angle);
+    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
+    self.cellModel.angle = self.cellModel.angle - 3;
 }
 
 - (void)prepareForReuse {
@@ -172,7 +170,6 @@
         self.isObserving = NO;
     }
     self.cellModel = nil;
-    self.angle = 0;
     [self.timer invalidate];
 }
 
