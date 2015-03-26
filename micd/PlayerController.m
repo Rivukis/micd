@@ -48,6 +48,9 @@
 }
 
 - (void)playAudio {
+    if (self.secondsCompleted >= self.loadedRecording.lengthAsTimeInterval) {
+        [self setPlaybackTimeInterval:0.f];
+    }
     self.playerState = PlayerControllerStatePlaying;
     [self.audioPlayer play];
 }
