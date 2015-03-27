@@ -299,25 +299,29 @@
 
 - (IBAction)playPauseButtonPressed:(id)sender {
     if (self.playerState == PlayerControllerStatePaused) {
-        [self playPlayback];
+        [self playPlaybackShouldAnimatePlayButton:YES];
     } else {
-        [self pausePlayback];
+        [self pausePlaybackShouldAnimatePauseButton:YES];
     }
 }
 
-- (void)playPlayback {
+- (void)playPlaybackShouldAnimatePlayButton:(BOOL)shouldAnimatePlayButton {
     [self.playerController playAudio];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
-    [self addButtonBounceAnimationToView:self.playButton];
     [self.focusedCellModel setCellState:CellStatePlaying];
     [self.displayLinkController addSubscriberWithKey:@"waveform"];
+    if (shouldAnimatePlayButton) {
+        [self addButtonBounceAnimationToView:self.playButton];
+    }
 }
 
-- (void)pausePlayback {
-    [self pausePlaybackWhilePanning:NO];
+- (void)pausePlaybackShouldAnimatePauseButton:(BOOL)shouldAnimatePauseButton {
+    [self pausePlaybackShouldAnimate:NO];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
     [self.focusedCellModel setCellState:CellStatePaused];
-    [self addButtonBounceAnimationToView:self.playButton];
+    if (shouldAnimatePauseButton) {
+        [self addButtonBounceAnimationToView:self.playButton];
+    }
 }
 
 - (IBAction)rewindButtonPressed:(id)sender {
@@ -409,7 +413,7 @@
     }
 }
 
-- (void)pausePlaybackWhilePanning:(BOOL)isPanning {
+- (void)pausePlaybackShouldAnimate:(BOOL)isPanning {
     [self.playerController pauseAudio];
 
     if (isPanning) {
@@ -430,7 +434,7 @@
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan:
             self.audioWasPlaying_gestureStateBegan = self.playerController.playerState == PlayerControllerStatePlaying;
-            [self pausePlaybackWhilePanning:YES];
+            [self pausePlaybackShouldAnimate:YES];
         case UIGestureRecognizerStateChanged: {
             CGPoint translation = [gesture locationInView:self.waveformView];
             float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
@@ -447,14 +451,19 @@
             self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
         }
             break;
-        case UIGestureRecognizerStateEnded:
-            if (self.audioWasPlaying_gestureStateBegan && self.playerController.secondsCompleted != self.playerController.loadedRecording.lengthAsTimeInterval) {
-                [self playPlayback];
-            } else {
-                [self pausePlaybackWhilePanning:NO];
+        case UIGestureRecognizerStateEnded: {
+            
+            BOOL endOfRecordingReached = self.playerController.secondsCompleted == self.playerController.loadedRecording.lengthAsTimeInterval;
+            if (self.audioWasPlaying_gestureStateBegan && endOfRecordingReached) {
+                [self pausePlaybackShouldAnimatePauseButton:YES];
+            } else if (self.audioWasPlaying_gestureStateBegan && !endOfRecordingReached) {
+                [self playPlaybackShouldAnimatePlayButton:NO];
+            } else if (!self.audioWasPlaying_gestureStateBegan && endOfRecordingReached) {
+                [self pausePlaybackShouldAnimatePauseButton:NO];
             }
             
             [self handleDisplayLinkAnimation:nil];
+        }
         default:
             break;
     }
@@ -478,7 +487,7 @@
     
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
-    [self pausePlayback];
+    [self pausePlaybackShouldAnimatePauseButton:YES];
     [self.waveformView setNeedsLayout];
 }
 
@@ -561,16 +570,16 @@
     } else {
         if (self.focusedCellModel == recordingCellModel) {
             if (self.focusedCellModel.state == CellStatePlaying) {
-                [self pausePlayback];
+                [self pausePlaybackShouldAnimatePauseButton:YES];
             } else {
-                [self playPlayback];
+                [self playPlaybackShouldAnimatePlayButton:YES];
             }
         } else {
             [self.focusedCellModel setCellState:CellStateDefault];
             self.focusedCellModel = recordingCellModel;
             
             [self readyPlayerWithRecording:self.focusedCellModel.recording];
-            [self playPlayback];
+            [self playPlaybackShouldAnimatePlayButton:YES];
         }
     }
 }
