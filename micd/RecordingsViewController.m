@@ -15,6 +15,7 @@
 #import "PresentingAnimationController.h"
 #import "DismissingAnimationController.h"
 #import "Constants.h"
+#import "Factory.h"
 
 @interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, RecordingCellModelDelegate, RecordingCellDelegate>
 
@@ -56,7 +57,6 @@
 @property (strong, nonatomic) RecordingCell *editingCell;
 
 @property (strong, nonatomic) UIVisualEffectView *blurView;
-
 
 @end
 
@@ -105,8 +105,15 @@
 //    self.playbackView.hidden = YES;
 //    self.tableBottomBorder.hidden = YES;
     
-    self.sections = [[RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
+    self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidPassMidnight:) name:kNotificationKeyDidPassMidnight object:nil];
+}
+
+- (void)responseToDidPassMidnight:(NSNotification *)notification {
+    [self reloadDataWithNewRecording:nil];
+    [self scrollToAndReadyPlayerWithMostRecentRecording];
 }
 
 - (void)reloadDataWithNewRecording:(Recording *)recording {
@@ -117,7 +124,9 @@
             [firstSection addToTodaySectionNewRecording:recording withCellModelDelegate:self];
             [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
         } else {
-            RecordingsSection *todaySection = [RecordingsSection sectionWithRecording:recording cellModelDelegate:self];
+            RecordingsSection *todaySection = [[Factory arrayOfSectionsForRecordings:@[recording]
+                                                                           ascending:NO
+                                                                   cellModelDelegate:self] firstObject];
             [self.sections insertObject:todaySection atIndex:0];
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
@@ -182,7 +191,8 @@
         ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton];
         ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
         
-        [self readyPlayerWithRecording:[self mostRecentRecording]];
+        RecordingCellModel *mostRecentRecordingCellModel = [self mostRecentRecordingCellModel];
+        [self readyPlayerWithRecording:mostRecentRecordingCellModel.recording];
         
         UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
         gesture.minimumPressDuration = 0.001f;
@@ -196,23 +206,23 @@
 }
 
 - (void)scrollToAndReadyPlayerWithMostRecentRecording {
-    RecordingsSection *firstSection = self.sections.firstObject;
-    if (firstSection) {
+    RecordingCellModel *mostRecentCellModel = [self mostRecentRecordingCellModel];
+    if (mostRecentCellModel) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//        [self.tableView reloadData];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
-        RecordingCellModel *mostRecentCellModel = [firstSection cellModelAtIndex:0];
-        self.focusedCellModel = mostRecentCellModel;
-        
-        [self readyPlayerWithRecording:self.focusedCellModel.recording];
-        [self.focusedCellModel setCellState:CellStatePaused];
     }
+    self.focusedCellModel = mostRecentCellModel;
+    [self readyPlayerWithRecording:self.focusedCellModel.recording];
+    [self.focusedCellModel setCellState:CellStatePaused];
 }
 
-- (Recording *)mostRecentRecording {
-    RecordingsSection *firstRecordingsSection = self.sections.lastObject;
-    RecordingCellModel *lastAddedRecordingModel = [firstRecordingsSection cellModelAtIndex:0];
-    return lastAddedRecordingModel.recording;
+- (RecordingCellModel *)mostRecentRecordingCellModel {
+    RecordingCellModel *mostRecentCellModel = nil;
+    RecordingsSection *firstSection = self.sections.firstObject;
+    if (firstSection) {
+        mostRecentCellModel = [firstSection cellModelAtIndex:0];
+    }
+    return mostRecentCellModel;
 }
 
 #pragma mark - RecordingCellDelegate
@@ -479,59 +489,60 @@
         return [NSIndexPath indexPathForRow:0 inSection:0];
     }
     
-    NSInteger nextSelectedSection;
-    NSInteger nextSelectedRow;
-    
-    if (isSectionDeleted) {
-        BOOL isSectionAfterDeletedSection = indexPath.section <= self.sections.count - 1;
-        
-        if (isSectionAfterDeletedSection) {
-            // select first object of next section
-            nextSelectedSection = indexPath.section;
-            nextSelectedRow = 0;
-        } else {
-            // else select last object of previous section
-            nextSelectedSection = indexPath.section - 1;
-            RecordingsSection *previousSection = self.sections[nextSelectedSection];
-            nextSelectedRow = previousSection.numberOfCellModels - 1;
-        }
-    } else {
-        RecordingsSection *currentSection = self.sections[indexPath.section];
-        
-        BOOL isCellAboveInCurrentSection = indexPath.row != 0;
-        
-        if (isCellAboveInCurrentSection) {
-            // select cell above deleted cell
-        }
-        
-        
-        
-        
-        
-        
-        
-        BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
-        
-        if (isRowAfterDeletedRow) {
-            // select next cell
-            nextSelectedSection = indexPath.section;
-            nextSelectedRow = indexPath.row;
-        } else {
-            BOOL isSectionAfterCurrentSection = indexPath.section >= self.sections.count - 1;
-            
-            if (isSectionAfterCurrentSection) {
-                // else select first cell of next section
-                nextSelectedSection = indexPath.section + 1;
-                nextSelectedRow = 0;
-            } else {
-                // else select previous cell
-                nextSelectedSection = indexPath.section;
-                nextSelectedRow = indexPath.row - 1;
-            }
-        }
-    }
-    
-    return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
+    // NEEDS REWORK!!!!!
+//    NSInteger nextSelectedSection;
+//    NSInteger nextSelectedRow;
+//    
+//    if (isSectionDeleted) {
+//        BOOL isSectionAfterDeletedSection = indexPath.section <= self.sections.count - 1;
+//        
+//        if (isSectionAfterDeletedSection) {
+//            // select first object of next section
+//            nextSelectedSection = indexPath.section;
+//            nextSelectedRow = 0;
+//        } else {
+//            // else select last object of previous section
+//            nextSelectedSection = indexPath.section - 1;
+//            RecordingsSection *previousSection = self.sections[nextSelectedSection];
+//            nextSelectedRow = previousSection.numberOfCellModels - 1;
+//        }
+//    } else {
+//        RecordingsSection *currentSection = self.sections[indexPath.section];
+//        
+//        BOOL isCellAboveInCurrentSection = indexPath.row != 0;
+//        
+//        if (isCellAboveInCurrentSection) {
+//            // select cell above deleted cell
+//        }
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
+//        
+//        if (isRowAfterDeletedRow) {
+//            // select next cell
+//            nextSelectedSection = indexPath.section;
+//            nextSelectedRow = indexPath.row;
+//        } else {
+//            BOOL isSectionAfterCurrentSection = indexPath.section >= self.sections.count - 1;
+//            
+//            if (isSectionAfterCurrentSection) {
+//                // else select first cell of next section
+//                nextSelectedSection = indexPath.section + 1;
+//                nextSelectedRow = 0;
+//            } else {
+//                // else select previous cell
+//                nextSelectedSection = indexPath.section;
+//                nextSelectedRow = indexPath.row - 1;
+//            }
+//        }
+//    }
+//    
+//    return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate
@@ -586,12 +597,12 @@
         
         if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
             NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
-            if (nextToLoadIndexPath != nil) {
+            if (nextToLoadIndexPath == nil) {
+                self.focusedCellModel = nil;
+            } else {
                 RecordingsSection *toLoadSection = self.sections[nextToLoadIndexPath.section];
                 self.focusedCellModel = [toLoadSection cellModelAtIndex:nextToLoadIndexPath.row];
                 [self.focusedCellModel setCellState:CellStatePaused];
-            } else {
-                self.focusedCellModel = nil;
             }
             [self readyPlayerWithRecording:self.focusedCellModel.recording];
         }

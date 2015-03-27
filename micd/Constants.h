@@ -16,6 +16,8 @@ static NSString *const kRecorderFormatTypeAsString = @".m4a";
 
 // Notification shit
 static NSString *const kNotificationKeyDidFinishRecordingFromWatch = @"NotificationKeyDidFinishRecordingFromWatch";
+//static NSString *const kNotificationKeyDidPassMidnight = @"kNotificationKeyDidPassMidnight";
+static NSString *const kNotificationKeyApplicationDidBecomeActive = @"kNotificationKeyApplicationDidBecomeActive";
 
 // UserDefaults shit
 static NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";

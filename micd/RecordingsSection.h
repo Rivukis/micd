@@ -8,15 +8,13 @@
 
 @property (nonatomic, readonly) NSInteger numberOfCellModels;
 
-+ (NSArray *)arrayOfSectionsForRecordings:(NSArray *)recordings ascending:(BOOL)ascending cellModelDelegate:(id<RecordingCellModelDelegate>)cellModelDelegate;
+- (instancetype)initWithRecordingCellModels:(NSArray *)cellModels Year:(NSInteger)year month:(NSInteger)month daysAgo:(NSInteger)daysAgo isThisYear:(BOOL)isThisYear isThisMonth:(BOOL)isThisMonth;
 
-+ (instancetype)sectionWithRecording:(Recording *)recording cellModelDelegate:(id<RecordingCellModelDelegate>)cellModelDelegate;
 - (void)addToTodaySectionNewRecording:(Recording *)recording withCellModelDelegate:(id<RecordingCellModelDelegate>)delegate;
 - (void)deleteRecordingCellModelAtIndex:(NSInteger)index;
 
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index;
 - (BOOL)isToday;
 - (NSString *)dateAsString;
-
 
 @end
