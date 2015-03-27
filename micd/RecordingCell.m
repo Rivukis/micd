@@ -143,10 +143,7 @@
                             animations:^{
                 self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
                             } completion:^(BOOL finished) {
-                                
-                                // trying animating this during the flippyness
                                 [welf startAnimating];
-                                
                             }];
         } else {
             self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
