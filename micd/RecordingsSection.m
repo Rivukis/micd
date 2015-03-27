@@ -90,6 +90,56 @@
     return [assemblingSections copy];
 }
 
++ (instancetype)sectionWithRecording:(Recording *)recording cellModelDelegate:(id<RecordingCellModelDelegate>)cellModelDelegate {
+    NSDateComponents *nowDateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay
+                                                                          fromDate:[NSDate date]];
+    NSDateComponents *beginningOfTodayComponents = nowDateComponents;
+    beginningOfTodayComponents.hour = 0;
+    beginningOfTodayComponents.minute = 0;
+    beginningOfTodayComponents.second = 0;
+    NSDate *beginningOfToday = [[NSCalendar currentCalendar] dateFromComponents:beginningOfTodayComponents];
+    NSDate *beginningOf6DaysAgo = [beginningOfToday dateByAddingTimeInterval:-60*60*24*6];
+
+    BOOL recordingIsThisYear = (recording.dateComponents.year == nowDateComponents.year);
+    BOOL recordingIsThisMonth = (recording.dateComponents.month == nowDateComponents.month && recordingIsThisYear);
+    BOOL recordingIsWithin6DaysAgo = [recording.date compare:beginningOf6DaysAgo] == NSOrderedDescending;
+    NSInteger recordingDaysAgo = NSNotFound;
+    
+    if (recordingIsWithin6DaysAgo) {
+        for (NSInteger daysAgo = 6; daysAgo >= 0; daysAgo--) {
+            /*
+             would think that it should just be daysAgo and not daysAgo-1 but everything is shifted up a day otherwise (compare: acts weird)
+             when getting a dates components enter 252 on components parameter to get year, month, day, hour, minute, second
+             */
+            NSDate *beginningOfDay = [beginningOfToday dateByAddingTimeInterval:-60*60*24*(daysAgo-1)];
+            if ([recording.date compare:beginningOfDay] == NSOrderedAscending) {
+                recordingDaysAgo = daysAgo;
+                break;
+            }
+        }
+    }
+    
+    RecordingsSection *section = [[RecordingsSection alloc] initWithYear:recording.dateComponents.year month:recording.dateComponents.month];
+    section.daysAgo = recordingDaysAgo;
+    section.isThisMonth = recordingIsThisMonth;
+    section.isThisYear = recordingIsThisYear;
+    RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording delegate:cellModelDelegate];
+    [section.cellModels addObject:cellModel];
+    
+    return section;
+}
+
+- (void)addToTodaySectionNewRecording:(Recording *)recording withCellModelDelegate:(id<RecordingCellModelDelegate>)delegate {
+    if (self.isToday) {
+        RecordingCellModel *cellModel = [[RecordingCellModel alloc] initWithRecording:recording delegate:delegate];
+        [self.cellModels insertObject:cellModel atIndex:0];
+    }
+}
+
+- (void)deleteRecordingCellModelAtIndex:(NSInteger)index {
+    [self.cellModels removeObjectAtIndex:index];
+}
+
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index {
     if (self.cellModels.count == 0) return nil;
     

@@ -39,7 +39,7 @@
 
 @property (strong, nonatomic) Recording *playbackRecording;
 @property (strong, nonatomic) DataSourceController *dataSource;
-@property (strong, nonatomic) NSArray *sections;
+@property (strong, nonatomic) NSMutableArray *sections;
 
 //@property (assign, nonatomic) BOOL didGetOriginalHeight;
 //@property (assign, nonatomic) CGFloat originalHeight;
@@ -101,21 +101,24 @@
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-//    
+    
 //    self.playbackView.hidden = YES;
 //    self.tableBottomBorder.hidden = YES;
     
-    [self reloadDataForNewRecording:NO];
+    self.sections = [[RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
+    [self reloadDataWithNewRecording:nil];
 }
 
-- (void)reloadDataForNewRecording:(BOOL)isNewRecording {
+- (void)reloadDataWithNewRecording:(Recording *)recording {
     RecordingsSection *firstSection = self.sections.firstObject;
     BOOL firstSectionIsToday = firstSection.isToday;
-    self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
-    if (isNewRecording) {
+    if (recording != nil) {
         if (firstSectionIsToday) {
+            [firstSection addToTodaySectionNewRecording:recording withCellModelDelegate:self];
             [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
         } else {
+            RecordingsSection *todaySection = [RecordingsSection sectionWithRecording:recording cellModelDelegate:self];
+            [self.sections insertObject:todaySection atIndex:0];
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     } else {
@@ -124,7 +127,15 @@
     if (self.playbackView.hidden == YES && self.dataSource.recordings.count) {
         self.tableBottomBorder.hidden = NO;
         self.playbackView.hidden = NO;
-        [self readyPlayerWithRecording:[self mostRecentRecording]];
+    }
+    
+    if (self.focusedCellModel) {
+        [self.focusedCellModel setCellState:CellStateDefault];
+        self.focusedCellModel = nil;
+    }
+    
+    if (recording != nil) {
+        [self scrollToAndReadyPlayerWithMostRecentRecording];
     }
 }
 
@@ -188,6 +199,7 @@
     RecordingsSection *firstSection = self.sections.firstObject;
     if (firstSection) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//        [self.tableView reloadData];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
         RecordingCellModel *mostRecentCellModel = [firstSection cellModelAtIndex:0];
         self.focusedCellModel = mostRecentCellModel;
@@ -284,7 +296,6 @@
 }
 
 - (void)playPlayback {
-    //TODO: put player state into the player controller
     [self.playerController playAudio];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
     [self addButtonBounceAnimationToView:self.playButton];
@@ -561,15 +572,15 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         RecordingsSection *editingRecordingsSection = self.sections[indexPath.section];
         RecordingCellModel *editingCellModel = [editingRecordingsSection cellModelAtIndex:indexPath.row];
+        [self.dataSource deleteRecording:editingCellModel.recording];
         
         BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
-        
-        [self.dataSource deleteRecording:editingCellModel.recording];
-        self.sections = [RecordingsSection arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self];
-        
         if (deletingSection) {
+            [self.sections removeObjectAtIndex:indexPath.section];
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
         } else {
+            RecordingsSection *section = self.sections[indexPath.section];
+            [section deleteRecordingCellModelAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         
