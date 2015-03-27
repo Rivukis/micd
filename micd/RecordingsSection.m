@@ -40,9 +40,12 @@
 }
 
 - (RecordingCellModel *)cellModelAtIndex:(NSInteger)index {
-    if (self.cellModels.count == 0) return nil;
+    RecordingCellModel *cellModel = nil;
+    if (index < self.cellModels.count && index >= 0) {
+        cellModel = self.cellModels[index];
+    }
     
-    return self.cellModels[index];
+    return cellModel;
 }
 
 - (NSInteger)numberOfCellModels {
