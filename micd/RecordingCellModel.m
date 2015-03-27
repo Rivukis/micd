@@ -16,6 +16,8 @@
 @property (nonatomic, weak) id<RecordingCellModelDelegate> delegate;
 @property (nonatomic, strong, readwrite) Recording *recording;
 @property (nonatomic, strong, readwrite) NSString *title;
+@property (nonatomic, assign, readwrite) CellState state;
+
 
 @end
 
@@ -52,6 +54,18 @@
 
 + (NSString *)titlePlaceholderText {
     return @"Tap and hold to edit";
+}
+
+- (void)setCellState:(CellState)cellState {
+    if (self.state != cellState) {
+        self.state = cellState;
+    }
+}
+
+- (void)setState:(CellState)state {
+    if (state != _state) {
+        _state = state;
+    }
 }
 
 @end

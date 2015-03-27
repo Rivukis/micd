@@ -193,7 +193,7 @@
         self.focusedCellModel = mostRecentCellModel;
         
         [self readyPlayerWithRecording:self.focusedCellModel.recording];
-        self.focusedCellModel.state = CellStatePaused;
+        [self.focusedCellModel setCellState:CellStatePaused];
     }
 }
 
@@ -288,14 +288,14 @@
     [self.playerController playAudio];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPauseButton] forState:UIControlStateNormal];
     [self addButtonBounceAnimationToView:self.playButton];
-    self.focusedCellModel.state = CellStatePlaying;
+    [self.focusedCellModel setCellState:CellStatePlaying];
     [self.displayLinkController addSubscriberWithKey:@"waveform"];
 }
 
 - (void)pausePlayback {
     [self pausePlaybackWhilePanning:NO];
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
-    self.focusedCellModel.state = CellStatePaused;
+    [self.focusedCellModel setCellState:CellStatePaused];
     [self addButtonBounceAnimationToView:self.playButton];
 }
 
@@ -453,7 +453,7 @@
 #pragma mark - PlayerControllerDelegate
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
-    self.focusedCellModel.state = CellStatePaused;
+    [self.focusedCellModel setCellState:CellStatePaused];
     
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
     self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
@@ -544,7 +544,7 @@
                 [self playPlayback];
             }
         } else {
-            self.focusedCellModel.state = CellStateDefault;
+            [self.focusedCellModel setCellState:CellStateDefault];
             self.focusedCellModel = recordingCellModel;
             
             [self readyPlayerWithRecording:self.focusedCellModel.recording];
@@ -578,7 +578,7 @@
             if (nextToLoadIndexPath != nil) {
                 RecordingsSection *toLoadSection = self.sections[nextToLoadIndexPath.section];
                 self.focusedCellModel = [toLoadSection cellModelAtIndex:nextToLoadIndexPath.row];
-                self.focusedCellModel.state = CellStatePaused;
+                [self.focusedCellModel setCellState:CellStatePaused];
             } else {
                 self.focusedCellModel = nil;
             }

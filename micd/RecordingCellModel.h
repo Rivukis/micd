@@ -29,15 +29,17 @@ typedef NS_ENUM(NSUInteger, CellState) {
 
 @interface RecordingCellModel : NSObject
 
-@property (nonatomic, assign) CellState state;
+@property (nonatomic, assign, readonly) CellState state;
 @property (nonatomic, strong, readonly) Recording *recording;
 @property (nonatomic, strong, readonly) NSString *title;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;
 @property (nonatomic, assign) CGFloat angle;
+@property (nonatomic, assign) BOOL shouldAnimateStateChanges;
 
 - (instancetype)initWithRecording:(Recording *)recording delegate:(id<RecordingCellModelDelegate>)delegate;
 - (CGFloat)heightForState;
 - (void)changeRecordingTitle:(NSString *)title;
+- (void)setCellState:(CellState)cellState;
 
 + (NSString *)titlePlaceholderText;
 

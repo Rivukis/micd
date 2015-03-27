@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *playStateImageViewWidthConstraint;
 @property (weak, nonatomic) IBOutlet UIView *lengthContainerView;
 @property (weak, nonatomic) IBOutlet UIImageView *playPauseImageView;
+@property (strong, nonatomic) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
 @property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
 @property (assign, nonatomic) BOOL isObserving;
@@ -59,10 +60,12 @@
     
     [self setupViewBasedOnState];
     
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longPressGestureRecognizer.minimumPressDuration = 0.5;
-    longPressGestureRecognizer.delegate = self;
-    [self.contentView addGestureRecognizer:longPressGestureRecognizer];
+    if (!self.longPressGestureRecognizer) {
+        self.longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        self.longPressGestureRecognizer.minimumPressDuration = 0.5;
+        self.longPressGestureRecognizer.delegate = self;
+        [self.contentView addGestureRecognizer:self.longPressGestureRecognizer];
+    }
 
     self.title.delegate = self;
     self.title.userInteractionEnabled = NO;
@@ -72,9 +75,27 @@
     self.title.rightView = button;
     self.title.rightViewMode = UITextFieldViewModeWhileEditing;
     [button addTarget:self action:@selector(clearText) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.cellModel.shouldAnimateStateChanges = NO;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    self.cellModel.shouldAnimateStateChanges = YES;
+    [self bindToModel:object];
+}
+
+- (void)prepareForReuse {
+    [self.timer invalidate];
+    self.cellModel.shouldAnimateStateChanges = NO;
+    if (self.isObserving) {
+        [self.cellModel removeObserver:self forKeyPath:@"state"];
+        self.isObserving = NO;
+    }
+    self.cellModel = nil;
 }
 
 - (void)dealloc {
+    [self.timer invalidate];
     if (self.isObserving) {
         [self.cellModel removeObserver:self forKeyPath:@"state"];
         self.isObserving = NO;
@@ -83,7 +104,9 @@
 
 #pragma mark - State Methods
 
-- (void)setupViewBasedOnState { 
+- (void)setupViewBasedOnState {
+    [self.timer invalidate];
+    
     switch (self.cellModel.state) {
         case CellStateDefault:
             [self setupViewForDefaultState];
@@ -98,85 +121,97 @@
 }
 
 - (void)setupViewForDefaultState {
-    if (self.length.hidden) {
-        [self.timer invalidate];
-        [UIView transitionFromView:self.playPauseImageView toView:self.length duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews completion:nil];
+    if (self.cellModel.shouldAnimateStateChanges) {
+        [UIView transitionFromView:self.playPauseImageView
+                            toView:self.length duration:.4
+                           options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews
+                        completion:nil];
+    } else {
+        self.playPauseImageView.hidden = YES;
+        self.length.hidden = NO;
     }
 }
 
 - (void)setupViewForPlayingState {
-    [self.timer invalidate];
-    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
-    if (self.length.hidden) {
-        [UIView transitionWithView:self.playPauseImageView duration:.4 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-            self.playPauseImageView.image = self.playPauseImageView.image;
-        } completion:^(BOOL finished) {
-            //due to animation time, if the duration of the recording is shorter then we need to check
-            //state again
-            if (self.cellModel.state == CellStatePaused || self.cellModel.state == CellStateDefault) {
-                [self setupViewBasedOnState];
-            } else {
-                self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
-                                                     target:self
-                                                   selector:@selector(drivePlayButtonAnimation)
-                                                   userInfo:nil
-                                                    repeats:YES];
-                
-                [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
-                
-                [self.timer fire];
-            }
-        }];
+    __weak __typeof(self) welf = self;
+    
+    if (self.cellModel.shouldAnimateStateChanges) {
+        if (self.length.hidden) {
+            [UIView transitionWithView:self.playPauseImageView
+                              duration:.4
+                               options:UIViewAnimationOptionTransitionFlipFromLeft
+                            animations:^{
+                self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
+                            } completion:^(BOOL finished) {
+                                
+                                // trying animating this during the flippyness
+                                [welf startAnimating];
+                                
+                            }];
+        } else {
+            self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
+            [UIView transitionFromView:self.length
+                                toView:self.playPauseImageView
+                              duration:.4
+                               options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews
+                            completion:^(BOOL finished) {
+                                [welf startAnimating];
+                            }];
+        }
     } else {
-        [UIView transitionFromView:self.length toView:self.playPauseImageView duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews completion:^(BOOL finished) {
-            //due to animation time, if the duration of the recording is shorter then we need to check
-            //state again
-            if (self.cellModel.state == CellStatePaused || self.cellModel.state == CellStateDefault) {
-                [self setupViewBasedOnState];
-            } else {
-                self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
-                                                     target:self
-                                                   selector:@selector(drivePlayButtonAnimation)
-                                                   userInfo:nil
-                                                    repeats:YES];
-                
-                [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
-                
-                [self.timer fire];
-            }
-        }];
+        self.length.hidden = YES;
+        self.playPauseImageView.hidden = NO;
+        [self startAnimating];
     }
 }
 
 - (void)setupViewForPausedState {
-    [self.timer invalidate];
-    if (self.length.hidden) {
-        [UIView transitionWithView:self.playPauseImageView duration:.25 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-            self.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
-        } completion:^(BOOL finished) {
-        }];
+    __weak __typeof(self) welf = self;
+    
+    if (self.cellModel.shouldAnimateStateChanges) {
+        if (self.length.hidden) {
+            
+            [UIView transitionWithView:self.playPauseImageView
+                              duration:.25
+                               options:UIViewAnimationOptionTransitionFlipFromLeft
+                            animations:^{
+                welf.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
+                            } completion:nil];
+        } else {
+            [UIView transitionFromView:self.length
+                                toView:self.playPauseImageView
+                              duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews
+                            completion:nil];
+        }
     } else {
-        [UIView transitionFromView:self.length toView:self.playPauseImageView duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews completion:nil];
+        self.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
+        self.length.hidden = YES;
+        self.playPauseImageView.hidden = NO;
     }
 }
 
 - (void)drivePlayButtonAnimation {
-    NSLog(@"driving %f", self.cellModel.angle);
     self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
     self.cellModel.angle = self.cellModel.angle - 3;
 }
 
-- (void)prepareForReuse {
-    if (self.isObserving) {
-        [self.cellModel removeObserver:self forKeyPath:@"state"];
-        self.isObserving = NO;
-    }
-    self.cellModel = nil;
-    [self.timer invalidate];
-}
+#pragma mark - Helper Methods
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [self bindToModel:object];
+- (void)startAnimating {
+    //due to animation time, if the duration of the recording is shorter then we need to check
+    //state again
+    if (self.cellModel.state == CellStatePaused || self.cellModel.state == CellStateDefault) {
+        [self setupViewBasedOnState];
+    } else {
+        self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
+                                             target:self
+                                           selector:@selector(drivePlayButtonAnimation)
+                                           userInfo:nil
+                                            repeats:YES];
+        
+        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+        [self.timer fire];
+    }
 }
 
 #pragma mark - UITextfield Delegate and Gesture Recognizer
