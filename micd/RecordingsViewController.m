@@ -108,7 +108,18 @@
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
     
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToApplicationDidBecomeActive:) name:kNotificationKeyApplicationDidBecomeActive object:nil];
+    
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidPassMidnight:) name:kNotificationKeyDidPassMidnight object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
+        [self reloadDataWithNewRecording:nil];
+        [self scrollToAndReadyPlayerWithMostRecentRecording];
 }
 
 //- (void)responseToDidPassMidnight:(NSNotification *)notification {

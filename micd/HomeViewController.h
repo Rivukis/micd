@@ -15,9 +15,9 @@
 
 @protocol MovementDelegate <NSObject>
 
-- (void)shouldMoveWithTranslation:(CGPoint)translation;
-- (void)shouldMoveToPositionState:(PositionState)state;
-- (void)shouldCancelMoveAnimations;
+- (void)moveWithTranslation:(CGPoint)translation;
+- (void)moveToPositionState:(PositionState)state;
+- (void)cancelMoveAnimations;
 
 @end
 

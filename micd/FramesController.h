@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSUInteger, PositionState) {
-    PositionStateRecordings = 0,
+    PositionStateRecordings = 1,
     PositionStateHome,
     PositionStateSettings,
 };

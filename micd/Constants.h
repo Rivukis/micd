@@ -15,18 +15,23 @@ static NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenat
 static NSString *const kRecorderFormatTypeAsString = @".m4a";
 
 // Notification shit
-static NSString *const kNotificationKeyDidFinishRecordingFromWatch = @"NotificationKeyDidFinishRecordingFromWatch";
-//static NSString *const kNotificationKeyDidPassMidnight = @"kNotificationKeyDidPassMidnight";
+static NSString *const kNotificationKeyDidFinishedRecordingFromWatch = @"NotificationKeyDidFinishedRecordingFromWatch";
 static NSString *const kNotificationKeyApplicationDidBecomeActive = @"kNotificationKeyApplicationDidBecomeActive";
+//static NSString *const kNotificationKeyDidPassMidnight = @"kNotificationKeyDidPassMidnight";
 
 // UserDefaults shit
 static NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";
+static NSString *const kUserDefaultsKeyWillResignActiveDate = @"UserDefaultsKeyWillResignActiveDate";
+static NSString *const kUserDefaultsKeyCurrentState = @"UserDefaultsKeyCurrentState";
 
 // WatchKit shit
 static NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
 static NSString *const kWatchExtKeyMessageTypeWillActivate = @"WatchExtKeyMessageTypeWillActivate";
 static NSString *const kWatchExtKeyMessageTypeRecordButtonPressed = @"WatchExtKeyMessageTypeRecordButtonPressed";
 static NSString *const kWatchExtKeyIsRecording = @"kWatchExtKeyIsRecording";
+
+// User Info shit
+static NSString *const kUserInfoKeyStateToLoadOnAppBecomesActive = @"UserInfoKeyStateToLoadOnAppBecomesActive";
 
 
 @interface Constants : NSObject

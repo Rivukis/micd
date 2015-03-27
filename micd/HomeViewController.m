@@ -49,7 +49,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidFinishRecordingFromWatch:) name:kNotificationKeyDidFinishRecordingFromWatch object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidFinishRecordingFromWatch:) name:kNotificationKeyDidFinishedRecordingFromWatch object:nil];
     
     self.growForLouderNoises = NO;
     self.recordButtonEnabled = YES;
@@ -221,13 +221,13 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         
-        [self.movementDelegate shouldCancelMoveAnimations];
+        [self.movementDelegate cancelMoveAnimations];
         self.recordButtonEnabled = NO;
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-        [self.movementDelegate shouldMoveWithTranslation:translation];
+        [self.movementDelegate moveWithTranslation:translation];
         [self rotateGearsWithTranslation:translation];
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
         
@@ -321,15 +321,15 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 - (void)moveToHomeState {
     self.recordButtonEnabled = YES;
-    [self.movementDelegate shouldMoveToPositionState:PositionStateHome];
+    [self.movementDelegate moveToPositionState:PositionStateHome];
 }
 
 - (void)moveToPlayerState {
-    [self.movementDelegate shouldMoveToPositionState:PositionStateRecordings];
+    [self.movementDelegate moveToPositionState:PositionStateRecordings];
 }
 
 - (void)moveToSettingState {
-    [self.movementDelegate shouldMoveToPositionState:PositionStateSettings];
+    [self.movementDelegate moveToPositionState:PositionStateSettings];
 }
 
 #pragma mark - FramesBasedOnStateProtocol

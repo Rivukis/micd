@@ -43,6 +43,11 @@
     [self addChildViewController:self.recordingsViewController];
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToApplicationDidBecomeActive:)
+                                                 name:kNotificationKeyApplicationDidBecomeActive
+                                               object:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -54,6 +59,15 @@
     }
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
+    PositionState state = [notification.userInfo[kUserInfoKeyStateToLoadOnAppBecomesActive] integerValue];
+    [self moveToPositionState:state];
+}
+
 #pragma mark - AddNewRecordingDelegate
 
 - (void)addNewRecording:(Recording *)recording {
@@ -62,13 +76,13 @@
 //    [self.recordingsViewController scrollToAndReadyPlayerWithMostRecentRecording];
 }
 
-#pragma mark - MovementDelegate
+#pragma mark - MovementDelegate && Movement Helper Methods
 
-- (void)shouldMoveWithTranslation:(CGPoint)translation {
+- (void)moveWithTranslation:(CGPoint)translation {
     [self adjustFrameBasedOnTranslation:translation];
 }
 
-- (void)shouldMoveToPositionState:(PositionState)state {
+- (void)moveToPositionState:(PositionState)state {
     [self.homeViewController animateGearsSpinning];
     
     for (UIViewController<FramesBasedOnStateProtocol> *childViewController in [self primaryChildViewControllers]) {
@@ -84,17 +98,18 @@
         }
         
         [animation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
-            
             for (UIViewController *viewController in [self primaryChildViewControllers]) {
                 if ([viewController respondsToSelector:@selector(popAnimationCompleted)]) {
                     [(id)viewController popAnimationCompleted];
                 }
             }
+            [[NSUserDefaults standardUserDefaults] setInteger:state forKey:kUserDefaultsKeyCurrentState];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         }];
     }
 }
 
-- (void)shouldCancelMoveAnimations {
+- (void)cancelMoveAnimations {
     for (UIViewController<FramesBasedOnStateProtocol> *viewController in [self primaryChildViewControllers]) {
         [viewController.view pop_removeAnimationForKey:@"state"];
     }

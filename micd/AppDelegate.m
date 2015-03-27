@@ -3,6 +3,9 @@
 #import "Constants.h"
 #import "RecorderController.h"
 #import "DataSourceController.h"
+#import "FramesController.h"
+
+NSInteger const timeAllowedBeforeForcedLaunchingToHomeState = 60*2; // 2 minutes
 
 @implementation AppDelegate
 
@@ -20,23 +23,25 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
+    NSDate *lastActiveDate = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyWillResignActiveDate];
+    NSTimeInterval secondsSinceLastActive = abs([lastActiveDate timeIntervalSinceNow]);
+    PositionState state = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyCurrentState];
     
+    if (secondsSinceLastActive > timeAllowedBeforeForcedLaunchingToHomeState || lastActiveDate == nil) {
+        state = PositionStateHome;
+    }
     
-//    NSCalendar *currentCalendar = [NSCalendar autoupdatingCurrentCalendar];
-//    NSDateComponents *beginningOfTodayComponents = [currentCalendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay
-//                                                                      fromDate:[NSDate date]];
-//    NSDate *beginningOfTodayDate = [currentCalendar dateFromComponents:beginningOfTodayComponents];
-//    NSDate *beginningOfTomorrowDate = [beginningOfTodayDate dateByAddingTimeInterval:60*60*24 + 1]; // 24 hours and 1 second
-//    NSTimeInterval delay = [beginningOfTomorrowDate timeIntervalSinceNow];
-//    
-//    [self performSelector:@selector(sendMidnightNotification) withObject:nil afterDelay:delay];
+    NSDictionary *userInfo = @{kUserInfoKeyStateToLoadOnAppBecomesActive : @(state)};
+    NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyApplicationDidBecomeActive object:nil userInfo:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     
-//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(sendMidnightNotification) object:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kUserDefaultsKeyWillResignActiveDate];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -53,13 +58,6 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-#pragma mark - Notification Methods
-
-//- (void)sendMidnightNotification {
-//    NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyDidPassMidnight object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotification:notification];
-//}
-
 #pragma mark - WatchKit Methods
 
 - (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void(^)(NSDictionary *replyInfo))reply {
@@ -74,7 +72,7 @@
     NSString *messageType = userInfo[kWatchExtKeyMessageType];
     if ([messageType isEqualToString:kWatchExtKeyMessageTypeRecordButtonPressed]) {
         // start or stop recording
-        NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyDidFinishRecordingFromWatch object:nil];
+        NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyDidFinishedRecordingFromWatch object:nil];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
         isRecording = !isRecording;
     }
