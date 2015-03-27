@@ -58,8 +58,8 @@
 
 - (void)addNewRecording:(Recording *)recording {
     [self.dataSource saveRecording:recording];
-    [self.recordingsViewController reloadDataForNewRecording:YES];
-    [self.recordingsViewController scrollToAndReadyPlayerWithMostRecentRecording];
+    [self.recordingsViewController reloadDataWithNewRecording:recording];
+//    [self.recordingsViewController scrollToAndReadyPlayerWithMostRecentRecording];
 }
 
 #pragma mark - MovementDelegate

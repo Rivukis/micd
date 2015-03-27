@@ -49,7 +49,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToWatchDidFinishRecording:) name:kNotificationKeyDidFinishRecordingFromWatch object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidFinishRecordingFromWatch:) name:kNotificationKeyDidFinishRecordingFromWatch object:nil];
     
     self.growForLouderNoises = NO;
     self.recordButtonEnabled = YES;
@@ -90,7 +90,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)responseToWatchDidFinishRecording:(NSNotification *)notification {
+- (void)responseToDidFinishRecordingFromWatch:(NSNotification *)notification {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         [self.recorderController pauseRecording];
         __weak __typeof(self) weakSelf = self;

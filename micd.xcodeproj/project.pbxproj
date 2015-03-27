@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
 		7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */; };
+		7A96606A1AC5E6C500439660 /* Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9660691AC5E6C500439660 /* Factory.m */; };
 		7AC290B61A8EF0100085B927 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* PlayerController.m */; };
 		7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290AB1A8EF0100085B927 /* RecorderController.m */; };
@@ -92,6 +93,8 @@
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKValidKeyPath.h; path = micd/MTKValidKeyPath.h; sourceTree = "<group>"; };
 		7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKValidKeyPath.m; path = micd/MTKValidKeyPath.m; sourceTree = "<group>"; };
+		7A9660681AC5E6C500439660 /* Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Factory.h; sourceTree = "<group>"; };
+		7A9660691AC5E6C500439660 /* Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Factory.m; sourceTree = "<group>"; };
 		7AC290A61A8EF0100085B927 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = micd/Constants.h; sourceTree = "<group>"; };
 		7AC290A71A8EF0100085B927 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = micd/Constants.m; sourceTree = "<group>"; };
 		7AC290A81A8EF0100085B927 /* PlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerController.h; sourceTree = "<group>"; };
@@ -415,6 +418,8 @@
 		D0C67CE01A929E0E000F501A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7A9660681AC5E6C500439660 /* Factory.h */,
+				7A9660691AC5E6C500439660 /* Factory.m */,
 				7AC290AC1A8EF0100085B927 /* Recording.h */,
 				7AC290AD1A8EF0100085B927 /* Recording.m */,
 				D034F0401AA148680059028D /* RecordingsSection.h */,
@@ -637,6 +642,7 @@
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */,
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
+				7A96606A1AC5E6C500439660 /* Factory.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
 				D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */,
 				D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */,
