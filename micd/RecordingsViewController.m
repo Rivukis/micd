@@ -108,13 +108,13 @@
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidPassMidnight:) name:kNotificationKeyDidPassMidnight object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidPassMidnight:) name:kNotificationKeyDidPassMidnight object:nil];
 }
 
-- (void)responseToDidPassMidnight:(NSNotification *)notification {
-    [self reloadDataWithNewRecording:nil];
-    [self scrollToAndReadyPlayerWithMostRecentRecording];
-}
+//- (void)responseToDidPassMidnight:(NSNotification *)notification {
+//    [self reloadDataWithNewRecording:nil];
+//    [self scrollToAndReadyPlayerWithMostRecentRecording];
+//}
 
 - (void)reloadDataWithNewRecording:(Recording *)recording {
     RecordingsSection *firstSection = self.sections.firstObject;
