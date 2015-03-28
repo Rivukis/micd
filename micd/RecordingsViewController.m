@@ -53,8 +53,9 @@
 
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
 
-@property (strong, nonatomic) RecordingCellModel *focusedCellModel;
+@property (strong, nonatomic) NSIndexPath *focusedCellIndexPath;
 @property (strong, nonatomic) RecordingCell *editingCell;
+@property (strong, nonatomic, readonly) RecordingCellModel *focusedCellModel;
 
 @property (strong, nonatomic) UIVisualEffectView *blurView;
 
@@ -101,9 +102,11 @@
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    
-//    self.playbackView.hidden = YES;
-//    self.tableBottomBorder.hidden = YES;
+
+    UILongPressGestureRecognizer *titleTapDetector = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(detectTitleTapped:)];
+    titleTapDetector.minimumPressDuration = 0.0001;
+    titleTapDetector.delegate = self;
+    [self.playbackTitleLabel addGestureRecognizer:titleTapDetector];
     
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
@@ -149,9 +152,9 @@
         self.playbackView.hidden = NO;
     }
     
-    if (self.focusedCellModel) {
+    if (self.focusedCellIndexPath) {
         [self.focusedCellModel setCellState:CellStateDefault];
-        self.focusedCellModel = nil;
+        self.focusedCellIndexPath = nil;
     }
     
     if (recording != nil) {
@@ -217,12 +220,10 @@
 }
 
 - (void)scrollToAndReadyPlayerWithMostRecentRecording {
-    RecordingCellModel *mostRecentCellModel = [self mostRecentRecordingCellModel];
-    if (mostRecentCellModel) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
-    }
-    self.focusedCellModel = mostRecentCellModel;
+    if (self.sections.count == 0) return;
+    
+    self.focusedCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:self.focusedCellIndexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
     [self readyPlayerWithRecording:self.focusedCellModel.recording];
     [self.focusedCellModel setCellState:CellStatePaused];
 }
@@ -234,6 +235,21 @@
         mostRecentCellModel = [firstSection cellModelAtIndex:0];
     }
     return mostRecentCellModel;
+}
+
+- (RecordingCellModel *)cellModelAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.sections.count == 0) return nil;
+    
+    RecordingsSection *section = self.sections[self.focusedCellIndexPath.section];
+    RecordingCellModel *cellModel = [section cellModelAtIndex:self.focusedCellIndexPath.row];
+    return cellModel;
+}
+
+- (RecordingCellModel *)focusedCellModel {
+    if (self.focusedCellIndexPath) {
+        return [self cellModelAtIndexPath:self.focusedCellIndexPath];
+    }
+    return nil;
 }
 
 #pragma mark - RecordingCellDelegate
@@ -387,6 +403,12 @@
     button.transform = CGAffineTransformIdentity;
     POPSpringAnimation *showButtonAnimation = [ViewAnimator springAnimationGrowFromNothing];
     [button pop_addAnimation:showButtonAnimation forKey:@"showButton"];
+}
+
+- (void)detectTitleTapped:(UILongPressGestureRecognizer *)gestureRecognizer {
+//    self.focusedCellModel.
+//    NSIndexPath *indexPath;
+//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 #pragma mark - PlayerController Methods
@@ -587,7 +609,7 @@
             }
         } else {
             [self.focusedCellModel setCellState:CellStateDefault];
-            self.focusedCellModel = recordingCellModel;
+            self.focusedCellIndexPath = indexPath;
             
             [self readyPlayerWithRecording:self.focusedCellModel.recording];
             [self playPlaybackShouldAnimatePlayButton:YES];
@@ -617,13 +639,8 @@
         
         if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
             NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
-            if (nextToLoadIndexPath == nil) {
-                self.focusedCellModel = nil;
-            } else {
-                RecordingsSection *toLoadSection = self.sections[nextToLoadIndexPath.section];
-                self.focusedCellModel = [toLoadSection cellModelAtIndex:nextToLoadIndexPath.row];
-                [self.focusedCellModel setCellState:CellStatePaused];
-            }
+            self.focusedCellIndexPath = nextToLoadIndexPath;
+            [self.focusedCellModel setCellState:CellStatePaused];
             [self readyPlayerWithRecording:self.focusedCellModel.recording];
         }
     }
