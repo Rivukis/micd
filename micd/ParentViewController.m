@@ -54,6 +54,10 @@
     }
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - AddNewRecordingDelegate
 
 - (void)addNewRecording:(Recording *)recording {
@@ -83,10 +87,8 @@
         }
         
         [animation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
-            for (UIViewController *viewController in [self primaryChildViewControllers]) {
-                if ([viewController respondsToSelector:@selector(popAnimationCompleted)]) {
-                    [(id)viewController popAnimationCompleted];
-                }
+            if ([childViewController respondsToSelector:@selector(popAnimationCompleted)]) {
+                [(id)childViewController popAnimationCompleted];
             }
         }];
     }

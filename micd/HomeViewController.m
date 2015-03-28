@@ -42,6 +42,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (nonatomic) CGRect recordButtonOriginalFrame;
 @property (nonatomic) BOOL recordButtonEnabled;
 
+@property (assign, nonatomic) BOOL startRecordingWhenAnimationCompletes;
+
 @end
 
 @implementation HomeViewController
@@ -77,6 +79,11 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGesture.delegate = self;
     [self.view addGestureRecognizer:panGesture];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToApplicationDidBecomeActive:)
+                                                 name:kNotificationKeyApplicationDidBecomeActive
+                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -107,6 +114,14 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     }
     
     if (self.view.frame.origin.y != [self backgroundImageHomeStateYOffset]) {
+        [self moveToHomeState];
+    }
+}
+
+- (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
+    BOOL shouldMoveToHomeState = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    if (shouldMoveToHomeState) {
+        self.startRecordingWhenAnimationCompletes = YES;
         [self moveToHomeState];
     }
 }
@@ -208,7 +223,14 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 //    if (self.recorderController.recordingState == RecorderControllerStateRecording && self.view.frame.origin.y == [self backgroundImageHomeStateYOffset]) {
 //        [self performSelector:@selector(animateRecordingState) withObject:nil afterDelay:1.0f];
 //    }
+    
     [self.displayLinkController removeSubscriberWithKey:@"gears"];
+    
+    if (self.startRecordingWhenAnimationCompletes) {
+        [self recordButtonPressed:self.recordButton];
+        self.startRecordingWhenAnimationCompletes = NO;
+        
+    }
 }
 
 - (void)animateGearsSpinning {

@@ -4,13 +4,14 @@
 #import "RecorderController.h"
 #import "DataSourceController.h"
 #import "FramesController.h"
-
-NSInteger const timeAllowedBeforeForcedLaunchingToHomeState = 60*2; // 2 minutes
+#import "VersionController.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [VersionController updateVersion];
     
     return YES;
 }
@@ -22,6 +23,11 @@ NSInteger const timeAllowedBeforeForcedLaunchingToHomeState = 60*2; // 2 minutes
     [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     [sharedSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+    
+    NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyApplicationDidBecomeActive
+                                                                 object:nil
+                                                               userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

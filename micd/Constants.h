@@ -1,30 +1,29 @@
-//
-//  CKConstants.h
-//  Recorder
-//
-//  Created by Brian Radebaugh on 12/5/14.
-//  Copyright (c) 2014 CleverKnot. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 // Recording shit
-static NSString *const kRecorderPrimaryAudioFile = @"RecorderPrimaryAudioFile.m4a";
-static NSString *const kRecorderSavedAudioFileName = @"RecorderSavedAudioFileName.m4a";
-static NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenatedAudioFileName.m4a";
-static NSString *const kRecorderFormatTypeAsString = @".m4a";
+extern NSString *const kRecorderPrimaryAudioFile;
+extern NSString *const kRecorderSavedAudioFileName;
+extern NSString *const kRecorderConcatenatedAudioFileName;
+extern NSString *const kRecorderFormatTypeAsString;
 
 // Notification shit
-static NSString *const kNotificationKeyDidFinishedRecordingFromWatch = @"NotificationKeyDidFinishedRecordingFromWatch";
+extern NSString *const kNotificationKeyDidFinishedRecordingFromWatch;
+extern NSString *const kNotificationKeyApplicationDidBecomeActive;
 
 // UserDefaults shit
-static NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";
+extern NSString *const kUserDefaultsKeyCurrentVersion;
+extern NSString *const kUserDefaultsKeyMainColor;
+extern NSString *const kUserDefaultsKeyStartRecordingOnAppDidBecomeActive;
+extern NSString *const kUserDefaultsKeyRecordingsSavePlaybackPosition;
 
 // WatchKit shit
-static NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
-static NSString *const kWatchExtKeyMessageTypeWillActivate = @"WatchExtKeyMessageTypeWillActivate";
-static NSString *const kWatchExtKeyMessageTypeRecordButtonPressed = @"WatchExtKeyMessageTypeRecordButtonPressed";
-static NSString *const kWatchExtKeyIsRecording = @"kWatchExtKeyIsRecording";
+extern NSString *const kWatchExtKeyMessageType;
+extern NSString *const kWatchExtKeyMessageTypeWillActivate;
+extern NSString *const kWatchExtKeyMessageTypeRecordButtonPressed;
+extern NSString *const kWatchExtKeyIsRecording;
+
+// User Info shit
+extern NSString *const kUserInfoKeyStateToLoadOnAppBecomesActive;
 
 @interface Constants : NSObject
 

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
+		7A301EF11AC75AE600FC900D /* VersionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A301EF01AC75AE600FC900D /* VersionController.m */; };
+		7A301EF21AC7653100FC900D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */; };
 		7A96606A1AC5E6C500439660 /* Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9660691AC5E6C500439660 /* Factory.m */; };
 		7AC290B61A8EF0100085B927 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
@@ -91,6 +93,8 @@
 
 /* Begin PBXFileReference section */
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A301EEF1AC75AE600FC900D /* VersionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionController.h; sourceTree = "<group>"; };
+		7A301EF01AC75AE600FC900D /* VersionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionController.m; sourceTree = "<group>"; };
 		7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKValidKeyPath.h; path = micd/MTKValidKeyPath.h; sourceTree = "<group>"; };
 		7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKValidKeyPath.m; path = micd/MTKValidKeyPath.m; sourceTree = "<group>"; };
 		7A9660681AC5E6C500439660 /* Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Factory.h; sourceTree = "<group>"; };
@@ -411,6 +415,8 @@
 				7AC290A91A8EF0100085B927 /* PlayerController.m */,
 				7AC290AA1A8EF0100085B927 /* RecorderController.h */,
 				7AC290AB1A8EF0100085B927 /* RecorderController.m */,
+				7A301EEF1AC75AE600FC900D /* VersionController.h */,
+				7A301EF01AC75AE600FC900D /* VersionController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -518,19 +524,20 @@
 				TargetAttributes = {
 					D05D756B1A79AAA40050A49C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = A57KTL95E8;
+						DevelopmentTeam = XQJAY5KMS4;
 					};
 					D05D75841A79AAA40050A49C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = A57KTL95E8;
+						DevelopmentTeam = XQJAY5KMS4;
 						TestTargetID = D05D756B1A79AAA40050A49C;
 					};
 					D0BFAD381ABF9C9B0051F0CF = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = A57KTL95E8;
+						DevelopmentTeam = XQJAY5KMS4;
 					};
 					D0BFAD431ABF9C9B0051F0CF = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = XQJAY5KMS4;
 					};
 				};
 			};
@@ -634,6 +641,7 @@
 			files = (
 				D0F97F541A92A46800F07032 /* NSString+Score.m in Sources */,
 				D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */,
+				7A301EF11AC75AE600FC900D /* VersionController.m in Sources */,
 				D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */,
 				7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */,
 				7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */,
@@ -678,6 +686,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0BFAD3F1ABF9C9B0051F0CF /* InterfaceController.m in Sources */,
+				7A301EF21AC7653100FC900D /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
