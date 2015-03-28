@@ -17,12 +17,12 @@ static NSString *const kRecorderFormatTypeAsString = @".m4a";
 // Notification shit
 static NSString *const kNotificationKeyDidFinishedRecordingFromWatch = @"NotificationKeyDidFinishedRecordingFromWatch";
 static NSString *const kNotificationKeyApplicationDidBecomeActive = @"kNotificationKeyApplicationDidBecomeActive";
-//static NSString *const kNotificationKeyDidPassMidnight = @"kNotificationKeyDidPassMidnight";
 
 // UserDefaults shit
 static NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";
 static NSString *const kUserDefaultsKeyWillResignActiveDate = @"UserDefaultsKeyWillResignActiveDate";
 static NSString *const kUserDefaultsKeyCurrentState = @"UserDefaultsKeyCurrentState";
+static NSString *const kUserDefaultsKeyFocusedCellIndexPath = @"UserDefaultsKeyFocusedCellIndexPath";
 
 // WatchKit shit
 static NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
@@ -32,7 +32,10 @@ static NSString *const kWatchExtKeyIsRecording = @"kWatchExtKeyIsRecording";
 
 // User Info shit
 static NSString *const kUserInfoKeyStateToLoadOnAppBecomesActive = @"UserInfoKeyStateToLoadOnAppBecomesActive";
+static NSString *const kUserInfoKeyFocusedCellIndexPath = @"UserInfoKeyFocusedCellIndexPath";
 
+static NSString *const kUserInfoValueKeyIndexPathSection = @"UserDefaultsValueKeyIndexPathSection";
+static NSString *const kUserInfoValueKeyIndexPathRow = @"UserDefaultsValueKeyIndexPathRow";
 
 @interface Constants : NSObject
 

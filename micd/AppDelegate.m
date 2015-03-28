@@ -22,17 +22,24 @@ NSInteger const timeAllowedBeforeForcedLaunchingToHomeState = 60*2; // 2 minutes
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     
     NSDate *lastActiveDate = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyWillResignActiveDate];
     NSTimeInterval secondsSinceLastActive = abs([lastActiveDate timeIntervalSinceNow]);
     PositionState state = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyCurrentState];
-    
     if (secondsSinceLastActive > timeAllowedBeforeForcedLaunchingToHomeState || lastActiveDate == nil) {
         state = PositionStateHome;
     }
+    [userInfo setObject:@(state) forKey:kUserInfoKeyStateToLoadOnAppBecomesActive];
     
-    NSDictionary *userInfo = @{kUserInfoKeyStateToLoadOnAppBecomesActive : @(state)};
-    NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyApplicationDidBecomeActive object:nil userInfo:userInfo];
+    NSDictionary *focusedCellIndexPathDict = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyFocusedCellIndexPath];
+    if (focusedCellIndexPathDict) {
+        [userInfo setObject:focusedCellIndexPathDict forKey:kUserInfoKeyFocusedCellIndexPath];
+    }
+    
+    NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyApplicationDidBecomeActive
+                                                                 object:nil
+                                                               userInfo:[userInfo copy]];
     [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 

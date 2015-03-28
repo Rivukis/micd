@@ -112,9 +112,10 @@
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToApplicationDidBecomeActive:) name:kNotificationKeyApplicationDidBecomeActive object:nil];
-    
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidPassMidnight:) name:kNotificationKeyDidPassMidnight object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToApplicationDidBecomeActive:)
+                                                 name:kNotificationKeyApplicationDidBecomeActive
+                                               object:nil];
 }
 
 - (void)dealloc {
@@ -122,14 +123,19 @@
 }
 
 - (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
-        [self reloadDataWithNewRecording:nil];
-        [self scrollToAndReadyPlayerWithMostRecentRecording];
-}
-
-//- (void)responseToDidPassMidnight:(NSNotification *)notification {
 //    [self reloadDataWithNewRecording:nil];
 //    [self scrollToAndReadyPlayerWithMostRecentRecording];
-//}
+    NSDictionary *indexPathDict = notification.userInfo[kUserInfoKeyFocusedCellIndexPath];
+    if (indexPathDict) {
+        self.focusedCellIndexPath = [NSIndexPath indexPathForRow:[indexPathDict[kUserInfoValueKeyIndexPathRow] integerValue]
+                                                       inSection:[indexPathDict[kUserInfoValueKeyIndexPathSection] integerValue]];
+        
+        [self.tableView scrollToRowAtIndexPath:self.focusedCellIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        [self readyPlayerWithRecording:self.focusedCellModel.recording];
+    } else {
+        self.focusedCellIndexPath = nil;
+    }
+}
 
 - (void)reloadDataWithNewRecording:(Recording *)recording {
     if (self.focusedCellIndexPath) {
@@ -242,6 +248,18 @@
     RecordingsSection *section = self.sections[self.focusedCellIndexPath.section];
     RecordingCellModel *cellModel = [section cellModelAtIndex:self.focusedCellIndexPath.row];
     return cellModel;
+}
+
+- (void)setFocusedCellIndexPath:(NSIndexPath *)focusedCellIndexPath {
+    _focusedCellIndexPath = focusedCellIndexPath;
+    
+    if (focusedCellIndexPath) {
+        NSDictionary *dictionary = @{kUserInfoValueKeyIndexPathSection : @(focusedCellIndexPath.section),
+                                     kUserInfoValueKeyIndexPathRow : @(focusedCellIndexPath.row)};
+        [[NSUserDefaults standardUserDefaults] setObject:dictionary forKey:kUserDefaultsKeyFocusedCellIndexPath];
+    } else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserDefaultsKeyFocusedCellIndexPath];
+    }
 }
 
 - (RecordingCellModel *)focusedCellModel {
