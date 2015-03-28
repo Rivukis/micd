@@ -43,11 +43,6 @@
     [self addChildViewController:self.recordingsViewController];
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(responseToApplicationDidBecomeActive:)
-                                                 name:kNotificationKeyApplicationDidBecomeActive
-                                               object:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -59,21 +54,11 @@
     }
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
-    PositionState state = [notification.userInfo[kUserInfoKeyStateToLoadOnAppBecomesActive] integerValue];
-    [self moveToPositionState:state];
-}
-
 #pragma mark - AddNewRecordingDelegate
 
 - (void)addNewRecording:(Recording *)recording {
     [self.dataSource saveRecording:recording];
     [self.recordingsViewController reloadDataWithNewRecording:recording];
-//    [self.recordingsViewController scrollToAndReadyPlayerWithMostRecentRecording];
 }
 
 #pragma mark - MovementDelegate && Movement Helper Methods
@@ -103,7 +88,6 @@
                     [(id)viewController popAnimationCompleted];
                 }
             }
-            [[NSUserDefaults standardUserDefaults] setInteger:state forKey:kUserDefaultsKeyCurrentState];
         }];
     }
 }

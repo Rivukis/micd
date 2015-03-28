@@ -12,43 +12,21 @@ NSInteger const timeAllowedBeforeForcedLaunchingToHomeState = 60*2; // 2 minutes
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
-    [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    [sharedSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-    
     return YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     
-    NSDate *lastActiveDate = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyWillResignActiveDate];
-    NSTimeInterval secondsSinceLastActive = abs([lastActiveDate timeIntervalSinceNow]);
-    PositionState state = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyCurrentState];
-    if (secondsSinceLastActive > timeAllowedBeforeForcedLaunchingToHomeState || lastActiveDate == nil) {
-        state = PositionStateHome;
-    }
-    [userInfo setObject:@(state) forKey:kUserInfoKeyStateToLoadOnAppBecomesActive];
-    
-    NSDictionary *focusedCellIndexPathDict = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyFocusedCellIndexPath];
-    if (focusedCellIndexPathDict) {
-        [userInfo setObject:focusedCellIndexPathDict forKey:kUserInfoKeyFocusedCellIndexPath];
-    }
-    
-    NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyApplicationDidBecomeActive
-                                                                 object:nil
-                                                               userInfo:[userInfo copy]];
-    [[NSNotificationCenter defaultCenter] postNotification:notification];
+    AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
+    [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    [sharedSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-    
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kUserDefaultsKeyWillResignActiveDate];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
