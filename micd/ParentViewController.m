@@ -104,7 +104,6 @@
                 }
             }
             [[NSUserDefaults standardUserDefaults] setInteger:state forKey:kUserDefaultsKeyCurrentState];
-            [[NSUserDefaults standardUserDefaults] synchronize];
         }];
     }
 }
