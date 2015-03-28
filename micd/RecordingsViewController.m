@@ -107,6 +107,7 @@
     titleTapDetector.minimumPressDuration = 0.0001;
     titleTapDetector.delegate = self;
     [self.playbackTitleLabel addGestureRecognizer:titleTapDetector];
+    self.playbackTitleLabel.userInteractionEnabled = YES;
     
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
@@ -202,7 +203,7 @@
         [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
         self.progressTimeIndicatorView.userInteractionEnabled = YES;
         [self.playbackView addSubview:self.progressTimeIndicatorView];
-        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton];
+        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton, self.playbackTitleLabel];
         ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
         
         RecordingCellModel *mostRecentRecordingCellModel = [self mostRecentRecordingCellModel];
@@ -406,9 +407,7 @@
 }
 
 - (void)detectTitleTapped:(UILongPressGestureRecognizer *)gestureRecognizer {
-//    self.focusedCellModel.
-//    NSIndexPath *indexPath;
-//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [self.tableView scrollToRowAtIndexPath:self.focusedCellIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 #pragma mark - PlayerController Methods
