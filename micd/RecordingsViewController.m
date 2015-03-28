@@ -123,13 +123,12 @@
 }
 
 - (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
-//    [self reloadDataWithNewRecording:nil];
-//    [self scrollToAndReadyPlayerWithMostRecentRecording];
     NSDictionary *indexPathDict = notification.userInfo[kUserInfoKeyFocusedCellIndexPath];
     if (indexPathDict) {
         self.focusedCellIndexPath = [NSIndexPath indexPathForRow:[indexPathDict[kUserInfoValueKeyIndexPathRow] integerValue]
                                                        inSection:[indexPathDict[kUserInfoValueKeyIndexPathSection] integerValue]];
         
+        [self.focusedCellModel setCellState:CellStatePaused];
         [self.tableView scrollToRowAtIndexPath:self.focusedCellIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         [self readyPlayerWithRecording:self.focusedCellModel.recording];
     } else {
@@ -220,10 +219,10 @@
         [self.progressTimeIndicatorView addGestureRecognizer:gesture];
     }
     
-    if (self.isFirstTimeLayingOutSubviews) {
-        [self scrollToAndReadyPlayerWithMostRecentRecording];
-        self.isFirstTimeLayingOutSubviews = NO;
-    }
+//    if (self.isFirstTimeLayingOutSubviews) {
+//        [self scrollToAndReadyPlayerWithMostRecentRecording];
+//        self.isFirstTimeLayingOutSubviews = NO;
+//    }
 }
 
 - (void)scrollToAndReadyPlayerWithMostRecentRecording {
