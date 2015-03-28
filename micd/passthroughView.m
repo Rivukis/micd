@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 CleverKnot. All rights reserved.
 //
 
-#import "passthroughView.h"
+#import "PassthroughView.h"
 #import "UIImage+ColorAtPixel.h"
 
-@implementation passthroughView
+@implementation PassthroughView
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     for (UIView *view in self.subviews) {

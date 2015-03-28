@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22B359A31AC75E850037107C /* MicdStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B359A21AC75E850037107C /* MicdStyleKit.m */; };
+		22B359A61AC75F2E0037107C /* ProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B359A51AC75F2E0037107C /* ProgressBarView.m */; };
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
 		7A301EF11AC75AE600FC900D /* VersionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A301EF01AC75AE600FC900D /* VersionController.m */; };
 		7A301EF21AC7653100FC900D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
@@ -20,8 +22,8 @@
 		7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B51A8EF0100085B927 /* FakesForProject.m */; };
 		7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */; };
 		D034F0421AA148680059028D /* RecordingsSection.m in Sources */ = {isa = PBXBuildFile; fileRef = D034F0411AA148680059028D /* RecordingsSection.m */; };
-		D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500F71AA7C8F100C71FE1 /* passthroughView.m */; };
-		D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500FA1AA7CAD600C71FE1 /* passthroughImageView.m */; };
+		D05500F81AA7C8F100C71FE1 /* PassthroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500F71AA7C8F100C71FE1 /* PassthroughView.m */; };
+		D05500FB1AA7CAD600C71FE1 /* PassthroughImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500FA1AA7CAD600C71FE1 /* PassthroughImageView.m */; };
 		D05D75721A79AAA40050A49C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75711A79AAA40050A49C /* main.m */; };
 		D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75741A79AAA40050A49C /* AppDelegate.m */; };
 		D05D75781A79AAA40050A49C /* ParentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75771A79AAA40050A49C /* ParentViewController.m */; };
@@ -92,6 +94,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		22B359A11AC75E850037107C /* MicdStyleKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MicdStyleKit.h; path = micd/MicdStyleKit.h; sourceTree = "<group>"; };
+		22B359A21AC75E850037107C /* MicdStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MicdStyleKit.m; path = micd/MicdStyleKit.m; sourceTree = "<group>"; };
+		22B359A41AC75F2E0037107C /* ProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarView.h; sourceTree = "<group>"; };
+		22B359A51AC75F2E0037107C /* ProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressBarView.m; sourceTree = "<group>"; };
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A301EEF1AC75AE600FC900D /* VersionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionController.h; sourceTree = "<group>"; };
 		7A301EF01AC75AE600FC900D /* VersionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionController.m; sourceTree = "<group>"; };
@@ -116,10 +122,10 @@
 		97CB92049F40C98A8BAF6E34 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D034F0401AA148680059028D /* RecordingsSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsSection.h; sourceTree = "<group>"; };
 		D034F0411AA148680059028D /* RecordingsSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsSection.m; sourceTree = "<group>"; };
-		D05500F61AA7C8F100C71FE1 /* passthroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = passthroughView.h; sourceTree = "<group>"; };
-		D05500F71AA7C8F100C71FE1 /* passthroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = passthroughView.m; sourceTree = "<group>"; };
-		D05500F91AA7CAD600C71FE1 /* passthroughImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = passthroughImageView.h; sourceTree = "<group>"; };
-		D05500FA1AA7CAD600C71FE1 /* passthroughImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = passthroughImageView.m; sourceTree = "<group>"; };
+		D05500F61AA7C8F100C71FE1 /* PassthroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassthroughView.h; sourceTree = "<group>"; };
+		D05500F71AA7C8F100C71FE1 /* PassthroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassthroughView.m; sourceTree = "<group>"; };
+		D05500F91AA7CAD600C71FE1 /* PassthroughImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassthroughImageView.h; sourceTree = "<group>"; };
+		D05500FA1AA7CAD600C71FE1 /* PassthroughImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassthroughImageView.m; sourceTree = "<group>"; };
 		D05D756C1A79AAA40050A49C /* micd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = micd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05D75701A79AAA40050A49C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05D75711A79AAA40050A49C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -318,6 +324,8 @@
 			children = (
 				D05D75951A79ABDC0050A49C /* WireTapStyleKit.h */,
 				D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */,
+				22B359A11AC75E850037107C /* MicdStyleKit.h */,
+				22B359A21AC75E850037107C /* MicdStyleKit.m */,
 				D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */,
 				D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */,
 			);
@@ -394,10 +402,12 @@
 				D0C67CD51A91B9D4000F501A /* RecordingCell.m */,
 				D0BD55811AB6690600A73485 /* RecordingsView.h */,
 				D0BD55821AB6690600A73485 /* RecordingsView.m */,
-				D05500F61AA7C8F100C71FE1 /* passthroughView.h */,
-				D05500F71AA7C8F100C71FE1 /* passthroughView.m */,
-				D05500F91AA7CAD600C71FE1 /* passthroughImageView.h */,
-				D05500FA1AA7CAD600C71FE1 /* passthroughImageView.m */,
+				D05500F61AA7C8F100C71FE1 /* PassthroughView.h */,
+				D05500F71AA7C8F100C71FE1 /* PassthroughView.m */,
+				D05500F91AA7CAD600C71FE1 /* PassthroughImageView.h */,
+				D05500FA1AA7CAD600C71FE1 /* PassthroughImageView.m */,
+				22B359A41AC75F2E0037107C /* ProgressBarView.h */,
+				22B359A51AC75F2E0037107C /* ProgressBarView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -537,7 +547,7 @@
 					};
 					D0BFAD431ABF9C9B0051F0CF = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = XQJAY5KMS4;
+						DevelopmentTeam = A57KTL95E8;
 					};
 				};
 			};
@@ -648,15 +658,16 @@
 				D0BFAD291ABE351A0051F0CF /* NSObject+Blocks.m in Sources */,
 				7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
-				D05500FB1AA7CAD600C71FE1 /* passthroughImageView.m in Sources */,
+				D05500FB1AA7CAD600C71FE1 /* PassthroughImageView.m in Sources */,
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
 				7A96606A1AC5E6C500439660 /* Factory.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
 				D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */,
-				D05500F81AA7C8F100C71FE1 /* passthroughView.m in Sources */,
+				D05500F81AA7C8F100C71FE1 /* PassthroughView.m in Sources */,
 				D034F0421AA148680059028D /* RecordingsSection.m in Sources */,
 				D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */,
 				D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */,
+				22B359A61AC75F2E0037107C /* ProgressBarView.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,
 				D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */,
@@ -668,6 +679,7 @@
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
 				D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */,
 				D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */,
+				22B359A31AC75E850037107C /* MicdStyleKit.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
 				7AC290B61A8EF0100085B927 /* Constants.m in Sources */,
 			);
@@ -882,6 +894,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -890,6 +904,7 @@
 				INFOPLIST_FILE = "micd WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -900,11 +915,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				IBSC_MODULE = micd_WatchKit_Extension;
 				INFOPLIST_FILE = "micd WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";

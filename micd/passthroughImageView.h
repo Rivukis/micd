@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface passthroughImageView : UIImageView
+@interface PassthroughImageView : UIImageView
 
 @end

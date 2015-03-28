@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 CleverKnot. All rights reserved.
 //
 
-#import "passthroughImageView.h"
+#import "PassthroughImageView.h"
 #import "UIImage+ColorAtPixel.h"
 
 #define kAlphaVisibleThreshold (0.1f)
 
-@implementation passthroughImageView
+@implementation PassthroughImageView
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     BOOL isPointVisible = [self isAlphaVisibleAtPoint:point forImage:self.image];    

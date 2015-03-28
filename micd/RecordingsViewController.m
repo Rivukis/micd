@@ -3,10 +3,12 @@
 #import "DataSourceController.h"
 #import "Recording.h"
 #import "WireTapStyleKit.h"
+#import "MicdStyleKit.h"
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
 #import "FakesForProject.h"
 //#import "SCWaveformView.h"
+#import "ProgressBarView.h"
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
 #import "RecordingsView.h"
@@ -37,6 +39,7 @@
 @property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
 //@property (strong, nonatomic) SCWaveformView *waveformView;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
+@property (strong, nonatomic) ProgressBarView *progressBar;
 
 @property (strong, nonatomic) Recording *playbackRecording;
 @property (strong, nonatomic) DataSourceController *dataSource;
@@ -99,6 +102,11 @@
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
+    // gonna hide and disable these buttons until were ready to use them
+    self.shareButton.hidden = YES;
+    self.editButton.hidden = YES;
+    self.shareButton.userInteractionEnabled = NO;
+    self.editButton.userInteractionEnabled = NO;
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
@@ -111,6 +119,48 @@
     
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+
+    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
+    
+//    if (!self.didGetOriginalHeight) {
+//        self.didGetOriginalHeight = YES;
+//        self.originalHeight = self.view.frame.size.height;
+//    }
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+    self.waveformContainerView.backgroundColor = [UIColor clearColor];
+    
+    if (self.isFirstTimeLayingOutSubviews) {
+        
+        [self scrollToAndReadyPlayerWithMostRecentRecording];
+        
+        self.progressBar = [[ProgressBarView alloc] initWithFrame:self.waveformContainerView.bounds percentComplete:0];
+        [self.waveformContainerView addSubview:self.progressBar];
+        
+        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-22.0f, self.waveformContainerView.frame.origin.y, 44.0f, self.waveformContainerView.frame.size.height);
+        self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
+        [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
+        self.progressTimeIndicatorView.userInteractionEnabled = YES;
+        [self.playbackView addSubview:self.progressTimeIndicatorView];
+        
+        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton, self.playbackTitleLabel];
+        ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
+        
+        RecordingCellModel *mostRecentRecordingCellModel = [self mostRecentRecordingCellModel];
+        [self readyPlayerWithRecording:mostRecentRecordingCellModel.recording];
+        
+        UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
+        gesture.minimumPressDuration = 0.001f;
+        [self.progressTimeIndicatorView addGestureRecognizer:gesture];
+        self.isFirstTimeLayingOutSubviews = NO;
+    }
 }
 
 - (void)reloadDataWithNewRecording:(Recording *)recording {
@@ -140,65 +190,6 @@
     }
     if (recording != nil) {
         [self scrollToAndReadyPlayerWithMostRecentRecording];
-    }
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-
-    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
-    
-//    if (!self.didGetOriginalHeight) {
-//        self.didGetOriginalHeight = YES;
-//        self.originalHeight = self.view.frame.size.height;
-//    }
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-//    if (!self.didGetOriginalTableViewHeight) {
-//        self.didGetOriginalTableViewHeight = YES;
-//        self.originalTableViewHeight = self.tableView.frame.size.height;
-//    }
-    
-//    if (!self.waveformView) {
-        //after pod install need to change
-        //CGFloat pointSize = 1.0 / scale / 2;
-        //to
-        //CGFloat pointSize = 1.0 / scale * 2;
-        //this makes the minimum line height big enough to still see
-//        self.waveformView = [[SCWaveformView alloc] init];
-//        self.waveformView.frame = self.waveformContainerView.bounds;
-//        [self.waveformContainerView addSubview:self.waveformView];
-        self.waveformContainerView.backgroundColor = [UIColor clearColor];
-//        self.waveformView.normalColor = [UIColor vibrantVeryDarkBlue];
-//        self.waveformView.progressColor = [UIColor vibrantBlue];
-//        self.waveformView.precision = 0.15;
-//        self.waveformView.lineWidthRatio = 0.7;
-//        self.waveformView.channelStartIndex = 0;
-//        self.waveformView.channelEndIndex = 0;
-        
-//    }
-    
-    if (self.isFirstTimeLayingOutSubviews) {
-        
-        [self scrollToAndReadyPlayerWithMostRecentRecording];
-        
-        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-22.0f, self.waveformContainerView.frame.origin.y, 44.0f, self.waveformContainerView.frame.size.height);
-        self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
-        [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
-        self.progressTimeIndicatorView.userInteractionEnabled = YES;
-        [self.playbackView addSubview:self.progressTimeIndicatorView];
-        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton, self.playbackTitleLabel];
-        ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
-        
-        RecordingCellModel *mostRecentRecordingCellModel = [self mostRecentRecordingCellModel];
-        [self readyPlayerWithRecording:mostRecentRecordingCellModel.recording];
-        
-        UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
-        gesture.minimumPressDuration = 0.001f;
-        [self.progressTimeIndicatorView addGestureRecognizer:gesture];
-        self.isFirstTimeLayingOutSubviews = NO;
     }
 }
 
@@ -244,7 +235,7 @@
 #pragma mark - RecordingCellModelDelegate
 
 - (void)cellModel:(RecordingCellModel *)cellModel shouldChangeRecordingTitle:(NSString *)title {
-    if (title.length > 0 && [cellModel.recording.title isEqualToString:title]) {
+    if (title.length > 0 && ![cellModel.recording.title isEqualToString:title]) {
         cellModel.recording.title = title;
         [self.dataSource saveData];
         if (cellModel == self.focusedCellModel) {
@@ -259,7 +250,8 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         
-//        self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
+        self.progressBar.percent = self.playerController.percentageCompleted;
+        [self.waveformContainerView setNeedsLayout];
         
         CGFloat progressTimeCenterX = self.playerController.percentageCompleted * self.waveformContainerView.frame.size.width;
         self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);

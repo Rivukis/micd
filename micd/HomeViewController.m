@@ -4,7 +4,7 @@
 #import "GearsImageView.h"
 #import "OBShapedButton.h"
 #import "RecorderController.h"
-#import "passthroughImageView.h"
+#import "PassthroughImageView.h"
 #import "ViewAnimator.h"
 #import "DisplayLinkController.h"
 #import "PlayerController.h"

@@ -28,7 +28,7 @@
         CGPoint convertedPointForPlayerControl = [playerControl convertPoint:point fromView:self];
         BOOL isInsidePlayerControl = [playerControl pointInside:convertedPointForPlayerControl withEvent:event];
         
-        if (isInsidePlaybackContainerView && isInsidePlayerControl) {
+        if (isInsidePlaybackContainerView && isInsidePlayerControl && playerControl.userInteractionEnabled) {
             //hit button
             return YES;
         }
