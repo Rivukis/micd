@@ -167,7 +167,6 @@
     
     if (self.cellModel.shouldAnimateStateChanges) {
         if (self.length.hidden) {
-            
             [UIView transitionWithView:self.playPauseImageView
                               duration:.25
                                options:UIViewAnimationOptionTransitionFlipFromLeft
@@ -178,7 +177,9 @@
             [UIView transitionFromView:self.length
                                 toView:self.playPauseImageView
                               duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews
-                            completion:nil];
+                            completion:^(BOOL finished) {
+                welf.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
+                            }];
         }
     } else {
         self.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];

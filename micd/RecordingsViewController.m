@@ -137,6 +137,10 @@
 }
 
 - (void)reloadDataWithNewRecording:(Recording *)recording {
+    if (self.focusedCellIndexPath) {
+        [self.focusedCellModel setCellState:CellStateDefault];
+        self.focusedCellIndexPath = nil;
+    }
     RecordingsSection *firstSection = self.sections.firstObject;
     BOOL firstSectionIsToday = firstSection.isToday;
     if (recording != nil) {
@@ -157,12 +161,6 @@
         self.tableBottomBorder.hidden = NO;
         self.playbackView.hidden = NO;
     }
-    
-    if (self.focusedCellIndexPath) {
-        [self.focusedCellModel setCellState:CellStateDefault];
-        self.focusedCellIndexPath = nil;
-    }
-    
     if (recording != nil) {
         [self scrollToAndReadyPlayerWithMostRecentRecording];
     }
@@ -294,13 +292,7 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         
-        if (self.playerController.secondsCompleted == 0.0f) {
-            Recording *recording = self.playerController.loadedRecording;
-            self.waveformView.asset = recording.avAsset;
-            self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
-        } else {
-            self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
-        }
+        self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
         
         CGFloat progressTimeCenterX = self.playerController.percentageCompleted * self.waveformContainerView.frame.size.width;
         self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
@@ -441,11 +433,18 @@
         self.playbackRecording = recording;
         [self.playerController loadRecording:recording];
         
-        self.waveformView.asset = recording.avAsset;
         CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
         CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
         self.waveformView.timeRange = displayedTimeRange;
         self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
+        
+        __weak __typeof(self) welf = self;
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+            welf.waveformView.asset = recording.avAsset;
+        }];
+        [queue addOperation:operation];
+        
         self.tableBottomBorder.hidden = NO;
         self.playbackView.hidden = NO;
     } else {
