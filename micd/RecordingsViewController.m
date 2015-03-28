@@ -6,7 +6,7 @@
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
 #import "FakesForProject.h"
-#import "SCWaveformView.h"
+//#import "SCWaveformView.h"
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
 #import "RecordingsView.h"
@@ -35,7 +35,7 @@
 
 @property (strong, nonatomic) PlayerController *playerController;
 @property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
-@property (strong, nonatomic) SCWaveformView *waveformView;
+//@property (strong, nonatomic) SCWaveformView *waveformView;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
 
 @property (strong, nonatomic) Recording *playbackRecording;
@@ -185,24 +185,30 @@
 //        self.originalTableViewHeight = self.tableView.frame.size.height;
 //    }
     
-    if (!self.waveformView) {
+//    if (!self.waveformView) {
         //after pod install need to change
         //CGFloat pointSize = 1.0 / scale / 2;
         //to
         //CGFloat pointSize = 1.0 / scale * 2;
         //this makes the minimum line height big enough to still see
-        self.waveformView = [[SCWaveformView alloc] init];
-        self.waveformView.frame = self.waveformContainerView.bounds;
-        [self.waveformContainerView addSubview:self.waveformView];
+//        self.waveformView = [[SCWaveformView alloc] init];
+//        self.waveformView.frame = self.waveformContainerView.bounds;
+//        [self.waveformContainerView addSubview:self.waveformView];
         self.waveformContainerView.backgroundColor = [UIColor clearColor];
-        self.waveformView.normalColor = [UIColor vibrantVeryDarkBlue];
-        self.waveformView.progressColor = [UIColor vibrantBlue];
-        self.waveformView.precision = 0.15;
-        self.waveformView.lineWidthRatio = 0.7;
-        self.waveformView.channelStartIndex = 0;
-        self.waveformView.channelEndIndex = 0;
+//        self.waveformView.normalColor = [UIColor vibrantVeryDarkBlue];
+//        self.waveformView.progressColor = [UIColor vibrantBlue];
+//        self.waveformView.precision = 0.15;
+//        self.waveformView.lineWidthRatio = 0.7;
+//        self.waveformView.channelStartIndex = 0;
+//        self.waveformView.channelEndIndex = 0;
         
-        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-22.0f, self.waveformContainerView.frame.origin.y, 44.0f, self.waveformView.frame.size.height);
+//    }
+    
+    if (self.isFirstTimeLayingOutSubviews) {
+        
+        [self scrollToAndReadyPlayerWithMostRecentRecording];
+        
+        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-22.0f, self.waveformContainerView.frame.origin.y, 44.0f, self.waveformContainerView.frame.size.height);
         self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
         [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
         self.progressTimeIndicatorView.userInteractionEnabled = YES;
@@ -216,10 +222,6 @@
         UILongPressGestureRecognizer *gesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWaveFormPanning:)];
         gesture.minimumPressDuration = 0.001f;
         [self.progressTimeIndicatorView addGestureRecognizer:gesture];
-    }
-    
-    if (self.isFirstTimeLayingOutSubviews) {
-        [self scrollToAndReadyPlayerWithMostRecentRecording];
         self.isFirstTimeLayingOutSubviews = NO;
     }
 }
@@ -293,7 +295,7 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         
-        self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
+//        self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playerController.secondsCompleted, 60);
         
         CGFloat progressTimeCenterX = self.playerController.percentageCompleted * self.waveformContainerView.frame.size.width;
         self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
@@ -434,17 +436,17 @@
         self.playbackRecording = recording;
         [self.playerController loadRecording:recording];
         
-        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
-        CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
-        self.waveformView.timeRange = displayedTimeRange;
-        self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
+//        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
+//        CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
+//        self.waveformView.timeRange = displayedTimeRange;
+//        self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
         
-        __weak __typeof(self) welf = self;
-        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-        NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-            welf.waveformView.asset = recording.avAsset;
-        }];
-        [queue addOperation:operation];
+//        __weak __typeof(self) welf = self;
+//        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+//        NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+//            welf.waveformView.asset = recording.avAsset;
+//        }];
+//        [queue addOperation:operation];
         
         self.tableBottomBorder.hidden = NO;
         self.playbackView.hidden = NO;
@@ -485,16 +487,16 @@
             self.audioWasPlaying_gestureStateBegan = self.playerController.playerState == PlayerControllerStatePlaying;
             [self pausePlaybackShouldAnimate:YES];
         case UIGestureRecognizerStateChanged: {
-            CGPoint translation = [gesture locationInView:self.waveformView];
-            float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
+            CGPoint translation = [gesture locationInView:self.waveformContainerView];
+            float translationToWidthPercentage = translation.x / self.waveformContainerView.bounds.size.width;
             NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.loadedRecording.lengthAsTimeInterval;
             [self.playerController setPlaybackTimeInterval:secondsToTouchedLocation];
             
             CGFloat progressTimeCenterX = translation.x;
             if (translation.x < 0) {
                 progressTimeCenterX = 0;
-            } else if (translation.x > self.waveformView.frame.size.width) {
-                progressTimeCenterX = self.waveformView.frame.size.width;
+            } else if (translation.x > self.waveformContainerView.frame.size.width) {
+                progressTimeCenterX = self.waveformContainerView.frame.size.width;
             }
             
             self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
@@ -535,9 +537,9 @@
     [self.focusedCellModel setCellState:CellStatePaused];
     
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
-    self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
+//    self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self pausePlaybackShouldAnimatePauseButton:YES];
-    [self.waveformView setNeedsLayout];
+//    [self.waveformView setNeedsLayout];
 }
 
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {

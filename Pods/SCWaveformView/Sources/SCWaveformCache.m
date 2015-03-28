@@ -238,18 +238,17 @@ static float SCDecibelAverage(double sample, NSUInteger sampleCount) {
         double *addedSamples = malloc(sizeof(double) * channelCount);
         memset(addedSamples, 0, sizeof(double) * channelCount);
         
-//        CFTimeInterval start = CACurrentMediaTime();
-//        CFTimeInterval timeTakenCopy = 0;
-//        CFTimeInterval timeTakenProcessing = 0;
+        CFTimeInterval start = CACurrentMediaTime();
+        CFTimeInterval timeTakenCopy = 0;
+        CFTimeInterval timeTakenProcessing = 0;
         
         while (reader.status == AVAssetReaderStatusReading) {
-            
-//            CFTimeInterval copy = CACurrentMediaTime();
+            CFTimeInterval copy = CACurrentMediaTime();
             CMSampleBufferRef sampleBufferRef = [output copyNextSampleBuffer];
-//            timeTakenCopy += (CACurrentMediaTime() - copy);
+            timeTakenCopy += (CACurrentMediaTime() - copy);
             
             if (sampleBufferRef) {
-//                copy = CACurrentMediaTime();
+                copy = CACurrentMediaTime();
                 
                 CMBlockBufferRef blockBufferRef = CMSampleBufferGetDataBuffer(sampleBufferRef);
                 CMTime time = CMSampleBufferGetPresentationTimeStamp(sampleBufferRef);
@@ -316,7 +315,7 @@ static float SCDecibelAverage(double sample, NSUInteger sampleCount) {
                 }
                 CFRelease(sampleBufferRef);
                 
-//                timeTakenProcessing += (CACurrentMediaTime() - copy);
+                timeTakenProcessing += (CACurrentMediaTime() - copy);
             }
         }
         
@@ -346,7 +345,7 @@ static float SCDecibelAverage(double sample, NSUInteger sampleCount) {
             }
         }
 
-//        NSLog(@"Read file in %fs (copy: %fs, processing: %fs)", (float)(CACurrentMediaTime() - start), (float)timeTakenCopy, (float)timeTakenProcessing);
+        NSLog(@"Read file in %fs (copy: %fs, processing: %fs)", (float)(CACurrentMediaTime() - start), (float)timeTakenCopy, (float)timeTakenProcessing);
         
         if (shouldSetStartTime) {
             if (CMTIME_IS_VALID(beginTime)) {
@@ -369,8 +368,8 @@ static float SCDecibelAverage(double sample, NSUInteger sampleCount) {
             }
         }
         
-//        NSLog(@"Read timeRange %fs to %fs. New cache duration: %fs (end bounds: %fs), asset duration :%fs", CMTimeGetSeconds(timeRange.start), CMTimeGetSeconds(CMTimeAdd(timeRange.start, timeRange.duration)),
-//              CMTimeGetSeconds([self cacheDuration]), CMTimeGetSeconds(CMTimeAdd(_cachedStartTime, [self cacheDuration])), CMTimeGetSeconds([self actualAssetDuration]));
+        NSLog(@"Read timeRange %fs to %fs. New cache duration: %fs (end bounds: %fs), asset duration :%fs", CMTimeGetSeconds(timeRange.start), CMTimeGetSeconds(CMTimeAdd(timeRange.start, timeRange.duration)),
+              CMTimeGetSeconds([self cacheDuration]), CMTimeGetSeconds(CMTimeAdd(_cachedStartTime, [self cacheDuration])), CMTimeGetSeconds([self actualAssetDuration]));
     }
     
     
