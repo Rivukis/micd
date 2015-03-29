@@ -155,7 +155,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
             case RecorderControllerStateStopped:
             case RecorderControllerStatePaused:
                 // time to record
-                [[PlayerController sharedPlayer] pauseAudio];
+                [[PlayerController sharedPlayer] pauseAudio]; // tell recorders controller to pause
+                
                 [self.recorderController startRecording];
                 [self animateRecordingState];
                 

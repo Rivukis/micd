@@ -164,6 +164,8 @@
 }
 
 - (void)reloadDataWithNewRecording:(Recording *)recording {
+    self.progressBarWidth.constant = 0;
+    
     if (self.focusedCellIndexPath) {
         [self.focusedCellModel setCellState:CellStateDefault];
         self.focusedCellIndexPath = nil;
