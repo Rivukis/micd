@@ -12,6 +12,7 @@
     // Override point for customization after application launch.
     
     [VersionController updateVersion];
+    [VersionController restoreDefaultSettings];
     
     return YES;
 }
@@ -19,10 +20,12 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
+    [self startObservingNotifications];
+    
     AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
     [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    [sharedSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+    [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
     
     NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyApplicationDidBecomeActive
                                                                  object:nil
@@ -33,6 +36,8 @@
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -47,6 +52,33 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark - Helper Methods
+
+- (void)setAudioSessionOutputToSpeakersIfCurrentlySetToReciever {
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortBuiltInReceiver]) {
+            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+        }
+    }
+}
+
+#pragma mark - Response To Notification Methods
+
+- (void)startObservingNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToAVAudioSessionRouteChange:)
+                                                 name:AVAudioSessionRouteChangeNotification
+                                               object:nil];
+}
+
+- (void)responseToAVAudioSessionRouteChange:(NSNotification *)notification {
+    AVAudioSessionRouteChangeReason changeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
+    if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
+        [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
+    }
 }
 
 #pragma mark - WatchKit Methods
