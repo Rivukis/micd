@@ -26,7 +26,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    [MicdStyleKit drawProgressBarWithFrame:self.frame progressWidth:self.frame.size.width*self.percent/100];
+//    [MicdStyleKit drawProgressBarWithFrame:self.frame progressWidth:self.frame.size.width*self.percent];
 }
 
 

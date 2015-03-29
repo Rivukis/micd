@@ -14,10 +14,15 @@
 
 @interface MicdStyleKit : NSObject
 
+// iOS Controls Customization Outlets
+@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* progressBarTargets;
+
 // Drawing Methods
-+ (void)drawProgressBarWithFrame: (CGRect)frame progressWidth: (CGFloat)progressWidth;
++ (void)drawProgressBarFuckedWithFrame: (CGRect)frame;
++ (void)drawProgressBar;
 
 // Generated Images
-+ (UIImage*)imageOfProgressBarWithFrame: (CGRect)frame progressWidth: (CGFloat)progressWidth;
++ (UIImage*)imageOfProgressBarFuckedWithFrame: (CGRect)frame;
++ (UIImage*)imageOfProgressBar;
 
 @end

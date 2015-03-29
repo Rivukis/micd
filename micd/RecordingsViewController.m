@@ -36,10 +36,12 @@
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 
 @property (strong, nonatomic) PlayerController *playerController;
-@property (weak, nonatomic) IBOutlet UIView *waveformContainerView;
 //@property (strong, nonatomic) SCWaveformView *waveformView;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
-@property (strong, nonatomic) ProgressBarView *progressBar;
+//@property (strong, nonatomic) ProgressBarView *progressBar;
+@property (weak, nonatomic) IBOutlet UIView *progressBar;
+@property (weak, nonatomic) IBOutlet UIImageView *progressBarBorder;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *progressBarWidth;
 
 @property (strong, nonatomic) Recording *playbackRecording;
 @property (strong, nonatomic) DataSourceController *dataSource;
@@ -117,6 +119,10 @@
     [self.playbackTitleLabel addGestureRecognizer:titleTapDetector];
     self.playbackTitleLabel.userInteractionEnabled = YES;
     
+    CGRect frame = CGRectMake(self.progressBarBorder.frame.origin.x-22.0f, self.progressBarBorder.frame.origin.y-15, 44.0f, self.progressBarBorder.frame.size.height+30);
+    self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
+    self.progressTimeIndicatorView.userInteractionEnabled = YES;
+    
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
 }
@@ -134,21 +140,10 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-
-    self.waveformContainerView.backgroundColor = [UIColor clearColor];
     
     if (self.isFirstTimeLayingOutSubviews) {
-        
-        [self scrollToAndReadyPlayerWithMostRecentRecording];
-        
-        self.progressBar = [[ProgressBarView alloc] initWithFrame:self.waveformContainerView.bounds percentComplete:0];
-        [self.waveformContainerView addSubview:self.progressBar];
-        
-        CGRect frame = CGRectMake(self.waveformContainerView.frame.origin.x-22.0f, self.waveformContainerView.frame.origin.y, 44.0f, self.waveformContainerView.frame.size.height);
-        self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
-        [self.progressTimeIndicatorView setImage:[WireTapStyleKit imageOfProgressTimeIndicatorView]];
-        self.progressTimeIndicatorView.userInteractionEnabled = YES;
         [self.playbackView addSubview:self.progressTimeIndicatorView];
+        [self scrollToAndReadyPlayerWithMostRecentRecording];
         
         ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton, self.playbackTitleLabel];
         ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
@@ -160,6 +155,11 @@
         gesture.minimumPressDuration = 0.001f;
         [self.progressTimeIndicatorView addGestureRecognizer:gesture];
         self.isFirstTimeLayingOutSubviews = NO;
+        
+//        self.progressBarImageView.image = [MicdStyleKit imageOfProgressBarWithFrame:self.progressBarImageView.frame progressWidth:0];
+        self.progressBarBorder.image = [MicdStyleKit imageOfProgressBar];
+        self.progressBar.backgroundColor = [UIColor vibrantBlue];
+        self.progressBarWidth.constant = 0;
     }
 }
 
@@ -250,12 +250,10 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         
-        self.progressBar.percent = self.playerController.percentageCompleted;
-        [self.waveformContainerView setNeedsLayout];
+        self.progressBarWidth.constant = self.playerController.percentageCompleted * self.progressBarBorder.frame.size.width;
         
-        CGFloat progressTimeCenterX = self.playerController.percentageCompleted * self.waveformContainerView.frame.size.width;
-        self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
-  
+        CGFloat progressTimeCenterX = self.playerController.percentageCompleted * self.progressBarBorder.frame.size.width;
+        self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.progressBarBorder.frame.origin.x, self.progressBarBorder.center.y);
     }];
 }
 
@@ -441,21 +439,25 @@
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan:
             self.audioWasPlaying_gestureStateBegan = self.playerController.playerState == PlayerControllerStatePlaying;
-            [self pausePlaybackShouldAnimate:YES];
+            [self pausePlaybackShouldAnimate:NO];
         case UIGestureRecognizerStateChanged: {
-            CGPoint translation = [gesture locationInView:self.waveformContainerView];
-            float translationToWidthPercentage = translation.x / self.waveformContainerView.bounds.size.width;
+            CGPoint translation = [gesture locationInView:self.progressBarBorder];
+            float translationToWidthPercentage = translation.x / self.progressBarBorder.bounds.size.width;
             NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.loadedRecording.lengthAsTimeInterval;
             [self.playerController setPlaybackTimeInterval:secondsToTouchedLocation];
             
             CGFloat progressTimeCenterX = translation.x;
             if (translation.x < 0) {
                 progressTimeCenterX = 0;
-            } else if (translation.x > self.waveformContainerView.frame.size.width) {
-                progressTimeCenterX = self.waveformContainerView.frame.size.width;
+            } else if (translation.x > self.progressBarBorder.frame.size.width) {
+                progressTimeCenterX = self.progressBarBorder.frame.size.width;
             }
             
-            self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.waveformContainerView.frame.origin.x, self.waveformContainerView.center.y);
+            self.progressBarWidth.constant = self.playerController.percentageCompleted * self.progressBarBorder.frame.size.width;
+
+            self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.progressBarBorder.frame.origin.x, self.progressBarBorder.center.y);
+            
+            self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         }
             break;
         case UIGestureRecognizerStateEnded: {

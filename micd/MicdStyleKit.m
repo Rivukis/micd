@@ -13,6 +13,10 @@
 
 @implementation MicdStyleKit
 
+#pragma mark Cache
+
+static UIImage* _imageOfProgressBar = nil;
+
 #pragma mark Initialization
 
 + (void)initialize
@@ -21,7 +25,7 @@
 
 #pragma mark Drawing Methods
 
-+ (void)drawProgressBarWithFrame: (CGRect)frame progressWidth: (CGFloat)progressWidth
++ (void)drawProgressBarFuckedWithFrame: (CGRect)frame
 {
     //// General Declarations
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -29,11 +33,14 @@
     //// Color Declarations
     UIColor* color = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
 
+    //// Variable Declarations
+    CGFloat width = 373;
+
     //// progress Drawing
     CGContextSaveGState(context);
-    CGContextTranslateCTM(context, CGRectGetMinX(frame) + 13, CGRectGetMinY(frame));
+    CGContextTranslateCTM(context, CGRectGetMinX(frame) + 14, CGRectGetMinY(frame) + 5);
 
-    UIBezierPath* progressPath = [UIBezierPath bezierPathWithRect: CGRectMake(-13, 0, progressWidth, 30)];
+    UIBezierPath* progressPath = [UIBezierPath bezierPathWithRect: CGRectMake(-12, 1, 353, 28)];
     [color setFill];
     [progressPath fill];
 
@@ -42,14 +49,14 @@
 
     //// Bezier Drawing
     UIBezierPath* bezierPath = UIBezierPath.bezierPath;
-    [bezierPath moveToPoint: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame))];
-    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + 30) controlPoint1: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) - 0) controlPoint2: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + 30)];
-    [bezierPath addLineToPoint: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame) + 30)];
-    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame) + 28.86) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame) + 30) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame) + 29.59)];
-    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + 15) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 5.65, CGRectGetMinY(frame) + 27.89) controlPoint2: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + 22.05)];
-    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame) + 1.14) controlPoint1: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame) + 7.95) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 5.65, CGRectGetMinY(frame) + 2.11)];
-    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame)) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame) + 0.41) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 13, CGRectGetMinY(frame))];
-    [bezierPath addLineToPoint: CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame))];
+    [bezierPath moveToPoint: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 5)];
+    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 35) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 5) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 35)];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 35)];
+    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 33.86) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 35) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 34.59)];
+    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 20) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 6.65, CGRectGetMinY(frame) + 32.89) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 27.05)];
+    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 6.14) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 12.95) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 6.65, CGRectGetMinY(frame) + 7.11)];
+    [bezierPath addCurveToPoint: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 5) controlPoint1: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 5.41) controlPoint2: CGPointMake(CGRectGetMaxX(frame) - 14, CGRectGetMinY(frame) + 5)];
+    [bezierPath addLineToPoint: CGPointMake(CGRectGetMaxX(frame) - 1, CGRectGetMinY(frame) + 5)];
     [bezierPath closePath];
     [UIColor.blackColor setFill];
     [bezierPath fill];
@@ -57,38 +64,106 @@
 
     //// Bezier 2 Drawing
     UIBezierPath* bezier2Path = UIBezierPath.bezierPath;
-    [bezier2Path moveToPoint: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 0)];
-    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 1.14) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame)) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 0.41)];
-    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame) + 15) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 5.22, CGRectGetMinY(frame) + 2.11) controlPoint2: CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame) + 7.95)];
-    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 28.86) controlPoint1: CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame) + 22.05) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 5.22, CGRectGetMinY(frame) + 27.89)];
-    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 30) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 29.59) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 30)];
-    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame) + 30)];
-    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame))];
-    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame))];
-    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 12, CGRectGetMinY(frame) + 0)];
+    [bezier2Path moveToPoint: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 5)];
+    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 6.14) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 5) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 5.41)];
+    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 1, CGRectGetMinY(frame) + 20) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 6.22, CGRectGetMinY(frame) + 7.11) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 1, CGRectGetMinY(frame) + 12.95)];
+    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 33.86) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 1, CGRectGetMinY(frame) + 27.05) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 6.22, CGRectGetMinY(frame) + 32.89)];
+    [bezier2Path addCurveToPoint: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 35) controlPoint1: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 34.59) controlPoint2: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 35)];
+    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 1, CGRectGetMinY(frame) + 35)];
+    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 1, CGRectGetMinY(frame) + 5)];
+    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 5)];
+    [bezier2Path addLineToPoint: CGPointMake(CGRectGetMinX(frame) + 13, CGRectGetMinY(frame) + 5)];
     [bezier2Path closePath];
     [UIColor.blackColor setFill];
     [bezier2Path fill];
 
 
     //// progressOutline Drawing
-    UIBezierPath* progressOutlinePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(CGRectGetMinX(frame) + 1, CGRectGetMinY(frame) + 1, floor((CGRectGetWidth(frame) - 1) * 0.99733 + 0.5), 28) cornerRadius: 14];
+    UIBezierPath* progressOutlinePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(1, 3, width, 29) cornerRadius: 14.5];
     [color setStroke];
     progressOutlinePath.lineWidth = 2;
     [progressOutlinePath stroke];
 }
 
++ (void)drawProgressBar
+{
+    //// Color Declarations
+    UIColor* color = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
+
+    //// Bezier Drawing
+    UIBezierPath* bezierPath = UIBezierPath.bezierPath;
+    [bezierPath moveToPoint: CGPointMake(375, -0.5)];
+    [bezierPath addCurveToPoint: CGPointMake(375, 31) controlPoint1: CGPointMake(375, -0.5) controlPoint2: CGPointMake(375, 31)];
+    [bezierPath addLineToPoint: CGPointMake(359, 31)];
+    [bezierPath addCurveToPoint: CGPointMake(359, 29.8) controlPoint1: CGPointMake(359, 31) controlPoint2: CGPointMake(359, 30.57)];
+    [bezierPath addCurveToPoint: CGPointMake(375, 15.25) controlPoint1: CGPointMake(368.05, 28.78) controlPoint2: CGPointMake(375, 22.66)];
+    [bezierPath addCurveToPoint: CGPointMake(359, 0.7) controlPoint1: CGPointMake(375, 7.84) controlPoint2: CGPointMake(368.05, 1.72)];
+    [bezierPath addCurveToPoint: CGPointMake(359, -0.5) controlPoint1: CGPointMake(359, -0.07) controlPoint2: CGPointMake(359, -0.5)];
+    [bezierPath addLineToPoint: CGPointMake(375, -0.5)];
+    [bezierPath closePath];
+    [UIColor.blackColor setFill];
+    [bezierPath fill];
+
+
+    //// Bezier 2 Drawing
+    UIBezierPath* bezier2Path = UIBezierPath.bezierPath;
+    [bezier2Path moveToPoint: CGPointMake(15, -0.5)];
+    [bezier2Path addCurveToPoint: CGPointMake(15, 0.7) controlPoint1: CGPointMake(15, -0.5) controlPoint2: CGPointMake(15, -0.07)];
+    [bezier2Path addCurveToPoint: CGPointMake(0, 15.25) controlPoint1: CGPointMake(6.52, 1.72) controlPoint2: CGPointMake(0, 7.84)];
+    [bezier2Path addCurveToPoint: CGPointMake(15, 29.8) controlPoint1: CGPointMake(-0, 22.66) controlPoint2: CGPointMake(6.52, 28.78)];
+    [bezier2Path addCurveToPoint: CGPointMake(15, 31) controlPoint1: CGPointMake(15, 30.57) controlPoint2: CGPointMake(15, 31)];
+    [bezier2Path addLineToPoint: CGPointMake(0, 31)];
+    [bezier2Path addLineToPoint: CGPointMake(0, -0.5)];
+    [bezier2Path addLineToPoint: CGPointMake(15, -0.5)];
+    [bezier2Path addLineToPoint: CGPointMake(15, -0.5)];
+    [bezier2Path closePath];
+    [UIColor.blackColor setFill];
+    [bezier2Path fill];
+
+
+    //// border Drawing
+    UIBezierPath* borderPath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(1, 1, 373, 28) cornerRadius: 14];
+    [color setStroke];
+    borderPath.lineWidth = 2;
+    [borderPath stroke];
+}
+
 #pragma mark Generated Images
 
-+ (UIImage*)imageOfProgressBarWithFrame: (CGRect)frame progressWidth: (CGFloat)progressWidth
++ (UIImage*)imageOfProgressBarFuckedWithFrame: (CGRect)frame
 {
     UIGraphicsBeginImageContextWithOptions(frame.size, NO, 0.0f);
-    [MicdStyleKit drawProgressBarWithFrame: frame progressWidth: progressWidth];
+    [MicdStyleKit drawProgressBarFuckedWithFrame: frame];
 
-    UIImage* imageOfProgressBar = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage* imageOfProgressBarFucked = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    return imageOfProgressBar;
+    return imageOfProgressBarFucked;
 }
+
++ (UIImage*)imageOfProgressBar
+{
+    if (_imageOfProgressBar)
+        return _imageOfProgressBar;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(375, 30), NO, 0.0f);
+    [MicdStyleKit drawProgressBar];
+
+    _imageOfProgressBar = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return _imageOfProgressBar;
+}
+
+#pragma mark Customization Infrastructure
+
+- (void)setProgressBarTargets: (NSArray*)progressBarTargets
+{
+    _progressBarTargets = progressBarTargets;
+
+    for (id target in self.progressBarTargets)
+        [target setImage: MicdStyleKit.imageOfProgressBar];
+}
+
 
 @end
