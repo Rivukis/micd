@@ -9,6 +9,7 @@
 #import "DisplayLinkController.h"
 #import "PlayerController.h"
 #import "Constants.h"
+#import <AVFoundation/AVFoundation.h>
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -51,13 +52,18 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseToDidFinishRecordingFromWatch:) name:kNotificationKeyDidFinishedRecordingFromWatch object:nil];
-    
     self.growForLouderNoises = NO;
     self.recordButtonEnabled = YES;
     
     self.recorderController = [RecorderController sharedRecorder];
+    self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
+    [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
+    [self setupSubviews];
+    [self startObservingNotifications];
+}
+
+- (void)setupSubviews {
     self.backgroundImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfHomeView]];
     [self.view addSubview:self.backgroundImageView];
     self.backgroundImageView.userInteractionEnabled = YES;
@@ -73,17 +79,9 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     self.gearsImageView = [[GearsImageView alloc] init];
     [self.gearsCircleImageView addSubview:self.gearsImageView];
     
-    self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
-    [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGesture.delegate = self;
     [self.view addGestureRecognizer:panGesture];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(responseToApplicationDidBecomeActive:)
-                                                 name:kNotificationKeyApplicationDidBecomeActive
-                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -95,6 +93,23 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Notification Methods
+
+- (void)startObservingNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToDidFinishRecordingFromWatch:)
+                                                 name:kNotificationKeyDidFinishedRecordingFromWatch
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToApplicationDidBecomeActive:)
+                                                 name:kNotificationKeyApplicationDidBecomeActive
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToAVAudioSessionInterruption:)
+                                                 name:AVAudioSessionInterruptionNotification
+                                               object:nil];
 }
 
 - (void)responseToDidFinishRecordingFromWatch:(NSNotification *)notification {
@@ -123,6 +138,12 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     if (shouldMoveToHomeState) {
         self.startRecordingWhenAnimationCompletes = YES;
         [self moveToHomeState];
+    }
+}
+
+- (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+        [self recordButtonPressed:self.recordButton];
     }
 }
 
