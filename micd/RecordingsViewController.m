@@ -7,7 +7,6 @@
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
 #import "FakesForProject.h"
-//#import "SCWaveformView.h"
 #import "ProgressBarView.h"
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
@@ -36,9 +35,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 
 @property (strong, nonatomic) PlayerController *playerController;
-//@property (strong, nonatomic) SCWaveformView *waveformView;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
-//@property (strong, nonatomic) ProgressBarView *progressBar;
 @property (weak, nonatomic) IBOutlet UIView *progressBar;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarBorder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *progressBarWidth;
@@ -375,7 +372,7 @@
 }
 
 - (void)detectTitleTapped:(UILongPressGestureRecognizer *)gestureRecognizer {
-    [self.tableView scrollToRowAtIndexPath:self.focusedCellIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [self.tableView scrollToRowAtIndexPath:self.focusedCellIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
 #pragma mark - PlayerController Methods
@@ -688,6 +685,10 @@
     borderView.backgroundColor = [UIColor clearColor];
     [footerView addSubview:borderView];
     return footerView;
+}
+
+- (IBAction)scrollToTopTapped:(id)sender {
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
 // ----- use for resizing the tableview -----
