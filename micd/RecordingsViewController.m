@@ -36,6 +36,7 @@
 
 @property (strong, nonatomic) PlayerController *playerController;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
+@property (weak, nonatomic) IBOutlet UIView *progressBarBackground;
 @property (weak, nonatomic) IBOutlet UIView *progressBar;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarBorder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *progressBarWidth;
@@ -101,11 +102,13 @@
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
+    
     // gonna hide and disable these buttons until were ready to use them
     self.shareButton.hidden = YES;
     self.editButton.hidden = YES;
     self.shareButton.userInteractionEnabled = NO;
     self.editButton.userInteractionEnabled = NO;
+    ///////////////////////
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
@@ -119,6 +122,7 @@
     CGRect frame = CGRectMake(self.progressBarBorder.frame.origin.x-22.0f, self.progressBarBorder.frame.origin.y-15, 44.0f, self.progressBarBorder.frame.size.height+30);
     self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
     self.progressTimeIndicatorView.userInteractionEnabled = YES;
+    self.progressBarBackground.backgroundColor = [UIColor vibrantVeryDarkBlue];
     
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
@@ -153,7 +157,6 @@
         [self.progressTimeIndicatorView addGestureRecognizer:gesture];
         self.isFirstTimeLayingOutSubviews = NO;
         
-//        self.progressBarImageView.image = [MicdStyleKit imageOfProgressBarWithFrame:self.progressBarImageView.frame progressWidth:0];
         self.progressBarBorder.image = [MicdStyleKit imageOfProgressBar];
         self.progressBar.backgroundColor = [UIColor vibrantBlue];
         self.progressBarWidth.constant = 0;
@@ -167,6 +170,7 @@
         [self.focusedCellModel setCellState:CellStateDefault];
         self.focusedCellIndexPath = nil;
     }
+    
     RecordingsSection *firstSection = self.sections.firstObject;
     BOOL firstSectionIsToday = firstSection.isToday;
     if (recording != nil) {
@@ -385,9 +389,9 @@
     if (recording) {
         [self setplaybackTitleLabelText:recording.title];
         self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
-        self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         self.playbackRecording = recording;
         [self.playerController loadRecording:recording];
+        self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         
 //        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
 //        CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
@@ -491,12 +495,8 @@
 #pragma mark - PlayerControllerDelegate
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
-    [self.focusedCellModel setCellState:CellStatePaused];
-    
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
-//    self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self pausePlaybackShouldAnimatePauseButton:YES];
-//    [self.waveformView setNeedsLayout];
 }
 
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
