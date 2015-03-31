@@ -352,7 +352,6 @@
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
-//    [view pop_removeAnimationForKey:@"buttonBounce"];
     view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
@@ -455,14 +454,15 @@
         case UIGestureRecognizerStateEnded: {
             
             BOOL endOfRecordingReached = self.playerController.secondsCompleted == self.playerController.loadedRecording.lengthAsTimeInterval;
-            if (self.audioWasPlaying_gestureStateBegan && endOfRecordingReached) {
-                [self pausePlaybackShouldAnimatePauseButton:YES];
-            } else if (self.audioWasPlaying_gestureStateBegan && !endOfRecordingReached) {
-                [self playPlaybackShouldAnimatePlayButton:NO];
-            } else if (!self.audioWasPlaying_gestureStateBegan && endOfRecordingReached) {
+            if (self.audioWasPlaying_gestureStateBegan) {
+                if (endOfRecordingReached) {
+                    [self pausePlaybackShouldAnimatePauseButton:YES];
+                } else {
+                    [self playPlaybackShouldAnimatePlayButton:NO];
+                }
+            } else {
                 [self pausePlaybackShouldAnimatePauseButton:NO];
             }
-            
             [self handleDisplayLinkAnimation:nil];
         }
         default:
