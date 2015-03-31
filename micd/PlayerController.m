@@ -1,6 +1,7 @@
 #import "PlayerController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "Recording.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface PlayerController () <AVAudioPlayerDelegate>
 

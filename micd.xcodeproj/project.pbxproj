@@ -10,6 +10,7 @@
 		22B359A31AC75E850037107C /* MicdStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B359A21AC75E850037107C /* MicdStyleKit.m */; };
 		22B359A61AC75F2E0037107C /* ProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B359A51AC75F2E0037107C /* ProgressBarView.m */; };
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
+		7A146A8A1ACA4260004C55A2 /* RemoteCommandCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */; };
 		7A301EF11AC75AE600FC900D /* VersionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A301EF01AC75AE600FC900D /* VersionController.m */; };
 		7A301EF21AC7653100FC900D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */; };
@@ -99,6 +100,8 @@
 		22B359A41AC75F2E0037107C /* ProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarView.h; sourceTree = "<group>"; };
 		22B359A51AC75F2E0037107C /* ProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressBarView.m; sourceTree = "<group>"; };
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A146A881ACA4260004C55A2 /* RemoteCommandCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteCommandCenterController.h; sourceTree = "<group>"; };
+		7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteCommandCenterController.m; sourceTree = "<group>"; };
 		7A301EEF1AC75AE600FC900D /* VersionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionController.h; sourceTree = "<group>"; };
 		7A301EF01AC75AE600FC900D /* VersionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionController.m; sourceTree = "<group>"; };
 		7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKValidKeyPath.h; path = micd/MTKValidKeyPath.h; sourceTree = "<group>"; };
@@ -425,6 +428,8 @@
 				7AC290A91A8EF0100085B927 /* PlayerController.m */,
 				7AC290AA1A8EF0100085B927 /* RecorderController.h */,
 				7AC290AB1A8EF0100085B927 /* RecorderController.m */,
+				7A146A881ACA4260004C55A2 /* RemoteCommandCenterController.h */,
+				7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */,
 				7A301EEF1AC75AE600FC900D /* VersionController.h */,
 				7A301EF01AC75AE600FC900D /* VersionController.m */,
 			);
@@ -677,6 +682,7 @@
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
+				7A146A8A1ACA4260004C55A2 /* RemoteCommandCenterController.m in Sources */,
 				D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */,
 				D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */,
 				22B359A31AC75E850037107C /* MicdStyleKit.m in Sources */,

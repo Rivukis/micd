@@ -5,6 +5,7 @@
 #import "DataSourceController.h"
 #import "FramesController.h"
 #import "VersionController.h"
+#import "RemoteCommandCenterController.h"
 
 @implementation AppDelegate
 
@@ -13,6 +14,8 @@
     
     [VersionController updateVersion];
     [VersionController restoreDefaultSettings];
+    RemoteCommandCenterController *rccController = [[RemoteCommandCenterController alloc] initWithDelegate:nil];
+//    [rccController setupMediaPlayer];
     
     return YES;
 }
