@@ -82,6 +82,7 @@
     self.tableView.scrollsToTop = YES;
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(45, 0, 0, 0);
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
     //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     
     self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
@@ -126,17 +127,6 @@
     
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-
-    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
-    
-//    if (!self.didGetOriginalHeight) {
-//        self.didGetOriginalHeight = YES;
-//        self.originalHeight = self.view.frame.size.height;
-//    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -437,7 +427,6 @@
 }
 
 - (void)handleWaveFormPanning:(UILongPressGestureRecognizer *)gesture {
-    
     // pauses while panning and plays when touch ends
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan:
