@@ -377,6 +377,9 @@ RecordingCellDelegate>
         self.playbackRecording = recording;
         [self.playerController loadRecording:recording];
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
+        [self pausePlaybackShouldAnimatePauseButton:YES];
+        //this does a quick refresh of the ui without turning on the actual displaylink
+        [self handleDisplayLinkAnimation:nil];
         
 //        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
 //        CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
