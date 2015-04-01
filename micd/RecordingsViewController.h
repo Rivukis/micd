@@ -12,8 +12,6 @@
 
 @interface RecordingsViewController : UIViewController <FramesBasedOnStateProtocol>
 
-@property (nonatomic, readonly) PlayerControllerState playerState;
-
 - (void)reloadDataWithNewRecording:(Recording *)recording;
 - (void)playPlaybackShouldAnimatePlayButton:(BOOL)shouldAnimatePlayButton;
 - (void)pausePlaybackShouldAnimatePauseButton:(BOOL)shouldAnimatePauseButton;

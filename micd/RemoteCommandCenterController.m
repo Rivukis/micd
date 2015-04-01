@@ -2,134 +2,161 @@
 
 @interface RemoteCommandCenterController ()
 
-@property (nonatomic, readonly) MPRemoteCommandCenter *remoteCommandCenter;
-@property (nonatomic, weak) id<RemoteCommandCenterControllerDelegate> delegate;
-@property (nonatomic, assign) BOOL mediaPlayerHasBeenSetup;
+@property (nonatomic, strong) MPRemoteCommandCenter *remoteCommandCenter;
+
+@property (nonatomic, strong) NSString *nowPlayingInfoTitle;
+@property (nonatomic, strong) NSString *nowPlayingInfoDate;
+@property (nonatomic, strong) NSNumber *nowPlayingInfoElapsedTime;
+@property (nonatomic, strong) NSNumber *nowPlayingInfoDuration;
 
 @end
 
 @implementation RemoteCommandCenterController
 
-- (instancetype)initWithDelegate:(id)delegate {
++ (RemoteCommandCenterController *)sharedRCCController {
+    static RemoteCommandCenterController *sharedDataSource = nil;
+    @synchronized(self) {
+        if (!sharedDataSource) {
+            sharedDataSource = [[self alloc] init_common];
+        }
+    }
+    return sharedDataSource;
+}
+
+- (instancetype)init_common {
     self = [super init];
     if (self) {
-        _delegate = delegate;
-        if (!self.mediaPlayerHasBeenSetup) {
-            [self setupMediaPlayer];
-            self.mediaPlayerHasBeenSetup = YES;
-        }
+        _remoteCommandCenter = [MPRemoteCommandCenter sharedCommandCenter];
+        _nowPlayingInfoTitle = @"";
+        _nowPlayingInfoDate = @"";
+        _nowPlayingInfoElapsedTime = @0;
+        _nowPlayingInfoDuration = @0;
     }
     return self;
 }
 
-- (MPRemoteCommandCenter *)remoteCommandCenter {
-    return [MPRemoteCommandCenter sharedCommandCenter];
+- (void)dealloc {
+    [self removeAllTargets];
 }
 
-- (void)setupMediaPlayer {
-    [self setupPlaybackCommands];
-    [self setupChangingTracksCommands];
+#pragma mark - MPNowPlayingInfoCenter Methods
+
+- (void)showRemoteTitle:(NSString *)title createdDate:(NSString *)date duration:(NSNumber *)duration elapsedTime:(NSNumber *)elapsedTime {
+//    if (title.length == 0) {
+//        title = date;
+//        date = @"";
+//    }
     
-//    NSURL *url = [NSURL URLWithString:@"/Users/Rivukis/Library/Developer/CoreSimulator/Devices/781FEA78-63CD-4EA8-9ABA-F36E69FDACC3/data/Containers/Data/Application/06ED118A-7FB6-495A-9A38-80583445BC13/Documents/325C0148-34ED-48A2-A3A5-EFCB3A76B82C.m4a"];
-//    MPMoviePlayerController *audioPlayer = [[MPMoviePlayerController alloc] initWithContentURL:url];
-//    [audioPlayer play];
+    self.nowPlayingInfoTitle = title;
+    self.nowPlayingInfoDate = date;
+    self.nowPlayingInfoDuration = duration;
+    self.nowPlayingInfoElapsedTime = (duration.integerValue >= elapsedTime.integerValue) ? elapsedTime : @0;
     
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    NSMutableDictionary *trackInfo = [NSMutableDictionary dictionary];
-    [trackInfo setObject:@"Current Title" forKey:MPMediaItemPropertyTitle];
-    [trackInfo setObject:@"Mr. Author" forKey:MPMediaItemPropertyArtist];
-    [trackInfo setObject:@"Who Cares Album" forKey:MPMediaItemPropertyAlbumTitle];
-    [trackInfo setObject:@(123) forKey:MPMediaItemPropertyPlaybackDuration];
-    [trackInfo setObject:@(120) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-//    UIImage *image = [UIImage imageNamed:@"album_art"];
-//    MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:image];
-//    [trackInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
+    [self updateNowPlayingInfo];
+}
+
+- (void)showRemoteElapsedPlaybackTime:(NSNumber *)time {
+    if (self.nowPlayingInfoElapsedTime.integerValue != time.integerValue) {
+        NSLog(@"%i", time.intValue);
+        self.nowPlayingInfoElapsedTime = time;
+        [self updateNowPlayingInfo];
+    }
+}
+
+- (void)updateNowPlayingInfo {
+    NSDictionary *trackInfo = @{MPMediaItemPropertyMediaType: @(MPMediaTypeAnyAudio),
+                                MPMediaItemPropertyTitle: self.nowPlayingInfoTitle,
+                                MPMediaItemPropertyArtist: self.nowPlayingInfoDate,
+                                MPNowPlayingInfoPropertyElapsedPlaybackTime: self.nowPlayingInfoElapsedTime,
+                                MPMediaItemPropertyPlaybackDuration: self.nowPlayingInfoDuration};
+    
     [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:trackInfo];
 }
 
+- (NSString *)nowPlayingInfoTitle {
+    return _nowPlayingInfoTitle ?: @"";
+}
+
+- (NSString *)nowPlayingInfoDate {
+    return _nowPlayingInfoDate ?: @"";
+}
+
+- (NSNumber *)nowPlayingInfoElapsedTime {
+    return _nowPlayingInfoElapsedTime ?: @0;
+}
+
+- (NSNumber *)nowPlayingInfoDuration {
+    return _nowPlayingInfoDuration ?: @0;
+}
+
+#pragma mark - MPRemoteCommandCenter Methods
+
+- (void)configureMediaPlayer {
+    // In case the target actions are already registered we don't want them firing twice
+    [self removeAllTargets];
+    
+    [self setupPlaybackCommands];
+    [self setupChangingTracksCommands];
+}
+
 - (void)setupPlaybackCommands {
-    // pause and maintain position
+    self.remoteCommandCenter.playCommand.enabled = YES;
+    [self.remoteCommandCenter.playCommand addTarget:self action:@selector(play)];
+
     self.remoteCommandCenter.pauseCommand.enabled = YES;
-    [self.remoteCommandCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        // from command center and lock screen
-        NSLog(@"pause command");
-        return [self.delegate pauseCommand];
-    }];
+    [self.remoteCommandCenter.pauseCommand addTarget:self action:@selector(pause)];
     
-    // start playback of current item
-    self.remoteCommandCenter.playCommand.enabled = NO;
-    [self.remoteCommandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        // from command center and lock screen
-        NSLog(@"play command");
-        return [self.delegate playCommand];
-    }];
-    
-    // stop playback of current item
     self.remoteCommandCenter.stopCommand.enabled = YES;
-    [self.remoteCommandCenter.stopCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        // not sure what sends this command
-        NSLog(@"stop command");
-        return [self.delegate stopCommand];
-    }];
+    [self.remoteCommandCenter.stopCommand addTarget:self action:@selector(stop)];
     
-    // play if paused and pause if playing
     self.remoteCommandCenter.togglePlayPauseCommand.enabled = YES;
-    [self.remoteCommandCenter.togglePlayPauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        NSLog(@"toggle play pause command");
-        
-        // from headphones
-        return [self.delegate togglePlayPauseCommand];
-    }];
+    [self.remoteCommandCenter.togglePlayPauseCommand addTarget:self action:@selector(togglePlayPause)];
 }
 
 - (void)setupChangingTracksCommands {
     self.remoteCommandCenter.skipBackwardCommand.enabled = YES;
     self.remoteCommandCenter.skipBackwardCommand.preferredIntervals = @[@15];
-    [self.remoteCommandCenter.skipBackwardCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        NSLog(@"skip backward command");
-        return [self.delegate previousTrackCommand];
-    }];
+    [self.remoteCommandCenter.skipBackwardCommand addTarget:self action:@selector(skipBackward)];
     
     self.remoteCommandCenter.skipForwardCommand.enabled = YES;
     self.remoteCommandCenter.skipForwardCommand.preferredIntervals = @[@30];
-    [self.remoteCommandCenter.skipForwardCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        NSLog(@"skip forward command");
-        return [self.delegate nextTrackCommand];
-    }];
-    
-    self.remoteCommandCenter.nextTrackCommand.enabled = YES;
-    [self.remoteCommandCenter.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        NSLog(@"next track command");
-        return [self.delegate nextTrackCommand];
-    }];
-    
-    self.remoteCommandCenter.previousTrackCommand.enabled = YES;
-    [self.remoteCommandCenter.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
-        NSLog(@"previous track command");
-        return [self.delegate previousTrackCommand];
-    }];
+    [self.remoteCommandCenter.skipForwardCommand addTarget:self action:@selector(skipForward)];
 }
 
-- (void)remoteControlReceivedWithEvent:(UIEvent *)theEvent {
-    if (theEvent.type == UIEventTypeRemoteControl)
-    {
-        switch(theEvent.subtype) {
-            case UIEventSubtypeRemoteControlTogglePlayPause:
-                //Insert code
-                
-            case UIEventSubtypeRemoteControlPlay:
-                //Insert code
-                break;
-            case UIEventSubtypeRemoteControlPause:
-                // Insert code
-                break;
-            case UIEventSubtypeRemoteControlStop:
-                //Insert code.
-                break;
-            default:
-                return;
-        }
-    }
+- (void)removeAllTargets {
+    [self.remoteCommandCenter.playCommand removeTarget:self action:@selector(play)];
+    [self.remoteCommandCenter.pauseCommand removeTarget:self action:@selector(pause)];
+    [self.remoteCommandCenter.stopCommand removeTarget:self action:@selector(stop)];
+    [self.remoteCommandCenter.togglePlayPauseCommand removeTarget:self action:@selector(togglePlayPause)];
+    
+    [self.remoteCommandCenter.skipForwardCommand removeTarget:self action:@selector(skipForward)];
+    [self.remoteCommandCenter.skipBackwardCommand removeTarget:self action:@selector(skipBackward)];
+}
+
+#pragma mark - Remote Command Messages
+
+- (MPRemoteCommandHandlerStatus)play {
+    return [self.delegate playCommand];
+}
+
+- (MPRemoteCommandHandlerStatus)pause {
+    return [self.delegate pauseCommand];
+}
+
+- (MPRemoteCommandHandlerStatus)stop {
+    return [self.delegate stopCommand];
+}
+
+- (MPRemoteCommandHandlerStatus)togglePlayPause {
+    return [self.delegate togglePlayPauseCommand];
+}
+
+- (MPRemoteCommandHandlerStatus)skipBackward {
+    return [self.delegate skipBackwardCommand];
+}
+
+- (MPRemoteCommandHandlerStatus)skipForward {
+    return [self.delegate skipForwardCommand];
 }
 
 @end

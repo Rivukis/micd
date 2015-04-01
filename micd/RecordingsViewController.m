@@ -17,8 +17,16 @@
 #import "DismissingAnimationController.h"
 #import "Constants.h"
 #import "Factory.h"
+#import "RemoteCommandCenterController.h"
 
-@interface RecordingsViewController () <UITableViewDataSource, UITableViewDelegate, PlayerControllerDelegate, UIGestureRecognizerDelegate, RecordingCellModelDelegate, RecordingCellDelegate>
+@interface RecordingsViewController ()
+<UITableViewDataSource,
+UITableViewDelegate,
+UIGestureRecognizerDelegate,
+RemoteCommandCenterControllerDelegate,
+PlayerControllerDelegate,
+RecordingCellModelDelegate,
+RecordingCellDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
@@ -67,6 +75,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
     
     self.dataSource = [DataSourceController sharedDataSource];
     self.playerController = [PlayerController sharedPlayer];
@@ -225,29 +235,13 @@
     return nil;
 }
 
-#pragma mark - RecordingCellDelegate
-
-- (void)cellDidBecomeFirstResponer:(RecordingCell *)cell {
-    self.editingCell = cell;
-}
-
-#pragma mark - RecordingCellModelDelegate
-
-- (void)cellModel:(RecordingCellModel *)cellModel shouldChangeRecordingTitle:(NSString *)title {
-    if (title.length > 0 && ![cellModel.recording.title isEqualToString:title]) {
-        cellModel.recording.title = title;
-        [self.dataSource saveData];
-        if (cellModel == self.focusedCellModel) {
-            [self setplaybackTitleLabelText:title];
-        }
-    }
-}
-
 #pragma mark - FramesBasedOnStateProtocol
 
 - (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
+        RemoteCommandCenterController *rccController = [RemoteCommandCenterController sharedRCCController];
+        [rccController showRemoteElapsedPlaybackTime:[NSNumber numberWithDouble:self.playerController.secondsCompleted]];
         
         self.progressBarWidth.constant = self.playerController.percentageCompleted * self.progressBarBorder.frame.size.width;
         
@@ -291,7 +285,7 @@
 #pragma mark - Player Buttons
 
 - (IBAction)playPauseButtonPressed:(id)sender {
-    if (self.playerState == PlayerControllerStatePaused) {
+    if (self.playerController.playerState == PlayerControllerStatePaused) {
         [self playPlaybackShouldAnimatePlayButton:YES];
     } else {
         [self pausePlaybackShouldAnimatePauseButton:YES];
@@ -377,11 +371,13 @@
 
 #pragma mark - PlayerController Methods
 
-- (PlayerControllerState)playerState {
-    return self.playerController.playerState;
-}
-
 - (void)readyPlayerWithRecording:(Recording *)recording {
+    RemoteCommandCenterController *rccController = [RemoteCommandCenterController sharedRCCController];
+    [rccController showRemoteTitle:recording.title
+                       createdDate:recording.dateAsString
+                          duration:[NSNumber numberWithDouble:recording.lengthAsTimeInterval]
+                       elapsedTime:@0];
+    
     if (recording) {
         [self setplaybackTitleLabelText:recording.title];
         self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
@@ -560,6 +556,60 @@
 //    }
 //    
 //    return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
+}
+
+#pragma mark - RemoteCommandCenterControllerDelegate
+
+- (MPRemoteCommandHandlerStatus)playCommand {
+    [self playPlaybackShouldAnimatePlayButton:NO];
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus)pauseCommand {
+    [self pausePlaybackShouldAnimatePauseButton:NO];
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus)stopCommand {
+    [self pausePlaybackShouldAnimatePauseButton:NO];
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus)togglePlayPauseCommand {
+    if (self.playerController.playerState == PlayerControllerStatePlaying) {
+        [self pausePlaybackShouldAnimatePauseButton:NO];
+    } else {
+        [self playPlaybackShouldAnimatePlayButton:NO];
+    }
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus)skipBackwardCommand {
+    [self offsetPlaybackByTimeInterval:-15];
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus)skipForwardCommand {
+    [self offsetPlaybackByTimeInterval:30];
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+#pragma mark - RecordingCellDelegate
+
+- (void)cellDidBecomeFirstResponer:(RecordingCell *)cell {
+    self.editingCell = cell;
+}
+
+#pragma mark - RecordingCellModelDelegate
+
+- (void)cellModel:(RecordingCellModel *)cellModel shouldChangeRecordingTitle:(NSString *)title {
+    if (title.length > 0 && ![cellModel.recording.title isEqualToString:title]) {
+        cellModel.recording.title = title;
+        [self.dataSource saveData];
+        if (cellModel == self.focusedCellModel) {
+            [self setplaybackTitleLabelText:title];
+        }
+    }
 }
 
 #pragma mark - UITableViewDataSource && UITableViewDelegate

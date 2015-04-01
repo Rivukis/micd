@@ -97,7 +97,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ - daysAgo:%li isThisMonth:%i \n%@", self.dateAsString, self.daysAgo, self.isThisMonth, self.cellModels];
+    return [NSString stringWithFormat:@"%@ - daysAgo:%li isThisMonth:%li \n%@", self.dateAsString, (long)self.daysAgo, (long)self.isThisMonth, self.cellModels];
 }
 
 @end
