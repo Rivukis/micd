@@ -187,10 +187,10 @@ RecordingCellDelegate>
     } else {
         [self.tableView reloadData];
     }
-    if (self.playbackView.hidden == YES && self.dataSource.recordings.count) {
-        self.tableBottomBorder.hidden = NO;
-        self.playbackView.hidden = NO;
-    }
+//    if (self.playbackView.hidden == YES && self.dataSource.recordings.count) {
+//        self.tableBottomBorder.hidden = NO;
+//        self.playbackView.hidden = NO;
+//    }
     if (recording != nil) {
         [self scrollToAndReadyPlayerWithMostRecentRecording];
     }
@@ -390,12 +390,13 @@ RecordingCellDelegate>
 //        }];
 //        [queue addOperation:operation];
         
-        self.tableBottomBorder.hidden = NO;
-        self.playbackView.hidden = NO;
-    } else {
-        self.tableBottomBorder.hidden = YES;
-        self.playbackView.hidden = YES;
+//        self.tableBottomBorder.hidden = NO;
+//        self.playbackView.hidden = NO;
     }
+//    else {
+//        self.tableBottomBorder.hidden = YES;
+//        self.playbackView.hidden = YES;
+//    }
 }
 
 - (void)setplaybackTitleLabelText:(NSString *)title {
@@ -653,9 +654,13 @@ RecordingCellDelegate>
         
         if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
             NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
-            self.focusedCellIndexPath = nextToLoadIndexPath;
-            [self.focusedCellModel setCellState:CellStatePaused];
-            [self readyPlayerWithRecording:self.focusedCellModel.recording];
+            if (nextToLoadIndexPath) {
+                self.focusedCellIndexPath = nextToLoadIndexPath;
+                [self.focusedCellModel setCellState:CellStatePaused];
+                [self readyPlayerWithRecording:self.focusedCellModel.recording];
+            } else {
+                [self.noRecordingStateDelegate goToNoRecordingState];
+            }
         }
     }
 }
@@ -728,6 +733,12 @@ RecordingCellDelegate>
 
 - (IBAction)scrollToTopTapped:(id)sender {
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+}
+
+#pragma mark - Helper
+
+- (void)returnToHomeWithNoRecordingsState {
+    
 }
 
 // ----- use for resizing the tableview -----

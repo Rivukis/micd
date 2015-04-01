@@ -9,7 +9,7 @@
 #import "ViewAnimator.h"
 #import "Constants.h"
 
-@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate>
+@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, GoToNoRecordingStateDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
@@ -43,6 +43,7 @@
     [self addChildViewController:self.recordingsViewController];
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
+    self.recordingsViewController.noRecordingStateDelegate = self;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -63,6 +64,13 @@
 - (void)addNewRecording:(Recording *)recording {
     [self.dataSource saveRecording:recording];
     [self.recordingsViewController reloadDataWithNewRecording:recording];
+}
+
+#pragma mark - GoToNoRecordingStateDelegate
+
+- (void)goToNoRecordingState {
+    [self moveToPositionState:PositionStateHome];
+    [self.homeViewController goToNoRecordingState];
 }
 
 #pragma mark - MovementDelegate && Movement Helper Methods

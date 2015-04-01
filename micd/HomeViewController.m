@@ -1,6 +1,7 @@
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
 #import "HomeViewController.h"
+#import "DataSourceController.h"
 #import "GearsImageView.h"
 #import "OBShapedButton.h"
 #import "RecorderController.h"
@@ -21,10 +22,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIImageView *gearsCircleImageView;
 @property (strong, nonatomic) GearsImageView *gearsImageView;
-@property (strong, nonatomic) UIButton *recordingsBottomArrowButton;
-@property (strong, nonatomic) UIButton *recordingsTopArrowButton;
-@property (strong, nonatomic) UIButton *settingsBottomArrowButton;
-@property (strong, nonatomic) UIButton *settingsTopArrowButton;
 
 @property (strong, nonatomic) RecorderController *recorderController;
 
@@ -34,6 +31,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (assign, nonatomic) PositionState currentPositionState;
 
 @property (strong, nonatomic) DisplayLinkController *displayLinkController;
+@property (strong, nonatomic) UIPanGestureRecognizer *panGesture;
 
 @property (assign, nonatomic) NSUInteger animatingPulseCount;
 @property (strong, nonatomic) NSMutableArray *pulsingValues;
@@ -41,9 +39,12 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (nonatomic) CGFloat arcAngleShrinkCount;
 @property (strong, nonatomic) UIView *transitionView;
 @property (nonatomic) CGRect recordButtonOriginalFrame;
-@property (nonatomic) BOOL recordButtonEnabled;
+@property (nonatomic) CGRect backgroundImageViewOriginalFrame;
+@property (nonatomic) CGRect gearImageViewOriginalFrame;
 
+@property (nonatomic) BOOL recordButtonEnabled;
 @property (assign, nonatomic) BOOL startRecordingWhenAnimationCompletes;
+@property (assign, nonatomic) BOOL movingFromNoRecordingsState;
 
 @end
 
@@ -60,6 +61,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     [self setupSubviews];
+    
     [self startObservingNotifications];
 }
 
@@ -79,12 +81,13 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     self.gearsImageView = [[GearsImageView alloc] init];
     [self.gearsCircleImageView addSubview:self.gearsImageView];
     
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    panGesture.delegate = self;
-    [self.view addGestureRecognizer:panGesture];
+    self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    self.panGesture.delegate = self;
+    [self.view addGestureRecognizer:self.panGesture];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     // for launching the app while recording
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         [self animateRecordingState];
@@ -187,49 +190,26 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)animateRecordingState {
-    self.recordButtonOriginalFrame = self.recordButton.frame;
+    if (!self.movingFromNoRecordingsState) {
+        [self goToRecordButtonOnlyStateShouldAnimate:YES];
+    } else {
+        self.movingFromNoRecordingsState = NO;
+    }
     
     self.pulsingValues = [NSMutableArray array];
     for (int i = 0; i < 15; i++) {
         [self.pulsingValues addObject:(self.growForLouderNoises) ? @1.2 : @1];
     }
-    
-    //setup transition view to hold record button stationary
-    self.transitionView = [[UIView alloc] initWithFrame:self.view.window.bounds];
-    [self.view addSubview:self.transitionView];
-    self.transitionView.center = self.recordButton.center;
-    [self.transitionView addSubview:self.recordButton];
-    self.recordButton.center = self.view.window.center;//CGRectMake(0, 0, 256, 256);
-    
-    //now take these views and make animation magic
-    CGFloat fullCircle = self.gearsCircleImageView.frame.size.height;
-    CGRect mainFrame = self.backgroundImageView.frame;
-    mainFrame.origin.y -= fullCircle;
-    CGRect gearFrame = self.gearsCircleImageView.frame;
-    gearFrame.origin.y += fullCircle;
-    
-    [UIView animateWithDuration:.25f animations:^{
-        self.backgroundImageView.frame = mainFrame;
-        self.gearsCircleImageView.frame = gearFrame;
-    }];
-    
     self.arcAngleShrinkCount = 0;
     [self.displayLinkController addSubscriberWithKey:@"recordButton"];
 }
 
 - (void)animatePauseState {
-    [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
     [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:10] forState:UIControlStateNormal];
     
-    CGFloat fullCircle = self.gearsCircleImageView.frame.size.height;
-    CGRect mainFrame = self.backgroundImageView.frame;
-    mainFrame.origin.y += fullCircle;
-    CGRect gearFrame = self.gearsCircleImageView.frame;
-    gearFrame.origin.y -= fullCircle;
-    
     [UIView animateWithDuration:.25f animations:^{
-        self.backgroundImageView.frame = mainFrame;
-        self.gearsCircleImageView.frame = gearFrame;
+        self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
+        self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
     }];
     
     [UIView animateWithDuration:.25f animations:^{
@@ -238,6 +218,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         [self.view addSubview:self.recordButton];
         self.recordButton.frame = self.recordButtonOriginalFrame;
         [self.transitionView removeFromSuperview];
+        [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
+        [self.view addGestureRecognizer:self.panGesture];
     }];
 }
 
@@ -248,10 +230,13 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     [self.displayLinkController removeSubscriberWithKey:@"gears"];
     
+    if (self.currentPositionState == PositionStateHome) {
+        self.recordButtonEnabled = YES;
+    }
+    
     if (self.startRecordingWhenAnimationCompletes) {
         [self recordButtonPressed:self.recordButton];
         self.startRecordingWhenAnimationCompletes = NO;
-        
     }
 }
 
@@ -405,6 +390,16 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     self.gearsImageView.frame = self.gearsCircleImageView.bounds;
     
     self.currentPositionState = PositionStateHome;
+    
+    self.recordButtonOriginalFrame = self.recordButton.frame;
+    self.gearImageViewOriginalFrame = self.gearsCircleImageView.frame;
+    self.backgroundImageViewOriginalFrame = self.backgroundImageView.frame;
+    
+    BOOL weHaveRecordings = [[DataSourceController sharedDataSource] numberOfRecordings];
+    if (!weHaveRecordings) {
+        [self goToRecordButtonOnlyStateShouldAnimate:NO];
+        self.movingFromNoRecordingsState = YES;
+    }
 }
 
 - (CGRect)frameForState:(PositionState)state {
@@ -503,6 +498,43 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         self.initialY = presentationFrame.origin.y;
         [self.gearsImageView moveGearsWithRotationAngle:-Ytraveled];
     }
+}
+
+#pragma mark - Helper
+
+- (void)goToRecordButtonOnlyStateShouldAnimate:(BOOL)animate {
+    //setup transition view to hold record button stationary
+    self.transitionView = [[UIView alloc] initWithFrame:self.view.window.bounds];
+    [self.view addSubview:self.transitionView];
+    self.transitionView.center = self.recordButton.center;
+    [self.transitionView addSubview:self.recordButton];
+    self.recordButton.center = self.view.window.center;//CGRectMake(0, 0, 256, 256);
+    
+    //now take these views and get them outta here
+    CGFloat fullCircle = self.recordButton.frame.size.height;
+    CGRect mainFrame = self.backgroundImageView.frame;
+    mainFrame.origin.y -= fullCircle;
+    CGRect gearFrame = self.gearsCircleImageView.frame;
+    gearFrame.origin.y += fullCircle;
+    
+    if (animate) {
+        [UIView animateWithDuration:.25f animations:^{
+            self.backgroundImageView.frame = mainFrame;
+            self.gearsCircleImageView.frame = gearFrame;
+        } completion:^(BOOL finished) {
+            
+        }];
+    } else {
+        self.backgroundImageView.frame = mainFrame;
+        self.gearsCircleImageView.frame = gearFrame;
+    }
+    
+    [self.view removeGestureRecognizer:self.panGesture];
+}
+
+- (void)goToNoRecordingState {
+    [self goToRecordButtonOnlyStateShouldAnimate:YES];
+    self.movingFromNoRecordingsState = YES;
 }
 
 @end
