@@ -34,6 +34,9 @@
 		D05D758C1A79AAA40050A49C /* micdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D758B1A79AAA40050A49C /* micdTests.m */; };
 		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
 		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
+		D0693E9E1ACB7AD8006556FE /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0693E9D1ACB7AD8006556FE /* ShareViewController.m */; };
+		D0693EA01ACB7AD8006556FE /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0693E9F1ACB7AD8006556FE /* MainInterface.storyboard */; };
+		D0693EA31ACB7AD8006556FE /* MicdShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0693E981ACB7AD8006556FE /* MicdShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */; };
 		D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */; };
 		D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BEA1AB27EE300949483 /* ViewAnimator.m */; };
@@ -64,6 +67,13 @@
 			remoteGlobalIDString = D05D756B1A79AAA40050A49C;
 			remoteInfo = micd;
 		};
+		D0693EA11ACB7AD8006556FE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D05D75641A79AAA40050A49C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D0693E971ACB7AD8006556FE;
+			remoteInfo = MicdShareExtension;
+		};
 		D0BFAD461ABF9C9B0051F0CF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D05D75641A79AAA40050A49C /* Project object */;
@@ -88,6 +98,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				D0BFAD521ABF9C9B0051F0CF /* micd WatchKit Extension.appex in Embed App Extensions */,
+				D0693EA31ACB7AD8006556FE /* MicdShareExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,6 +157,11 @@
 		D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WireTapStyleKit.m; path = micd/WireTapStyleKit.m; sourceTree = "<group>"; };
 		D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Palette.h"; path = "micd/UIColor+Palette.h"; sourceTree = "<group>"; };
 		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
+		D0693E981ACB7AD8006556FE /* MicdShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MicdShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0693E9B1ACB7AD8006556FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0693E9C1ACB7AD8006556FE /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		D0693E9D1ACB7AD8006556FE /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		D0693E9F1ACB7AD8006556FE /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCellModel.h; sourceTree = "<group>"; };
 		D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCellModel.m; sourceTree = "<group>"; };
 		D08D4BE61AB2748700949483 /* ViewMovementBehavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewMovementBehavior.h; sourceTree = "<group>"; };
@@ -195,6 +211,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D05D75821A79AAA40050A49C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0693E951ACB7AD8006556FE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -257,6 +280,7 @@
 				D05D75881A79AAA40050A49C /* micdTests */,
 				D0BFAD3A1ABF9C9B0051F0CF /* micd WatchKit Extension */,
 				D0BFAD481ABF9C9B0051F0CF /* micd WatchKit App */,
+				D0693E991ACB7AD8006556FE /* MicdShareExtension */,
 				D05D756D1A79AAA40050A49C /* Products */,
 				5382381EB36A40952B91A5F0 /* Pods */,
 				9608EBA9FD03CB81B731CDFB /* Frameworks */,
@@ -270,6 +294,7 @@
 				D05D75851A79AAA40050A49C /* micdTests.xctest */,
 				D0BFAD391ABF9C9B0051F0CF /* micd WatchKit Extension.appex */,
 				D0BFAD441ABF9C9B0051F0CF /* micd WatchKit App.app */,
+				D0693E981ACB7AD8006556FE /* MicdShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -334,6 +359,25 @@
 			);
 			name = Styling;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		D0693E991ACB7AD8006556FE /* MicdShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				D0693E9C1ACB7AD8006556FE /* ShareViewController.h */,
+				D0693E9D1ACB7AD8006556FE /* ShareViewController.m */,
+				D0693E9F1ACB7AD8006556FE /* MainInterface.storyboard */,
+				D0693E9A1ACB7AD8006556FE /* Supporting Files */,
+			);
+			path = MicdShareExtension;
+			sourceTree = "<group>";
+		};
+		D0693E9A1ACB7AD8006556FE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D0693E9B1ACB7AD8006556FE /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		D0BFAD3A1ABF9C9B0051F0CF /* micd WatchKit Extension */ = {
@@ -471,6 +515,7 @@
 			);
 			dependencies = (
 				D0BFAD511ABF9C9B0051F0CF /* PBXTargetDependency */,
+				D0693EA21ACB7AD8006556FE /* PBXTargetDependency */,
 			);
 			name = micd;
 			productName = micd;
@@ -494,6 +539,23 @@
 			productName = micdTests;
 			productReference = D05D75851A79AAA40050A49C /* micdTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D0693E971ACB7AD8006556FE /* MicdShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0693EA41ACB7AD8006556FE /* Build configuration list for PBXNativeTarget "MicdShareExtension" */;
+			buildPhases = (
+				D0693E941ACB7AD8006556FE /* Sources */,
+				D0693E951ACB7AD8006556FE /* Frameworks */,
+				D0693E961ACB7AD8006556FE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MicdShareExtension;
+			productName = MicdShareExtension;
+			productReference = D0693E981ACB7AD8006556FE /* MicdShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		D0BFAD381ABF9C9B0051F0CF /* micd WatchKit Extension */ = {
 			isa = PBXNativeTarget;
@@ -546,6 +608,10 @@
 						DevelopmentTeam = A57KTL95E8;
 						TestTargetID = D05D756B1A79AAA40050A49C;
 					};
+					D0693E971ACB7AD8006556FE = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = A57KTL95E8;
+					};
 					D0BFAD381ABF9C9B0051F0CF = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = A57KTL95E8;
@@ -573,6 +639,7 @@
 				D05D75841A79AAA40050A49C /* micdTests */,
 				D0BFAD381ABF9C9B0051F0CF /* micd WatchKit Extension */,
 				D0BFAD431ABF9C9B0051F0CF /* micd WatchKit App */,
+				D0693E971ACB7AD8006556FE /* MicdShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -593,6 +660,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0693E961ACB7AD8006556FE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0693EA01ACB7AD8006556FE /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +774,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0693E941ACB7AD8006556FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0693E9E1ACB7AD8006556FE /* ShareViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0BFAD351ABF9C9B0051F0CF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -715,6 +798,11 @@
 			isa = PBXTargetDependency;
 			target = D05D756B1A79AAA40050A49C /* micd */;
 			targetProxy = D05D75861A79AAA40050A49C /* PBXContainerItemProxy */;
+		};
+		D0693EA21ACB7AD8006556FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D0693E971ACB7AD8006556FE /* MicdShareExtension */;
+			targetProxy = D0693EA11ACB7AD8006556FE /* PBXContainerItemProxy */;
 		};
 		D0BFAD471ABF9C9B0051F0CF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -896,6 +984,37 @@
 			};
 			name = Release;
 		};
+		D0693EA51ACB7AD8006556FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MicdShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		D0693EA61ACB7AD8006556FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = MicdShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		D0BFAD541ABF9C9B0051F0CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -995,6 +1114,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		D0693EA41ACB7AD8006556FE /* Build configuration list for PBXNativeTarget "MicdShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0693EA51ACB7AD8006556FE /* Debug */,
+				D0693EA61ACB7AD8006556FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		D0BFAD531ABF9C9B0051F0CF /* Build configuration list for PBXNativeTarget "micd WatchKit App" */ = {
 			isa = XCConfigurationList;

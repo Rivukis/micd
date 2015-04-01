@@ -186,10 +186,10 @@ RecordingCellDelegate>
     } else {
         [self.tableView reloadData];
     }
-    if (self.playbackView.hidden == YES && self.dataSource.recordings.count) {
-        self.tableBottomBorder.hidden = NO;
-        self.playbackView.hidden = NO;
-    }
+//    if (self.playbackView.hidden == YES && self.dataSource.recordings.count) {
+//        self.tableBottomBorder.hidden = NO;
+//        self.playbackView.hidden = NO;
+//    }
     if (recording != nil) {
         [self scrollToAndReadyPlayerWithMostRecentRecording];
     }
@@ -377,24 +377,9 @@ RecordingCellDelegate>
         [self setplaybackTitleLabelText:recording.title];
         self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
-        
-//        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
-//        CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
-//        self.waveformView.timeRange = displayedTimeRange;
-//        self.waveformView.progressTime = CMTimeMakeWithSeconds(0, 1);
-        
-//        __weak __typeof(self) welf = self;
-//        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-//        NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-//            welf.waveformView.asset = recording.avAsset;
-//        }];
-//        [queue addOperation:operation];
-        
-        self.tableBottomBorder.hidden = NO;
-        self.playbackView.hidden = NO;
-    } else {
-        self.tableBottomBorder.hidden = YES;
-        self.playbackView.hidden = YES;
+        [self pausePlaybackShouldAnimatePauseButton:NO];
+        //this does a quick refresh of the ui without turning on the actual displaylink
+        [self handleDisplayLinkAnimation:nil];
     }
 }
 
@@ -464,17 +449,6 @@ RecordingCellDelegate>
         default:
             break;
     }
-    
-    // plays while scrubbing
-    // -----handle issue when scrubbing on a track that is not playing (maybe only before or after track has played)
-    // -----handle issue where audio ends while scrubbing
-    // ---------- on panning state changed if moved less than 1 horizontally (maybe more/less) then pause otherwise play and set playback at current spot (also if really close to end of track then either pause or rely on the play command to restart the playing
-//    if (gesture.state == UIGestureRecognizerStateBegan || gesture.state == UIGestureRecognizerStateChanged) {
-//        CGPoint translation = [gesture locationInView:self.waveformView];
-//        float translationToWidthPercentage = translation.x / self.waveformView.bounds.size.width;
-//        NSTimeInterval secondsToTouchedLocation = translationToWidthPercentage * self.playerController.duration;
-//        [self setPlaybackTimeTo:secondsToTouchedLocation];
-//    }
 }
 
 #pragma mark - PlayerControllerDelegate
@@ -516,13 +490,7 @@ RecordingCellDelegate>
 //        if (isCellAboveInCurrentSection) {
 //            // select cell above deleted cell
 //        }
-//        
-//        
-//        
-//        
-//        
-//        
-//        
+    
 //        BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
 //        
 //        if (isRowAfterDeletedRow) {
@@ -653,9 +621,13 @@ RecordingCellDelegate>
         
         if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
             NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
-            self.focusedCellIndexPath = nextToLoadIndexPath;
-            [self.focusedCellModel setCellState:CellStatePaused];
-            [self readyPlayerWithRecording:self.focusedCellModel.recording];
+            if (nextToLoadIndexPath) {
+                self.focusedCellIndexPath = nextToLoadIndexPath;
+                [self.focusedCellModel setCellState:CellStatePaused];
+                [self readyPlayerWithRecording:self.focusedCellModel.recording];
+            } else {
+                [self.noRecordingStateDelegate goToNoRecordingState];
+            }
         }
     }
 }
@@ -728,6 +700,12 @@ RecordingCellDelegate>
 
 - (IBAction)scrollToTopTapped:(id)sender {
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+}
+
+#pragma mark - Helper
+
+- (void)returnToHomeWithNoRecordingsState {
+    
 }
 
 // ----- use for resizing the tableview -----

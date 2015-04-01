@@ -36,5 +36,6 @@
 
 - (void)popAnimationCompleted;
 - (void)animateGearsSpinning;
+- (void)goToNoRecordingState;
 
 @end

@@ -165,7 +165,7 @@
                                     <constraint firstItem="Agl-fI-Zbv" firstAttribute="top" secondItem="P7F-yT-HrD" secondAttribute="top" id="sjI-Tm-fie"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gXm-fX-a1s" userLabel="Bottom Border" customClass="UIImageView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gXm-fX-a1s" userLabel="Bottom Border" customClass="UIImageView">
                                 <rect key="frame" x="0.0" y="410" width="375" height="2"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.74509803919999995" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -176,7 +176,7 @@
                                 <rect key="frame" x="0.0" y="412" width="375" height="255"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="950" verticalHuggingPriority="251" horizontalCompressionResistancePriority="975" text="14:03" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5cl-Sb-pmr">
-                                        <rect key="frame" x="297" y="109" width="38" height="18"/>
+                                        <rect key="frame" x="297" y="110.5" width="38" height="18"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="38" id="bQg-uL-QWi"/>
                                         </constraints>
@@ -190,7 +190,7 @@
                                         </variation>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="950" verticalHuggingPriority="251" horizontalCompressionResistancePriority="975" text="0:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nM0-BA-DCM">
-                                        <rect key="frame" x="40" y="109" width="30" height="18"/>
+                                        <rect key="frame" x="40" y="110.5" width="29.5" height="18"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
                                         <color key="textColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -264,20 +264,20 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rbp-gB-Lpf">
-                                        <rect key="frame" x="170" y="30" width="34" height="21"/>
+                                        <rect key="frame" x="170.5" y="32" width="33.5" height="20.5"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="54J-Wg-SP3" userLabel="progressBarBackground">
-                                        <rect key="frame" x="30" y="82" width="315" height="18"/>
+                                        <rect key="frame" x="30" y="83.5" width="315" height="18"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="18" id="lJj-AC-pq6"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A0i-Zq-DV3" userLabel="progressBar">
-                                        <rect key="frame" x="30" y="82" width="315" height="18"/>
+                                        <rect key="frame" x="30" y="83.5" width="315" height="18"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="18" id="bMI-sZ-7Xr"/>
@@ -285,7 +285,7 @@
                                         </constraints>
                                     </view>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KOQ-Wl-9fw" userLabel="progressBorder">
-                                        <rect key="frame" x="30" y="81" width="315" height="20"/>
+                                        <rect key="frame" x="30" y="82.5" width="315" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="W0h-r0-OsG"/>
                                         </constraints>
@@ -294,7 +294,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="x4o-WT-nwi" firstAttribute="centerY" secondItem="4Bs-Pn-BCm" secondAttribute="centerY" id="4QZ-vn-IXF"/>
-                                    <constraint firstItem="Rbp-gB-Lpf" firstAttribute="top" secondItem="6pK-hO-A7X" secondAttribute="top" constant="30" id="4t4-gD-asQ"/>
+                                    <constraint firstItem="Rbp-gB-Lpf" firstAttribute="top" secondItem="6pK-hO-A7X" secondAttribute="top" constant="32" id="4t4-gD-asQ"/>
                                     <constraint firstAttribute="bottom" secondItem="x4o-WT-nwi" secondAttribute="bottom" constant="8" id="6Wl-cQ-KB5"/>
                                     <constraint firstItem="x4o-WT-nwi" firstAttribute="leading" secondItem="4Bs-Pn-BCm" secondAttribute="trailing" constant="15" id="8OQ-El-E4M"/>
                                     <constraint firstItem="nM0-BA-DCM" firstAttribute="top" secondItem="KOQ-Wl-9fw" secondAttribute="bottom" constant="8" id="E1k-W7-fet"/>
