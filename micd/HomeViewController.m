@@ -118,6 +118,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)responseToDidFinishRecordingFromWatch:(NSNotification *)notification {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         [self.recorderController pauseRecording];
+        [self animatePauseState];
         __weak __typeof(self) weakSelf = self;
         [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
             if (error) {
@@ -129,6 +130,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     } else {
         [[PlayerController sharedPlayer] pauseAudio];
         [self.recorderController startRecording];
+        [self animateRecordingState];
     }
     
     if (self.view.frame.origin.y != [self backgroundImageHomeStateYOffset]) {
