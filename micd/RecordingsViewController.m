@@ -187,10 +187,6 @@ RecordingCellDelegate>
     } else {
         [self.tableView reloadData];
     }
-//    if (self.playbackView.hidden == YES && self.dataSource.recordings.count) {
-//        self.tableBottomBorder.hidden = NO;
-//        self.playbackView.hidden = NO;
-//    }
     if (recording != nil) {
         [self scrollToAndReadyPlayerWithMostRecentRecording];
     }
