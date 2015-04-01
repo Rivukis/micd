@@ -31,10 +31,6 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-//    self.layer.masksToBounds = YES;
-//    self.bottomSeparator.backgroundColor = [UIColor blackColor];
-//    self.bottomSeparator.alpha = .5f;
-    
     self.bottomSeparator.backgroundColor = [UIColor vibrantVeryDarkBlue];
 }
 
@@ -47,7 +43,6 @@
     self.title.textColor = [UIColor vibrantLightBlueText];
     self.title.tintColor = [UIColor vibrantLightBlueText];
     self.lengthContainerView.backgroundColor = [UIColor clearColor];
-    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
     
     if (!self.isObserving) {
         [cellModel addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
@@ -81,7 +76,8 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     self.cellModel.shouldAnimateStateChanges = YES;
-    [self bindToModel:object];
+    [self setupViewBasedOnState];
+    self.cellModel.shouldAnimateStateChanges = NO;
 }
 
 - (void)prepareForReuse {
@@ -207,7 +203,7 @@
                                            userInfo:nil
                                             repeats:YES];
         
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
         [self.timer fire];
     }
 }

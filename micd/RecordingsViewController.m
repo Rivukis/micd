@@ -44,6 +44,7 @@ RecordingCellDelegate>
 
 @property (strong, nonatomic) PlayerController *playerController;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
+@property (weak, nonatomic) IBOutlet UIView *progressBarBackground;
 @property (weak, nonatomic) IBOutlet UIView *progressBar;
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarBorder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *progressBarWidth;
@@ -91,6 +92,7 @@ RecordingCellDelegate>
     self.tableView.scrollsToTop = YES;
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(45, 0, 0, 0);
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
     //    [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
     
     self.currentPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
@@ -111,11 +113,13 @@ RecordingCellDelegate>
     [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
+    
     // gonna hide and disable these buttons until were ready to use them
     self.shareButton.hidden = YES;
     self.editButton.hidden = YES;
     self.shareButton.userInteractionEnabled = NO;
     self.editButton.userInteractionEnabled = NO;
+    ///////////////////////
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
@@ -129,20 +133,10 @@ RecordingCellDelegate>
     CGRect frame = CGRectMake(self.progressBarBorder.frame.origin.x-22.0f, self.progressBarBorder.frame.origin.y-15, 44.0f, self.progressBarBorder.frame.size.height+30);
     self.progressTimeIndicatorView = [[UIImageView alloc] initWithFrame:frame];
     self.progressTimeIndicatorView.userInteractionEnabled = YES;
+    self.progressBarBackground.backgroundColor = [UIColor vibrantVeryDarkBlue];
     
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-
-    self.tableBottomBorder.backgroundColor = [UIColor vibrantBlue];
-    
-//    if (!self.didGetOriginalHeight) {
-//        self.didGetOriginalHeight = YES;
-//        self.originalHeight = self.view.frame.size.height;
-//    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -163,7 +157,6 @@ RecordingCellDelegate>
         [self.progressTimeIndicatorView addGestureRecognizer:gesture];
         self.isFirstTimeLayingOutSubviews = NO;
         
-//        self.progressBarImageView.image = [MicdStyleKit imageOfProgressBarWithFrame:self.progressBarImageView.frame progressWidth:0];
         self.progressBarBorder.image = [MicdStyleKit imageOfProgressBar];
         self.progressBar.backgroundColor = [UIColor vibrantBlue];
         self.progressBarWidth.constant = 0;
@@ -177,6 +170,7 @@ RecordingCellDelegate>
         [self.focusedCellModel setCellState:CellStateDefault];
         self.focusedCellIndexPath = nil;
     }
+    
     RecordingsSection *firstSection = self.sections.firstObject;
     BOOL firstSectionIsToday = firstSection.isToday;
     if (recording != nil) {
@@ -352,7 +346,6 @@ RecordingCellDelegate>
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
-//    [view pop_removeAnimationForKey:@"buttonBounce"];
     view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
@@ -381,9 +374,9 @@ RecordingCellDelegate>
     if (recording) {
         [self setplaybackTitleLabelText:recording.title];
         self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
-        self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         self.playbackRecording = recording;
         [self.playerController loadRecording:recording];
+        self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         
 //        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);
 //        CMTimeRange displayedTimeRange = CMTimeRangeMake(kCMTimeZero, recordingDuration);
@@ -429,7 +422,6 @@ RecordingCellDelegate>
 }
 
 - (void)handleWaveFormPanning:(UILongPressGestureRecognizer *)gesture {
-    
     // pauses while panning and plays when touch ends
     switch (gesture.state) {
         case UIGestureRecognizerStateBegan:
@@ -458,14 +450,15 @@ RecordingCellDelegate>
         case UIGestureRecognizerStateEnded: {
             
             BOOL endOfRecordingReached = self.playerController.secondsCompleted == self.playerController.loadedRecording.lengthAsTimeInterval;
-            if (self.audioWasPlaying_gestureStateBegan && endOfRecordingReached) {
-                [self pausePlaybackShouldAnimatePauseButton:YES];
-            } else if (self.audioWasPlaying_gestureStateBegan && !endOfRecordingReached) {
-                [self playPlaybackShouldAnimatePlayButton:NO];
-            } else if (!self.audioWasPlaying_gestureStateBegan && endOfRecordingReached) {
+            if (self.audioWasPlaying_gestureStateBegan) {
+                if (endOfRecordingReached) {
+                    [self pausePlaybackShouldAnimatePauseButton:YES];
+                } else {
+                    [self playPlaybackShouldAnimatePlayButton:NO];
+                }
+            } else {
                 [self pausePlaybackShouldAnimatePauseButton:NO];
             }
-            
             [self handleDisplayLinkAnimation:nil];
         }
         default:
@@ -487,12 +480,8 @@ RecordingCellDelegate>
 #pragma mark - PlayerControllerDelegate
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
-    [self.focusedCellModel setCellState:CellStatePaused];
-    
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
-//    self.waveformView.progressTime = CMTimeMakeWithSeconds(self.playbackRecording.lengthAsTimeInterval, 60);
     [self pausePlaybackShouldAnimatePauseButton:YES];
-//    [self.waveformView setNeedsLayout];
 }
 
 - (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
