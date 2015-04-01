@@ -91,6 +91,12 @@
 }
 
 - (CGFloat)percentageCompleted {
+    if (self.loadedRecording.lengthAsTimeInterval <= 0) {
+        return 0.f;
+    } else if (self.secondsCompleted > self.loadedRecording.lengthAsTimeInterval) {
+        return 1.f;
+    }
+    
     return self.secondsCompleted/self.loadedRecording.lengthAsTimeInterval;
 }
 

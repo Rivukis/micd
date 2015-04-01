@@ -23,7 +23,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [self setupAudioSession];
     [self startObservingNotifications];
-    [[RemoteCommandCenterController sharedRCCController] configureMediaPlayer];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyApplicationDidBecomeActive object:nil];
 }
 

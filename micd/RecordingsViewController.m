@@ -49,7 +49,6 @@ RecordingCellDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *progressBarBorder;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *progressBarWidth;
 
-@property (strong, nonatomic) Recording *playbackRecording;
 @property (strong, nonatomic) DataSourceController *dataSource;
 @property (strong, nonatomic) NSMutableArray *sections;
 
@@ -365,17 +364,18 @@ RecordingCellDelegate>
 #pragma mark - PlayerController Methods
 
 - (void)readyPlayerWithRecording:(Recording *)recording {
+    [self.playerController loadRecording:recording];
+    
     RemoteCommandCenterController *rccController = [RemoteCommandCenterController sharedRCCController];
     [rccController showRemoteTitle:recording.title
                        createdDate:recording.dateAsString
                           duration:[NSNumber numberWithDouble:recording.lengthAsTimeInterval]
-                       elapsedTime:@0];
-    
+                       elapsedTime:@0
+                          forstate:RemoteCommandCenterControllerStatePlaying];
+
     if (recording) {
         [self setplaybackTitleLabelText:recording.title];
         self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
-        self.playbackRecording = recording;
-        [self.playerController loadRecording:recording];
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
         
 //        CMTime recordingDuration = CMTimeMakeWithSeconds(recording.lengthAsTimeInterval, 10000);

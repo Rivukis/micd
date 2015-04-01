@@ -1,6 +1,11 @@
 #import <Foundation/Foundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
+typedef NS_ENUM(NSInteger, RemoteCommandCenterControllerState) {
+    RemoteCommandCenterControllerStatePlaying,
+    RemoteCommandCenterControllerStateRecording
+};
+
 @protocol RemoteCommandCenterControllerDelegate <NSObject>
 
 - (MPRemoteCommandHandlerStatus)playCommand;
@@ -18,9 +23,8 @@
 @property (nonatomic, weak) id<RemoteCommandCenterControllerDelegate> delegate;
 
 + (RemoteCommandCenterController *)sharedRCCController;
-- (void)configureMediaPlayer;
 
-- (void)showRemoteTitle:(NSString *)title createdDate:(NSString *)date duration:(NSNumber *)duration elapsedTime:(NSNumber *)elapsedTime;
+- (void)showRemoteTitle:(NSString *)title createdDate:(NSString *)date duration:(NSNumber *)duration elapsedTime:(NSNumber *)elapsedTime forstate:(RemoteCommandCenterControllerState)state;
 - (void)showRemoteElapsedPlaybackTime:(NSNumber *)time;
 
 @end

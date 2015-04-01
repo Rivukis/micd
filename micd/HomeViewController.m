@@ -10,6 +10,7 @@
 #import "PlayerController.h"
 #import "Constants.h"
 #import <AVFoundation/AVFoundation.h>
+#import "RemoteCommandCenterController.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -125,7 +126,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         }];
     } else {
         [[PlayerController sharedPlayer] pauseAudio];
-        [self.recorderController startRecording];
+        [self startRecording];
     }
     
     if (self.view.frame.origin.y != [self backgroundImageHomeStateYOffset]) {
@@ -147,6 +148,17 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     }
 }
 
+#pragma mark - Helper Methods
+
+- (void)startRecording {
+    [self.recorderController startRecording];
+    [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
+                                                             createdDate:nil
+                                                                duration:nil
+                                                             elapsedTime:nil
+                                                                forstate:RemoteCommandCenterControllerStateRecording];
+}
+
 #pragma mark - User Actions
 
 - (void)recordButtonPressed:(UIButton *)sender {
@@ -155,9 +167,11 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
             case RecorderControllerStateStopped:
             case RecorderControllerStatePaused:
                 // time to record
+                
+                // !!!: we should be telling the player controller to pause not only pause the audio
                 [[PlayerController sharedPlayer] pauseAudio]; // tell recorders controller to pause
                 
-                [self.recorderController startRecording];
+                [self startRecording];
                 [self animateRecordingState];
                 
                 break;
