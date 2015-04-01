@@ -9,6 +9,8 @@
 @property (nonatomic, strong) NSNumber *nowPlayingInfoElapsedTime;
 @property (nonatomic, strong) NSNumber *nowPlayingInfoDuration;
 
+@property (nonatomic, assign) RemoteCommandCenterControllerState state;
+
 @end
 
 @implementation RemoteCommandCenterController
@@ -27,10 +29,6 @@
     self = [super init];
     if (self) {
         _remoteCommandCenter = [MPRemoteCommandCenter sharedCommandCenter];
-        _nowPlayingInfoTitle = @"";
-        _nowPlayingInfoDate = @"";
-        _nowPlayingInfoElapsedTime = @0;
-        _nowPlayingInfoDuration = @0;
     }
     return self;
 }
@@ -39,38 +37,56 @@
     [self removeAllTargets];
 }
 
-#pragma mark - MPNowPlayingInfoCenter Methods
+#pragma mark - MPNowPlayingInfoCenter Public Methods
 
-- (void)showRemoteTitle:(NSString *)title createdDate:(NSString *)date duration:(NSNumber *)duration elapsedTime:(NSNumber *)elapsedTime {
-//    if (title.length == 0) {
-//        title = date;
-//        date = @"";
+- (void)showRemoteTitle:(NSString *)title createdDate:(NSString *)date duration:(NSNumber *)duration elapsedTime:(NSNumber *)elapsedTime forstate:(RemoteCommandCenterControllerState)state {
+    self.state = state;
+    
+//    if (self.state == RemoteCommandCenterControllerStatePlaying) {
+//        if (title.length == 0) {
+//            title = date;
+//            date = @"";
+//        }
 //    }
     
     self.nowPlayingInfoTitle = title;
     self.nowPlayingInfoDate = date;
     self.nowPlayingInfoDuration = duration;
-    self.nowPlayingInfoElapsedTime = (duration.integerValue >= elapsedTime.integerValue) ? elapsedTime : @0;
+    self.nowPlayingInfoElapsedTime = (elapsedTime <= duration) ? elapsedTime : @0;
     
     [self updateNowPlayingInfo];
 }
 
 - (void)showRemoteElapsedPlaybackTime:(NSNumber *)time {
     if (self.nowPlayingInfoElapsedTime.integerValue != time.integerValue) {
-        NSLog(@"%i", time.intValue);
         self.nowPlayingInfoElapsedTime = time;
         [self updateNowPlayingInfo];
     }
 }
 
+- (void)setState:(RemoteCommandCenterControllerState)state {
+    if (_state != state) {
+        if (state == RemoteCommandCenterControllerStatePlaying) {
+            [self configureMediaPlayerForPlaying];
+        } else {
+            [self configureMediaPlayerForRecording];
+        }
+        _state = state;
+    }
+}
+
+#pragma mark - MPNowPlayingInfoCenter Private Methods
+
 - (void)updateNowPlayingInfo {
-    NSDictionary *trackInfo = @{MPMediaItemPropertyMediaType: @(MPMediaTypeAnyAudio),
-                                MPMediaItemPropertyTitle: self.nowPlayingInfoTitle,
-                                MPMediaItemPropertyArtist: self.nowPlayingInfoDate,
-                                MPNowPlayingInfoPropertyElapsedPlaybackTime: self.nowPlayingInfoElapsedTime,
-                                MPMediaItemPropertyPlaybackDuration: self.nowPlayingInfoDuration};
+    NSMutableDictionary *trackInfo = [NSMutableDictionary dictionary];
     
-    [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:trackInfo];
+    [trackInfo setObject:@(MPMediaTypeAnyAudio) forKey:MPMediaItemPropertyMediaType];
+    if (self.nowPlayingInfoTitle) [trackInfo setObject:self.nowPlayingInfoTitle forKey:MPMediaItemPropertyTitle];
+    if (self.nowPlayingInfoDate) [trackInfo setObject:self.nowPlayingInfoDate forKey:MPMediaItemPropertyArtist];
+    if (self.nowPlayingInfoElapsedTime) [trackInfo setObject:self.nowPlayingInfoElapsedTime forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+    if (self.nowPlayingInfoDuration) [trackInfo setObject:self.nowPlayingInfoDuration forKey:MPMediaItemPropertyPlaybackDuration];
+    
+    [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:[trackInfo copy]];
 }
 
 - (NSString *)nowPlayingInfoTitle {
@@ -91,12 +107,16 @@
 
 #pragma mark - MPRemoteCommandCenter Methods
 
-- (void)configureMediaPlayer {
+- (void)configureMediaPlayerForRecording {
+    [self removeAllTargets];
+}
+
+- (void)configureMediaPlayerForPlaying {
     // In case the target actions are already registered we don't want them firing twice
     [self removeAllTargets];
     
     [self setupPlaybackCommands];
-    [self setupChangingTracksCommands];
+    [self setupSkipCommands];
 }
 
 - (void)setupPlaybackCommands {
@@ -113,7 +133,7 @@
     [self.remoteCommandCenter.togglePlayPauseCommand addTarget:self action:@selector(togglePlayPause)];
 }
 
-- (void)setupChangingTracksCommands {
+- (void)setupSkipCommands {
     self.remoteCommandCenter.skipBackwardCommand.enabled = YES;
     self.remoteCommandCenter.skipBackwardCommand.preferredIntervals = @[@15];
     [self.remoteCommandCenter.skipBackwardCommand addTarget:self action:@selector(skipBackward)];
@@ -129,8 +149,8 @@
     [self.remoteCommandCenter.stopCommand removeTarget:self action:@selector(stop)];
     [self.remoteCommandCenter.togglePlayPauseCommand removeTarget:self action:@selector(togglePlayPause)];
     
-    [self.remoteCommandCenter.skipForwardCommand removeTarget:self action:@selector(skipForward)];
     [self.remoteCommandCenter.skipBackwardCommand removeTarget:self action:@selector(skipBackward)];
+    [self.remoteCommandCenter.skipForwardCommand removeTarget:self action:@selector(skipForward)];
 }
 
 #pragma mark - Remote Command Messages
