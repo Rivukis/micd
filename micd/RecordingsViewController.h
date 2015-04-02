@@ -25,7 +25,6 @@
 - (void)pausePlaybackShouldAnimatePauseButton:(BOOL)shouldAnimatePauseButton;
 - (void)offsetPlaybackByTimeInterval:(NSTimeInterval)timeInterval;
 - (void)showPlayerButtons;
-- (void)hidePlayerButtons;
 
 - (void)scrollToAndReadyPlayerWithMostRecentRecording;
 

@@ -32,19 +32,28 @@
 + (POPSpringAnimation *)springAnimationShrinkToNothing; {
     POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
     animation.fromValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
-    animation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.1, 0.1)];
-    animation.velocity = [NSValue valueWithCGPoint:CGPointMake(8, 8)];
-    animation.springBounciness = 10.f;
+    animation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.0001, 0.0001)];
+    animation.velocity = [NSValue valueWithCGPoint:CGPointMake(20, 20)];
+    animation.springBounciness = 0.0f;
     
     return animation;
 }
 
-+ (POPSpringAnimation *)springAnimationBounce {
++ (POPSpringAnimation *)springAnimationButtonBounce {
     POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
     animation.velocity = [NSValue valueWithCGPoint:CGPointMake(-10, -10)];
     animation.springBounciness = 16.f;
     
     return animation;
 }
+
++ (POPSpringAnimation *)springAnimationCellBounce {
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    animation.velocity = [NSValue valueWithCGPoint:CGPointMake(-2, -2)];
+    animation.springBounciness = 12.0f;
+    
+    return animation;
+}
+
 
 @end

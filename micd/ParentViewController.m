@@ -12,6 +12,7 @@
 @interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, GoToNoRecordingStateDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
+@property (nonatomic) CGRect micdBackgroundOriginalFrame;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
 @property (strong, nonatomic) DataSourceController *dataSource;
@@ -81,8 +82,12 @@
 
 - (void)moveToPositionState:(PositionState)state {
     [self.homeViewController animateGearsSpinning];
+    CGRect fromFrame = self.micdBackgroundView.frame;
+    CGRect toFrame = [self frameForState:state];
+    POPSpringAnimation *animation = [ViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
+    [self.micdBackgroundView pop_addAnimation:animation forKey:@"state"];
     
-    for (UIViewController<FramesBasedOnStateProtocol> *childViewController in [self primaryChildViewControllers]) {
+    for (UIViewController<FramesBasedOnStateProtocol> *childViewController in [self primaryViewControllers]) {
         CGRect fromFrame = childViewController.view.frame;
         CGRect toFrame = [childViewController frameForState:state];
         POPSpringAnimation *animation = [ViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
@@ -90,8 +95,6 @@
         
         if (state == PositionStateRecordings) {
             [self.recordingsViewController showPlayerButtons];
-        } else {
-            [self.recordingsViewController hidePlayerButtons];
         }
         
         [animation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
@@ -103,9 +106,10 @@
 }
 
 - (void)cancelMoveAnimations {
-    for (UIViewController<FramesBasedOnStateProtocol> *viewController in [self primaryChildViewControllers]) {
+    for (UIViewController<FramesBasedOnStateProtocol> *viewController in [self primaryViewControllers]) {
         [viewController.view pop_removeAnimationForKey:@"state"];
     }
+    [self.micdBackgroundView pop_removeAnimationForKey:@"state"];
 }
 
 #pragma mark - FramesBasedOnStateProtocol
@@ -113,14 +117,40 @@
 - (void)setInitialStateFrame {
     [self.homeViewController setInitialStateFrame];
     [self.recordingsViewController setInitialStateFrame];
+    self.micdBackgroundOriginalFrame = self.micdBackgroundView.frame;
 }
 
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
+    CGRect frame = self.micdBackgroundView.frame;
+    frame.origin.y += translation.y * .67;
+    self.micdBackgroundView.frame = frame;
+    
     [self.homeViewController adjustFrameBasedOnTranslation:translation];
     [self.recordingsViewController adjustFrameBasedOnTranslation:translation];
 }
 
-- (NSArray *)primaryChildViewControllers {
+- (CGRect)frameForState:(PositionState)state {
+    CGRect futureFrame = self.micdBackgroundView.frame;
+    switch (state) {
+        case PositionStateHome:
+            futureFrame.origin.y = 0;
+            break;
+        case PositionStateRecordings:
+            futureFrame.origin.y = (self.view.window.frame.size.height * 1.068f);
+            break;
+        case PositionStateSettings:
+            futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f);
+            break;
+        default:
+            break;
+    }
+    
+    futureFrame.origin.y *= 0.67f;
+    
+    return futureFrame;
+}
+
+- (NSArray *)primaryViewControllers {
     return @[self.homeViewController, self.recordingsViewController];
 }
 

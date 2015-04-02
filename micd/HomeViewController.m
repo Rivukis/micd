@@ -263,7 +263,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
     
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        
         [self.movementDelegate cancelMoveAnimations];
         self.recordButtonEnabled = NO;
         

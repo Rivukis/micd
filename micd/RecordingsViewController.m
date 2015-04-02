@@ -41,6 +41,7 @@ RecordingCellDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *forwardButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
+@property (assign, nonatomic) BOOL shouldBounce;
 
 @property (strong, nonatomic) PlayerController *playerController;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
@@ -99,11 +100,11 @@ RecordingCellDelegate>
     self.totalPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     
     self.playButton.backgroundColor = [UIColor clearColor];
-    self.playButton.hidden = YES;
+    self.playButton.alpha = 0;
     self.rewindButton.backgroundColor = [UIColor clearColor];
-    self.rewindButton.hidden = YES;
+    self.rewindButton.alpha = 0;
     self.forwardButton.backgroundColor = [UIColor clearColor];
-    self.forwardButton.hidden = YES;
+    self.forwardButton.alpha = 0;
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
     [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
     [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
@@ -252,9 +253,11 @@ RecordingCellDelegate>
     switch (state) {
         case PositionStateHome:
             futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f);
+            self.shouldBounce = YES;
             break;
         case PositionStateRecordings:
             futureFrame.origin.y = 0;
+            self.shouldBounce = NO;
             break;
         case PositionStateSettings:
             futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f * 2);
@@ -269,6 +272,18 @@ RecordingCellDelegate>
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
+    
+//    if (frame.origin.y < 0 && frame.origin.y > -200) {
+//        CGAffineTransform transform = self.playButton.transform;
+//        transform = CGAffineTransformScale(transform, 1+translation.y/30.0, 1+translation.y/30.0);
+//        self.playButton.transform = transform;
+//        self.rewindButton.transform = transform;
+//        self.forwardButton.transform = transform;
+//    }
+    CGFloat alphaDelta = 1+(frame.origin.y/100);
+    self.playButton.alpha = alphaDelta;
+    self.rewindButton.alpha = alphaDelta;
+    self.forwardButton.alpha = alphaDelta;
 }
 
 #pragma mark - Player Buttons
@@ -319,35 +334,36 @@ RecordingCellDelegate>
 }
 
 - (void)showPlayerButtons {
-    if (self.playButton.hidden == YES) {
-        [self performBlock:^{
-            [self showAndAddSpringAnimationToButton:self.playButton];
-        } afterDelay:.2];
-        
-        [self performBlock:^{
-            [self showAndAddSpringAnimationToButton:self.rewindButton];
-        } afterDelay:.25];
-        
-        [self performBlock:^{
-            [self showAndAddSpringAnimationToButton:self.forwardButton];
-        } afterDelay:.25];
-    }
-}
-
-- (void)hidePlayerButtons {
-    self.playButton.hidden = YES;
-    self.rewindButton.hidden = YES;
-    self.forwardButton.hidden = YES;
+//    if (self.shouldBounce) {
+//        [self performBlock:^{
+//            [self showAndAddSpringAnimationToButton:self.playButton];
+//        } afterDelay:.2];
+//        
+//        [self performBlock:^{
+//            [self showAndAddSpringAnimationToButton:self.rewindButton];
+//        } afterDelay:.25];
+//        
+//        [self performBlock:^{
+//            [self showAndAddSpringAnimationToButton:self.forwardButton];
+//        } afterDelay:.25];
+//    } else {
+        [UIView animateWithDuration:.25 animations:^{
+            self.playButton.alpha = 1;
+            self.forwardButton.alpha = 1;
+            self.rewindButton.alpha = 1;
+        }];
+//    }
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
     view.transform = CGAffineTransformIdentity;
-    POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationBounce];
+    POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationButtonBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
 
 - (void)showAndAddSpringAnimationToButton:(UIButton *)button {
-    button.hidden = NO;
+    [button pop_removeAnimationForKey:@"hideButton"];
+    NSLog(@"Showing");
     button.transform = CGAffineTransformIdentity;
     POPSpringAnimation *showButtonAnimation = [ViewAnimator springAnimationGrowFromNothing];
     [button pop_addAnimation:showButtonAnimation forKey:@"showButton"];
@@ -373,7 +389,6 @@ RecordingCellDelegate>
         [self setplaybackTitleLabelText:recording.title];
         self.totalPlaybackTimeLabel.text = recording.lengthToDiplay;
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
-        [self pausePlaybackShouldAnimatePauseButton:NO];
         //this does a quick refresh of the ui without turning on the actual displaylink
         [self handleDisplayLinkAnimation:nil];
     }
@@ -551,6 +566,10 @@ RecordingCellDelegate>
 
 - (void)cellDidBecomeFirstResponer:(RecordingCell *)cell {
     self.editingCell = cell;
+}
+
+- (void)cellDidResignFirstResponer:(RecordingCell *)cell {
+    self.editingCell = nil;
 }
 
 #pragma mark - RecordingCellModelDelegate
