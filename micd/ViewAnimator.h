@@ -7,6 +7,7 @@
 + (POPSpringAnimation *)springAnimationForTransformToScale:(CGSize)toScale;
 + (POPSpringAnimation *)springAnimationGrowFromNothing;
 + (POPSpringAnimation *)springAnimationShrinkToNothing;
-+ (POPSpringAnimation *)springAnimationBounce;
++ (POPSpringAnimation *)springAnimationButtonBounce;
++ (POPSpringAnimation *)springAnimationCellBounce;
     
 @end

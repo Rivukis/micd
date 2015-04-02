@@ -6,6 +6,7 @@
 @protocol RecordingCellDelegate <NSObject>
 
 - (void)cellDidBecomeFirstResponer:(RecordingCell *)cell;
+- (void)cellDidResignFirstResponer:(RecordingCell *)cell;
 
 @end
 

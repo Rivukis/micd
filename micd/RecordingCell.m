@@ -5,6 +5,7 @@
 #import "OBShapedButton.h"
 #import "SCWaveformView.h"
 #import "RecordingCellModel.h"
+#import "ViewAnimator.h"
 
 #define kUpdateInterval             0.02
 
@@ -151,6 +152,9 @@
                                 [welf startAnimating];
                             }];
         }
+        [self pop_removeAnimationForKey:@"cellBounce"];
+        [self addBounceAnimationToView:self];
+        NSLog(@"play");
     } else {
         self.length.hidden = YES;
         self.playPauseImageView.hidden = NO;
@@ -177,6 +181,9 @@
                 welf.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
                             }];
         }
+        [self pop_removeAnimationForKey:@"cellBounce"];
+        [self addBounceAnimationToView:self];
+        NSLog(@"pause");
     } else {
         self.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
         self.length.hidden = YES;
@@ -208,6 +215,12 @@
     }
 }
 
+- (void)addBounceAnimationToView:(UIView *)view {
+    view.transform = CGAffineTransformIdentity;
+    POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationCellBounce];
+    [view pop_addAnimation:buttonPressedAnimation forKey:@"cellBounce"];
+}
+
 #pragma mark - UITextfield Delegate and Gesture Recognizer
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -234,6 +247,7 @@
     self.title.userInteractionEnabled = NO;
     [self.cellModel changeRecordingTitle:self.title.text];
     [self.title resignFirstResponder];
+    [self.delegate cellDidResignFirstResponer:self];
     if (self.title.text.length == 0) {
         self.title.text = self.cellModel.title;
     }
