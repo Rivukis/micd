@@ -366,7 +366,7 @@ RecordingCellDelegate>
     [rccController showRemoteTitle:recording.title
                        createdDate:recording.dateAsString
                           duration:[NSNumber numberWithDouble:recording.lengthAsTimeInterval]
-                       elapsedTime:@0
+                       elapsedTime:[NSNumber numberWithDouble:0.f]
                           forstate:RemoteCommandCenterControllerStatePlaying];
 
     if (recording) {
@@ -534,6 +534,71 @@ RecordingCellDelegate>
     } else {
         [self playPlaybackShouldAnimatePlayButton:NO];
     }
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus)previousTrackCommand {
+    if (self.playerController.secondsCompleted > 2.0f) {
+        [self.playerController setPlaybackTimeInterval:0];
+        [self handleDisplayLinkAnimation:nil];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }
+    
+    // selecting the cell immediately below the focused cell
+    NSIndexPath *indexPath;
+    BOOL wasPlaying = self.playerController.playerState == PlayerControllerStatePlaying;
+    RecordingsSection *currentSection = self.sections[self.focusedCellIndexPath.section];
+    
+    if (self.focusedCellIndexPath.row == currentSection.numberOfCellModels - 1) {
+        if (self.focusedCellIndexPath.section == self.sections.count - 1) {
+            [self.playerController setPlaybackTimeInterval:0];
+//            [self handleDisplayLinkAnimation:nil];
+            return MPRemoteCommandHandlerStatusNoSuchContent;
+        } else {
+            indexPath = [NSIndexPath indexPathForRow:0 inSection:self.focusedCellIndexPath.section + 1];
+        }
+    } else {
+        indexPath = [NSIndexPath indexPathForRow:self.focusedCellIndexPath.row + 1 inSection:self.focusedCellIndexPath.section];
+    }
+    
+    [self.focusedCellModel setCellState:CellStateDefault];
+    self.focusedCellIndexPath = indexPath;
+    
+    [self readyPlayerWithRecording:self.focusedCellModel.recording];
+    
+    if (wasPlaying) {
+        [self playPlaybackShouldAnimatePlayButton:YES];
+    }
+    
+    return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (MPRemoteCommandHandlerStatus)nextTrackCommand {
+    // selecting the cell immediately above the focused cell
+    NSIndexPath *indexPath;
+    BOOL wasPlaying = self.playerController.playerState == PlayerControllerStatePlaying;
+    
+    if (self.focusedCellIndexPath.row == 0) {
+        if (self.focusedCellIndexPath.section == 0) {
+            [self.playerController setPlaybackTimeInterval:self.playerController.loadedRecording.lengthAsTimeInterval];
+            return MPRemoteCommandHandlerStatusNoSuchContent;
+        } else {
+            RecordingsSection *previousSection = self.sections[self.focusedCellIndexPath.section - 1];
+            indexPath = [NSIndexPath indexPathForRow:previousSection.numberOfCellModels - 1 inSection:self.focusedCellIndexPath.section - 1];
+        }
+    } else {
+        indexPath = [NSIndexPath indexPathForRow:self.focusedCellIndexPath.row - 1 inSection:self.focusedCellIndexPath.section];
+    }
+    
+    [self.focusedCellModel setCellState:CellStateDefault];
+    self.focusedCellIndexPath = indexPath;
+    
+    [self readyPlayerWithRecording:self.focusedCellModel.recording];
+    
+    if (wasPlaying) {
+        [self playPlaybackShouldAnimatePlayButton:YES];
+    }
+    
     return MPRemoteCommandHandlerStatusSuccess;
 }
 

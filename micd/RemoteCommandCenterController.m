@@ -1,5 +1,7 @@
 #import "RemoteCommandCenterController.h"
 
+static const BOOL useSkipButtons = NO;
+
 @interface RemoteCommandCenterController ()
 
 @property (nonatomic, strong) MPRemoteCommandCenter *remoteCommandCenter;
@@ -52,7 +54,7 @@
     self.nowPlayingInfoTitle = title;
     self.nowPlayingInfoDate = date;
     self.nowPlayingInfoDuration = duration;
-    self.nowPlayingInfoElapsedTime = (elapsedTime <= duration) ? elapsedTime : @0;
+    self.nowPlayingInfoElapsedTime = (elapsedTime.doubleValue <= duration.doubleValue) ? elapsedTime : [NSNumber numberWithDouble:0.f];
     
     [self updateNowPlayingInfo];
 }
@@ -89,34 +91,19 @@
     [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:[trackInfo copy]];
 }
 
-- (NSString *)nowPlayingInfoTitle {
-    return _nowPlayingInfoTitle ?: @"";
-}
-
-- (NSString *)nowPlayingInfoDate {
-    return _nowPlayingInfoDate ?: @"";
-}
-
-- (NSNumber *)nowPlayingInfoElapsedTime {
-    return _nowPlayingInfoElapsedTime ?: @0;
-}
-
-- (NSNumber *)nowPlayingInfoDuration {
-    return _nowPlayingInfoDuration ?: @0;
-}
-
 #pragma mark - MPRemoteCommandCenter Methods
-
-- (void)configureMediaPlayerForRecording {
-    [self removeAllTargets];
-}
 
 - (void)configureMediaPlayerForPlaying {
     // In case the target actions are already registered we don't want them firing twice
     [self removeAllTargets];
     
     [self setupPlaybackCommands];
+    [self setupChangingTracksCommands];
     [self setupSkipCommands];
+}
+
+- (void)configureMediaPlayerForRecording {
+    [self removeAllTargets];
 }
 
 - (void)setupPlaybackCommands {
@@ -133,14 +120,24 @@
     [self.remoteCommandCenter.togglePlayPauseCommand addTarget:self action:@selector(togglePlayPause)];
 }
 
-- (void)setupSkipCommands {
-    self.remoteCommandCenter.skipBackwardCommand.enabled = YES;
-    self.remoteCommandCenter.skipBackwardCommand.preferredIntervals = @[@15];
-    [self.remoteCommandCenter.skipBackwardCommand addTarget:self action:@selector(skipBackward)];
+- (void)setupChangingTracksCommands {
+    self.remoteCommandCenter.previousTrackCommand.enabled = YES;
+    [self.remoteCommandCenter.previousTrackCommand addTarget:self action:@selector(previousTrack)];
     
-    self.remoteCommandCenter.skipForwardCommand.enabled = YES;
-    self.remoteCommandCenter.skipForwardCommand.preferredIntervals = @[@30];
-    [self.remoteCommandCenter.skipForwardCommand addTarget:self action:@selector(skipForward)];
+    self.remoteCommandCenter.nextTrackCommand.enabled = YES;
+    [self.remoteCommandCenter.nextTrackCommand addTarget:self action:@selector(nextTrack)];
+}
+
+- (void)setupSkipCommands {
+    if (useSkipButtons) {
+        self.remoteCommandCenter.skipBackwardCommand.enabled = YES;
+        self.remoteCommandCenter.skipBackwardCommand.preferredIntervals = @[@15];
+        [self.remoteCommandCenter.skipBackwardCommand addTarget:self action:@selector(skipBackward)];
+        
+        self.remoteCommandCenter.skipForwardCommand.enabled = YES;
+        self.remoteCommandCenter.skipForwardCommand.preferredIntervals = @[@30];
+        [self.remoteCommandCenter.skipForwardCommand addTarget:self action:@selector(skipForward)];
+    }
 }
 
 - (void)removeAllTargets {
@@ -150,7 +147,9 @@
     [self.remoteCommandCenter.togglePlayPauseCommand removeTarget:self action:@selector(togglePlayPause)];
     
     [self.remoteCommandCenter.skipBackwardCommand removeTarget:self action:@selector(skipBackward)];
+    self.remoteCommandCenter.skipBackwardCommand.preferredIntervals = nil;
     [self.remoteCommandCenter.skipForwardCommand removeTarget:self action:@selector(skipForward)];
+    self.remoteCommandCenter.skipForwardCommand.preferredIntervals = nil;
 }
 
 #pragma mark - Remote Command Messages
@@ -169,6 +168,14 @@
 
 - (MPRemoteCommandHandlerStatus)togglePlayPause {
     return [self.delegate togglePlayPauseCommand];
+}
+
+- (MPRemoteCommandHandlerStatus)previousTrack {
+    return [self.delegate previousTrackCommand];
+}
+
+- (MPRemoteCommandHandlerStatus)nextTrack {
+    return [self.delegate nextTrackCommand];
 }
 
 - (MPRemoteCommandHandlerStatus)skipBackward {

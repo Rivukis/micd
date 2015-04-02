@@ -2,7 +2,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 typedef NS_ENUM(NSInteger, RemoteCommandCenterControllerState) {
-    RemoteCommandCenterControllerStatePlaying,
+    RemoteCommandCenterControllerStatePlaying = 1,
     RemoteCommandCenterControllerStateRecording
 };
 
@@ -12,6 +12,9 @@ typedef NS_ENUM(NSInteger, RemoteCommandCenterControllerState) {
 - (MPRemoteCommandHandlerStatus)pauseCommand;
 - (MPRemoteCommandHandlerStatus)stopCommand;
 - (MPRemoteCommandHandlerStatus)togglePlayPauseCommand;
+
+- (MPRemoteCommandHandlerStatus)previousTrackCommand;
+- (MPRemoteCommandHandlerStatus)nextTrackCommand;
 
 - (MPRemoteCommandHandlerStatus)skipBackwardCommand;
 - (MPRemoteCommandHandlerStatus)skipForwardCommand;

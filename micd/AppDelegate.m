@@ -5,7 +5,6 @@
 #import "DataSourceController.h"
 #import "FramesController.h"
 #import "VersionController.h"
-#import "RemoteCommandCenterController.h"
 
 //    UIImage *image = [UIImage imageNamed:@"album_art"];
 //    MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:image];

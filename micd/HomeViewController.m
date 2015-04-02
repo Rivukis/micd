@@ -158,7 +158,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)startRecording {
     [self.recorderController startRecording];
     [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
-                                                             createdDate:nil
+                                                             createdDate:@"buttons disabled"
                                                                 duration:nil
                                                              elapsedTime:nil
                                                                 forstate:RemoteCommandCenterControllerStateRecording];
