@@ -11,7 +11,7 @@
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
 #import "RecordingsView.h"
-#import "ViewAnimator.h"
+#import "PopViewAnimator.h"
 #import "NSObject+Blocks.h"
 #import "PresentingAnimationController.h"
 #import "DismissingAnimationController.h"
@@ -41,7 +41,6 @@ RecordingCellDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *forwardButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
-@property (assign, nonatomic) BOOL shouldBounce;
 
 @property (strong, nonatomic) PlayerController *playerController;
 @property (strong, nonatomic) UIImageView *progressTimeIndicatorView;
@@ -253,11 +252,9 @@ RecordingCellDelegate>
     switch (state) {
         case PositionStateHome:
             futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f);
-            self.shouldBounce = YES;
             break;
         case PositionStateRecordings:
             futureFrame.origin.y = 0;
-            self.shouldBounce = NO;
             break;
         case PositionStateSettings:
             futureFrame.origin.y = (self.view.window.frame.size.height * -1.068f * 2);
@@ -272,15 +269,8 @@ RecordingCellDelegate>
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
-    
-//    if (frame.origin.y < 0 && frame.origin.y > -200) {
-//        CGAffineTransform transform = self.playButton.transform;
-//        transform = CGAffineTransformScale(transform, 1+translation.y/30.0, 1+translation.y/30.0);
-//        self.playButton.transform = transform;
-//        self.rewindButton.transform = transform;
-//        self.forwardButton.transform = transform;
-//    }
-    CGFloat alphaDelta = 1+(frame.origin.y/100);
+
+    CGFloat alphaDelta = 1+(frame.origin.y/200);
     self.playButton.alpha = alphaDelta;
     self.rewindButton.alpha = alphaDelta;
     self.forwardButton.alpha = alphaDelta;
@@ -357,7 +347,7 @@ RecordingCellDelegate>
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
     view.transform = CGAffineTransformIdentity;
-    POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationButtonBounce];
+    POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationButtonBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
 
@@ -365,7 +355,7 @@ RecordingCellDelegate>
     [button pop_removeAnimationForKey:@"hideButton"];
     NSLog(@"Showing");
     button.transform = CGAffineTransformIdentity;
-    POPSpringAnimation *showButtonAnimation = [ViewAnimator springAnimationGrowFromNothing];
+    POPSpringAnimation *showButtonAnimation = [PopViewAnimator springAnimationGrowFromNothing];
     [button pop_addAnimation:showButtonAnimation forKey:@"showButton"];
 }
 

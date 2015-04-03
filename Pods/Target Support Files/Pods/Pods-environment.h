@@ -12,12 +12,6 @@
 #define COCOAPODS_VERSION_MINOR_OBShapedButton 0
 #define COCOAPODS_VERSION_PATCH_OBShapedButton 2
 
-// SCWaveformView
-#define COCOAPODS_POD_AVAILABLE_SCWaveformView
-#define COCOAPODS_VERSION_MAJOR_SCWaveformView 2
-#define COCOAPODS_VERSION_MINOR_SCWaveformView 0
-#define COCOAPODS_VERSION_PATCH_SCWaveformView 6
-
 // pop
 #define COCOAPODS_POD_AVAILABLE_pop
 #define COCOAPODS_VERSION_MAJOR_pop 1
