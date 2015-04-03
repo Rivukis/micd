@@ -7,8 +7,15 @@ NSString *const kRecorderConcatenatedAudioFileName = @"RecorderConcatenatedAudio
 NSString *const kRecorderFormatTypeAsString = @".m4a";
 
 // Notification shit
-NSString *const kNotificationKeyDidFinishedRecordingFromWatch = @"NotificationKeyDidFinishedRecordingFromWatch";
+NSString *const kNotificationKeyRecordPressedFromWatch = @"NotificationKeyRecordPressedFromWatch";
 NSString *const kNotificationKeyApplicationDidBecomeActive = @"kNotificationKeyApplicationDidBecomeActive";
+NSString *const kNotificationKeyControlPlayerFromWatch = @"NotificationKeyControlPlayerFromWatch";
+
+NSString *const kNotificationKeyControlPlayerFromWatchValue = @"NotificationKeyControlPlayerFromWatchValue";
+NSString *const kNotificationKeyControlPlayerFromWatchValuePlay = @"NotificationKeyControlPlayerFromWatchValuePlay";
+NSString *const kNotificationKeyControlPlayerFromWatchValuePause = @"NotificationKeyControlPlayerFromWatchValuePause";
+NSString *const kNotificationKeyControlPlayerFromWatchValuePrevious = @"NotificationKeyControlPlayerFromWatchValuePrevious";
+NSString *const kNotificationKeyControlPlayerFromWatchValueNext = @"NotificationKeyControlPlayerFromWatchValueNext";
 
 // UserDefaults shit
 NSString *const kUserDefaultsKeyCurrentVersion = @"UserDefaultsKeyCurrentVersion";
@@ -18,9 +25,19 @@ NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";
 
 // WatchKit shit
 NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
-NSString *const kWatchExtKeyMessageTypeWillActivate = @"WatchExtKeyMessageTypeWillActivate";
+NSString *const kWatchExtKeyMessageTypeGetRecorderInfo = @"WatchExtKeyMessageTypeGetRecorderInfo";
 NSString *const kWatchExtKeyMessageTypeRecordButtonPressed = @"WatchExtKeyMessageTypeRecordButtonPressed";
-NSString *const kWatchExtKeyIsRecording = @"kWatchExtKeyIsRecording";
+NSString *const kWatchExtKeyMessageTypeGetRecordingsList = @"WatchExtKeyMessageTypeGetRecordingsList";
+NSString *const kWatchExtKeyMessageTypeRecordingPressed = @"WatchExtKeyMessageTypeRecordingPressed";
+NSString *const kWatchExtKeyMessageTypePlayButtonPressed = @"WatchExtKeyMessageTypePlayButtonPressed";
+NSString *const kWatchExtKeyMessageTypePauseButtonPressed = @"WatchExtKeyMessageTypePauseButtonPressed";
+NSString *const kWatchExtKeyMessageTypePreviousButtonPressed = @"WatchExtKeyMessageTypePreviousButtonPressed";
+NSString *const kWatchExtKeyMessageTypeNextButtonPressed = @"WatchExtKeyMessageTypeNextButtonPressed";
+
+NSString *const kWatchExtKeyIsRecording = @"WatchExtKeyIsRecording";
+NSString *const kWatchExtKeyIsPlaying = @"WatchExtKeyIsPlaying";
+NSString *const kWatchExtKeyRecordingsList = @"WatchExtKeyRecordingsList";
+NSString *const kWatchExtKeyPlayRecordingIndex = @"WatchExtKeyPlayRecordingIndex";
 
 // User Info shit
 NSString *const kUserInfoKeyStateToLoadOnAppBecomesActive = @"UserInfoKeyStateToLoadOnAppBecomesActive";

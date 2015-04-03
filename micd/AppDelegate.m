@@ -2,6 +2,7 @@
 #import <AVFoundation/AVAudioSession.h>
 #import "Constants.h"
 #import "RecorderController.h"
+#import "PlayerController.h"
 #import "DataSourceController.h"
 #import "FramesController.h"
 #import "VersionController.h"
@@ -80,23 +81,75 @@
 #pragma mark - WatchKit Methods
 
 - (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void(^)(NSDictionary *replyInfo))reply {
-    NSLog(@"recieved message");
+    NSString *messageType = userInfo[kWatchExtKeyMessageType];
+    NSMutableDictionary *replyDict = [NSMutableDictionary dictionary];
     
     RecorderController *recorderController = [RecorderController sharedRecorder];
-    BOOL isRecording = NO;
-    if (recorderController.recordingState == RecorderControllerStateRecording) {
-        isRecording = YES;
+    BOOL isRecording = recorderController.recordingState == RecorderControllerStateRecording;
+    
+    PlayerController *playerController = [PlayerController sharedPlayer];
+    BOOL isPlaying = playerController.playerState == PlayerControllerStatePlaying;
+    
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypeGetRecorderInfo]) {
+        // just getting info so nothing to do
     }
     
-    NSString *messageType = userInfo[kWatchExtKeyMessageType];
     if ([messageType isEqualToString:kWatchExtKeyMessageTypeRecordButtonPressed]) {
-        // start or stop recording
-        NSNotification *notification = [NSNotification notificationWithName:kNotificationKeyDidFinishedRecordingFromWatch object:nil];
-        [[NSNotificationCenter defaultCenter] postNotification:notification];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyRecordPressedFromWatch object:nil];
         isRecording = !isRecording;
     }
     
-    reply(@{kWatchExtKeyIsRecording : @(isRecording)});
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypeGetRecordingsList]) {
+        DataSourceController *dataSourceController = [DataSourceController sharedDataSource];
+        NSInteger numberOfRecordingsToSend = dataSourceController.numberOfRecordings <= 20 ? dataSourceController.numberOfRecordings : 20;
+        NSMutableArray *titlesList = [NSMutableArray array];
+        
+        for (NSInteger i = 0; i < numberOfRecordingsToSend; i++) {
+            Recording *recording = dataSourceController.recordings[i];
+            NSString *nameToSend;
+            
+            if (recording.title.length > 0) {
+                nameToSend = recording.title;
+            } else {
+                nameToSend = recording.dateAsString;
+            }
+            
+            [titlesList addObject:nameToSend];
+        }
+        
+        replyDict[kWatchExtKeyRecordingsList] = [titlesList copy];
+    }
+    
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypeRecordingPressed]) {
+        __unused NSInteger indexPressed = [userInfo[kWatchExtKeyPlayRecordingIndex] integerValue];
+        
+        // post notification to play recording at watch index
+    }
+    
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypePlayButtonPressed]) {
+        NSDictionary *userInfo = @{kNotificationKeyControlPlayerFromWatchValue: kNotificationKeyControlPlayerFromWatchValuePlay};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyControlPlayerFromWatch object:nil userInfo:userInfo];
+    }
+    
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypePauseButtonPressed]) {
+        NSDictionary *userInfo = @{kNotificationKeyControlPlayerFromWatchValue: kNotificationKeyControlPlayerFromWatchValuePause};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyControlPlayerFromWatch object:nil userInfo:userInfo];
+    }
+    
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypePreviousButtonPressed]) {
+        NSDictionary *userInfo = @{kNotificationKeyControlPlayerFromWatchValue: kNotificationKeyControlPlayerFromWatchValuePrevious};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyControlPlayerFromWatch object:nil userInfo:userInfo];
+    }
+    
+    if ([messageType isEqualToString:kWatchExtKeyMessageTypeNextButtonPressed]) {
+        NSDictionary *userInfo = @{kNotificationKeyControlPlayerFromWatchValue: kNotificationKeyControlPlayerFromWatchValueNext};
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyControlPlayerFromWatch object:nil userInfo:userInfo];
+    }
+    
+    replyDict[kWatchExtKeyIsRecording] = @(isRecording);
+    replyDict[kWatchExtKeyIsPlaying]= @(isPlaying);
+    
+    reply([replyDict copy]);
 }
 
 @end

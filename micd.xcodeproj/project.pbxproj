@@ -14,6 +14,8 @@
 		7A301EF11AC75AE600FC900D /* VersionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A301EF01AC75AE600FC900D /* VersionController.m */; };
 		7A301EF21AC7653100FC900D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */; };
+		7A581D501ACE4373008828CC /* RecordingsInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */; };
+		7A581D531ACE5423008828CC /* RecordingRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D521ACE5423008828CC /* RecordingRowController.m */; };
 		7A96606A1AC5E6C500439660 /* Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9660691AC5E6C500439660 /* Factory.m */; };
 		7AC290B61A8EF0100085B927 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* PlayerController.m */; };
@@ -47,7 +49,7 @@
 		D0BA6D031AB906D800F6B3FF /* icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D0BA6D021AB906D800F6B3FF /* icon.pdf */; };
 		D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BD55821AB6690600A73485 /* RecordingsView.m */; };
 		D0BFAD291ABE351A0051F0CF /* NSObject+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */; };
-		D0BFAD3F1ABF9C9B0051F0CF /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD3E1ABF9C9B0051F0CF /* InterfaceController.m */; };
+		D0BFAD3F1ABF9C9B0051F0CF /* RecorderInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFAD3E1ABF9C9B0051F0CF /* RecorderInterfaceController.m */; };
 		D0BFAD411ABF9C9B0051F0CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD401ABF9C9B0051F0CF /* Images.xcassets */; };
 		D0BFAD451ABF9C9B0051F0CF /* micd WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD441ABF9C9B0051F0CF /* micd WatchKit App.app */; };
 		D0BFAD4D1ABF9C9B0051F0CF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD4B1ABF9C9B0051F0CF /* Interface.storyboard */; };
@@ -117,6 +119,10 @@
 		7A301EF01AC75AE600FC900D /* VersionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionController.m; sourceTree = "<group>"; };
 		7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKValidKeyPath.h; path = micd/MTKValidKeyPath.h; sourceTree = "<group>"; };
 		7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKValidKeyPath.m; path = micd/MTKValidKeyPath.m; sourceTree = "<group>"; };
+		7A581D4E1ACE4373008828CC /* RecordingsInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsInterfaceController.h; sourceTree = "<group>"; };
+		7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsInterfaceController.m; sourceTree = "<group>"; };
+		7A581D511ACE5423008828CC /* RecordingRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingRowController.h; sourceTree = "<group>"; };
+		7A581D521ACE5423008828CC /* RecordingRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingRowController.m; sourceTree = "<group>"; };
 		7A9660681AC5E6C500439660 /* Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Factory.h; sourceTree = "<group>"; };
 		7A9660691AC5E6C500439660 /* Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Factory.m; sourceTree = "<group>"; };
 		7AC290A61A8EF0100085B927 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = micd/Constants.h; sourceTree = "<group>"; };
@@ -183,8 +189,8 @@
 		D0BFAD281ABE351A0051F0CF /* NSObject+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Blocks.m"; path = "micd/NSObject+Blocks.m"; sourceTree = "<group>"; };
 		D0BFAD391ABF9C9B0051F0CF /* micd WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "micd WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BFAD3C1ABF9C9B0051F0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D0BFAD3D1ABF9C9B0051F0CF /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
-		D0BFAD3E1ABF9C9B0051F0CF /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		D0BFAD3D1ABF9C9B0051F0CF /* RecorderInterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecorderInterfaceController.h; sourceTree = "<group>"; };
+		D0BFAD3E1ABF9C9B0051F0CF /* RecorderInterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecorderInterfaceController.m; sourceTree = "<group>"; };
 		D0BFAD401ABF9C9B0051F0CF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D0BFAD441ABF9C9B0051F0CF /* micd WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "micd WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BFAD4A1ABF9C9B0051F0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -383,8 +389,12 @@
 		D0BFAD3A1ABF9C9B0051F0CF /* micd WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
-				D0BFAD3D1ABF9C9B0051F0CF /* InterfaceController.h */,
-				D0BFAD3E1ABF9C9B0051F0CF /* InterfaceController.m */,
+				D0BFAD3D1ABF9C9B0051F0CF /* RecorderInterfaceController.h */,
+				D0BFAD3E1ABF9C9B0051F0CF /* RecorderInterfaceController.m */,
+				7A581D4E1ACE4373008828CC /* RecordingsInterfaceController.h */,
+				7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */,
+				7A581D511ACE5423008828CC /* RecordingRowController.h */,
+				7A581D521ACE5423008828CC /* RecordingRowController.m */,
 				D0BFAD401ABF9C9B0051F0CF /* Images.xcassets */,
 				D0BFAD3B1ABF9C9B0051F0CF /* Supporting Files */,
 			);
@@ -786,8 +796,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0BFAD3F1ABF9C9B0051F0CF /* InterfaceController.m in Sources */,
+				7A581D531ACE5423008828CC /* RecordingRowController.m in Sources */,
+				D0BFAD3F1ABF9C9B0051F0CF /* RecorderInterfaceController.m in Sources */,
 				7A301EF21AC7653100FC900D /* Constants.m in Sources */,
+				7A581D501ACE4373008828CC /* RecordingsInterfaceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1122,6 +1134,7 @@
 				D0693EA61ACB7AD8006556FE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D0BFAD531ABF9C9B0051F0CF /* Build configuration list for PBXNativeTarget "micd WatchKit App" */ = {
 			isa = XCConfigurationList;
