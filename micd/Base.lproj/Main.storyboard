@@ -425,6 +425,28 @@
                                     <action selector="noTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="u5N-dT-6vq"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OmA-kA-rFC">
+                                <rect key="frame" x="294" y="263" width="51" height="31"/>
+                                <color key="tintColor" red="0.12941176469999999" green="0.63921568630000003" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jjx-vS-RkR">
+                                <rect key="frame" x="294" y="341" width="51" height="31"/>
+                                <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Remember last recording position on playback" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mae-01-frw">
+                                <rect key="frame" x="32" y="250" width="227" height="57"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Start recording on launch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEA-e1-oec">
+                                <rect key="frame" x="32" y="338" width="211" height="38"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -432,6 +454,10 @@
                     <connections>
                         <outlet property="loveMicdImageView" destination="Bvc-aN-eEs" id="FIq-hm-4tP"/>
                         <outlet property="noButton" destination="TWk-ho-1y6" id="bPg-uT-wmV"/>
+                        <outlet property="rememberRecordingLocationLabel" destination="mae-01-frw" id="hog-RA-hbh"/>
+                        <outlet property="rememberRecordingLocationSwitch" destination="OmA-kA-rFC" id="80W-ZY-Bca"/>
+                        <outlet property="startRecordingOnLaunchLabel" destination="DEA-e1-oec" id="7dh-oY-nVh"/>
+                        <outlet property="startRecordingOnLaunchSwitch" destination="jjx-vS-RkR" id="d2u-a4-F43"/>
                         <outlet property="yesButton" destination="ctB-4M-UoI" id="IGI-rq-JQ4"/>
                     </connections>
                 </viewController>

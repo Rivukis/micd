@@ -16,6 +16,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *loveMicdImageView;
 @property (weak, nonatomic) IBOutlet UIButton *noButton;
 @property (weak, nonatomic) IBOutlet UIButton *yesButton;
+@property (weak, nonatomic) IBOutlet UISwitch *rememberRecordingLocationSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *rememberRecordingLocationLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *startRecordingOnLaunchSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *startRecordingOnLaunchLabel;
 
 @property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
 @end
@@ -29,6 +33,12 @@
     self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicd];
     self.noButton.backgroundColor = [UIColor vibrantBlue];
     self.yesButton.backgroundColor = [UIColor vibrantBlue];
+    self.rememberRecordingLocationSwitch.onTintColor = [UIColor vibrantBlue];
+    self.startRecordingOnLaunchSwitch.onTintColor = [UIColor vibrantBlue];
+    self.rememberRecordingLocationLabel.textColor = [UIColor vibrantBlue];
+    self.startRecordingOnLaunchLabel.textColor = [UIColor vibrantBlue];
+    
+    self.startRecordingOnLaunchSwitch.on = NO;
     
     self.noButton.layer.cornerRadius = 5;
     self.yesButton.layer.cornerRadius = 5;
@@ -38,7 +48,7 @@
 
 -(void)viewDidLayoutSubviews {
     if (self.isFirstTimeLayingOutSubviews) {
-        ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton];
+        ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton, self.rememberRecordingLocationSwitch, self.startRecordingOnLaunchSwitch];
         ((SettingsView *)self.view).settingsView = self.view;
         
         self.isFirstTimeLayingOutSubviews = NO;
