@@ -3,9 +3,8 @@
 #import "UIColor+Palette.h"
 #import "Recording.h"
 #import "OBShapedButton.h"
-#import "SCWaveformView.h"
 #import "RecordingCellModel.h"
-#import "ViewAnimator.h"
+#import "PopViewAnimator.h"
 
 #define kUpdateInterval             0.02
 
@@ -217,7 +216,7 @@
 
 - (void)addBounceAnimationToView:(UIView *)view {
     view.transform = CGAffineTransformIdentity;
-    POPSpringAnimation *buttonPressedAnimation = [ViewAnimator springAnimationCellBounce];
+    POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationCellBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"cellBounce"];
 }
 

@@ -39,10 +39,11 @@
 		D0693EA31ACB7AD8006556FE /* MicdShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0693E981ACB7AD8006556FE /* MicdShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */; };
 		D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */; };
-		D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BEA1AB27EE300949483 /* ViewAnimator.m */; };
+		D08D4BEB1AB27EE300949483 /* PopViewAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */; };
 		D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BF01AB407C400949483 /* DisplayLinkController.m */; };
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
+		D0A427CD1ACE370B00BBC4D6 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0A427CB1ACE370B00BBC4D6 /* SettingsViewController.m */; };
 		D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B0DE461A8DA10200C88773 /* GearsImageView.m */; };
 		D0BA6D031AB906D800F6B3FF /* icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D0BA6D021AB906D800F6B3FF /* icon.pdf */; };
 		D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BD55821AB6690600A73485 /* RecordingsView.m */; };
@@ -53,6 +54,9 @@
 		D0BFAD4D1ABF9C9B0051F0CF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD4B1ABF9C9B0051F0CF /* Interface.storyboard */; };
 		D0BFAD4F1ABF9C9B0051F0CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BFAD4E1ABF9C9B0051F0CF /* Images.xcassets */; };
 		D0BFAD521ABF9C9B0051F0CF /* micd WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0BFAD391ABF9C9B0051F0CF /* micd WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D0BFED401ACE4BD700E12526 /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFED3F1ACE4BD700E12526 /* SettingsView.m */; };
+		D0BFED451ACE517A00E12526 /* DismissingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFED421ACE517A00E12526 /* DismissingAnimationController.m */; };
+		D0BFED461ACE517A00E12526 /* PresentingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BFED441ACE517A00E12526 /* PresentingAnimationController.m */; };
 		D0C67CD01A8EF917000F501A /* DataSourceController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CCF1A8EF917000F501A /* DataSourceController.m */; };
 		D0C67CD61A91B9D4000F501A /* RecordingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CD51A91B9D4000F501A /* RecordingCell.m */; };
 		D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C67CDB1A929A4C000F501A /* FramesController.m */; };
@@ -166,14 +170,16 @@
 		D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCellModel.m; sourceTree = "<group>"; };
 		D08D4BE61AB2748700949483 /* ViewMovementBehavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewMovementBehavior.h; sourceTree = "<group>"; };
 		D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewMovementBehavior.m; sourceTree = "<group>"; };
-		D08D4BE91AB27EE300949483 /* ViewAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewAnimator.h; path = micd/ViewAnimator.h; sourceTree = "<group>"; };
-		D08D4BEA1AB27EE300949483 /* ViewAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewAnimator.m; path = micd/ViewAnimator.m; sourceTree = "<group>"; };
+		D08D4BE91AB27EE300949483 /* PopViewAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopViewAnimator.h; path = micd/PopViewAnimator.h; sourceTree = "<group>"; };
+		D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopViewAnimator.m; path = micd/PopViewAnimator.m; sourceTree = "<group>"; };
 		D08D4BEF1AB407C400949483 /* DisplayLinkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayLinkController.h; sourceTree = "<group>"; };
 		D08D4BF01AB407C400949483 /* DisplayLinkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayLinkController.m; sourceTree = "<group>"; };
 		D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsViewController.h; sourceTree = "<group>"; };
 		D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsViewController.m; sourceTree = "<group>"; };
 		D09A69EE1A86EFC500A2C347 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		D09A69EF1A86EFC500A2C347 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		D0A427CA1ACE370B00BBC4D6 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		D0A427CB1ACE370B00BBC4D6 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		D0B0DE451A8DA10200C88773 /* GearsImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GearsImageView.h; sourceTree = "<group>"; };
 		D0B0DE461A8DA10200C88773 /* GearsImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GearsImageView.m; sourceTree = "<group>"; };
 		D0BA6D021AB906D800F6B3FF /* icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = icon.pdf; sourceTree = "<group>"; };
@@ -190,6 +196,12 @@
 		D0BFAD4A1ABF9C9B0051F0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0BFAD4C1ABF9C9B0051F0CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		D0BFAD4E1ABF9C9B0051F0CF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		D0BFED3E1ACE4BD700E12526 /* SettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsView.h; sourceTree = "<group>"; };
+		D0BFED3F1ACE4BD700E12526 /* SettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsView.m; sourceTree = "<group>"; };
+		D0BFED411ACE517A00E12526 /* DismissingAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DismissingAnimationController.h; sourceTree = "<group>"; };
+		D0BFED421ACE517A00E12526 /* DismissingAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DismissingAnimationController.m; sourceTree = "<group>"; };
+		D0BFED431ACE517A00E12526 /* PresentingAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentingAnimationController.h; sourceTree = "<group>"; };
+		D0BFED441ACE517A00E12526 /* PresentingAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentingAnimationController.m; sourceTree = "<group>"; };
 		D0C67CCE1A8EF917000F501A /* DataSourceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSourceController.h; sourceTree = "<group>"; };
 		D0C67CCF1A8EF917000F501A /* DataSourceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSourceController.m; sourceTree = "<group>"; };
 		D0C67CD41A91B9D4000F501A /* RecordingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCell.h; sourceTree = "<group>"; };
@@ -256,8 +268,8 @@
 				D0F97F531A92A46800F07032 /* NSString+Score.m */,
 				7AFC16761ABE6C8600B5B7F8 /* UIColor+PalettePicker.h */,
 				7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */,
-				D08D4BE91AB27EE300949483 /* ViewAnimator.h */,
-				D08D4BEA1AB27EE300949483 /* ViewAnimator.m */,
+				D08D4BE91AB27EE300949483 /* PopViewAnimator.h */,
+				D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */,
 			);
 			name = "Helper Classes";
 			path = ..;
@@ -436,6 +448,8 @@
 				D05D75771A79AAA40050A49C /* ParentViewController.m */,
 				D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */,
 				D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */,
+				D0A427CA1ACE370B00BBC4D6 /* SettingsViewController.h */,
+				D0A427CB1ACE370B00BBC4D6 /* SettingsViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -449,6 +463,8 @@
 				D0C67CD51A91B9D4000F501A /* RecordingCell.m */,
 				D0BD55811AB6690600A73485 /* RecordingsView.h */,
 				D0BD55821AB6690600A73485 /* RecordingsView.m */,
+				D0BFED3E1ACE4BD700E12526 /* SettingsView.h */,
+				D0BFED3F1ACE4BD700E12526 /* SettingsView.m */,
 				D05500F61AA7C8F100C71FE1 /* PassthroughView.h */,
 				D05500F71AA7C8F100C71FE1 /* PassthroughView.m */,
 				D05500F91AA7CAD600C71FE1 /* PassthroughImageView.h */,
@@ -476,6 +492,10 @@
 				7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */,
 				7A301EEF1AC75AE600FC900D /* VersionController.h */,
 				7A301EF01AC75AE600FC900D /* VersionController.m */,
+				D0BFED411ACE517A00E12526 /* DismissingAnimationController.h */,
+				D0BFED421ACE517A00E12526 /* DismissingAnimationController.m */,
+				D0BFED431ACE517A00E12526 /* PresentingAnimationController.h */,
+				D0BFED441ACE517A00E12526 /* PresentingAnimationController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -742,10 +762,13 @@
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
 				7A96606A1AC5E6C500439660 /* Factory.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
-				D08D4BEB1AB27EE300949483 /* ViewAnimator.m in Sources */,
+				D08D4BEB1AB27EE300949483 /* PopViewAnimator.m in Sources */,
 				D05500F81AA7C8F100C71FE1 /* PassthroughView.m in Sources */,
+				D0BFED461ACE517A00E12526 /* PresentingAnimationController.m in Sources */,
+				D0BFED451ACE517A00E12526 /* DismissingAnimationController.m in Sources */,
 				D034F0421AA148680059028D /* RecordingsSection.m in Sources */,
 				D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */,
+				D0BFED401ACE4BD700E12526 /* SettingsView.m in Sources */,
 				D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */,
 				22B359A61AC75F2E0037107C /* ProgressBarView.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
@@ -756,6 +779,7 @@
 				7AC290BC1A8EF0100085B927 /* CKSearchViewController.m in Sources */,
 				D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */,
 				7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */,
+				D0A427CD1ACE370B00BBC4D6 /* SettingsViewController.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
 				7A146A8A1ACA4260004C55A2 /* RemoteCommandCenterController.m in Sources */,
 				D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */,
@@ -1122,6 +1146,7 @@
 				D0693EA61ACB7AD8006556FE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D0BFAD531ABF9C9B0051F0CF /* Build configuration list for PBXNativeTarget "micd WatchKit App" */ = {
 			isa = XCConfigurationList;

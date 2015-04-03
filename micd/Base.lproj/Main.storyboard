@@ -257,7 +257,7 @@
                                             <action selector="fastforwardButtonPressed:" destination="t5E-Iw-Z4F" eventType="touchUpInside" id="fqL-vA-cSc"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rbp-gB-Lpf">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="500" misplaced="YES" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rbp-gB-Lpf">
                                         <rect key="frame" x="171" y="32" width="34" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -385,6 +385,59 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rUB-sc-IwX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="648.5" y="361.5"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="qOx-2S-atl">
+            <objects>
+                <viewController storyboardIdentifier="SettingsViewController" id="BMN-E5-xRT" customClass="SettingsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ytR-dO-Z8F"/>
+                        <viewControllerLayoutGuide type="bottom" id="AgR-nW-Ft7"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="VZF-qB-C28" customClass="SettingsView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bvc-aN-eEs">
+                                <rect key="frame" x="32" y="553" width="311" height="45"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ctB-4M-UoI">
+                                <rect key="frame" x="193" y="611" width="150" height="36"/>
+                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Yes">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="yesTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="Q7M-u3-dEs"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TWk-ho-1y6">
+                                <rect key="frame" x="32" y="611" width="150" height="36"/>
+                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="No">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="noTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="u5N-dT-6vq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="loveMicdImageView" destination="Bvc-aN-eEs" id="FIq-hm-4tP"/>
+                        <outlet property="noButton" destination="TWk-ho-1y6" id="bPg-uT-wmV"/>
+                        <outlet property="yesButton" destination="ctB-4M-UoI" id="IGI-rq-JQ4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YtL-3u-YRj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="648.5" y="1096.5"/>
         </scene>
         <!--Parent View Controller-->
         <scene sceneID="ufC-wZ-h7g">

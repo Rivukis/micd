@@ -1,12 +1,13 @@
 #import "ParentViewController.h"
 #import "RecordingsViewController.h"
 #import "HomeViewController.h"
+#import "SettingsViewController.h"
 #import "FramesController.h"
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"
 #import "DataSourceController.h"
 #import "Recording.h"
-#import "ViewAnimator.h"
+#import "PopViewAnimator.h"
 #import "Constants.h"
 
 @interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, GoToNoRecordingStateDelegate>
@@ -15,11 +16,12 @@
 @property (nonatomic) CGRect micdBackgroundOriginalFrame;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
+@property (strong, nonatomic) SettingsViewController *settingsViewController;
 @property (strong, nonatomic) DataSourceController *dataSource;
 
 @property (assign, nonatomic) BOOL didSetInitialFrames;
 
-@property (strong, nonatomic) ViewAnimator *viewAnimator;
+@property (strong, nonatomic) PopViewAnimator *viewAnimator;
 
 @end
 
@@ -45,6 +47,11 @@
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
     self.recordingsViewController.noRecordingStateDelegate = self;
+    
+    self.settingsViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([SettingsViewController class])];
+    [self addChildViewController:self.settingsViewController];
+    [self.view addSubview:self.settingsViewController.view];
+    [self.settingsViewController didMoveToParentViewController:self];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -84,13 +91,13 @@
     [self.homeViewController animateGearsSpinning];
     CGRect fromFrame = self.micdBackgroundView.frame;
     CGRect toFrame = [self frameForState:state];
-    POPSpringAnimation *animation = [ViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
+    POPSpringAnimation *animation = [PopViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
     [self.micdBackgroundView pop_addAnimation:animation forKey:@"state"];
     
     for (UIViewController<FramesBasedOnStateProtocol> *childViewController in [self primaryViewControllers]) {
         CGRect fromFrame = childViewController.view.frame;
         CGRect toFrame = [childViewController frameForState:state];
-        POPSpringAnimation *animation = [ViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
+        POPSpringAnimation *animation = [PopViewAnimator springAnimationFromFrameTo:fromFrame toFrame:toFrame];
         [childViewController.view pop_addAnimation:animation forKey:@"state"];
         
         if (state == PositionStateRecordings) {
@@ -117,6 +124,7 @@
 - (void)setInitialStateFrame {
     [self.homeViewController setInitialStateFrame];
     [self.recordingsViewController setInitialStateFrame];
+    [self.settingsViewController setInitialStateFrame];
     self.micdBackgroundOriginalFrame = self.micdBackgroundView.frame;
 }
 
@@ -127,6 +135,7 @@
     
     [self.homeViewController adjustFrameBasedOnTranslation:translation];
     [self.recordingsViewController adjustFrameBasedOnTranslation:translation];
+    [self.settingsViewController adjustFrameBasedOnTranslation:translation];
 }
 
 - (CGRect)frameForState:(PositionState)state {
@@ -151,7 +160,7 @@
 }
 
 - (NSArray *)primaryViewControllers {
-    return @[self.homeViewController, self.recordingsViewController];
+    return @[self.homeViewController, self.recordingsViewController, self.settingsViewController];
 }
 
 @end

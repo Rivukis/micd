@@ -6,7 +6,7 @@
 #import "OBShapedButton.h"
 #import "RecorderController.h"
 #import "PassthroughImageView.h"
-#import "ViewAnimator.h"
+#import "PopViewAnimator.h"
 #import "DisplayLinkController.h"
 #import "PlayerController.h"
 #import "Constants.h"

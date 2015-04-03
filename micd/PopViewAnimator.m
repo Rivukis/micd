@@ -1,6 +1,6 @@
-#import "ViewAnimator.h"
+#import "PopViewAnimator.h"
 
-@implementation ViewAnimator
+@implementation PopViewAnimator
 
 + (POPSpringAnimation *)springAnimationFromFrameTo:(CGRect)fromFrame toFrame:(CGRect)toFrame {
     POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];

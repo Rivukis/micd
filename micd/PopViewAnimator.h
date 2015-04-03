@@ -1,7 +1,7 @@
 #import <pop/POP.h>
 #import <UIKit/UIKit.h>
 
-@interface ViewAnimator : NSObject
+@interface PopViewAnimator : NSObject
 
 + (POPSpringAnimation *)springAnimationFromFrameTo:(CGRect)fromFrame toFrame:(CGRect)toFrame;
 + (POPSpringAnimation *)springAnimationForTransformToScale:(CGSize)toScale;
