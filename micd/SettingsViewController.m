@@ -53,7 +53,6 @@
         
         self.isFirstTimeLayingOutSubviews = NO;
     }
-    
 }
 
 - (IBAction)noTapped:(id)sender {
@@ -65,9 +64,8 @@
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
-    view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationButtonBounce];
-    [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
+    [view.layer pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
 
 #pragma mark - FramesBasedOnStateProtocol

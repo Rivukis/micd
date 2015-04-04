@@ -346,9 +346,8 @@ RecordingCellDelegate>
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
-    view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationButtonBounce];
-    [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
+    [view.layer pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
 //
 //- (void)showAndAddSpringAnimationToButton:(UIButton *)button {
@@ -668,18 +667,18 @@ RecordingCellDelegate>
     }
     
     RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
-
-    [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:0 animations:^{
-        
-    } completion:^(BOOL finished) {
-        
-    }];
+//    [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:0 animations:^{
+//        cell.transform = CGAffineTransformMakeScale(.9, .9);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:.5 initialSpringVelocity:.8 options:0 animations:^{
+//            cell.transform = CGAffineTransformIdentity;
+//        } completion:nil];
+//    }];
     
-//    POPSpringAnimation *cellBounce = [PopViewAnimator springAnimationCellBounce];
-//    cell.transform = CGAffineTransformIdentity;
-//    [cell pop_removeAllAnimations];
-//    [cell pop_addAnimation:cellBounce forKey:@"cellBounce"];
-//    [cell setNeedsDisplay];
+//    [cell.layer pop_removeAllAnimations];
+    
+    POPSpringAnimation *cellBounce = [PopViewAnimator springAnimationCellBounce];
+    [cell.layer pop_addAnimation:cellBounce forKey:@"cellBounce"];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

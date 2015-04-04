@@ -12,7 +12,7 @@
 }
 
 + (POPSpringAnimation *)springAnimationForTransformToScale:(CGSize)toScale {
-    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
     animation.toValue = [NSValue valueWithCGSize:toScale];
     animation.springBounciness = 1;
     animation.springSpeed = 20;
@@ -20,7 +20,7 @@
 }
 
 + (POPSpringAnimation *)springAnimationGrowFromNothing; {
-    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
     animation.fromValue = [NSValue valueWithCGSize:CGSizeMake(0.1, 0.1)];
     animation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
     animation.velocity = [NSValue valueWithCGPoint:CGPointMake(8, 8)];
@@ -30,7 +30,7 @@
 }
 
 + (POPSpringAnimation *)springAnimationShrinkToNothing; {
-    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
     animation.fromValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
     animation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.0001, 0.0001)];
     animation.velocity = [NSValue valueWithCGPoint:CGPointMake(20, 20)];
@@ -40,7 +40,8 @@
 }
 
 + (POPSpringAnimation *)springAnimationButtonBounce {
-    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+    animation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
     animation.velocity = [NSValue valueWithCGPoint:CGPointMake(-10, -10)];
     animation.springBounciness = 16.f;
     
@@ -48,7 +49,8 @@
 }
 
 + (POPSpringAnimation *)springAnimationCellBounce {
-    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+    animation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
     animation.velocity = [NSValue valueWithCGPoint:CGPointMake(-2, -2)];
     animation.springBounciness = 12.0f;
     
