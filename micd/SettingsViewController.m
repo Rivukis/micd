@@ -50,8 +50,6 @@
     self.startRecordingOnLaunchSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
     self.rememberRecordingLocationSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
     
-    [self testmethod];
-    
     self.noButton.layer.cornerRadius = 5;
     self.yesButton.layer.cornerRadius = 5;
 }
@@ -61,22 +59,11 @@
 - (IBAction)recordingsSavePlaybackPositionSwitchValueChanged:(UISwitch *)sender {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:sender.on forKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
-    [self testmethod];
 }
 
 - (IBAction)startRecordingOnAppDidBecomeActiveSwitchValueChanged:(UISwitch *)sender {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:sender.on forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
-    [self testmethod];
-}
-
-- (void)testmethod {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    BOOL savePlayback = [userDefaults boolForKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
-    BOOL recordOnStart = [userDefaults boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
-    
-    NSLog(@"save playback: %i, record on start: %i", savePlayback, recordOnStart);
 }
 
 - (IBAction)noTapped:(id)sender {
@@ -88,9 +75,8 @@
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
-    view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationButtonBounce];
-    [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
+    [view.layer pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
 
 #pragma mark - FramesBasedOnStateProtocol
