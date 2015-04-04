@@ -594,20 +594,20 @@
 				TargetAttributes = {
 					D05D756B1A79AAA40050A49C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = A57KTL95E8;
+						DevelopmentTeam = XQJAY5KMS4;
 					};
 					D05D75841A79AAA40050A49C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = A57KTL95E8;
+						DevelopmentTeam = XQJAY5KMS4;
 						TestTargetID = D05D756B1A79AAA40050A49C;
 					};
 					D0BFAD381ABF9C9B0051F0CF = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = A57KTL95E8;
+						DevelopmentTeam = XQJAY5KMS4;
 					};
 					D0BFAD431ABF9C9B0051F0CF = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = A57KTL95E8;
+						DevelopmentTeam = XQJAY5KMS4;
 					};
 				};
 			};
