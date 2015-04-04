@@ -15,8 +15,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [VersionController updateVersion];
-    [VersionController restoreDefaultSettings];
-    
+        
     return YES;
 }
 
