@@ -752,7 +752,7 @@ RecordingCellDelegate>
     RecordingsSection *recordingsSection = self.sections[section];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44.0f)];
     
-    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 42.0f, tableView.frame.size.width, 2.0f)];
+    UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 42.0f, tableView.frame.size.width, 1.0f)];
     bottomBorderView.backgroundColor = [UIColor vibrantBlue];
     [headerView addSubview:bottomBorderView];
     
