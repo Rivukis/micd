@@ -608,20 +608,6 @@ RecordingCellDelegate>
             [self playPlaybackShouldAnimatePlayButton:YES];
         }
     }
-    
-    RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
-//    [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:0 animations:^{
-//        cell.transform = CGAffineTransformMakeScale(.9, .9);
-//    } completion:^(BOOL finished) {
-//        [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:.5 initialSpringVelocity:.8 options:0 animations:^{
-//            cell.transform = CGAffineTransformIdentity;
-//        } completion:nil];
-//    }];
-    
-//    [cell.layer pop_removeAllAnimations];
-    
-    POPSpringAnimation *cellBounce = [PopViewAnimator springAnimationCellBounce];
-    [cell.layer pop_addAnimation:cellBounce forKey:@"cellBounce"];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
