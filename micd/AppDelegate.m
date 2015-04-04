@@ -7,18 +7,33 @@
 #import "FramesController.h"
 #import "VersionController.h"
 
+@interface AppDelegate ()
+
+@property (nonatomic, assign) BOOL fireDidBecomeActiveNotification;
+
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [VersionController updateVersion];
-        
+    self.fireDidBecomeActiveNotification = YES;
+    
     return YES;
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    self.fireDidBecomeActiveNotification = YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [self setupAudioSession];
     [self startObservingNotifications];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyApplicationDidBecomeActive object:nil];
+    
+    if (self.fireDidBecomeActiveNotification) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyApplicationDidBecomeActive object:nil];
+        self.fireDidBecomeActiveNotification = NO;
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -27,12 +42,7 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [[DataSourceController sharedDataSource] saveData];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

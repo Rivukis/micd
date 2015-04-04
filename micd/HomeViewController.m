@@ -248,7 +248,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         self.recordButtonEnabled = YES;
     }
     
-    if (self.startRecordingWhenAnimationCompletes) {
+    if (self.startRecordingWhenAnimationCompletes && self.recorderController.recordingState != RecorderControllerStateRecording) {
         [self recordButtonPressed:self.recordButton];
         self.startRecordingWhenAnimationCompletes = NO;
     }
