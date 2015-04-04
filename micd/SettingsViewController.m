@@ -1,16 +1,9 @@
-//
-//  SettingsViewController.m
-//  micd
-//
-//  Created by Timothy Hise on 4/2/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "SettingsViewController.h"
 #import "UIColor+Palette.h"
 #import "WireTapStyleKit.h"
 #import "SettingsView.h"
 #import "PopViewAnimator.h"
+#import "Constants.h"
 
 @interface SettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *loveMicdImageView;
@@ -29,19 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor clearColor];
-    self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicd];
-    self.noButton.backgroundColor = [UIColor vibrantBlue];
-    self.yesButton.backgroundColor = [UIColor vibrantBlue];
-    self.rememberRecordingLocationSwitch.onTintColor = [UIColor vibrantBlue];
-    self.startRecordingOnLaunchSwitch.onTintColor = [UIColor vibrantBlue];
-    self.rememberRecordingLocationLabel.textColor = [UIColor vibrantBlue];
-    self.startRecordingOnLaunchLabel.textColor = [UIColor vibrantBlue];
-    
-    self.startRecordingOnLaunchSwitch.on = NO;
-    
-    self.noButton.layer.cornerRadius = 5;
-    self.yesButton.layer.cornerRadius = 5;
+    [self initialSetupOfViews];
     
     self.isFirstTimeLayingOutSubviews = YES;
 }
@@ -53,7 +34,49 @@
         
         self.isFirstTimeLayingOutSubviews = NO;
     }
+}
+
+- (void)initialSetupOfViews {
+    self.view.backgroundColor = [UIColor clearColor];
+    self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicd];
+    self.noButton.backgroundColor = [UIColor vibrantBlue];
+    self.yesButton.backgroundColor = [UIColor vibrantBlue];
+    self.rememberRecordingLocationSwitch.onTintColor = [UIColor vibrantBlue];
+    self.startRecordingOnLaunchSwitch.onTintColor = [UIColor vibrantBlue];
+    self.rememberRecordingLocationLabel.textColor = [UIColor vibrantBlue];
+    self.startRecordingOnLaunchLabel.textColor = [UIColor vibrantBlue];
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.startRecordingOnLaunchSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    self.rememberRecordingLocationSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
+    
+    [self testmethod];
+    
+    self.noButton.layer.cornerRadius = 5;
+    self.yesButton.layer.cornerRadius = 5;
+}
+
+#pragma mark - User Action Methods
+
+- (IBAction)recordingsSavePlaybackPositionSwitchValueChanged:(UISwitch *)sender {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:sender.on forKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
+    [self testmethod];
+}
+
+- (IBAction)startRecordingOnAppDidBecomeActiveSwitchValueChanged:(UISwitch *)sender {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:sender.on forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    [self testmethod];
+}
+
+- (void)testmethod {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    BOOL savePlayback = [userDefaults boolForKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
+    BOOL recordOnStart = [userDefaults boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    
+    NSLog(@"save playback: %i, record on start: %i", savePlayback, recordOnStart);
 }
 
 - (IBAction)noTapped:(id)sender {
