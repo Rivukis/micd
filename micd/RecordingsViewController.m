@@ -457,63 +457,6 @@ RecordingCellDelegate>
     [self pausePlaybackShouldAnimatePauseButton:YES];
 }
 
-- (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
-    if (self.sections.count == 0) {
-        return nil;
-    } else {
-        return [NSIndexPath indexPathForRow:0 inSection:0];
-    }
-    
-    // NEEDS REWORK!!!!!
-//    NSInteger nextSelectedSection;
-//    NSInteger nextSelectedRow;
-//    
-//    if (isSectionDeleted) {
-//        BOOL isSectionAfterDeletedSection = indexPath.section <= self.sections.count - 1;
-//        
-//        if (isSectionAfterDeletedSection) {
-//            // select first object of next section
-//            nextSelectedSection = indexPath.section;
-//            nextSelectedRow = 0;
-//        } else {
-//            // else select last object of previous section
-//            nextSelectedSection = indexPath.section - 1;
-//            RecordingsSection *previousSection = self.sections[nextSelectedSection];
-//            nextSelectedRow = previousSection.numberOfCellModels - 1;
-//        }
-//    } else {
-//        RecordingsSection *currentSection = self.sections[indexPath.section];
-//        
-//        BOOL isCellAboveInCurrentSection = indexPath.row != 0;
-//        
-//        if (isCellAboveInCurrentSection) {
-//            // select cell above deleted cell
-//        }
-    
-//        BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
-//        
-//        if (isRowAfterDeletedRow) {
-//            // select next cell
-//            nextSelectedSection = indexPath.section;
-//            nextSelectedRow = indexPath.row;
-//        } else {
-//            BOOL isSectionAfterCurrentSection = indexPath.section >= self.sections.count - 1;
-//            
-//            if (isSectionAfterCurrentSection) {
-//                // else select first cell of next section
-//                nextSelectedSection = indexPath.section + 1;
-//                nextSelectedRow = 0;
-//            } else {
-//                // else select previous cell
-//                nextSelectedSection = indexPath.section;
-//                nextSelectedRow = indexPath.row - 1;
-//            }
-//        }
-//    }
-//    
-//    return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
-}
-
 #pragma mark - RemoteCommandCenterControllerDelegate
 
 - (MPRemoteCommandHandlerStatus)playCommand {
@@ -784,10 +727,61 @@ RecordingCellDelegate>
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
-#pragma mark - Helper
-
-- (void)returnToHomeWithNoRecordingsState {
+- (NSIndexPath *)indexPathToSelectAfterDeletingIndexPath:(NSIndexPath *)indexPath sectionWasDeleted:(BOOL)isSectionDeleted {
+    if (self.sections.count == 0) {
+        return nil;
+    } else {
+        return [NSIndexPath indexPathForRow:0 inSection:0];
+    }
     
+    // NEEDS REWORK!!!!! if we want a custom next cell to select after deleting focused cell
+    //    NSInteger nextSelectedSection;
+    //    NSInteger nextSelectedRow;
+    //
+    //    if (isSectionDeleted) {
+    //        BOOL isSectionAfterDeletedSection = indexPath.section <= self.sections.count - 1;
+    //
+    //        if (isSectionAfterDeletedSection) {
+    //            // select first object of next section
+    //            nextSelectedSection = indexPath.section;
+    //            nextSelectedRow = 0;
+    //        } else {
+    //            // else select last object of previous section
+    //            nextSelectedSection = indexPath.section - 1;
+    //            RecordingsSection *previousSection = self.sections[nextSelectedSection];
+    //            nextSelectedRow = previousSection.numberOfCellModels - 1;
+    //        }
+    //    } else {
+    //        RecordingsSection *currentSection = self.sections[indexPath.section];
+    //
+    //        BOOL isCellAboveInCurrentSection = indexPath.row != 0;
+    //
+    //        if (isCellAboveInCurrentSection) {
+    //            // select cell above deleted cell
+    //        }
+    
+    //        BOOL isRowAfterDeletedRow = indexPath.row >= currentSection.numberOfCellModels;
+    //
+    //        if (isRowAfterDeletedRow) {
+    //            // select next cell
+    //            nextSelectedSection = indexPath.section;
+    //            nextSelectedRow = indexPath.row;
+    //        } else {
+    //            BOOL isSectionAfterCurrentSection = indexPath.section >= self.sections.count - 1;
+    //
+    //            if (isSectionAfterCurrentSection) {
+    //                // else select first cell of next section
+    //                nextSelectedSection = indexPath.section + 1;
+    //                nextSelectedRow = 0;
+    //            } else {
+    //                // else select previous cell
+    //                nextSelectedSection = indexPath.section;
+    //                nextSelectedRow = indexPath.row - 1;
+    //            }
+    //        }
+    //    }
+    //    
+    //    return [NSIndexPath indexPathForRow:nextSelectedRow inSection:nextSelectedSection];
 }
 
 // ----- use for resizing the tableview -----

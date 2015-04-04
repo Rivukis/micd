@@ -54,6 +54,7 @@
         _date = [aDecoder decodeObjectForKey:@"date"];
         _tags = [aDecoder decodeObjectForKey:@"tags"];
         _lengthAsTimeInterval = [aDecoder decodeDoubleForKey:@"length"];
+        _currentPlaybackPosistion = [aDecoder decodeDoubleForKey:@"currentPlaybackPosistion"];
     }
     return self;
 }
@@ -64,6 +65,7 @@
     [aCoder encodeObject:_date forKey:@"date"];
     [aCoder encodeObject:_tags forKey:@"tags"];
     [aCoder encodeDouble:_lengthAsTimeInterval forKey:@"length"];
+    [aCoder encodeDouble:_currentPlaybackPosistion forKey:@"currentPlaybackPosistion"];
 }
 
 - (NSData *)data {
@@ -72,6 +74,14 @@
     }
     
     return _data;
+}
+
+- (void)setCurrentPlaybackPosistion:(NSTimeInterval)currentPlaybackPosistion {
+    if (currentPlaybackPosistion >= self.lengthAsTimeInterval || currentPlaybackPosistion < 0.0f) {
+        _currentPlaybackPosistion = 0.0f;
+    } else {
+        _currentPlaybackPosistion = currentPlaybackPosistion;
+    }
 }
 
 #pragma mark - tag methods

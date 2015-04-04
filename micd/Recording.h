@@ -23,6 +23,7 @@ struct Length {
 @property (nonatomic, strong, readonly) NSUUID *uuid;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong, readonly) NSArray *tags;
+@property (nonatomic, assign) NSTimeInterval currentPlaybackPosistion;
 
 @property (nonatomic, copy, readonly) NSData *data;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;

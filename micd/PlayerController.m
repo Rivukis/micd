@@ -2,6 +2,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Recording.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "Constants.h"
 
 @interface PlayerController () <AVAudioPlayerDelegate>
 
@@ -41,11 +42,18 @@
 #pragma mark - API Methods
 
 - (void)loadRecording:(Recording *)recording {
+    self.loadedRecording.currentPlaybackPosistion = self.secondsCompleted;
     self.secondsCompleted = 0.0f;
     self.playerState = PlayerControllerStatePaused;
     self.audioPlayer = [[AVAudioPlayer alloc] initWithData:recording.data error:nil];
     self.loadedRecording = recording;
     self.audioPlayer.delegate = self;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL shouldSetPlaybackToLastKnownPosition = [userDefaults boolForKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
+    if (shouldSetPlaybackToLastKnownPosition) {
+        [self setPlaybackTimeInterval:self.loadedRecording.currentPlaybackPosistion];
+    }
 }
 
 - (void)playAudio {
@@ -58,6 +66,7 @@
 
 - (void)pauseAudio {
     self.playerState = PlayerControllerStatePaused;
+    self.loadedRecording.currentPlaybackPosistion = self.secondsCompleted;
     [self.audioPlayer pause];
 }
 
