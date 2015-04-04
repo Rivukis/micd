@@ -350,14 +350,13 @@ RecordingCellDelegate>
     POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationButtonBounce];
     [view pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
-
-- (void)showAndAddSpringAnimationToButton:(UIButton *)button {
-    [button pop_removeAnimationForKey:@"hideButton"];
-    NSLog(@"Showing");
-    button.transform = CGAffineTransformIdentity;
-    POPSpringAnimation *showButtonAnimation = [PopViewAnimator springAnimationGrowFromNothing];
-    [button pop_addAnimation:showButtonAnimation forKey:@"showButton"];
-}
+//
+//- (void)showAndAddSpringAnimationToButton:(UIButton *)button {
+//    [button pop_removeAnimationForKey:@"hideButton"];
+//    button.transform = CGAffineTransformIdentity;
+//    POPSpringAnimation *showButtonAnimation = [PopViewAnimator springAnimationGrowFromNothing];
+//    [button pop_addAnimation:showButtonAnimation forKey:@"showButton"];
+//}
 
 - (void)detectTitleTapped:(UILongPressGestureRecognizer *)gestureRecognizer {
     [self.tableView scrollToRowAtIndexPath:self.focusedCellIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
@@ -667,6 +666,16 @@ RecordingCellDelegate>
             [self playPlaybackShouldAnimatePlayButton:YES];
         }
     }
+    
+    RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
+
+    UIView animateWithDuration:1 delay: usingSpringWithDamping:1 initialSpringVelocity:<#(CGFloat)#> options:<#(UIViewAnimationOptions)#> animations:<#^(void)animations#> completion:<#^(BOOL finished)completion#>
+    
+//    POPSpringAnimation *cellBounce = [PopViewAnimator springAnimationCellBounce];
+//    cell.transform = CGAffineTransformIdentity;
+//    [cell pop_removeAllAnimations];
+//    [cell pop_addAnimation:cellBounce forKey:@"cellBounce"];
+//    [cell setNeedsDisplay];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

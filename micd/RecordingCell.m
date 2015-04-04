@@ -14,8 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *title;
 @property (weak, nonatomic) IBOutlet UILabel *length;
 @property (weak, nonatomic) IBOutlet UILabel *date;
-@property (weak, nonatomic) IBOutlet UIImageView *playStateImageView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *playStateImageViewWidthConstraint;
 @property (weak, nonatomic) IBOutlet UIView *lengthContainerView;
 @property (weak, nonatomic) IBOutlet UIImageView *playPauseImageView;
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPressGestureRecognizer;
@@ -151,9 +149,6 @@
                                 [welf startAnimating];
                             }];
         }
-        [self pop_removeAnimationForKey:@"cellBounce"];
-        [self addBounceAnimationToView:self];
-        NSLog(@"play");
     } else {
         self.length.hidden = YES;
         self.playPauseImageView.hidden = NO;
@@ -180,9 +175,6 @@
                 welf.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
                             }];
         }
-        [self pop_removeAnimationForKey:@"cellBounce"];
-        [self addBounceAnimationToView:self];
-        NSLog(@"pause");
     } else {
         self.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
         self.length.hidden = YES;
@@ -212,12 +204,6 @@
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
         [self.timer fire];
     }
-}
-
-- (void)addBounceAnimationToView:(UIView *)view {
-    view.transform = CGAffineTransformIdentity;
-    POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationCellBounce];
-    [view pop_addAnimation:buttonPressedAnimation forKey:@"cellBounce"];
 }
 
 #pragma mark - UITextfield Delegate and Gesture Recognizer
