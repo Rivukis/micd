@@ -669,7 +669,11 @@ RecordingCellDelegate>
     
     RecordingCell *cell = (RecordingCell *)[tableView cellForRowAtIndexPath:indexPath];
 
-    UIView animateWithDuration:1 delay: usingSpringWithDamping:1 initialSpringVelocity:<#(CGFloat)#> options:<#(UIViewAnimationOptions)#> animations:<#^(void)animations#> completion:<#^(BOOL finished)completion#>
+    [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:0 animations:^{
+        
+    } completion:^(BOOL finished) {
+        
+    }];
     
 //    POPSpringAnimation *cellBounce = [PopViewAnimator springAnimationCellBounce];
 //    cell.transform = CGAffineTransformIdentity;
