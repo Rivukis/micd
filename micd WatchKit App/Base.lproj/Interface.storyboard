@@ -1,26 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
     <scenes>
-        <!--Interface Controller-->
+        <!--RecorderInterfaceController-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController">
+                <controller identifier="RecorderInterfaceController" id="AgC-eL-Hgc" customClass="RecorderInterfaceController">
                     <items>
-                        <button width="0.90000000000000002" height="0.80000000000000004" alignment="center" verticalAlignment="center" backgroundImage="recordButton" id="hH1-HM-nUd">
+                        <button width="0.78749999999999998" height="0.70000000000000007" alignment="center" backgroundImage="recordButton" id="hH1-HM-nUd">
                             <connections>
                                 <action selector="recordButtonPressed" destination="AgC-eL-Hgc" id="tzV-Yo-vLl"/>
+                            </connections>
+                        </button>
+                        <button width="1" alignment="left" verticalAlignment="bottom" title="Recordings" id="jtB-xv-8BT">
+                            <connections>
+                                <action selector="recordingsButtonPressed" destination="AgC-eL-Hgc" id="gxo-jf-lDc"/>
                             </connections>
                         </button>
                     </items>
                     <connections>
                         <outlet property="recordButton" destination="hH1-HM-nUd" id="aEF-sC-G9a"/>
+                        <outlet property="recordingsButton" destination="jtB-xv-8BT" id="McF-3U-2LR"/>
                     </connections>
                 </controller>
             </objects>
+        </scene>
+        <!--RecordingsInterfaceController-->
+        <scene sceneID="kCV-cH-jmE">
+            <objects>
+                <controller identifier="RecordingsInterfaceController" id="IiR-WI-Mu4" customClass="RecordingsInterfaceController">
+                    <items>
+                        <group width="1" alignment="left" id="4VY-zP-W1c" userLabel="Player Buttons">
+                            <items>
+                                <button width="0.33333332999999998" alignment="left" verticalAlignment="center" title="prev" id="ecW-W4-ITf">
+                                    <connections>
+                                        <action selector="previousButtonPressed" destination="IiR-WI-Mu4" id="ge5-pp-NHl"/>
+                                    </connections>
+                                </button>
+                                <button width="0.33333332999999998" alignment="center" verticalAlignment="center" title="play" id="i2h-at-kAs">
+                                    <connections>
+                                        <action selector="playPausedButtonPressed" destination="IiR-WI-Mu4" id="3PV-7i-YH1"/>
+                                    </connections>
+                                </button>
+                                <button width="0.33333332999999998" alignment="right" verticalAlignment="center" title="next" id="8le-IZ-xp1">
+                                    <connections>
+                                        <action selector="nextButtonPressed" destination="IiR-WI-Mu4" id="Zpw-Nr-C2Z"/>
+                                    </connections>
+                                </button>
+                            </items>
+                        </group>
+                        <table alignment="left" id="d8d-PP-Yn2">
+                            <items>
+                                <tableRow identifier="RecordingRowController" id="4qZ-7R-Ssb" customClass="RecordingRowController">
+                                    <group key="rootItem" width="1" alignment="left" id="0ib-4G-2OQ">
+                                        <items>
+                                            <label width="1" height="1" alignment="left" verticalAlignment="center" text="Label" numberOfLines="2" id="4XE-Gy-0pu">
+                                                <fontDescription key="font" style="UICTFontTextStyleBody"/>
+                                            </label>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="recordingTitleLabel" destination="4XE-Gy-0pu" id="PJd-ap-JHi"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="playPauseButton" destination="i2h-at-kAs" id="oYc-Bl-QTN"/>
+                        <outlet property="tableView" destination="d8d-PP-Yn2" id="xoJ-Ha-jpc"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="327" y="246"/>
         </scene>
     </scenes>
 </document>

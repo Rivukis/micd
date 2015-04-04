@@ -103,8 +103,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 - (void)startObservingNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(responseToDidFinishRecordingFromWatch:)
-                                                 name:kNotificationKeyDidFinishedRecordingFromWatch
+                                             selector:@selector(responseToRecordPressedFromWatch:)
+                                                 name:kNotificationKeyRecordPressedFromWatch
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(responseToApplicationDidBecomeActive:)
@@ -116,7 +116,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
                                                object:nil];
 }
 
-- (void)responseToDidFinishRecordingFromWatch:(NSNotification *)notification {
+- (void)responseToRecordPressedFromWatch:(NSNotification *)notification {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         [self.recorderController pauseRecording];
         [self animatePauseState];
