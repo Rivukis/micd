@@ -64,7 +64,7 @@
     self.title.userInteractionEnabled = NO;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setImage:[WireTapStyleKit imageOfClearButton] forState:UIControlStateNormal];
-    [button setFrame:CGRectMake(0.0f, 0.0f, 15.0f, 15.0f)];
+    [button setFrame:CGRectMake(0.0f, 0.0f, 20.0f, 20.0f)];
     self.title.rightView = button;
     self.title.rightViewMode = UITextFieldViewModeWhileEditing;
     [button addTarget:self action:@selector(clearText) forControlEvents:UIControlEventTouchUpInside];
@@ -128,19 +128,19 @@
 
 - (void)setupViewForPlayingState {
     __weak __typeof(self) welf = self;
-    
+    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
     if (self.cellModel.shouldAnimateStateChanges) {
         if (self.length.hidden) {
             [UIView transitionWithView:self.playPauseImageView
                               duration:.4
                                options:UIViewAnimationOptionTransitionFlipFromLeft
                             animations:^{
-                self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
+                self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
                             } completion:^(BOOL finished) {
                                 [welf startAnimating];
                             }];
         } else {
-            self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
+            self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
             [UIView transitionFromView:self.length
                                 toView:self.playPauseImageView
                               duration:.4
@@ -183,8 +183,8 @@
 }
 
 - (void)drivePlayButtonAnimation {
-    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+90 arcEnd:self.cellModel.angle];
     self.cellModel.angle = self.cellModel.angle - 3;
+    self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
 }
 
 #pragma mark - Helper Methods
