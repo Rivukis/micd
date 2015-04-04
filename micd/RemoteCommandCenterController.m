@@ -88,6 +88,10 @@ static const BOOL useSkipButtons = NO;
     if (self.nowPlayingInfoElapsedTime) [trackInfo setObject:self.nowPlayingInfoElapsedTime forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
     if (self.nowPlayingInfoDuration) [trackInfo setObject:self.nowPlayingInfoDuration forKey:MPMediaItemPropertyPlaybackDuration];
     
+    //    UIImage *image = [UIImage imageNamed:@"album_art"];
+    //    MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:image];
+    //    [trackInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
+    
     [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:[trackInfo copy]];
 }
 

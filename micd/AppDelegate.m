@@ -7,10 +7,6 @@
 #import "FramesController.h"
 #import "VersionController.h"
 
-//    UIImage *image = [UIImage imageNamed:@"album_art"];
-//    MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:image];
-//    [trackInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
