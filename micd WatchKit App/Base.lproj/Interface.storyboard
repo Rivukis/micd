@@ -33,25 +33,6 @@
             <objects>
                 <controller identifier="RecordingsInterfaceController" id="IiR-WI-Mu4" customClass="RecordingsInterfaceController">
                     <items>
-                        <group width="1" alignment="left" id="4VY-zP-W1c" userLabel="Player Buttons">
-                            <items>
-                                <button width="0.33333332999999998" alignment="left" verticalAlignment="center" title="prev" id="ecW-W4-ITf">
-                                    <connections>
-                                        <action selector="previousButtonPressed" destination="IiR-WI-Mu4" id="ge5-pp-NHl"/>
-                                    </connections>
-                                </button>
-                                <button width="0.33333332999999998" alignment="center" verticalAlignment="center" title="play" id="i2h-at-kAs">
-                                    <connections>
-                                        <action selector="playPausedButtonPressed" destination="IiR-WI-Mu4" id="3PV-7i-YH1"/>
-                                    </connections>
-                                </button>
-                                <button width="0.33333332999999998" alignment="right" verticalAlignment="center" title="next" id="8le-IZ-xp1">
-                                    <connections>
-                                        <action selector="nextButtonPressed" destination="IiR-WI-Mu4" id="Zpw-Nr-C2Z"/>
-                                    </connections>
-                                </button>
-                            </items>
-                        </group>
                         <table alignment="left" id="d8d-PP-Yn2">
                             <items>
                                 <tableRow identifier="RecordingRowController" id="4qZ-7R-Ssb" customClass="RecordingRowController">
@@ -70,7 +51,6 @@
                         </table>
                     </items>
                     <connections>
-                        <outlet property="playPauseButton" destination="i2h-at-kAs" id="oYc-Bl-QTN"/>
                         <outlet property="tableView" destination="d8d-PP-Yn2" id="xoJ-Ha-jpc"/>
                     </connections>
                 </controller>

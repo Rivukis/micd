@@ -177,6 +177,10 @@ RecordingCellDelegate>
                                              selector:@selector(responseToAVAudioSessionInterruption:)
                                                  name:AVAudioSessionInterruptionNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToRecordingPressedFromWatch:)
+                                                 name:kNotificationKeyRecordingPressedFromWatch
+                                               object:nil];
 }
 
 - (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
@@ -199,6 +203,25 @@ RecordingCellDelegate>
         default:
             break;
     }
+}
+
+- (void)responseToRecordingPressedFromWatch:(NSNotification *)notification {
+    BOOL searching = YES;
+    NSInteger rowIndex = [notification.userInfo[kUserInfoKeyRecordingToPlayIndex] integerValue];
+    NSInteger sectionIndex = 0;
+    
+    while (searching) {
+        RecordingsSection *sectionToSearch = self.sections[sectionIndex];
+        if (rowIndex < sectionToSearch.numberOfCellModels) {
+            // play recording with section = sectionToSearch and row = rowIndexToPlay
+            searching = NO;
+        } else {
+            rowIndex -= sectionToSearch.numberOfCellModels;
+        }
+    }
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
 }
 
 #pragma mark - Helper Methods

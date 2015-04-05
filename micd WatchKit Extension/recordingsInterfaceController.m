@@ -12,11 +12,10 @@
 
 @interface RecordingsInterfaceController ()
 
-@property (weak, nonatomic) IBOutlet WKInterfaceButton *playPauseButton;
 @property (weak, nonatomic) IBOutlet WKInterfaceTable *tableView;
 
 @property (strong, nonatomic) NSArray *recordingTitles;
-@property (assign, nonatomic) BOOL isPlaying;
+//@property (assign, nonatomic) BOOL isPlaying;
 
 @end
 
@@ -41,7 +40,7 @@
     if (isRecording) {
         [self popController];
     }
-    self.isPlaying = [[replyInfo objectForKey:kWatchExtKeyIsPlaying] boolValue];
+//    self.isPlaying = [[replyInfo objectForKey:kWatchExtKeyIsPlaying] boolValue];
 }
 
 #pragma mark - View Setup Methods
@@ -55,14 +54,14 @@
     }
 }
 
-- (void)setIsPlaying:(BOOL)isPlaying {
-    if (isPlaying) {
-        [self.playPauseButton setTitle:@"pause"];
-    } else {
-        [self.playPauseButton setTitle:@"play"];
-    }
-    _isPlaying = isPlaying;
-}
+//- (void)setIsPlaying:(BOOL)isPlaying {
+//    if (isPlaying) {
+//        [self.playPauseButton setTitle:@"pause"];
+//    } else {
+//        [self.playPauseButton setTitle:@"play"];
+//    }
+//    _isPlaying = isPlaying;
+//}
 
 #pragma mark - User Action Methods
 
@@ -75,31 +74,31 @@
     }];
 }
 
-- (IBAction)previousButtonPressed {
-    NSDictionary *userInfo = @{kWatchExtKeyMessageType: kWatchExtKeyMessageTypePreviousButtonPressed};
-    [RecordingsInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
-        [self handleBasicReplyInfo:replyInfo];
-    }];
-}
-
-- (IBAction)playPausedButtonPressed {
-    NSString *messageType;
-    if (self.isPlaying) {
-        messageType = kWatchExtKeyMessageTypePauseButtonPressed;
-    } else {
-        messageType = kWatchExtKeyMessageTypePlayButtonPressed;
-    }
-    NSDictionary *userInfo = @{kWatchExtKeyMessageType: messageType};
-    [RecordingsInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
-        [self handleBasicReplyInfo:replyInfo];
-    }];
-}
-
-- (IBAction)nextButtonPressed {
-    NSDictionary *userInfo = @{kWatchExtKeyMessageType: kWatchExtKeyMessageTypeNextButtonPressed};
-    [RecordingsInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
-        [self handleBasicReplyInfo:replyInfo];
-    }];
-}
+//- (IBAction)previousButtonPressed {
+//    NSDictionary *userInfo = @{kWatchExtKeyMessageType: kWatchExtKeyMessageTypePreviousButtonPressed};
+//    [RecordingsInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
+//        [self handleBasicReplyInfo:replyInfo];
+//    }];
+//}
+//
+//- (IBAction)playPausedButtonPressed {
+//    NSString *messageType;
+//    if (self.isPlaying) {
+//        messageType = kWatchExtKeyMessageTypePauseButtonPressed;
+//    } else {
+//        messageType = kWatchExtKeyMessageTypePlayButtonPressed;
+//    }
+//    NSDictionary *userInfo = @{kWatchExtKeyMessageType: messageType};
+//    [RecordingsInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
+//        [self handleBasicReplyInfo:replyInfo];
+//    }];
+//}
+//
+//- (IBAction)nextButtonPressed {
+//    NSDictionary *userInfo = @{kWatchExtKeyMessageType: kWatchExtKeyMessageTypeNextButtonPressed};
+//    [RecordingsInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
+//        [self handleBasicReplyInfo:replyInfo];
+//    }];
+//}
 
 @end
