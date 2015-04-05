@@ -3,9 +3,12 @@
 #import "WireTapStyleKit.h"
 #import "SettingsView.h"
 #import "PopViewAnimator.h"
+#import "PresentingAnimationController.h"
+#import "DismissingAnimationController.h"
+#import "PopoverViewController.h"
 #import "Constants.h"
 
-@interface SettingsViewController ()
+@interface SettingsViewController () <UIViewControllerTransitioningDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *loveMicdImageView;
 @property (weak, nonatomic) IBOutlet UIButton *noButton;
 @property (weak, nonatomic) IBOutlet UIButton *yesButton;
@@ -68,10 +71,12 @@
 
 - (IBAction)noTapped:(id)sender {
     [self addButtonBounceAnimationToView:self.noButton];
+    [self setupPopoverView];
 }
 
 - (IBAction)yesTapped:(id)sender {
     [self addButtonBounceAnimationToView:self.yesButton];
+    [self setupPopoverView];
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
@@ -111,6 +116,25 @@
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
+}
+
+#pragma mark - Transitioning Delegate
+
+- (void)setupPopoverView {
+    PopoverViewController *popoverVC = [self.storyboard instantiateViewControllerWithIdentifier:@"popover"];
+    popoverVC.transitioningDelegate = self;
+    popoverVC.modalPresentationStyle = UIModalPresentationCustom;
+    [self presentViewController:popoverVC animated:YES completion:nil];
+}
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+{
+    return [[PresentingAnimationController alloc] init];
+}
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return [[DismissingAnimationController alloc] init];
 }
 
 @end

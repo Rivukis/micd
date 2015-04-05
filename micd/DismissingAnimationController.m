@@ -25,7 +25,7 @@
     
     
     POPBasicAnimation *closeAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    closeAnimation.toValue = @(-fromView.layer.position.y);
+    closeAnimation.toValue = @(toView.layer.position.y * 3);
     [closeAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
         [transitionContext completeTransition:YES];
     }];
