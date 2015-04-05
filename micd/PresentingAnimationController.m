@@ -22,13 +22,13 @@
     fromView.userInteractionEnabled = NO;
     
     UIView *toView = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey].view;
-    toView.frame = CGRectMake(0,
-                              0,
+    toView.frame = CGRectMake(10,
+                              CGRectGetHeight(transitionContext.containerView.bounds),
                               CGRectGetWidth(transitionContext.containerView.bounds) - 20.f,
-                              CGRectGetHeight(transitionContext.containerView.bounds) - (CGRectGetHeight(transitionContext.containerView.bounds)/2));
+                              250);
     
-    CGPoint point = CGPointMake(transitionContext.containerView.center.x, transitionContext.containerView.center.y + CGRectGetHeight(transitionContext.containerView.frame));
-    toView.center = point;
+//    CGPoint point = CGPointMake(transitionContext.containerView.center.x, transitionContext.containerView.center.y + CGRectGetHeight(transitionContext.containerView.frame));
+//    toView.center = point;
     
     [transitionContext.containerView addSubview:toView];
     
@@ -36,7 +36,7 @@
     backgroundColor.toValue = [UIColor colorWithWhite:0 alpha:.7];
     
     POPSpringAnimation *positionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    positionAnimation.toValue = @(transitionContext.containerView.center.y + CGRectGetHeight(transitionContext.containerView.frame)/4 -10);
+    positionAnimation.toValue = @(transitionContext.containerView.bounds.size.height -135);
     positionAnimation.springBounciness = 3;
     [positionAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
         [transitionContext completeTransition:YES];

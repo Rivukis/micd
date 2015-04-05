@@ -7,11 +7,13 @@
 #import "DismissingAnimationController.h"
 #import "PopoverViewController.h"
 #import "Constants.h"
+#import <MessageUI/MessageUI.h>
 
-@interface SettingsViewController () <UIViewControllerTransitioningDelegate>
+@interface SettingsViewController () <UIViewControllerTransitioningDelegate, MFMailComposeViewControllerDelegate, PopoverDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *loveMicdImageView;
 @property (weak, nonatomic) IBOutlet UIButton *noButton;
 @property (weak, nonatomic) IBOutlet UIButton *yesButton;
+@property (weak, nonatomic) IBOutlet UIButton *sendFeedbackButton;
 @property (weak, nonatomic) IBOutlet UISwitch *rememberRecordingLocationSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *rememberRecordingLocationLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *startRecordingOnLaunchSwitch;
@@ -36,7 +38,7 @@
 
 -(void)viewDidLayoutSubviews {
     if (self.isFirstTimeLayingOutSubviews) {
-        ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton, self.rememberRecordingLocationSwitch, self.startRecordingOnLaunchSwitch, self.lengthSegmentedControl, self.autoStartRecAfterMaxSwitch];
+        ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton, self.rememberRecordingLocationSwitch, self.startRecordingOnLaunchSwitch, self.lengthSegmentedControl, self.autoStartRecAfterMaxSwitch, self.sendFeedbackButton];
         ((SettingsView *)self.view).settingsView = self.view;
         
         self.isFirstTimeLayingOutSubviews = NO;
@@ -45,7 +47,7 @@
 
 - (void)initialSetupOfViews {
     self.view.backgroundColor = [UIColor clearColor];
-    self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicd];
+    self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicdWithColor7:[UIColor vibrantLightBlueText]];
     self.noButton.backgroundColor = [UIColor vibrantBlue];
     self.yesButton.backgroundColor = [UIColor vibrantBlue];
     self.rememberRecordingLocationSwitch.onTintColor = [UIColor vibrantBlue];
@@ -59,6 +61,8 @@
     self.autoStartRecAfterMaxSwitch.onTintColor = [UIColor vibrantBlue];
     self.autoStartRecAfterMaxSwitch.tintColor = [UIColor vibrantBlue];
     self.lengthSegmentedControl.tintColor = [UIColor vibrantLightBlueText];
+    self.sendFeedbackButton.backgroundColor = [UIColor vibrantBlue];
+    self.sendFeedbackButton.hidden = YES;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.startRecordingOnLaunchSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
@@ -66,6 +70,7 @@
     
     self.noButton.layer.cornerRadius = 5;
     self.yesButton.layer.cornerRadius = 5;
+    self.sendFeedbackButton.layer.cornerRadius = 5;
 }
 
 #pragma mark - User Action Methods
@@ -86,6 +91,10 @@
 
 - (IBAction)yesTapped:(id)sender {
     [self setupPopoverViewForAnswer:YES];
+}
+
+- (IBAction)emailUsTapped:(id)sender {
+    [self showMailComposer:nil];
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
@@ -132,12 +141,10 @@
 - (void)setupPopoverViewForAnswer:(BOOL)answer {
     PopoverViewController *popoverVC = [self.storyboard instantiateViewControllerWithIdentifier:@"popover"];
     popoverVC.didSayYes = answer;
+    popoverVC.delegate = self;
     popoverVC.transitioningDelegate = self;
     popoverVC.modalPresentationStyle = UIModalPresentationCustom;
     [self presentViewController:popoverVC animated:YES completion:^{
-        self.loveMicdImageView.hidden = YES;
-        self.yesButton.hidden = YES;
-        self.noButton.hidden = YES;
     }];
 }
 
@@ -149,6 +156,68 @@
 - (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 {
     return [[DismissingAnimationController alloc] init];
+}
+
+#pragma mark - Popover delegate
+
+- (void)finishedPoppingOver:(PopoverViewController *)popoverViewController {
+    self.yesButton.hidden = YES;
+    self.noButton.hidden = YES;
+    self.sendFeedbackButton.hidden = NO;
+    
+    [popoverViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+
+- (void)showMailComposer:(PopoverViewController *)popoverViewController {
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+        mail.mailComposeDelegate = self;
+        [mail setSubject:@"Some thoughts on Mic'd"];
+        [mail setMessageBody:@"" isHTML:NO];
+        [mail setToRecipients:@[@""]];
+        
+        if (popoverViewController) {
+            [popoverViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
+                [self presentViewController:mail animated:YES completion:^{
+                    self.yesButton.hidden = YES;
+                    self.noButton.hidden = YES;
+                    self.sendFeedbackButton.hidden = NO;
+                }];
+            }];
+        } else {
+            [self presentViewController:mail animated:YES completion:^{
+                self.yesButton.hidden = YES;
+                self.noButton.hidden = YES;
+                self.sendFeedbackButton.hidden = NO;
+            }];
+        }
+    } else {
+        NSLog(@"This device cannot send email");
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result) {
+        case MFMailComposeResultSent:
+            NSLog(@"You sent the email.");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"You saved a draft of this email");
+            break;
+        case MFMailComposeResultCancelled:
+            NSLog(@"You cancelled sending this email.");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail failed:  An error occurred when trying to compose this email");
+            break;
+        default:
+            NSLog(@"An error occurred when trying to compose this email");
+            break;
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
