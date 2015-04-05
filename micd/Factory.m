@@ -100,7 +100,8 @@
         }
         
         [recordingsListForWatch addObject:@{kWatchExtKeyRecordingsListKeyName: recordingTitle,
-                                            kWatchExtKeyRecordingsListKeyUUID: uuidString}];
+                                            kWatchExtKeyRecordingsListKeyUUID: uuidString,
+                                            kWatchExtKeyRecordingsListIsPlaying: @(NO)}];
     }
     
     return [recordingsListForWatch copy];

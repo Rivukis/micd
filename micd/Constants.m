@@ -30,6 +30,7 @@ NSString *const kWatchExtKeyIsRecording = @"WatchExtKeyIsRecording";
 NSString *const kWatchExtKeyRecordingsList = @"WatchExtKeyRecordingsList";
 NSString *const kWatchExtKeyRecordingsListKeyName = @"WatchExtKeyRecordingsListKeyName";
 NSString *const kWatchExtKeyRecordingsListKeyUUID = @"WatchExtKeyRecordingsListKeyUUID";
+NSString *const kWatchExtKeyRecordingsListIsPlaying = @"WatchExtKeyRecordingsListIsPlaying";
 NSString *const kWatchExtKeyRecordingsListChangedWhileShowingOnWatch = @"WatchExtKeyRecordingsListChangedWhileShowingOnWatch";
 NSString *const kWatchExtKeyPlayRecordingWithUUIDString = @"WatchExtKeyPlayRecordingWithUUIDString";
 

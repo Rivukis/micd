@@ -46,11 +46,17 @@ static BOOL const kUseFakes = NO;
 }
 
 - (void)saveRecording:(Recording *)recording {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
     [self.recordings insertObject:recording atIndex:0];
     [self saveData];
 }
 
 - (void)deleteRecording:(Recording *)recording {
+    NSUInteger indexOfRecording = [self.recordings indexOfObject:recording];
+    if (indexOfRecording < kWatchExtNumberOfRecordingsShown) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
+    }
+    
     [self.recordings removeObject:recording];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtURL:[NSURL fileURLWithPath:recording.urlString] error:nil];

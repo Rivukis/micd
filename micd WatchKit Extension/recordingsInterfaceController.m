@@ -53,9 +53,7 @@
         [self handleBasicReplyInfo:replyInfo];
         
         BOOL recordingsListDidChange = [replyInfo[kWatchExtKeyRecordingsListChangedWhileShowingOnWatch] boolValue];
-        NSLog(@"deciding to reload tableview");
         if (recordingsListDidChange) {
-            NSLog(@"reload tableview");
             self.recordings = replyInfo[kWatchExtKeyRecordingsList];
             [self setupTableView];
         }

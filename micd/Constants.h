@@ -30,6 +30,7 @@ extern NSString *const kWatchExtKeyIsRecording;
 extern NSString *const kWatchExtKeyRecordingsList;
 extern NSString *const kWatchExtKeyRecordingsListKeyName;
 extern NSString *const kWatchExtKeyRecordingsListKeyUUID;
+extern NSString *const kWatchExtKeyRecordingsListIsPlaying;
 extern NSString *const kWatchExtKeyRecordingsListChangedWhileShowingOnWatch;
 extern NSString *const kWatchExtKeyPlayRecordingWithUUIDString;
 

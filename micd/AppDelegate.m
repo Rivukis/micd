@@ -82,14 +82,19 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyRecordingPressedFromWatch
                                                                 object:nil
                                                               userInfo:userInfo];
-        }
-        
-        BOOL dataOnWatchIsOld = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
-        
-        replyDict[kWatchExtKeyRecordingsListChangedWhileShowingOnWatch] = @(dataOnWatchIsOld);
-        if (dataOnWatchIsOld) {
-            NSLog(@"data on watch is old");
-            replyDict[kWatchExtKeyRecordingsList] = [Factory arrayOfRecordingsForWatch];
+            
+            /*
+             On the watch we pop back to recorder screen when recording,
+             so no need to update info since it will auto refresh when 
+             going to recordings screen in the future
+             */
+            BOOL dataOnWatchIsOld = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
+            
+            replyDict[kWatchExtKeyRecordingsListChangedWhileShowingOnWatch] = @(dataOnWatchIsOld);
+            if (dataOnWatchIsOld) {
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
+                replyDict[kWatchExtKeyRecordingsList] = [Factory arrayOfRecordingsForWatch];
+            }
         }
     }
     
