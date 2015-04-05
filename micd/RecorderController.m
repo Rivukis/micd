@@ -197,6 +197,27 @@ BOOL const useEnhancedRecorder = NO;
     return [self.audioRecorder averagePowerForChannel:0];
 }
 
+- (NSString *)currentRecordingTimeAsString {
+    NSInteger lengthInSeconds = trunc(self.audioRecorder.currentTime);
+    NSInteger lengthInMinutes = trunc(lengthInSeconds / 60.0f);
+    NSInteger lengthInHours = trunc(lengthInMinutes / 60.0f);
+    
+    struct Length length;
+    length.hours = lengthInHours;
+    length.minutes = lengthInMinutes - lengthInHours * 60;
+    length.seconds = lengthInSeconds - lengthInMinutes * 60;
+    
+    NSString *displayableLength;
+    
+    if (length.hours > 0) {
+        displayableLength = [NSString stringWithFormat:@"%ld:%02ld:%02ld", (long)length.hours, (long)length.minutes, (long)length.seconds];
+    } else {
+        displayableLength = [NSString stringWithFormat:@"%ld:%02ld", (long)length.minutes, (long)length.seconds];
+    }
+    
+    return displayableLength;
+}
+
 #pragma mark - AVAudioRecorder Methods
 
 - (AVAudioRecorder *)customRecorder {
