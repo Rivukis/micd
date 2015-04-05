@@ -254,7 +254,7 @@ BOOL const useEnhancedRecorder = NO;
     [recorderSettings setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
     [recorderSettings setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
     [recorderSettings setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
-    [recorderSettings setValue:[NSNumber numberWithInteger:AVAudioQualityHigh] forKey:AVEncoderAudioQualityKey];
+    [recorderSettings setValue:[NSNumber numberWithInteger:AVAudioQualityMax] forKey:AVEncoderAudioQualityKey];
     NSError *recorderError;
     AVAudioRecorder *recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recorderSettings error:&recorderError];
     

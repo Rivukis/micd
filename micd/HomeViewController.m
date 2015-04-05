@@ -16,6 +16,8 @@
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
+static BOOL const growForLouderNoises = NO;
+
 @interface HomeViewController () <UIGestureRecognizerDelegate>
 
 @property (assign, nonatomic) BOOL isMovingDown;
@@ -36,7 +38,6 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 @property (assign, nonatomic) NSUInteger animatingPulseCount;
 @property (strong, nonatomic) NSMutableArray *pulsingValues;
-@property (assign, nonatomic) BOOL growForLouderNoises;
 @property (nonatomic) CGFloat arcAngleShrinkCount;
 @property (strong, nonatomic) UIView *transitionView;
 @property (nonatomic) CGRect recordButtonOriginalFrame;
@@ -47,6 +48,8 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 @property (assign, nonatomic) BOOL startRecordingWhenAnimationCompletes;
 @property (assign, nonatomic) BOOL movingFromNoRecordingsState;
 
+@property (nonatomic, assign) BOOL interruptionOccuredWhileRecording;
+
 @end
 
 @implementation HomeViewController
@@ -54,16 +57,14 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.growForLouderNoises = NO;
-    self.recordButtonEnabled = YES;
-    
     self.recorderController = [RecorderController sharedRecorder];
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     [self setupSubviews];
-    
     [self startObservingNotifications];
+    
+    self.interruptionOccuredWhileRecording = NO;
 }
 
 - (void)setupSubviews {
@@ -76,6 +77,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:10] forState:UIControlStateNormal];
     [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:5] forState:UIControlStateHighlighted];
     [self.view addSubview:self.recordButton];
+    self.recordButtonEnabled = YES;
     
     self.gearsCircleImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfGearsCircle]];
     [self.view addSubview:self.gearsCircleImageView];
@@ -148,8 +150,18 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 }
 
 - (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
-    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
-        [self recordButtonPressed:self.recordButton];
+    AVAudioSessionInterruptionType interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue];
+    
+    if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
+        if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+            [self recordButtonPressed:self.recordButton];
+            self.interruptionOccuredWhileRecording = YES;
+        }
+    } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
+        if (self.interruptionOccuredWhileRecording && self.recorderController.recordingState != RecorderControllerStateRecording) {
+            [self recordButtonPressed:self.recordButton];
+        }
+        self.interruptionOccuredWhileRecording = NO;
     }
 }
 
@@ -212,7 +224,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
     
     self.pulsingValues = [NSMutableArray array];
     for (int i = 0; i < 15; i++) {
-        [self.pulsingValues addObject:(self.growForLouderNoises) ? @1.2 : @1];
+        [self.pulsingValues addObject:(growForLouderNoises) ? @1.2 : @1];
     }
     self.arcAngleShrinkCount = 0;
     [self.displayLinkController addSubscriberWithKey:@"recordButton"];
@@ -485,7 +497,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
         
         averagedTransformCoefficient /= self.pulsingValues.count;
         
-        if (self.growForLouderNoises) {
+        if (growForLouderNoises) {
             float difference = 1.2 - averagedTransformCoefficient;
             averagedTransformCoefficient = 1.0 + difference;
         }
