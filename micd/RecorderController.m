@@ -1,11 +1,3 @@
-//
-//  NEWCKRecorderController.m
-//  Recorder
-//
-//  Created by Brian Radebaugh on 1/7/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "RecorderController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "Recording.h"

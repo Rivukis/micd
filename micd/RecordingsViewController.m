@@ -206,23 +206,28 @@ RecordingCellDelegate>
 }
 
 - (void)responseToRecordingPressedFromWatch:(NSNotification *)notification {
-    BOOL searching = YES;
-    NSInteger rowIndex = [notification.userInfo[kUserInfoKeyRecordingToPlayIndex] integerValue];
-    NSInteger sectionIndex = 0;
+    NSString *pressedRecordingsUUIDString = notification.userInfo[kUserInfoKeyRecordingToPlayUUIDString];
+    NSIndexPath *pressedRecordingsIndexPath;
     
-    while (searching) {
-        RecordingsSection *sectionToSearch = self.sections[sectionIndex];
-        if (rowIndex < sectionToSearch.numberOfCellModels) {
-            // play recording with section = sectionToSearch and row = rowIndexToPlay
-            searching = NO;
-        } else {
-            sectionIndex++;
-            rowIndex -= sectionToSearch.numberOfCellModels;
+    for (NSUInteger sectionIndex = 0; sectionIndex < self.sections.count; sectionIndex++) {
+        RecordingsSection *section = self.sections[sectionIndex];
+        BOOL shouldBreakOut = NO;
+        
+        for (NSUInteger cellModelIndex = 0; cellModelIndex < section.numberOfCellModels; cellModelIndex++) {
+            RecordingCellModel *recordingCellModel = [section cellModelAtIndex:cellModelIndex];
+            if ([recordingCellModel.recording.uuid.UUIDString isEqualToString:pressedRecordingsUUIDString]) {
+                pressedRecordingsIndexPath = [NSIndexPath indexPathForRow:cellModelIndex inSection:sectionIndex];
+                shouldBreakOut = YES;
+                break;
+            }
         }
+        
+        if (shouldBreakOut) break;
     }
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
+    if (pressedRecordingsIndexPath) {
+        [self tableView:self.tableView didSelectRowAtIndexPath:pressedRecordingsIndexPath];
+    }
 }
 
 #pragma mark - Helper Methods

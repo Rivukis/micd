@@ -1,11 +1,3 @@
-//
-//  DisplayLinkController.m
-//  micd
-//
-//  Created by Timothy Hise on 3/13/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "DisplayLinkController.h"
 #import <QuartzCore/QuartzCore.h>
 

@@ -39,7 +39,6 @@
 		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
 		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
 		D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */; };
-		D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */; };
 		D08D4BEB1AB27EE300949483 /* PopViewAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */; };
 		D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BF01AB407C400949483 /* DisplayLinkController.m */; };
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
@@ -164,8 +163,6 @@
 		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
 		D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCellModel.h; sourceTree = "<group>"; };
 		D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCellModel.m; sourceTree = "<group>"; };
-		D08D4BE61AB2748700949483 /* ViewMovementBehavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewMovementBehavior.h; sourceTree = "<group>"; };
-		D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewMovementBehavior.m; sourceTree = "<group>"; };
 		D08D4BE91AB27EE300949483 /* PopViewAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopViewAnimator.h; path = micd/PopViewAnimator.h; sourceTree = "<group>"; };
 		D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopViewAnimator.m; path = micd/PopViewAnimator.m; sourceTree = "<group>"; };
 		D08D4BEF1AB407C400949483 /* DisplayLinkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayLinkController.h; sourceTree = "<group>"; };
@@ -487,8 +484,6 @@
 				D034F0411AA148680059028D /* RecordingsSection.m */,
 				D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */,
 				D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */,
-				D08D4BE61AB2748700949483 /* ViewMovementBehavior.h */,
-				D08D4BE71AB2748700949483 /* ViewMovementBehavior.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -715,7 +710,6 @@
 				D034F0421AA148680059028D /* RecordingsSection.m in Sources */,
 				D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */,
 				D0BFED401ACE4BD700E12526 /* SettingsView.m in Sources */,
-				D08D4BE81AB2748700949483 /* ViewMovementBehavior.m in Sources */,
 				22B359A61AC75F2E0037107C /* ProgressBarView.m in Sources */,
 				D0B0DE471A8DA10200C88773 /* GearsImageView.m in Sources */,
 				D05D75721A79AAA40050A49C /* main.m in Sources */,

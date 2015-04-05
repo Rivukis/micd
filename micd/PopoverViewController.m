@@ -1,11 +1,3 @@
-//
-//  PopoverViewController.m
-//  micd
-//
-//  Created by Tim on 4/4/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "PopoverViewController.h"
 #import "UIColor+Palette.h"
 

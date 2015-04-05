@@ -1,11 +1,3 @@
-//
-//  CustomFrames.m
-//  micd
-//
-//  Created by Brian Radebaugh on 2/15/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "FramesController.h"
 
 @implementation FramesController

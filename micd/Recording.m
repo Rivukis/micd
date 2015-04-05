@@ -1,11 +1,3 @@
-//
-//  CKRecording.m
-//  Recorder
-//
-//  Created by Brian Radebaugh on 12/5/14.
-//  Copyright (c) 2014 CleverKnot. All rights reserved.
-//
-
 #import "Recording.h"
 #import "Constants.h"
 #import <AVFoundation/AVFoundation.h>

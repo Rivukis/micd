@@ -1,11 +1,3 @@
-//
-//  DataSource.m
-//  micd
-//
-//  Created by Timothy Hise on 2/13/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "DataSourceController.h"
 #import "FakesForProject.h"
 #import "Constants.h"

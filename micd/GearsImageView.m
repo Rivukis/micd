@@ -1,11 +1,3 @@
-//
-//  GearsImageView.m
-//  micd
-//
-//  Created by Timothy Hise on 2/12/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "GearsImageView.h"
 #import "WireTapStyleKit.h"
 #import "UIColor+Palette.h"

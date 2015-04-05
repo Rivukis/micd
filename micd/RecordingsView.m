@@ -1,11 +1,3 @@
-//
-//  RecordingsView.m
-//  micd
-//
-//  Created by Timothy Hise on 3/15/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "RecordingsView.h"
 
 @implementation RecordingsView

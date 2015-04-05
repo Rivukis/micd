@@ -1,15 +1,9 @@
-//
-//  Factory.m
-//  micd
-//
-//  Created by Brian Radebaugh on 3/27/15.
-//  Copyright (c) 2015 CleverKnot. All rights reserved.
-//
-
 #import "Factory.h"
+#import "Constants.h"
 #import "RecordingsSection.h"
 #import "RecordingCellModel.h"
 #import "Recording.h"
+#import "DataSourceController.h"
 
 @interface RecordingsSection (Private)
 @property (nonatomic, strong) NSMutableArray *cellModels;
@@ -85,6 +79,31 @@
     }
     
     return [assemblingSections copy];
+}
+
++ (NSArray *)arrayOfRecordingsForWatch {
+    NSMutableArray *recordingsListForWatch = [NSMutableArray array];
+    DataSourceController *dataSourceController = [DataSourceController sharedDataSource];
+    NSInteger numberOfRecordingsToSend = dataSourceController.numberOfRecordings <= kWatchExtNumberOfRecordingsShown
+    ? dataSourceController.numberOfRecordings
+    : kWatchExtNumberOfRecordingsShown;
+    
+    for (NSInteger i = 0; i < numberOfRecordingsToSend; i++) {
+        Recording *recording = dataSourceController.recordings[i];
+        NSString *uuidString = recording.uuid.UUIDString;
+        NSString *recordingTitle;
+        
+        if (recording.title.length > 0) {
+            recordingTitle = recording.title;
+        } else {
+            recordingTitle = recording.dateAsString;
+        }
+        
+        [recordingsListForWatch addObject:@{kWatchExtKeyRecordingsListKeyName: recordingTitle,
+                                            kWatchExtKeyRecordingsListKeyUUID: uuidString}];
+    }
+    
+    return [recordingsListForWatch copy];
 }
 
 @end
