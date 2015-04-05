@@ -16,6 +16,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *rememberRecordingLocationLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *startRecordingOnLaunchSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *startRecordingOnLaunchLabel;
+@property (weak, nonatomic) IBOutlet UILabel *maxRecordingLengthLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *lengthSegmentedControl;
+@property (weak, nonatomic) IBOutlet UILabel *autoStartRecAfterMaxLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *autoStartRecAfterMaxSwitch;
 
 @property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
 @end
@@ -32,7 +36,7 @@
 
 -(void)viewDidLayoutSubviews {
     if (self.isFirstTimeLayingOutSubviews) {
-        ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton, self.rememberRecordingLocationSwitch, self.startRecordingOnLaunchSwitch];
+        ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton, self.rememberRecordingLocationSwitch, self.startRecordingOnLaunchSwitch, self.lengthSegmentedControl, self.autoStartRecAfterMaxSwitch];
         ((SettingsView *)self.view).settingsView = self.view;
         
         self.isFirstTimeLayingOutSubviews = NO;
@@ -45,9 +49,16 @@
     self.noButton.backgroundColor = [UIColor vibrantBlue];
     self.yesButton.backgroundColor = [UIColor vibrantBlue];
     self.rememberRecordingLocationSwitch.onTintColor = [UIColor vibrantBlue];
+    self.rememberRecordingLocationSwitch.tintColor = [UIColor vibrantBlue];
     self.startRecordingOnLaunchSwitch.onTintColor = [UIColor vibrantBlue];
-    self.rememberRecordingLocationLabel.textColor = [UIColor vibrantBlue];
-    self.startRecordingOnLaunchLabel.textColor = [UIColor vibrantBlue];
+    self.startRecordingOnLaunchSwitch.tintColor = [UIColor vibrantBlue];
+    self.rememberRecordingLocationLabel.textColor = [UIColor vibrantLightBlueText];
+    self.startRecordingOnLaunchLabel.textColor = [UIColor vibrantLightBlueText];
+    self.maxRecordingLengthLabel.textColor = [UIColor vibrantLightBlueText];
+    self.autoStartRecAfterMaxLabel.textColor = [UIColor vibrantLightBlueText];
+    self.autoStartRecAfterMaxSwitch.onTintColor = [UIColor vibrantBlue];
+    self.autoStartRecAfterMaxSwitch.tintColor = [UIColor vibrantBlue];
+    self.lengthSegmentedControl.tintColor = [UIColor vibrantLightBlueText];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.startRecordingOnLaunchSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
