@@ -80,7 +80,6 @@ BOOL const useEnhancedRecorder = NO;
     }
     
     if (self.recordingState == RecorderControllerStatePaused || self.recordingState == RecorderControllerStateStopped) {
-        [self.audioSession setActive:YES error:nil];
         [self.audioRecorder record];
         self.recordingState = RecorderControllerStateRecording;
     }
