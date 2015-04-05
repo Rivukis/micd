@@ -216,6 +216,7 @@ RecordingCellDelegate>
             // play recording with section = sectionToSearch and row = rowIndexToPlay
             searching = NO;
         } else {
+            sectionIndex++;
             rowIndex -= sectionToSearch.numberOfCellModels;
         }
     }
