@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, PlayerControllerState) {
 @property (nonatomic, assign, readonly) NSString *displayableCurrentTime;
 
 + (PlayerController *)sharedPlayer;
+- (instancetype)init NS_UNAVAILABLE;
 
 - (void)loadRecording:(Recording *)recording;
 - (void)playAudio;

@@ -3,10 +3,10 @@
 #import "Recording.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "Constants.h"
+#import "AudioSessionController.h"
 
 @interface PlayerController () <AVAudioPlayerDelegate>
 
-@property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 @property (strong, nonatomic, readwrite) Recording *loadedRecording;
@@ -33,8 +33,7 @@
 - (instancetype)init_common {
     self = [super init];
     if (self) {
-        _audioSession = [AVAudioSession sharedInstance];
-        [_audioSession setActive:YES error:nil];
+        
     }
     return self;
 }
@@ -57,16 +56,7 @@
 }
 
 - (void)playAudio {
-    AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
-    [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
-    for (AVAudioSessionPortDescription* desc in [route outputs]) {
-        if ([[desc portType] isEqualToString:AVAudioSessionPortBuiltInReceiver]) {
-            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-        }
-    }
-    
+    [[AudioSessionController sharedAudioSessionController] setupAudioSession];
     
     if (self.secondsCompleted >= self.loadedRecording.lengthAsTimeInterval) {
         [self setPlaybackTimeInterval:0.f];

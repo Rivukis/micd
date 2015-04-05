@@ -15,6 +15,7 @@
 @property (strong, nonatomic, readonly) NSMutableArray *recordings;
 
 + (DataSourceController *)sharedDataSource;
+- (instancetype)init NS_UNAVAILABLE;
 
 - (void)saveRecording:(Recording *)recording;
 - (void)deleteRecording:(Recording *)recording;

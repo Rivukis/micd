@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class AVAudioSession;
 @class Recording;
 
 typedef NS_ENUM(NSInteger, RecorderControllerState) {
@@ -21,10 +20,8 @@ typedef NS_ENUM(NSInteger, RecorderControllerState) {
 
 @interface RecorderController : NSObject
 
-//- (instancetype)initWithAudioSession:(AVAudioSession *)session;
-//     //default init calls this init method with shared audio session
-
 + (RecorderController *)sharedRecorder;
+- (instancetype)init NS_UNAVAILABLE;
 
 @property (nonatomic, assign, readonly) RecorderControllerState recordingState;
 

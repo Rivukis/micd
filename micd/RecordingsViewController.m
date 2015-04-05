@@ -166,6 +166,10 @@ RecordingCellDelegate>
     }
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Notification Methods
 
 - (void)startObservingNotifications {
@@ -177,19 +181,6 @@ RecordingCellDelegate>
 
 - (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
     AVAudioSessionInterruptionType interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue];
-    
-//    if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
-//        if (self.playerController.playerState == PlayerControllerStatePlaying) {
-//            [self pausePlaybackShouldAnimate:NO];
-//            self.interruptionOccuredWhilePlaying = YES;
-//        }
-//    } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
-//        if (self.interruptionOccuredWhilePlaying && self.playerController.playerState != PlayerControllerStatePlaying) {
-//            [self playPlaybackShouldAnimatePlayButton:YES];
-//        }
-//        self.interruptionOccuredWhilePlaying = NO;
-//    }
-    NSLog(@"%lu", interruptionType);
     
     switch (interruptionType) {
         case AVAudioSessionInterruptionTypeBegan:

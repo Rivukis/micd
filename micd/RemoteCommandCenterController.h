@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, RemoteCommandCenterControllerState) {
 @property (nonatomic, weak) id<RemoteCommandCenterControllerDelegate> delegate;
 
 + (RemoteCommandCenterController *)sharedRCCController;
+- (instancetype)init NS_UNAVAILABLE;
 
 - (void)showRemoteTitle:(NSString *)title createdDate:(NSString *)date duration:(NSNumber *)duration elapsedTime:(NSNumber *)elapsedTime forstate:(RemoteCommandCenterControllerState)state;
 - (void)showRemoteElapsedPlaybackTime:(NSNumber *)time;

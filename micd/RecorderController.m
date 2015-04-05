@@ -15,7 +15,6 @@
 
 @property (nonatomic, assign, readwrite) RecorderControllerState recordingState;
 
-@property (nonatomic, strong) AVAudioSession *audioSession;
 @property (nonatomic, strong) AVAudioRecorder *audioRecorder;
 @property (nonatomic, strong) NSFileManager *fileManager;
 
@@ -64,9 +63,6 @@ BOOL const useEnhancedRecorder = NO;
         [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_savedFilePath] error:nil];
         [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_concatenatedFilePath] error:nil];
         
-        _audioSession = [AVAudioSession sharedInstance];
-        [_audioSession setActive:YES error:nil];
-        
         _audioRecorder = [self customRecorder];
         _audioRecorder.delegate = self;
         _recordingState = RecorderControllerStateStopped;
@@ -74,42 +70,6 @@ BOOL const useEnhancedRecorder = NO;
     }
     return self;
 }
-
-//----------------- old stuff
-
-//- (instancetype)init {
-//    AVAudioSession *session = [AVAudioSession sharedInstance];
-//    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-//    [session setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-//    return [self initWithAudioSession:session];
-//}
-//
-//- (instancetype)initWithAudioSession:(AVAudioSession *)session {
-//    self = [super init];
-//    if (self) {
-//        _fileManager = [[NSFileManager alloc] init];
-//        
-//        NSString *documentsDirectory = [Constants documentsDirectory];
-//        _primaryFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderPrimaryAudioFile];
-//        _savedFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderSavedAudioFileName];
-//        _concatenatedFilePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, kRecorderConcatenatedAudioFileName];
-//        
-//        NSLog(@"%@", _primaryFilePath);
-//        
-//        [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_primaryFilePath] error:nil];
-//        [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_savedFilePath] error:nil];
-//        [_fileManager removeItemAtURL:[NSURL fileURLWithPath:_concatenatedFilePath] error:nil];
-//        
-//        _recordingState = RecorderControllerStateStopped;
-//        _audioSession = session;
-//        [_audioSession setActive:YES error:nil];
-//        _audioRecorder = [self customRecorder];
-//        _audioRecorder.delegate = self;
-//        [_audioRecorder prepareToRecord];
-//        
-//    }
-//    return self;
-//}
 
 #pragma mark - Recording Methods
 

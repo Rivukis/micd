@@ -1,11 +1,11 @@
 #import "AppDelegate.h"
-#import <AVFoundation/AVAudioSession.h>
 #import "Constants.h"
 #import "RecorderController.h"
 #import "PlayerController.h"
 #import "DataSourceController.h"
 #import "FramesController.h"
 #import "VersionController.h"
+#import "AudioSessionController.h"
 
 @interface AppDelegate ()
 
@@ -27,8 +27,7 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [self setupAudioSession];
-    [self startObservingNotifications];
+    [[AudioSessionController sharedAudioSessionController] setupAudioSession];
     
     if (self.fireDidBecomeActiveNotification) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyApplicationDidBecomeActive object:nil];
@@ -47,40 +46,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [[DataSourceController sharedDataSource] saveData];
-}
-
-#pragma mark - Helper Methods
-
-- (void)setupAudioSession {
-    AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
-    [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
-}
-
-- (void)setAudioSessionOutputToSpeakersIfCurrentlySetToReciever {
-    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
-    for (AVAudioSessionPortDescription* desc in [route outputs]) {
-        if ([[desc portType] isEqualToString:AVAudioSessionPortBuiltInReceiver]) {
-            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-        }
-    }
-}
-
-#pragma mark - Notification Methods
-
-- (void)startObservingNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(responseToAVAudioSessionRouteChange:)
-                                                 name:AVAudioSessionRouteChangeNotification
-                                               object:nil];
-}
-
-- (void)responseToAVAudioSessionRouteChange:(NSNotification *)notification {
-    AVAudioSessionRouteChangeReason changeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
-    if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
-        [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
-    }
 }
 
 #pragma mark - WatchKit Methods

@@ -17,6 +17,7 @@
 		7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */; };
 		7A581D501ACE4373008828CC /* RecordingsInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */; };
 		7A581D531ACE5423008828CC /* RecordingRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D521ACE5423008828CC /* RecordingRowController.m */; };
+		7A581D561AD0E459008828CC /* AudioSessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D551AD0E459008828CC /* AudioSessionController.m */; };
 		7A96606A1AC5E6C500439660 /* Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9660691AC5E6C500439660 /* Factory.m */; };
 		7AC290B61A8EF0100085B927 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* PlayerController.m */; };
@@ -119,6 +120,8 @@
 		7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsInterfaceController.m; sourceTree = "<group>"; };
 		7A581D511ACE5423008828CC /* RecordingRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingRowController.h; sourceTree = "<group>"; };
 		7A581D521ACE5423008828CC /* RecordingRowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingRowController.m; sourceTree = "<group>"; };
+		7A581D541AD0E459008828CC /* AudioSessionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSessionController.h; sourceTree = "<group>"; };
+		7A581D551AD0E459008828CC /* AudioSessionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioSessionController.m; sourceTree = "<group>"; };
 		7A9660681AC5E6C500439660 /* Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Factory.h; sourceTree = "<group>"; };
 		7A9660691AC5E6C500439660 /* Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Factory.m; sourceTree = "<group>"; };
 		7AC290A61A8EF0100085B927 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = micd/Constants.h; sourceTree = "<group>"; };
@@ -461,6 +464,8 @@
 				7AC290AB1A8EF0100085B927 /* RecorderController.m */,
 				7A146A881ACA4260004C55A2 /* RemoteCommandCenterController.h */,
 				7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */,
+				7A581D541AD0E459008828CC /* AudioSessionController.h */,
+				7A581D551AD0E459008828CC /* AudioSessionController.m */,
 				7A301EEF1AC75AE600FC900D /* VersionController.h */,
 				7A301EF01AC75AE600FC900D /* VersionController.m */,
 				D0BFED411ACE517A00E12526 /* DismissingAnimationController.h */,
@@ -694,6 +699,7 @@
 				7A301EF11AC75AE600FC900D /* VersionController.m in Sources */,
 				D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */,
 				7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */,
+				7A581D561AD0E459008828CC /* AudioSessionController.m in Sources */,
 				7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */,
 				D0BFAD291ABE351A0051F0CF /* NSObject+Blocks.m in Sources */,
 				7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */,
