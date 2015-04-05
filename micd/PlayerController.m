@@ -57,6 +57,17 @@
 }
 
 - (void)playAudio {
+    AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
+    [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortBuiltInReceiver]) {
+            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+        }
+    }
+    
+    
     if (self.secondsCompleted >= self.loadedRecording.lengthAsTimeInterval) {
         [self setPlaybackTimeInterval:0.f];
     }

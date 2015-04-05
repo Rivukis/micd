@@ -18,6 +18,7 @@
 #import "Constants.h"
 #import "Factory.h"
 #import "RemoteCommandCenterController.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface RecordingsViewController ()
 <UITableViewDataSource,
@@ -62,6 +63,7 @@ RecordingCellDelegate>
 @property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
 
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
+@property (nonatomic, assign) BOOL interruptionOccuredWhilePlaying;
 
 @property (strong, nonatomic) NSIndexPath *focusedCellIndexPath;
 @property (strong, nonatomic) RecordingCell *editingCell;
@@ -136,6 +138,8 @@ RecordingCellDelegate>
     
     self.sections = [[Factory arrayOfSectionsForRecordings:self.dataSource.recordings ascending:NO cellModelDelegate:self] mutableCopy];
     [self reloadDataWithNewRecording:nil];
+    
+    [self startObservingNotifications];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -161,6 +165,52 @@ RecordingCellDelegate>
         self.progressBarWidth.constant = 0;
     }
 }
+
+#pragma mark - Notification Methods
+
+- (void)startObservingNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToAVAudioSessionInterruption:)
+                                                 name:AVAudioSessionInterruptionNotification
+                                               object:nil];
+}
+
+- (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
+    AVAudioSessionInterruptionType interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue];
+    
+//    if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
+//        if (self.playerController.playerState == PlayerControllerStatePlaying) {
+//            [self pausePlaybackShouldAnimate:NO];
+//            self.interruptionOccuredWhilePlaying = YES;
+//        }
+//    } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
+//        if (self.interruptionOccuredWhilePlaying && self.playerController.playerState != PlayerControllerStatePlaying) {
+//            [self playPlaybackShouldAnimatePlayButton:YES];
+//        }
+//        self.interruptionOccuredWhilePlaying = NO;
+//    }
+    NSLog(@"%lu", interruptionType);
+    
+    switch (interruptionType) {
+        case AVAudioSessionInterruptionTypeBegan:
+            if (self.playerController.playerState == PlayerControllerStatePlaying) {
+                NSLog(@"pause playback and set bool");
+                [self pausePlaybackShouldAnimate:NO];
+                self.interruptionOccuredWhilePlaying = YES;
+            }
+            break;
+        case AVAudioSessionInterruptionTypeEnded:
+            if (self.interruptionOccuredWhilePlaying && self.playerController.playerState != PlayerControllerStatePlaying) {
+                [self playPlaybackShouldAnimatePlayButton:NO];
+                NSLog(@"play playback");
+            }
+            self.interruptionOccuredWhilePlaying = NO;
+        default:
+            break;
+    }
+}
+
+#pragma mark - Helper Methods
 
 - (void)reloadDataWithNewRecording:(Recording *)recording {
     self.progressBarWidth.constant = 0;
