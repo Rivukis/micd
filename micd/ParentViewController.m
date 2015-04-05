@@ -130,7 +130,7 @@
 
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
     CGRect frame = self.micdBackgroundView.frame;
-    frame.origin.y += translation.y * .67;
+    frame.origin.y += translation.y * .835;
     self.micdBackgroundView.frame = frame;
     
     [self.homeViewController adjustFrameBasedOnTranslation:translation];
@@ -154,7 +154,7 @@
             break;
     }
     
-    futureFrame.origin.y *= 0.67f;
+    futureFrame.origin.y *= 0.835f;
     
     return futureFrame;
 }

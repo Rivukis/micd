@@ -33,18 +33,16 @@
 }
 
 - (IBAction)noTapped:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-    }];
+    [self.delegate finishedPoppingOver:self];
 }
 
 - (IBAction)yesTapped:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
     if (self.didSayYes) {
         //leaving us a review. woot 5 stars
+        //be sure to call finished delegate
     } else {
-        //sending us an email
+        [self.delegate showMailComposer:self];
+        //leaving us some email feedback
     }
 }
 

@@ -101,11 +101,8 @@ RecordingCellDelegate>
     self.totalPlaybackTimeLabel.textColor = [UIColor vibrantLightBlueText];
     
     self.playButton.backgroundColor = [UIColor clearColor];
-    self.playButton.alpha = 0;
     self.rewindButton.backgroundColor = [UIColor clearColor];
-    self.rewindButton.alpha = 0;
     self.forwardButton.backgroundColor = [UIColor clearColor];
-    self.forwardButton.alpha = 0;
     [self.playButton setBackgroundImage:[WireTapStyleKit imageOfPlayButton] forState:UIControlStateNormal];
     [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
     [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
@@ -160,7 +157,7 @@ RecordingCellDelegate>
         [self.progressTimeIndicatorView addGestureRecognizer:gesture];
         self.isFirstTimeLayingOutSubviews = NO;
         
-        self.progressBarBorder.image = [MicdStyleKit imageOfProgressBar];
+        self.progressBarBorder.image = [WireTapStyleKit imageOfProgressBarNoBorder];
         self.progressBar.backgroundColor = [UIColor vibrantBlue];
         self.progressBarWidth.constant = 0;
     }
@@ -340,10 +337,10 @@ RecordingCellDelegate>
     frame.origin.y += translation.y;
     self.view.frame = frame;
 
-    CGFloat alphaDelta = 1+(frame.origin.y/200);
-    self.playButton.alpha = alphaDelta;
-    self.rewindButton.alpha = alphaDelta;
-    self.forwardButton.alpha = alphaDelta;
+//    CGFloat alphaDelta = 1+(frame.origin.y/200);
+//    self.playButton.alpha = alphaDelta;
+//    self.rewindButton.alpha = alphaDelta;
+//    self.forwardButton.alpha = alphaDelta;
 }
 
 #pragma mark - Player Buttons
