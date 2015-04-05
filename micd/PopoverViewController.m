@@ -34,9 +34,9 @@
     self.textLabel.textColor = [UIColor vibrantLightBlueText];
     
     if (self.didSayYes) {
-        self.textLabel.text = @"Thanks you sexy sonofa bitch. We really appreciate that you really appreciate our app. If you would please take a few moments of your time and rate our app, we would give you a handy.";
+        self.textLabel.text = @"Thanks you sexy sonofa bitch. We really appreciate that you really appreciate our app. If you would please take a few moments of your time and rate our app, we would give you a handy...tip";
     } else {
-        self.textLabel.text = @"HMM. obviously you dont have even a smidge of taste. If you would like to leave your idiotic feedback, then please send us an email...you piece of shit.                   \n\n            Not reading it anyway";
+        self.textLabel.text = @"HMMM, Obviously you dont have even a smidge of taste. If you would like to leave your idiotic feedback, then please send us an email...you piece of shit.                   \n\n            Not reading it anyway";
     }
 }
 
