@@ -23,6 +23,8 @@
     
     UIView *fromView = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].view;
     
+    POPSpringAnimation *backgroundColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerBackgroundColor];
+    backgroundColor.toValue = [UIColor colorWithWhite:0 alpha:0];
     
     POPBasicAnimation *closeAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
     closeAnimation.toValue = @(toView.layer.position.y * 3);
@@ -30,13 +32,8 @@
         [transitionContext completeTransition:YES];
     }];
     
-    POPSpringAnimation *scaleDownAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-    scaleDownAnimation.springBounciness = 20;
-    scaleDownAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(0, 0)];
-    
     [fromView.layer pop_addAnimation:closeAnimation forKey:@"closeAnimation"];
-    [fromView.layer pop_addAnimation:scaleDownAnimation forKey:@"scaleDown"];
-    
+    [transitionContext.containerView.layer pop_addAnimation:backgroundColor forKey:@"background"];
 }
 
 @end

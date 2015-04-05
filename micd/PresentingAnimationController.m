@@ -24,35 +24,31 @@
     UIView *toView = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey].view;
     toView.frame = CGRectMake(0,
                               0,
-                              CGRectGetWidth(transitionContext.containerView.bounds) - 50.f,
-                              CGRectGetHeight(transitionContext.containerView.bounds) - (CGRectGetHeight(transitionContext.containerView.bounds)/3));
+                              CGRectGetWidth(transitionContext.containerView.bounds) - 20.f,
+                              CGRectGetHeight(transitionContext.containerView.bounds) - (CGRectGetHeight(transitionContext.containerView.bounds)/2));
     
-    transitionContext.containerView.backgroundColor = [UIColor redColor];
-    
-    CGPoint point = CGPointMake(transitionContext.containerView.center.x, transitionContext.containerView.center.y);
+    CGPoint point = CGPointMake(transitionContext.containerView.center.x, transitionContext.containerView.center.y + CGRectGetHeight(transitionContext.containerView.frame));
     toView.center = point;
-    
-    
     
     [transitionContext.containerView addSubview:toView];
     
-    CGRect newFrame = transitionContext.containerView.frame;
-    newFrame.origin.y += ((CGRectGetHeight(transitionContext.containerView.bounds)) - CGRectGetHeight(toView.bounds))/2;
-    transitionContext.containerView.frame = newFrame;
+    POPSpringAnimation *backgroundColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerBackgroundColor];
+    backgroundColor.toValue = [UIColor colorWithWhite:0 alpha:.7];
     
     POPSpringAnimation *positionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    positionAnimation.toValue = @(transitionContext.containerView.center.y);
-    positionAnimation.springBounciness = 10;
+    positionAnimation.toValue = @(transitionContext.containerView.center.y + CGRectGetHeight(transitionContext.containerView.frame)/4 -10);
+    positionAnimation.springBounciness = 3;
     [positionAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
         [transitionContext completeTransition:YES];
     }];
     
     POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-    scaleAnimation.springBounciness = 20;
+    scaleAnimation.springBounciness = 15;
     scaleAnimation.fromValue = [NSValue valueWithCGPoint:CGPointMake(1.2, 1.4)];
     
     [toView.layer pop_addAnimation:positionAnimation forKey:@"positionAnimation"];
     [toView.layer pop_addAnimation:scaleAnimation forKey:@"scaleAnimation"];
+    [transitionContext.containerView.layer pop_addAnimation:backgroundColor forKey:@"backgroundColor"];
     
 }
 

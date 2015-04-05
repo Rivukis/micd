@@ -70,13 +70,11 @@
 }
 
 - (IBAction)noTapped:(id)sender {
-    [self addButtonBounceAnimationToView:self.noButton];
-    [self setupPopoverView];
+    [self setupPopoverViewForAnswer:NO];
 }
 
 - (IBAction)yesTapped:(id)sender {
-    [self addButtonBounceAnimationToView:self.yesButton];
-    [self setupPopoverView];
+    [self setupPopoverViewForAnswer:YES];
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
@@ -120,11 +118,16 @@
 
 #pragma mark - Transitioning Delegate
 
-- (void)setupPopoverView {
+- (void)setupPopoverViewForAnswer:(BOOL)answer {
     PopoverViewController *popoverVC = [self.storyboard instantiateViewControllerWithIdentifier:@"popover"];
+    popoverVC.didSayYes = answer;
     popoverVC.transitioningDelegate = self;
     popoverVC.modalPresentationStyle = UIModalPresentationCustom;
-    [self presentViewController:popoverVC animated:YES completion:nil];
+    [self presentViewController:popoverVC animated:YES completion:^{
+        self.loveMicdImageView.hidden = YES;
+        self.yesButton.hidden = YES;
+        self.noButton.hidden = YES;
+    }];
 }
 
 - (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
