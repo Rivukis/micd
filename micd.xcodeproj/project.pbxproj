@@ -18,6 +18,8 @@
 		7A581D501ACE4373008828CC /* RecordingsInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */; };
 		7A581D531ACE5423008828CC /* RecordingRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D521ACE5423008828CC /* RecordingRowController.m */; };
 		7A581D561AD0E459008828CC /* AudioSessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D551AD0E459008828CC /* AudioSessionController.m */; };
+		7A72932C1AD1FADD0001B36C /* UIColor+PalettePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */; };
+		7A72932D1AD1FD270001B36C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
 		7A96606A1AC5E6C500439660 /* Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9660691AC5E6C500439660 /* Factory.m */; };
 		7AC290B61A8EF0100085B927 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7AC290B71A8EF0100085B927 /* PlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A91A8EF0100085B927 /* PlayerController.m */; };
@@ -744,6 +746,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A581D531ACE5423008828CC /* RecordingRowController.m in Sources */,
+				7A72932D1AD1FD270001B36C /* UIColor+Palette.m in Sources */,
+				7A72932C1AD1FADD0001B36C /* UIColor+PalettePicker.m in Sources */,
 				D0BFAD3F1ABF9C9B0051F0CF /* RecorderInterfaceController.m in Sources */,
 				7A301EF21AC7653100FC900D /* Constants.m in Sources */,
 				7A581D501ACE4373008828CC /* RecordingsInterfaceController.m in Sources */,

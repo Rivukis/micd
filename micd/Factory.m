@@ -4,7 +4,7 @@
 #import "RecordingCellModel.h"
 #import "Recording.h"
 #import "DataSourceController.h"
-
+#import "PlayerController.h"
 @interface RecordingsSection (Private)
 @property (nonatomic, strong) NSMutableArray *cellModels;
 @property (nonatomic, strong) NSDateComponents *dateComponents;
@@ -84,6 +84,7 @@
 + (NSArray *)arrayOfRecordingsForWatch {
     NSMutableArray *recordingsListForWatch = [NSMutableArray array];
     DataSourceController *dataSourceController = [DataSourceController sharedDataSource];
+    PlayerController *playerController = [PlayerController sharedPlayer];
     NSInteger numberOfRecordingsToSend = dataSourceController.numberOfRecordings <= kWatchExtNumberOfRecordingsShown
     ? dataSourceController.numberOfRecordings
     : kWatchExtNumberOfRecordingsShown;
@@ -91,7 +92,8 @@
     for (NSInteger i = 0; i < numberOfRecordingsToSend; i++) {
         Recording *recording = dataSourceController.recordings[i];
         NSString *uuidString = recording.uuid.UUIDString;
-        NSString *recordingTitle;
+        NSString *recordingTitle = @"";
+        BOOL isLoaded = NO;
         
         if (recording.title.length > 0) {
             recordingTitle = recording.title;
@@ -99,9 +101,13 @@
             recordingTitle = recording.dateAsString;
         }
         
+        if (recording == playerController.loadedRecording) {
+            isLoaded = YES;
+        }
+        
         [recordingsListForWatch addObject:@{kWatchExtKeyRecordingsListKeyName: recordingTitle,
                                             kWatchExtKeyRecordingsListKeyUUID: uuidString,
-                                            kWatchExtKeyRecordingsListIsPlaying: @(NO)}];
+                                            kWatchExtKeyRecordingsListIsLoaded: @(isLoaded)}];
     }
     
     return [recordingsListForWatch copy];

@@ -16,7 +16,6 @@ extern NSString *const kUserDefaultsKeyCurrentVersion;
 extern NSString *const kUserDefaultsKeyMainColor;
 extern NSString *const kUserDefaultsKeyStartRecordingOnAppDidBecomeActive;
 extern NSString *const kUserDefaultsKeyRecordingsSavePlaybackPosition;
-extern NSString *const kUserDefaultsKeyWatchTableViewInfoIsOutOfSync;
 
 // WatchKit shit
 extern NSString *const kWatchExtKeyMessageType;
@@ -30,8 +29,7 @@ extern NSString *const kWatchExtKeyIsRecording;
 extern NSString *const kWatchExtKeyRecordingsList;
 extern NSString *const kWatchExtKeyRecordingsListKeyName;
 extern NSString *const kWatchExtKeyRecordingsListKeyUUID;
-extern NSString *const kWatchExtKeyRecordingsListIsPlaying;
-extern NSString *const kWatchExtKeyRecordingsListChangedWhileShowingOnWatch;
+extern NSString *const kWatchExtKeyRecordingsListIsLoaded;
 extern NSString *const kWatchExtKeyPlayRecordingWithUUIDString;
 
 // User Info shit

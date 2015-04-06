@@ -68,7 +68,6 @@
     }
     
     if ([messageType isEqualToString:kWatchExtKeyMessageTypeGetRecordingsList]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
         replyDict[kWatchExtKeyRecordingsList] = [Factory arrayOfRecordingsForWatch];
     }
     
@@ -88,13 +87,7 @@
              so no need to update info since it will auto refresh when 
              going to recordings screen in the future
              */
-            BOOL dataOnWatchIsOld = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
-            
-            replyDict[kWatchExtKeyRecordingsListChangedWhileShowingOnWatch] = @(dataOnWatchIsOld);
-            if (dataOnWatchIsOld) {
-                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
-                replyDict[kWatchExtKeyRecordingsList] = [Factory arrayOfRecordingsForWatch];
-            }
+            replyDict[kWatchExtKeyRecordingsList] = [Factory arrayOfRecordingsForWatch];
         }
     }
     

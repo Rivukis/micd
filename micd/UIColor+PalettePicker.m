@@ -4,7 +4,7 @@
 
 @implementation UIColor (PalettePicker)
 
-- (UIColor *)colorWithType:(ColorType)colorType {
++ (UIColor *)colorWithType:(ColorType)colorType {
     ColorOption currentColor = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMainColor];
     
     switch (currentColor) {
@@ -12,7 +12,7 @@
     }
 }
 
-- (UIColor *)blueColorWithType:(ColorType)colorType {
++ (UIColor *)blueColorWithType:(ColorType)colorType {
     switch (colorType) {
         case ColorTypeDefault:              return [UIColor vibrantBlue];
         case ColorTypeDefaultHalfOpacity:   return [UIColor vibrantBlueHalfOpacity];

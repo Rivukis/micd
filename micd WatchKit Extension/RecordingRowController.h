@@ -3,6 +3,7 @@
 
 @interface RecordingRowController : NSObject
 
+@property (weak, nonatomic) IBOutlet WKInterfaceGroup *backgroundGroup;
 @property (weak, nonatomic) IBOutlet WKInterfaceLabel *recordingTitleLabel;
 
 @end

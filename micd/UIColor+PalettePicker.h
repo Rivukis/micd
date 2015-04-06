@@ -18,6 +18,6 @@ typedef NS_ENUM(NSInteger, ColorType) {
 
 @interface UIColor (PalettePicker)
 
-- (UIColor *)colorWithType:(ColorType)colorType;
++ (UIColor *)colorWithType:(ColorType)colorType;
 
 @end

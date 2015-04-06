@@ -644,11 +644,6 @@ RecordingCellDelegate>
         if (cellModel == self.focusedCellModel) {
             [self setplaybackTitleLabelText:title];
         }
-        
-        NSUInteger indexOfRecording = [self.dataSource.recordings indexOfObject:cellModel.recording];
-        if (indexOfRecording < kWatchExtNumberOfRecordingsShown) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyWatchTableViewInfoIsOutOfSync];
-        }
     }
 }
 
