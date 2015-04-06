@@ -29,8 +29,11 @@
 #pragma mark - Defaults Methods
 
 + (void)setDefaultsForVersion_1_0 {
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:kUserDefaultsKeyMainColor];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    [[NSUserDefaults standardUserDefaults] setInteger:15*60 forKey:kUserDefaultsKeyMaxRecordingLength];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyAutoStartRecordingAfterMaximumReached];
 }
 
 @end

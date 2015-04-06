@@ -197,6 +197,10 @@ BOOL const useEnhancedRecorder = NO;
     return [self.audioRecorder averagePowerForChannel:0];
 }
 
+- (NSTimeInterval)currentRecordingTime {
+    return self.audioRecorder.currentTime;
+}
+
 - (NSString *)currentRecordingTimeAsString {
     NSInteger lengthInSeconds = trunc(self.audioRecorder.currentTime);
     NSInteger lengthInMinutes = trunc(lengthInSeconds / 60.0f);

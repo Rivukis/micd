@@ -517,6 +517,24 @@ static BOOL const growForLouderNoises = NO;
         
         self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
         
+        NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+        if (self.recorderController.currentRecordingTime > maxRecordingLength) {
+            // TODO: find a way to stop then start recording again
+            
+//            [self recordButtonPressed:self.recordButton];
+            
+//            [self.recorderController pauseRecording];
+//            __weak __typeof(self) weakSelf = self;
+//            [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
+//                if (error) {
+//                    NSLog(@"error retrieving recording: %@", error);
+//                    return;
+//                }
+//                [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+//                [self.recorderController startRecording];
+//            }];
+        }
+        
     } else {
         CGRect presentationFrame = [self.view.layer.presentationLayer frame];
         

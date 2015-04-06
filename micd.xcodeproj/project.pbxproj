@@ -10,7 +10,7 @@
 		22B359A31AC75E850037107C /* MicdStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B359A21AC75E850037107C /* MicdStyleKit.m */; };
 		22B359A61AC75F2E0037107C /* ProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B359A51AC75F2E0037107C /* ProgressBarView.m */; };
 		22B3B94A1AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B3B9491AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.m */; };
-		22D2439C1AD0D87700867992 /* PopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D2439B1AD0D87700867992 /* PopoverViewController.m */; };
+		22D2439C1AD0D87700867992 /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D2439B1AD0D87700867992 /* FeedbackViewController.m */; };
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
 		7A146A8A1ACA4260004C55A2 /* RemoteCommandCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */; };
 		7A301EF11AC75AE600FC900D /* VersionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A301EF01AC75AE600FC900D /* VersionController.m */; };
@@ -111,8 +111,8 @@
 		22B359A51AC75F2E0037107C /* ProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressBarView.m; sourceTree = "<group>"; };
 		22B3B9481AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MicrophoneAccessRequiredViewController.h; sourceTree = "<group>"; };
 		22B3B9491AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MicrophoneAccessRequiredViewController.m; sourceTree = "<group>"; };
-		22D2439A1AD0D87700867992 /* PopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewController.h; sourceTree = "<group>"; };
-		22D2439B1AD0D87700867992 /* PopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverViewController.m; sourceTree = "<group>"; };
+		22D2439A1AD0D87700867992 /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
+		22D2439B1AD0D87700867992 /* FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackViewController.m; sourceTree = "<group>"; };
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A146A881ACA4260004C55A2 /* RemoteCommandCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteCommandCenterController.h; sourceTree = "<group>"; };
 		7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteCommandCenterController.m; sourceTree = "<group>"; };
@@ -424,8 +424,8 @@
 				D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */,
 				D0A427CA1ACE370B00BBC4D6 /* SettingsViewController.h */,
 				D0A427CB1ACE370B00BBC4D6 /* SettingsViewController.m */,
-				22D2439A1AD0D87700867992 /* PopoverViewController.h */,
-				22D2439B1AD0D87700867992 /* PopoverViewController.m */,
+				22D2439A1AD0D87700867992 /* FeedbackViewController.h */,
+				22D2439B1AD0D87700867992 /* FeedbackViewController.m */,
 				22B3B9481AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.h */,
 				22B3B9491AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.m */,
 			);
@@ -733,7 +733,7 @@
 				D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */,
 				D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */,
 				22B359A31AC75E850037107C /* MicdStyleKit.m in Sources */,
-				22D2439C1AD0D87700867992 /* PopoverViewController.m in Sources */,
+				22D2439C1AD0D87700867992 /* FeedbackViewController.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
 				7AC290B61A8EF0100085B927 /* Constants.m in Sources */,
 			);

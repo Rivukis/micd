@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 #import "FramesController.h"
-#import "PopoverViewController.h"
+#import "FeedbackViewController.h"
 
 @interface SettingsViewController : UIViewController <FramesBasedOnStateProtocol>
 

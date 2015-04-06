@@ -16,6 +16,8 @@ NSString *const kUserDefaultsKeyCurrentVersion = @"UserDefaultsKeyCurrentVersion
 NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";
 NSString *const kUserDefaultsKeyStartRecordingOnAppDidBecomeActive = @"UserDefaultsKeyStartRecordingOnAppDidBecomeActive";
 NSString *const kUserDefaultsKeyRecordingsSavePlaybackPosition = @"UserDefaultsKeyRecordingsSavePlaybackPosition";
+NSString *const kUserDefaultsKeyAutoStartRecordingAfterMaximumReached = @"UserDefaultsKeyAutoStartRecordingAfterMaximumReached";
+NSString *const kUserDefaultsKeyMaxRecordingLength = @"UserDefaultsKeyMaxRecordingLength";
 NSString *const kUserDefaultsKeyLoveMicdQuestionAnswered = @"UserDefaultsKeyLoveMicdQuestionAnswered";
 
 // WatchKit shit

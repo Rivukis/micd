@@ -5,11 +5,11 @@
 #import "PopViewAnimator.h"
 #import "PresentingAnimationController.h"
 #import "DismissingAnimationController.h"
-#import "PopoverViewController.h"
+#import "FeedbackViewController.h"
 #import "Constants.h"
 #import <MessageUI/MessageUI.h>
 
-@interface SettingsViewController () <UIViewControllerTransitioningDelegate, MFMailComposeViewControllerDelegate, PopoverDelegate>
+@interface SettingsViewController () <UIViewControllerTransitioningDelegate, MFMailComposeViewControllerDelegate, FeedbackViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *loveMicdImageView;
 @property (weak, nonatomic) IBOutlet UIButton *noButton;
 @property (weak, nonatomic) IBOutlet UIButton *yesButton;
@@ -30,6 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
     
     [self initialSetupOfViews];
     self.isFirstTimeLayingOutSubviews = YES;
@@ -62,6 +63,16 @@
     self.autoStartRecAfterMaxLabel.textColor = [UIColor vibrantLightBlueText];
     
     self.lengthSegmentedControl.tintColor = [UIColor vibrantLightBlueText];
+    NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+    NSInteger maxRecordingLengthMinutes = maxRecordingLength/60;
+    if (maxRecordingLengthMinutes == 5) {
+        self.lengthSegmentedControl.selectedSegmentIndex = 0;
+    } else if (maxRecordingLengthMinutes == 15) {
+        self.lengthSegmentedControl.selectedSegmentIndex = 1;
+    } else if (maxRecordingLengthMinutes == 30) {
+        self.lengthSegmentedControl.selectedSegmentIndex = 2;
+    }
+    
     self.maxRecordingLengthLabel.textColor = [UIColor vibrantLightBlueText];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -84,7 +95,7 @@
     BOOL questionHasBeenAnswered = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
     self.yesButton.hidden = questionHasBeenAnswered;
     self.noButton.hidden = questionHasBeenAnswered;
-    self.sendFeedbackButton.hidden = questionHasBeenAnswered;
+    self.sendFeedbackButton.hidden = !questionHasBeenAnswered;
 }
 
 #pragma mark - User Action Methods
@@ -99,11 +110,24 @@
     [userDefaults setBool:sender.on forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
 }
 
+- (IBAction)maxRecordingLengthSegmentedControl:(UISegmentedControl *)sender {
+    NSString *selectedSegmentTitle = [sender titleForSegmentAtIndex:sender.selectedSegmentIndex];
+    NSInteger maxRecordingLength = [selectedSegmentTitle integerValue] * 60;
+    [[NSUserDefaults standardUserDefaults] setInteger:maxRecordingLength forKey:kUserDefaultsKeyMaxRecordingLength];
+}
+
+- (IBAction)autoStartRecordingAfterMaximumReachedSwitch:(UISwitch *)sender {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:sender.on forKey:kUserDefaultsKeyAutoStartRecordingAfterMaximumReached];
+}
+
 - (IBAction)noTapped:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
     [self setupPopoverViewForAnswer:NO];
 }
 
 - (IBAction)yesTapped:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
     [self setupPopoverViewForAnswer:YES];
 }
 
@@ -153,9 +177,11 @@
 #pragma mark - Transitioning Delegate
 
 - (void)setupPopoverViewForAnswer:(BOOL)answer {
-    PopoverViewController *popoverVC = [self.storyboard instantiateViewControllerWithIdentifier:@"popover"];
-    popoverVC.didSayYes = answer;
-    popoverVC.delegate = self;
+//    FeedbackViewController *popoverVC = [self.storyboard instantiateViewControllerWithIdentifier:@"popover"];
+//    popoverVC.lovesMicd = answer;
+//    popoverVC.delegate = self;
+    
+    FeedbackViewController *popoverVC = [[FeedbackViewController alloc] initWithLovesMicd:answer delegate:self];
     popoverVC.transitioningDelegate = self;
     popoverVC.modalPresentationStyle = UIModalPresentationCustom;
     [self presentViewController:popoverVC animated:YES completion:^{
@@ -172,48 +198,44 @@
     return [[DismissingAnimationController alloc] init];
 }
 
-#pragma mark - Popover delegate
+#pragma mark - FeedbackViewControllerDelegate
 
-- (void)finishedPoppingOver:(PopoverViewController *)popoverViewController {
-    self.yesButton.hidden = YES;
-    self.noButton.hidden = YES;
-    self.sendFeedbackButton.hidden = NO;
+- (void)nevermind:(FeedbackViewController *)popoverViewController {
+    [self refreshFeedBackViews];
     
-    [popoverViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [popoverViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)showMailComposer:(PopoverViewController *)popoverViewController {
+- (void)showMailComposer:(FeedbackViewController *)popoverViewController {
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
         mail.mailComposeDelegate = self;
         [mail setSubject:@"Some thoughts on Mic'd"];
-        [mail setMessageBody:@"" isHTML:NO];
-        [mail setToRecipients:@[@""]];
+        [mail setMessageBody:@"Some Text" isHTML:NO];
+        [mail setToRecipients:@[@"micdfeedback@gmail.com"]];
         
         if (popoverViewController) {
-            [popoverViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
+            [self dismissViewControllerAnimated:YES completion:^{
                 [self presentViewController:mail animated:YES completion:^{
-                    self.yesButton.hidden = YES;
-                    self.noButton.hidden = YES;
-                    self.sendFeedbackButton.hidden = NO;
+                    [self refreshFeedBackViews];
                 }];
             }];
         } else {
-            [self presentViewController:mail animated:YES completion:^{
-                self.yesButton.hidden = YES;
-                self.noButton.hidden = YES;
-                self.sendFeedbackButton.hidden = NO;
-            }];
+            [self presentViewController:mail animated:YES completion:nil];
         }
     } else {
         NSLog(@"This device cannot send email");
     }
 }
 
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{
+- (void)showAppStore:(FeedbackViewController *)popoverViewController {
+    [self refreshFeedBackViews];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     switch (result) {
         case MFMailComposeResultSent:
             NSLog(@"You sent the email.");

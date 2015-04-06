@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, RecorderControllerState) {
 - (instancetype)init NS_UNAVAILABLE;
 
 @property (nonatomic, assign, readonly) RecorderControllerState recordingState;
+@property (nonatomic, readonly) NSTimeInterval currentRecordingTime;
 @property (nonatomic, readonly) NSString *currentRecordingTimeAsString;
 
 - (void)startRecording;
