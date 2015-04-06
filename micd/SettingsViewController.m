@@ -32,7 +32,6 @@
     [super viewDidLoad];
     
     [self initialSetupOfViews];
-    
     self.isFirstTimeLayingOutSubviews = YES;
 }
 
@@ -47,30 +46,45 @@
 
 - (void)initialSetupOfViews {
     self.view.backgroundColor = [UIColor clearColor];
+    
     self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicdWithColor7:[UIColor vibrantLightBlueText]];
-    self.noButton.backgroundColor = [UIColor vibrantBlue];
-    self.yesButton.backgroundColor = [UIColor vibrantBlue];
+    
     self.rememberRecordingLocationSwitch.onTintColor = [UIColor vibrantBlue];
     self.rememberRecordingLocationSwitch.tintColor = [UIColor vibrantBlue];
+    self.rememberRecordingLocationLabel.textColor = [UIColor vibrantLightBlueText];
+    
     self.startRecordingOnLaunchSwitch.onTintColor = [UIColor vibrantBlue];
     self.startRecordingOnLaunchSwitch.tintColor = [UIColor vibrantBlue];
-    self.rememberRecordingLocationLabel.textColor = [UIColor vibrantLightBlueText];
     self.startRecordingOnLaunchLabel.textColor = [UIColor vibrantLightBlueText];
-    self.maxRecordingLengthLabel.textColor = [UIColor vibrantLightBlueText];
-    self.autoStartRecAfterMaxLabel.textColor = [UIColor vibrantLightBlueText];
+    
     self.autoStartRecAfterMaxSwitch.onTintColor = [UIColor vibrantBlue];
     self.autoStartRecAfterMaxSwitch.tintColor = [UIColor vibrantBlue];
+    self.autoStartRecAfterMaxLabel.textColor = [UIColor vibrantLightBlueText];
+    
     self.lengthSegmentedControl.tintColor = [UIColor vibrantLightBlueText];
-    self.sendFeedbackButton.backgroundColor = [UIColor vibrantBlue];
-    self.sendFeedbackButton.hidden = YES;
+    self.maxRecordingLengthLabel.textColor = [UIColor vibrantLightBlueText];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.startRecordingOnLaunchSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
     self.rememberRecordingLocationSwitch.on = [userDefaults boolForKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
     
+    self.noButton.backgroundColor = [UIColor vibrantBlue];
     self.noButton.layer.cornerRadius = 5;
+    
+    self.yesButton.backgroundColor = [UIColor vibrantBlue];
     self.yesButton.layer.cornerRadius = 5;
+    
+    self.sendFeedbackButton.backgroundColor = [UIColor vibrantBlue];
     self.sendFeedbackButton.layer.cornerRadius = 5;
+    
+    [self refreshFeedBackViews];
+}
+
+- (void)refreshFeedBackViews {
+    BOOL questionHasBeenAnswered = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
+    self.yesButton.hidden = questionHasBeenAnswered;
+    self.noButton.hidden = questionHasBeenAnswered;
+    self.sendFeedbackButton.hidden = questionHasBeenAnswered;
 }
 
 #pragma mark - User Action Methods

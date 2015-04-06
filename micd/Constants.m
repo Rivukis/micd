@@ -16,6 +16,7 @@ NSString *const kUserDefaultsKeyCurrentVersion = @"UserDefaultsKeyCurrentVersion
 NSString *const kUserDefaultsKeyMainColor = @"UserDefaultsKeyMainColor";
 NSString *const kUserDefaultsKeyStartRecordingOnAppDidBecomeActive = @"UserDefaultsKeyStartRecordingOnAppDidBecomeActive";
 NSString *const kUserDefaultsKeyRecordingsSavePlaybackPosition = @"UserDefaultsKeyRecordingsSavePlaybackPosition";
+NSString *const kUserDefaultsKeyLoveMicdQuestionAnswered = @"UserDefaultsKeyLoveMicdQuestionAnswered";
 
 // WatchKit shit
 NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
