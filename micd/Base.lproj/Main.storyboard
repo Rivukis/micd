@@ -451,6 +451,54 @@
             </objects>
             <point key="canvasLocation" x="1020" y="1033"/>
         </scene>
+        <!--Microphone Access Required View Controller-->
+        <scene sceneID="MzC-AY-eaz">
+            <objects>
+                <viewController storyboardIdentifier="microphoneRequired" id="CQC-OG-zPH" customClass="MicrophoneAccessRequiredViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Pzg-1K-RJI"/>
+                        <viewControllerLayoutGuide type="bottom" id="b8T-qx-BNk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Kqv-Rs-pyE">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F6d-JZ-RLO">
+                                <rect key="frame" x="16" y="428" width="288" height="32"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Take me there!">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="takeMeTherePressed:" destination="CQC-OG-zPH" eventType="touchUpInside" id="dlR-zC-oBb"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" lineBreakMode="tailTruncation" numberOfLines="18" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuI-hM-IeT">
+                                <rect key="frame" x="115.5" y="180" width="89.5" height="20"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="AuI-hM-IeT" secondAttribute="centerX" id="1ml-hn-jHZ"/>
+                            <constraint firstAttribute="centerY" secondItem="AuI-hM-IeT" secondAttribute="centerY" constant="50" id="L60-3E-pQT"/>
+                            <constraint firstItem="F6d-JZ-RLO" firstAttribute="leading" secondItem="Kqv-Rs-pyE" secondAttribute="leadingMargin" id="ZNe-ic-jRC"/>
+                            <constraint firstItem="F6d-JZ-RLO" firstAttribute="trailing" secondItem="Kqv-Rs-pyE" secondAttribute="trailingMargin" id="bq5-tU-M03"/>
+                            <constraint firstItem="b8T-qx-BNk" firstAttribute="top" secondItem="F6d-JZ-RLO" secondAttribute="bottom" constant="20" id="m70-kt-Ba2"/>
+                            <constraint firstAttribute="centerX" secondItem="F6d-JZ-RLO" secondAttribute="centerX" id="omU-2E-M8g"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="label" destination="AuI-hM-IeT" id="C6u-q1-2GZ"/>
+                        <outlet property="linkButton" destination="F6d-JZ-RLO" id="Cls-O1-VR1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iAK-fT-5R0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1396" y="1034"/>
+        </scene>
         <!--Settings View Controller-->
         <scene sceneID="qOx-2S-atl">
             <objects>
