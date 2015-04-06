@@ -19,9 +19,6 @@
                               CGRectGetWidth(transitionContext.containerView.bounds) - 20.f,
                               250);
     
-//    CGPoint point = CGPointMake(transitionContext.containerView.center.x, transitionContext.containerView.center.y + CGRectGetHeight(transitionContext.containerView.frame));
-//    toView.center = point;
-    
     [transitionContext.containerView addSubview:toView];
     
     POPSpringAnimation *backgroundColor = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerBackgroundColor];
