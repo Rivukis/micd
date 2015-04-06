@@ -57,22 +57,14 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="500" horizontalCompressionResistancePriority="999" translatesAutoresizingMaskIntoConstraints="NO" id="ypM-Pd-d4O" userLabel="length container view">
-                                                            <rect key="frame" x="306.5" y="0.0" width="60.5" height="50"/>
+                                                            <rect key="frame" x="306" y="0.0" width="60.5" height="50"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="500" horizontalCompressionResistancePriority="999" text="3:43:43" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8S-eY-TQI">
                                                                     <rect key="frame" x="10" y="0.0" width="50.5" height="50"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="width" priority="200" constant="54" id="Pet-1s-Vhf"/>
-                                                                    </constraints>
                                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                                     <color key="textColor" red="0.61960784310000006" green="0.86274509799999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
-                                                                    <variation key="default">
-                                                                        <mask key="constraints">
-                                                                            <exclude reference="Pet-1s-Vhf"/>
-                                                                        </mask>
-                                                                    </variation>
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -91,7 +83,7 @@
                                                                 <constraint firstAttribute="height" constant="1" id="F4o-Sa-Noc"/>
                                                             </constraints>
                                                         </view>
-                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
+                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="998" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="35" id="WCs-EU-yWr"/>
                                                                 <constraint firstAttribute="width" id="kwG-q3-3cQ"/>
@@ -100,12 +92,12 @@
                                                     </subviews>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstItem="tvk-XG-X0g" firstAttribute="leading" secondItem="bfh-Da-2Rz" secondAttribute="leadingMargin" constant="7" id="00q-iZ-6rY"/>
                                                         <constraint firstAttribute="bottom" secondItem="ypM-Pd-d4O" secondAttribute="bottom" id="F3w-Pf-Gp8"/>
                                                         <constraint firstItem="ypM-Pd-d4O" firstAttribute="leading" secondItem="tvk-XG-X0g" secondAttribute="trailing" constant="8" id="FkF-Hg-V32"/>
+                                                        <constraint firstItem="R4b-WG-Mi9" firstAttribute="centerY" secondItem="ypM-Pd-d4O" secondAttribute="centerY" id="HSr-yk-Pr9"/>
                                                         <constraint firstItem="tvk-XG-X0g" firstAttribute="top" secondItem="bfh-Da-2Rz" secondAttribute="top" constant="7" id="Ja7-J5-5Qu"/>
+                                                        <constraint firstItem="R4b-WG-Mi9" firstAttribute="leading" secondItem="bfh-Da-2Rz" secondAttribute="leading" constant="15" id="JnV-mv-0Eb"/>
                                                         <constraint firstItem="tvk-XG-X0g" firstAttribute="leading" secondItem="R4b-WG-Mi9" secondAttribute="trailing" id="MRQ-Ct-Hhs"/>
-                                                        <constraint firstItem="R4b-WG-Mi9" firstAttribute="centerY" secondItem="Wen-Gi-3Il" secondAttribute="centerY" constant="-11.25" id="RAn-VA-thW"/>
                                                         <constraint firstItem="ypM-Pd-d4O" firstAttribute="top" secondItem="bfh-Da-2Rz" secondAttribute="top" id="WdO-FP-Bfq"/>
                                                         <constraint firstItem="ypM-Pd-d4O" firstAttribute="trailing" secondItem="bfh-Da-2Rz" secondAttribute="trailingMargin" id="doo-nL-k81"/>
                                                         <constraint firstItem="Wen-Gi-3Il" firstAttribute="top" secondItem="tvk-XG-X0g" secondAttribute="bottom" constant="1" id="fBF-sw-i2z"/>
@@ -117,7 +109,7 @@
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
-                                                            <exclude reference="00q-iZ-6rY"/>
+                                                            <exclude reference="vxu-9O-jkK"/>
                                                         </mask>
                                                     </variation>
                                                 </tableViewCellContentView>

@@ -413,6 +413,7 @@ RecordingCellDelegate>
 }
 
 - (void)addButtonBounceAnimationToView:(UIView *)view {
+    view.transform = CGAffineTransformIdentity;
     POPSpringAnimation *buttonPressedAnimation = [PopViewAnimator springAnimationButtonBounce];
     [view.layer pop_addAnimation:buttonPressedAnimation forKey:@"buttonBounce"];
 }
@@ -521,7 +522,7 @@ RecordingCellDelegate>
 
 - (void)playerController:(PlayerController *)playerController didFinishPlayingSuccessfully:(BOOL)successful {
     [self.displayLinkController removeSubscriberWithKey:@"waveform"];
-    [self pausePlaybackShouldAnimatePauseButton:YES];
+    [self pausePlaybackShouldAnimatePauseButton:NO];
 }
 
 #pragma mark - RemoteCommandCenterControllerDelegate
@@ -668,16 +669,16 @@ RecordingCellDelegate>
     } else {
         if (self.focusedCellModel == recordingCellModel) {
             if (self.focusedCellModel.state == CellStatePlaying) {
-                [self pausePlaybackShouldAnimatePauseButton:YES];
+                [self pausePlaybackShouldAnimatePauseButton:NO];
             } else {
-                [self playPlaybackShouldAnimatePlayButton:YES];
+                [self playPlaybackShouldAnimatePlayButton:NO];
             }
         } else {
             [self.focusedCellModel setCellState:CellStateDefault];
             self.focusedCellIndexPath = indexPath;
             
             [self readyPlayerWithRecording:self.focusedCellModel.recording];
-            [self playPlaybackShouldAnimatePlayButton:YES];
+            [self playPlaybackShouldAnimatePlayButton:NO];
         }
     }
 }
