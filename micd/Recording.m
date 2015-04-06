@@ -5,7 +5,7 @@
 @interface Recording () <NSCoding>
 
 @property (nonatomic, strong, readwrite) NSArray *tags;
-@property (nonatomic, copy, readwrite) NSData *data;
+//@property (nonatomic, copy, readwrite) NSData *data;
 @property (nonatomic, strong, readwrite) NSUUID *uuid;
 
 @end
@@ -20,15 +20,12 @@
 - (instancetype)initWithData:(NSData *)data date:(NSDate *)recordedDate length:(NSTimeInterval)length title:(NSString *)title {
     self = [super init];
     if (self) {
-        _data = data;
         _date = recordedDate;
         _lengthAsTimeInterval = length;
         _title = title ? title : @"";
         _uuid = [[NSUUID alloc] init];
         
-        if (_data) {
-            [_data writeToFile:[self urlString] atomically:YES];
-        }
+        [data writeToFile:[self urlString] atomically:YES];
     }
     return self;
 }
@@ -61,11 +58,7 @@
 }
 
 - (NSData *)data {
-    if (!_data && self.uuid) {
-        _data = [NSData dataWithContentsOfFile:self.urlString];
-    }
-    
-    return _data;
+    return [NSData dataWithContentsOfFile:self.urlString];
 }
 
 - (void)setCurrentPlaybackPosistion:(NSTimeInterval)currentPlaybackPosistion {
