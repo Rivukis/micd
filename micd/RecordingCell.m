@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *date;
 @property (weak, nonatomic) IBOutlet UIView *lengthContainerView;
 @property (weak, nonatomic) IBOutlet UIImageView *playPauseImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *playPauseWidthContraint;
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
 @property (nonatomic, strong, readwrite) RecordingCellModel *cellModel;
@@ -41,6 +42,7 @@
     self.title.textColor = [UIColor vibrantLightBlueText];
     self.title.tintColor = [UIColor vibrantLightBlueText];
     self.lengthContainerView.backgroundColor = [UIColor clearColor];
+    self.playPauseImageView.hidden = NO;
     
     if (!self.isObserving) {
         [cellModel addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:NULL];
@@ -115,14 +117,14 @@
 }
 
 - (void)setupViewForDefaultState {
+    [self layoutIfNeeded];
+    self.playPauseWidthContraint.constant = 0;
     if (self.cellModel.shouldAnimateStateChanges) {
-        [UIView transitionFromView:self.playPauseImageView
-                            toView:self.length duration:.4
-                           options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews
-                        completion:nil];
+        [UIView animateWithDuration:.25f animations:^{
+            [self layoutIfNeeded];
+        }];
     } else {
-        self.playPauseImageView.hidden = YES;
-        self.length.hidden = NO;
+        [self layoutIfNeeded];
     }
 }
 
@@ -130,28 +132,25 @@
     __weak __typeof(self) welf = self;
     self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
     if (self.cellModel.shouldAnimateStateChanges) {
-        if (self.length.hidden) {
-            [UIView transitionWithView:self.playPauseImageView
-                              duration:.4
-                               options:UIViewAnimationOptionTransitionFlipFromLeft
-                            animations:^{
-                self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
-                            } completion:^(BOOL finished) {
-                                [welf startAnimating];
-                            }];
-        } else {
-            self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
-            [UIView transitionFromView:self.length
-                                toView:self.playPauseImageView
-                              duration:.4
-                               options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews
-                            completion:^(BOOL finished) {
-                                [welf startAnimating];
-                            }];
-        }
+        
+        [self layoutIfNeeded];
+        
+        self.playPauseWidthContraint.constant = 46;
+        
+        [UIView transitionWithView:self.playPauseImageView
+                          duration:.25
+                           options:UIViewAnimationOptionTransitionFlipFromLeft
+                        animations:^{
+                            self.playPauseImageView.image = [WireTapStyleKit imageOfPlayAssetWithArcStart:self.cellModel.angle+270 arcEnd:self.cellModel.angle];
+                            [self layoutIfNeeded];
+                        } completion:^(BOOL finished) {
+                            [welf startAnimating];
+                        }];
+        
     } else {
-        self.length.hidden = YES;
-        self.playPauseImageView.hidden = NO;
+        [self layoutIfNeeded];
+        self.playPauseWidthContraint.constant = 46;
+        [self layoutIfNeeded];
         [self startAnimating];
     }
 }
@@ -160,25 +159,24 @@
     __weak __typeof(self) welf = self;
     
     if (self.cellModel.shouldAnimateStateChanges) {
-        if (self.length.hidden) {
-            [UIView transitionWithView:self.playPauseImageView
-                              duration:.25
-                               options:UIViewAnimationOptionTransitionFlipFromLeft
-                            animations:^{
-                welf.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
-                            } completion:nil];
-        } else {
-            [UIView transitionFromView:self.length
-                                toView:self.playPauseImageView
-                              duration:.4 options:UIViewAnimationOptionTransitionFlipFromTop | UIViewAnimationOptionShowHideTransitionViews
-                            completion:^(BOOL finished) {
-                welf.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
-                            }];
-        }
+        
+        [self layoutIfNeeded];
+        
+        self.playPauseWidthContraint.constant = 46;
+        
+        [UIView transitionWithView:self.playPauseImageView
+                          duration:.25
+                           options:UIViewAnimationOptionTransitionFlipFromLeft
+                        animations:^{
+                            [self layoutIfNeeded];
+                            welf.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
+                        } completion:nil];
+        
     } else {
         self.playPauseImageView.image = [WireTapStyleKit imageOfPauseAsset];
-        self.length.hidden = YES;
-        self.playPauseImageView.hidden = NO;
+        [self layoutIfNeeded];
+        self.playPauseWidthContraint.constant = 46;
+        [self layoutIfNeeded];
     }
 }
 
@@ -195,14 +193,16 @@
     if (self.cellModel.state == CellStatePaused || self.cellModel.state == CellStateDefault) {
         [self setupViewBasedOnState];
     } else {
-        self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
-                                             target:self
-                                           selector:@selector(drivePlayButtonAnimation)
-                                           userInfo:nil
-                                            repeats:YES];
-        
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        [self.timer fire];
+        if (!self.timer.isValid) {
+            self.timer = [NSTimer timerWithTimeInterval:kUpdateInterval
+                                                 target:self
+                                               selector:@selector(drivePlayButtonAnimation)
+                                               userInfo:nil
+                                                repeats:YES];
+            
+            [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+            [self.timer fire];
+        }
     }
 }
 

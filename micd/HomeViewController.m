@@ -43,6 +43,7 @@ static BOOL const growForLouderNoises = NO;
 @property (nonatomic) CGRect recordButtonOriginalFrame;
 @property (nonatomic) CGRect backgroundImageViewOriginalFrame;
 @property (nonatomic) CGRect gearImageViewOriginalFrame;
+@property (nonatomic, strong) UILabel *recordTime;
 
 @property (nonatomic) BOOL recordButtonEnabled;
 @property (assign, nonatomic) BOOL startRecordingWhenAnimationCompletes;
@@ -233,13 +234,13 @@ static BOOL const growForLouderNoises = NO;
 - (void)animatePauseState {
     [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:10] forState:UIControlStateNormal];
     
+    self.recordTime.alpha = 0;
+    
     [UIView animateWithDuration:.25f animations:^{
         self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
         self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
-    }];
-    
-    [UIView animateWithDuration:.25f animations:^{
         self.recordButton.transform = CGAffineTransformIdentity;
+        self.recordTime.alpha = 0;
     } completion:^(BOOL finished) {
         [self.view addSubview:self.recordButton];
         self.recordButton.frame = self.recordButtonOriginalFrame;
@@ -511,6 +512,8 @@ static BOOL const growForLouderNoises = NO;
             [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:self.arcAngleShrinkCount+300 strokeWidth:10] forState:UIControlStateNormal];
         }
         
+        self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
+        
     } else {
         CGRect presentationFrame = [self.view.layer.presentationLayer frame];
         
@@ -535,6 +538,20 @@ static BOOL const growForLouderNoises = NO;
     [self.transitionView addSubview:self.recordButton];
     self.recordButton.center = self.view.window.center;//CGRectMake(0, 0, 256, 256);
     
+    if (!self.recordTime) {
+        self.recordTime = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+        [self.recordButton addSubview:self.recordTime];
+        self.recordTime.text = @"";
+        self.recordTime.textAlignment = NSTextAlignmentCenter;
+        self.recordTime.font = [UIFont fontWithName: @"Helvetica-Bold" size:20.0f];
+        self.recordTime.textColor = [UIColor blackColor];
+        self.recordTime.alpha = 0;
+    }
+    
+    CGPoint recordTimeCenter = CGPointMake(CGRectGetWidth(self.recordButton.bounds)/2, CGRectGetHeight(self.recordButton.bounds)/2);
+    recordTimeCenter.y += self.recordButton.bounds.size.height*.30;
+    self.recordTime.center = recordTimeCenter;
+    
     //now take these views and get them outta here
     CGFloat fullCircle = self.recordButton.frame.size.height;
     CGRect mainFrame = self.backgroundImageView.frame;
@@ -542,17 +559,21 @@ static BOOL const growForLouderNoises = NO;
     CGRect gearFrame = self.gearsCircleImageView.frame;
     gearFrame.origin.y += fullCircle;
     
+    self.recordTime.alpha = 1;
     if (animate) {
         [UIView animateWithDuration:.25f animations:^{
             self.backgroundImageView.frame = mainFrame;
             self.gearsCircleImageView.frame = gearFrame;
+            self.recordTime.alpha = 1;
         } completion:^(BOOL finished) {
-            
+
         }];
     } else {
         self.backgroundImageView.frame = mainFrame;
         self.gearsCircleImageView.frame = gearFrame;
+        self.recordTime.alpha = 1;
     }
+    
     
     [self.view removeGestureRecognizer:self.panGesture];
 }

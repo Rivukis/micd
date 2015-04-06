@@ -3856,7 +3856,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
     UIColor* vibrantBlue = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
 
     //// Oval Drawing
-    UIBezierPath* ovalPath = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(3, 2, 36, 36)];
+    UIBezierPath* ovalPath = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(1, 1, 33, 33)];
     [vibrantBlue setStroke];
     ovalPath.lineWidth = 2;
     [ovalPath stroke];
@@ -3864,7 +3864,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
 
     //// Bezier 2 Drawing
     CGContextSaveGState(context);
-    CGContextTranslateCTM(context, 22, 19.5);
+    CGContextTranslateCTM(context, 18.5, 17.5);
     CGContextRotateCTM(context, 90 * M_PI / 180);
 
     UIBezierPath* bezier2Path = UIBezierPath.bezierPath;
@@ -3954,7 +3954,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
     UIColor* vibrantBlue = [UIColor colorWithRed: 0.161 green: 0.745 blue: 0.867 alpha: 1];
 
     //// Oval Drawing
-    CGRect ovalRect = CGRectMake(3, 2, 36, 36);
+    CGRect ovalRect = CGRectMake(1, 1, 33, 33);
     UIBezierPath* ovalPath = UIBezierPath.bezierPath;
     [ovalPath addArcWithCenter: CGPointMake(CGRectGetMidX(ovalRect), CGRectGetMidY(ovalRect)) radius: CGRectGetWidth(ovalRect) / 2 startAngle: -arcStart * M_PI/180 endAngle: -(arcEnd + 1) * M_PI/180 clockwise: YES];
 
@@ -3964,7 +3964,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
 
 
     //// Rectangle 2 Drawing
-    UIBezierPath* rectangle2Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(15, 13, 3.5, 14) cornerRadius: 1];
+    UIBezierPath* rectangle2Path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(11.5, 10.5, 3.5, 14) cornerRadius: 1];
     [vibrantBlue setFill];
     [rectangle2Path fill];
     [vibrantBlue setStroke];
@@ -3973,7 +3973,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
 
 
     //// Rectangle Drawing
-    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(23.5, 13, 3.5, 14) cornerRadius: 1];
+    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(20, 10.5, 3.5, 14) cornerRadius: 1];
     [vibrantBlue setFill];
     [rectanglePath fill];
     [vibrantBlue setStroke];
@@ -4746,7 +4746,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
     if (_imageOfPauseAsset)
         return _imageOfPauseAsset;
 
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(40, 40), NO, 0.0f);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(46, 35), NO, 0.0f);
     [WireTapStyleKit drawPauseAsset];
 
     _imageOfPauseAsset = UIGraphicsGetImageFromCurrentImageContext();
@@ -4785,7 +4785,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
 
 + (UIImage*)imageOfPlayAssetWithArcStart: (CGFloat)arcStart arcEnd: (CGFloat)arcEnd
 {
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(40, 40), NO, 0.0f);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(46, 35), NO, 0.0f);
     [WireTapStyleKit drawPlayAssetWithArcStart: arcStart arcEnd: arcEnd];
 
     UIImage* imageOfPlayAsset = UIGraphicsGetImageFromCurrentImageContext();
