@@ -124,6 +124,10 @@ static BOOL const growForLouderNoises = NO;
                                              selector:@selector(responseToAVAudioSessionInterruption:)
                                                  name:AVAudioSessionInterruptionNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToAVAudioSessionRouteChange:)
+                                                 name:AVAudioSessionRouteChangeNotification
+                                               object:nil];
 }
 
 - (void)responseToRecordPressedFromWatch:(NSNotification *)notification {
@@ -171,6 +175,14 @@ static BOOL const growForLouderNoises = NO;
             [self recordButtonPressed:self.recordButton];
         }
         self.interruptionOccuredWhileRecording = NO;
+    }
+}
+
+- (void)responseToAVAudioSessionRouteChange:(NSNotification *)notification {
+    AVAudioSessionRouteChangeReason changeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
+    if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable && self.recorderController.recordingState == RecorderControllerStateRecording) {
+        self.shouldShowOtherStates = YES;
+        [self animatePauseState];
     }
 }
 

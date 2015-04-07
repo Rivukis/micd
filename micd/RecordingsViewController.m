@@ -178,6 +178,10 @@ RecordingCellDelegate>
                                              selector:@selector(responseToRecordingPressedFromWatch:)
                                                  name:kNotificationKeyRecordingPressedFromWatch
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToAVAudioSessionRouteChange:)
+                                                 name:AVAudioSessionRouteChangeNotification
+                                               object:nil];
 }
 
 - (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
@@ -224,6 +228,13 @@ RecordingCellDelegate>
     
     if (pressedRecordingsIndexPath) {
         [self tableView:self.tableView didSelectRowAtIndexPath:pressedRecordingsIndexPath];
+    }
+}
+
+- (void)responseToAVAudioSessionRouteChange:(NSNotification *)notification {
+    AVAudioSessionRouteChangeReason changeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
+    if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable && self.playerController.playerState == PlayerControllerStatePlaying) {
+        [self pausePlaybackShouldAnimatePauseButton:NO];
     }
 }
 
