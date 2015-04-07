@@ -169,30 +169,5 @@
     return @[self.homeViewController, self.recordingsViewController, self.settingsViewController];
 }
 
-//- (void)checkForMicAccess {
-//    if ([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) {
-//        [[AVAudioSession sharedInstance] performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
-//            if (granted) {
-//                // Microphone enabled code
-//                NSLog(@"Microphone is enabled..");
-//            }
-//            else {
-//                // Microphone disabled code
-//                NSLog(@"Microphone is disabled..");
-//                
-//                // We're in a background thread here, so jump to main thread to do UI work.
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [[[UIAlertView alloc] initWithTitle:@"Microphone Access Denied"
-//                                                message:@"This app requires access to your device's Microphone.\n\nPlease enable Microphone access for this app in Settings / Privacy / Microphone"
-//                                               delegate:nil
-//                                      cancelButtonTitle:@"Dismiss"
-//                                      otherButtonTitles:nil] show];
-//                });
-//            }
-//        }];
-//    }
-//}
-
-
 @end
 

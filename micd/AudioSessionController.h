@@ -9,6 +9,7 @@
 - (void)setAudioSessionOutputToSpeakersIfCurrentlySetToReciever;
 
 - (BOOL)hasMicrophonePermissionBeenGranted;
-//- (BOOL)hasMicrophonePermissionBeenDetermined;
+- (BOOL)hasMicrophonePermissionBeenDetermined;
+- (void)requestMicrophonePermissionWithCompletion:(void(^)())completion;
 
 @end

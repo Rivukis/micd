@@ -13,6 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "RemoteCommandCenterController.h"
 #import "AudioSessionController.h"
+#import "MicrophoneAccessRequiredViewController.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -172,20 +173,27 @@ static BOOL const growForLouderNoises = NO;
 #pragma mark - Helper Methods
 
 - (void)startRecording {
-    BOOL accessGranted = [[AudioSessionController sharedAudioSessionController] hasMicrophonePermissionBeenGranted];
-    
-    if (YES || accessGranted) {
-        [self.recorderController startRecording];
-        [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
-                                                                 createdDate:@"buttons disabled"
-                                                                    duration:nil
-                                                                 elapsedTime:nil
-                                                                    forstate:RemoteCommandCenterControllerStateRecording];
+    AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
+    BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
+    if (accessDetermined) {
+        
+        BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
+        if (accessGranted) {
+            [self.recorderController startRecording];
+            [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
+                                                                     createdDate:@"buttons disabled"
+                                                                        duration:nil
+                                                                     elapsedTime:nil
+                                                                        forstate:RemoteCommandCenterControllerStateRecording];
+        } else {
+            [self animatePauseState];
+            [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
+        }
     } else {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"dumb ass" message:@"we need access" delegate:nil cancelButtonTitle:<#(NSString *)#> otherButtonTitles:nil];
-//        [alertView show];
+        [audioSessionController requestMicrophonePermissionWithCompletion:^{
+            [self startRecording];
+        }];
     }
-    
 }
 
 - (void)setRecordingTimeText {

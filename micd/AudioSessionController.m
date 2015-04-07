@@ -64,24 +64,18 @@
 }
 
 - (BOOL)hasMicrophonePermissionBeenGranted {
-    return NO;
+    return [[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionGranted;
 }
 
-- (void)checkForMicAccess {
-    if ([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) {
-        [[AVAudioSession sharedInstance] performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
-            if (granted) {
-                // Microphone enabled code
-                NSLog(@"Microphone is enabled..");
-            }
-            else {
-                // Microphone disabled code
-                NSLog(@"Microphone is disabled..");
-                
-            }
-        }];
-    }
+- (BOOL)hasMicrophonePermissionBeenDetermined {
+    return [[AVAudioSession sharedInstance] recordPermission] != AVAudioSessionRecordPermissionUndetermined;
 }
 
+- (void)requestMicrophonePermissionWithCompletion:(void(^)())completion {
+    completion();
+//    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+//        completion();
+//    }];
+}
 
 @end

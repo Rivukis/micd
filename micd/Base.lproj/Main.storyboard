@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -454,7 +454,7 @@
         <!--Microphone Access Required View Controller-->
         <scene sceneID="MzC-AY-eaz">
             <objects>
-                <viewController storyboardIdentifier="microphoneRequired" id="CQC-OG-zPH" customClass="MicrophoneAccessRequiredViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MicrophoneAccessRequiredViewController" id="CQC-OG-zPH" customClass="MicrophoneAccessRequiredViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Pzg-1K-RJI"/>
                         <viewControllerLayoutGuide type="bottom" id="b8T-qx-BNk"/>
@@ -464,35 +464,63 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F6d-JZ-RLO">
-                                <rect key="frame" x="16" y="428" width="288" height="32"/>
+                                <rect key="frame" x="16" y="414" width="288" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="N8D-aq-bXM"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="I'll do it later">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="dismissPressed:" destination="CQC-OG-zPH" eventType="touchUpInside" id="wR2-QW-uS7"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuI-hM-IeT">
+                                <rect key="frame" x="115.5" y="180" width="89.5" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="288" id="GRb-i9-Buj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gG9-Jw-dfB">
+                                <rect key="frame" x="16" y="348" width="288" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Sqq-na-GAB"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Take me there!">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="takeMeTherePressed:" destination="CQC-OG-zPH" eventType="touchUpInside" id="dlR-zC-oBb"/>
+                                    <action selector="goToSettingsPressed:" destination="CQC-OG-zPH" eventType="touchUpInside" id="dsE-tM-9rw"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" lineBreakMode="tailTruncation" numberOfLines="18" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuI-hM-IeT">
-                                <rect key="frame" x="116" y="180" width="90" height="20"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="AuI-hM-IeT" secondAttribute="centerX" id="1ml-hn-jHZ"/>
+                            <constraint firstItem="gG9-Jw-dfB" firstAttribute="trailing" secondItem="Kqv-Rs-pyE" secondAttribute="trailingMargin" id="5dp-o8-qxq"/>
+                            <constraint firstItem="F6d-JZ-RLO" firstAttribute="top" secondItem="gG9-Jw-dfB" secondAttribute="bottom" constant="16" id="DCd-dX-vfJ"/>
                             <constraint firstAttribute="centerY" secondItem="AuI-hM-IeT" secondAttribute="centerY" constant="50" id="L60-3E-pQT"/>
                             <constraint firstItem="F6d-JZ-RLO" firstAttribute="leading" secondItem="Kqv-Rs-pyE" secondAttribute="leadingMargin" id="ZNe-ic-jRC"/>
                             <constraint firstItem="F6d-JZ-RLO" firstAttribute="trailing" secondItem="Kqv-Rs-pyE" secondAttribute="trailingMargin" id="bq5-tU-M03"/>
-                            <constraint firstItem="b8T-qx-BNk" firstAttribute="top" secondItem="F6d-JZ-RLO" secondAttribute="bottom" constant="20" id="m70-kt-Ba2"/>
+                            <constraint firstItem="gG9-Jw-dfB" firstAttribute="leading" secondItem="Kqv-Rs-pyE" secondAttribute="leadingMargin" id="jdT-YF-Ha8"/>
+                            <constraint firstItem="b8T-qx-BNk" firstAttribute="top" secondItem="F6d-JZ-RLO" secondAttribute="bottom" constant="16" id="m70-kt-Ba2"/>
                             <constraint firstAttribute="centerX" secondItem="F6d-JZ-RLO" secondAttribute="centerX" id="omU-2E-M8g"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="omU-2E-M8g"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="dismissButton" destination="F6d-JZ-RLO" id="JZ8-NV-jVj"/>
+                        <outlet property="goToSettingsButton" destination="gG9-Jw-dfB" id="Mef-vD-zYR"/>
                         <outlet property="label" destination="AuI-hM-IeT" id="C6u-q1-2GZ"/>
-                        <outlet property="linkButton" destination="F6d-JZ-RLO" id="Cls-O1-VR1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iAK-fT-5R0" userLabel="First Responder" sceneMemberID="firstResponder"/>
