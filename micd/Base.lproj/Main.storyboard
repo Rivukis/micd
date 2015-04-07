@@ -36,7 +36,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="251" horizontalCompressionResistancePriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Confrontation With Popo" adjustsFontSizeToFit="NO" minimumFontSize="16" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tvk-XG-X0g">
-                                                            <rect key="frame" x="15" y="7" width="284" height="20"/>
+                                                            <rect key="frame" x="15" y="7" width="283.5" height="20"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="250" id="CSW-aN-mfg"/>
                                                             </constraints>
@@ -50,17 +50,17 @@
                                                             </variation>
                                                         </textField>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="date and time info" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wen-Gi-3Il">
-                                                            <rect key="frame" x="15" y="28" width="109" height="16"/>
+                                                            <rect key="frame" x="15" y="28" width="109" height="15.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="13"/>
                                                             <color key="textColor" red="0.61960784310000006" green="0.86274509799999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="500" horizontalCompressionResistancePriority="999" translatesAutoresizingMaskIntoConstraints="NO" id="ypM-Pd-d4O" userLabel="length container view">
-                                                            <rect key="frame" x="306" y="0.0" width="61" height="50"/>
+                                                            <rect key="frame" x="306" y="0.0" width="60.5" height="50"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="500" horizontalCompressionResistancePriority="999" text="3:43:43" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8S-eY-TQI">
-                                                                    <rect key="frame" x="10" y="0.0" width="51" height="50"/>
+                                                                    <rect key="frame" x="10" y="0.0" width="50.5" height="50"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                                     <color key="textColor" red="0.61960784310000006" green="0.86274509799999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -83,7 +83,7 @@
                                                                 <constraint firstAttribute="height" constant="1" id="F4o-Sa-Noc"/>
                                                             </constraints>
                                                         </view>
-                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="998" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
+                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="998" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
                                                             <constraints>
                                                                 <constraint firstAttribute="height" priority="750" constant="35" id="WCs-EU-yWr"/>
                                                                 <constraint firstAttribute="width" id="kwG-q3-3cQ"/>
@@ -394,7 +394,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="478"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tmk-Gl-uKr">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tmk-Gl-uKr">
                                 <rect key="frame" x="16" y="426" width="140" height="34"/>
                                 <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
@@ -406,7 +406,7 @@
                                     <action selector="noTapped:" destination="F6J-OS-nYy" eventType="touchUpInside" id="ZoM-8I-zHH"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5V-7y-xKB">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5V-7y-xKB">
                                 <rect key="frame" x="164" y="426" width="140" height="34"/>
                                 <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
@@ -419,7 +419,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="18" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="acV-u1-f7M">
-                                <rect key="frame" x="16" y="20" width="288" height="100"/>
+                                <rect key="frame" x="16" y="20" width="288" height="99.5"/>
                                 <string key="text">Two of us are busting our asses trying to make shit that you idiots can enjoy. The least you can do is go to the app store and leave us a 5 star review. GO NOW! DO GOOD!</string>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <nil key="highlightedColor"/>
@@ -435,7 +435,7 @@
                             <constraint firstItem="w5V-7y-xKB" firstAttribute="leading" secondItem="Tmk-Gl-uKr" secondAttribute="trailing" constant="8" id="bIn-zF-3Ky"/>
                             <constraint firstItem="Tmk-Gl-uKr" firstAttribute="centerY" secondItem="w5V-7y-xKB" secondAttribute="centerY" id="hFR-l9-f6r"/>
                             <constraint firstItem="acV-u1-f7M" firstAttribute="leading" secondItem="nWy-iu-cZO" secondAttribute="leadingMargin" id="iKE-A6-Qc5"/>
-                            <constraint firstItem="S2n-iS-ADT" firstAttribute="top" secondItem="Tmk-Gl-uKr" secondAttribute="bottom" constant="20" id="pgd-jO-g5p"/>
+                            <constraint firstItem="S2n-iS-ADT" firstAttribute="top" secondItem="Tmk-Gl-uKr" secondAttribute="bottom" constant="18" id="pgd-jO-g5p"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -543,7 +543,7 @@
                                 <rect key="frame" x="32" y="613" width="311" height="34"/>
                                 <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
-                                <state key="normal" title="We love feedback. Email us">
+                                <state key="normal" title="feedback please">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -582,7 +582,7 @@
                                 </connections>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OmA-kA-rFC" userLabel="Remember playback position switch">
-                                <rect key="frame" x="294" y="164" width="51" height="31"/>
+                                <rect key="frame" x="294" y="159" width="51" height="31"/>
                                 <color key="tintColor" red="0.12941176469999999" green="0.63921568630000003" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -590,7 +590,7 @@
                                 </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jjx-vS-RkR" userLabel="Start recording on launch switch">
-                                <rect key="frame" x="294" y="220" width="51" height="31"/>
+                                <rect key="frame" x="294" y="215" width="51" height="31"/>
                                 <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -598,31 +598,31 @@
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Remember playback position" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mae-01-frw">
-                                <rect key="frame" x="32" y="170" width="254" height="20"/>
+                                <rect key="frame" x="32" y="165" width="254" height="19.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Start recording on launch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEA-e1-oec">
-                                <rect key="frame" x="32" y="226" width="254" height="20"/>
+                                <rect key="frame" x="32" y="221" width="254" height="19.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Automatically start recording again when max recording length is reached" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0d-Of-OuQ">
-                                <rect key="frame" x="32" y="357" width="254" height="39"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Automatically start recording again when max recording length is reached" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="11" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0d-Of-OuQ">
+                                <rect key="frame" x="32" y="352.5" width="254" height="38.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Max recording length" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nqe-Vw-Wrc">
-                                <rect key="frame" x="108" y="281" width="157" height="20"/>
+                                <rect key="frame" x="108" y="276" width="157" height="19.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-Os-uBh" userLabel="Auto start recording when max reached switch">
-                                <rect key="frame" x="294" y="361" width="51" height="31"/>
+                                <rect key="frame" x="294" y="356" width="51" height="31"/>
                                 <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -630,7 +630,7 @@
                                 </connections>
                             </switch>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="93h-24-nKO">
-                                <rect key="frame" x="32" y="313" width="311" height="29"/>
+                                <rect key="frame" x="32" y="308" width="311" height="29"/>
                                 <segments>
                                     <segment title="5 min"/>
                                     <segment title="15 min"/>
@@ -648,7 +648,7 @@
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="centerY" secondItem="TWk-ho-1y6" secondAttribute="centerY" id="27z-6v-z5Y"/>
                             <constraint firstItem="Nqe-Vw-Wrc" firstAttribute="top" secondItem="jjx-vS-RkR" secondAttribute="bottom" constant="30" id="74F-mf-EeD"/>
                             <constraint firstItem="jjx-vS-RkR" firstAttribute="centerY" secondItem="DEA-e1-oec" secondAttribute="centerY" constant="-0.5" id="7PC-gm-8FR"/>
-                            <constraint firstItem="mae-01-frw" firstAttribute="top" secondItem="ytR-dO-Z8F" secondAttribute="bottom" constant="150" id="7r7-DP-SWk"/>
+                            <constraint firstItem="mae-01-frw" firstAttribute="top" secondItem="ytR-dO-Z8F" secondAttribute="bottom" constant="145" id="7r7-DP-SWk"/>
                             <constraint firstItem="TWk-ho-1y6" firstAttribute="leading" secondItem="VZF-qB-C28" secondAttribute="leadingMargin" constant="16" id="8Ww-hI-T9Y"/>
                             <constraint firstItem="AgR-nW-Ft7" firstAttribute="top" secondItem="TWk-ho-1y6" secondAttribute="bottom" constant="20" id="9Qr-oa-3SO"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="leading" secondItem="TWk-ho-1y6" secondAttribute="leading" id="AJt-gR-803"/>

@@ -33,12 +33,17 @@
     
     [self initialSetupOfViews];
     self.isFirstTimeLayingOutSubviews = YES;
+    
+    [self startObservingNotifications];
 }
 
--(void)viewDidLayoutSubviews {
+- (void)viewDidLayoutSubviews {
     if (self.isFirstTimeLayingOutSubviews) {
         ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton, self.rememberRecordingLocationSwitch, self.startRecordingOnLaunchSwitch, self.lengthSegmentedControl, self.autoStartRecAfterMaxSwitch, self.sendFeedbackButton];
         ((SettingsView *)self.view).settingsView = self.view;
+        
+//        self.sendFeedbackButton.titleLabel.text = @"We love feedback. Email us";
+        [self.sendFeedbackButton setTitle:@"We love feeback. Email us" forState:UIControlStateNormal];
         
         self.isFirstTimeLayingOutSubviews = NO;
     }
@@ -89,6 +94,26 @@
     
     [self refreshFeedBackViews];
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Notification Methods
+
+- (void)startObservingNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToApplicationDidBecomeActive:)
+                                                 name:kNotificationKeyApplicationDidBecomeActive
+                                               object:nil];
+}
+
+- (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
+//    self.sendFeedbackButton.titleLabel.text = @"We love feedback. Email us";
+    [self.sendFeedbackButton setTitle:@"We love feedback. Email us" forState:UIControlStateNormal];
+}
+
+#pragma mark - Helper Methods
 
 - (void)refreshFeedBackViews {
     BOOL questionHasBeenAnswered = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
@@ -150,7 +175,7 @@
 
 #pragma mark - FramesBasedOnStateProtocol
 
--(void)setInitialStateFrame {
+- (void)setInitialStateFrame {
     CGRect screenSize = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0,
                                  (self.view.window.frame.size.height * 1.068f),
@@ -176,7 +201,7 @@
     return futureFrame;
 }
 
--(void)adjustFrameBasedOnTranslation:(CGPoint)translation {
+- (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
@@ -185,10 +210,6 @@
 #pragma mark - Transitioning Delegate
 
 - (void)setupPopoverViewForAnswer:(BOOL)answer {
-//    FeedbackViewController *popoverVC = [self.storyboard instantiateViewControllerWithIdentifier:@"popover"];
-//    popoverVC.lovesMicd = answer;
-//    popoverVC.delegate = self;
-    
     FeedbackViewController *popoverVC = [[FeedbackViewController alloc] initWithLovesMicd:answer delegate:self];
     popoverVC.transitioningDelegate = self;
     popoverVC.modalPresentationStyle = UIModalPresentationCustom;
@@ -219,7 +240,7 @@
         MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
         mail.mailComposeDelegate = self;
         [mail setSubject:@"Some thoughts on Mic'd"];
-        [mail setMessageBody:@"Some Text" isHTML:NO];
+        [mail setMessageBody:@"" isHTML:NO];
         [mail setToRecipients:@[@"micdfeedback@gmail.com"]];
         
         if (popoverViewController) {
@@ -244,9 +265,12 @@
 #pragma mark - MFMailComposeViewControllerDelegate
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [self.sendFeedbackButton setTitle:@"Thank you for your feedback!" forState:UIControlStateNormal];
+    
     switch (result) {
         case MFMailComposeResultSent:
             NSLog(@"You sent the email.");
+            [self.sendFeedbackButton setTitle:@"Thank you for your feedback!" forState:UIControlStateNormal];
             break;
         case MFMailComposeResultSaved:
             NSLog(@"You saved a draft of this email");
@@ -256,9 +280,11 @@
             break;
         case MFMailComposeResultFailed:
             NSLog(@"Mail failed:  An error occurred when trying to compose this email");
+            [self.sendFeedbackButton setTitle:@"Thank you for your feedback!" forState:UIControlStateNormal];
             break;
         default:
             NSLog(@"An error occurred when trying to compose this email");
+            [self.sendFeedbackButton setTitle:@"Thank you for your feedback!" forState:UIControlStateNormal];
             break;
     }
     [self dismissViewControllerAnimated:YES completion:nil];

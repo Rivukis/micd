@@ -54,6 +54,7 @@ static BOOL const growForLouderNoises = NO;
 @property (nonatomic, assign) BOOL interruptionOccuredWhileRecording;
 
 @property (nonatomic, assign) BOOL tryingToStopAndStartRecorder;
+@property (nonatomic, assign) BOOL shouldShowOtherStates;
 
 @end
 
@@ -70,6 +71,8 @@ static BOOL const growForLouderNoises = NO;
     [self startObservingNotifications];
     
     self.interruptionOccuredWhileRecording = NO;
+    DataSourceController *dataSourceController = [DataSourceController sharedDataSource];
+    self.shouldShowOtherStates = dataSourceController.numberOfRecordings != 0;
 }
 
 - (void)setupSubviews {
@@ -126,6 +129,7 @@ static BOOL const growForLouderNoises = NO;
 - (void)responseToRecordPressedFromWatch:(NSNotification *)notification {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
         [self.recorderController pauseRecording];
+        self.shouldShowOtherStates = YES;
         [self animatePauseState];
         __weak __typeof(self) weakSelf = self;
         [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
@@ -274,6 +278,7 @@ static BOOL const growForLouderNoises = NO;
 }
 
 - (void)goToNoRecordingState {
+    self.shouldShowOtherStates = NO;
     [self goToRecordButtonOnlyStateShouldAnimate:YES];
     self.movingFromNoRecordingsState = YES;
 }
@@ -305,6 +310,7 @@ static BOOL const growForLouderNoises = NO;
                     [weakSelf.addNewRecordingDelegate addNewRecording:recording];
                 }];
                 
+                self.shouldShowOtherStates = YES;
                 [self animatePauseState];
                 
                 break;
@@ -339,8 +345,10 @@ static BOOL const growForLouderNoises = NO;
     self.recordTime.alpha = 0;
     
     [UIView animateWithDuration:.4f animations:^{
-        self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
-        self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
+        if (self.shouldShowOtherStates) {
+            self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
+            self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
+        }
         self.recordButton.transform = CGAffineTransformIdentity;
         self.recordTime.alpha = 0;
     } completion:^(BOOL finished) {
@@ -348,7 +356,9 @@ static BOOL const growForLouderNoises = NO;
         self.recordButton.frame = self.recordButtonOriginalFrame;
         [self.transitionView removeFromSuperview];
         [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
-        [self.view addGestureRecognizer:self.panGesture];
+        if (self.shouldShowOtherStates) {
+            [self.view addGestureRecognizer:self.panGesture];
+        }
     }];
 }
 
