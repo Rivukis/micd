@@ -8,12 +8,13 @@
 }
 
 + (void)updateVersion {
-    Version currentVersion = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyCurrentVersion];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    Version currentVersion = [userDefaults integerForKey:kUserDefaultsKeyCurrentVersion];
     
     [VersionController setDefaultsStartingAtVersion:currentVersion];
     
-    [[NSUserDefaults standardUserDefaults] setInteger:Version_1_0 forKey:kUserDefaultsKeyCurrentVersion];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [userDefaults setInteger:Version_1_0 forKey:kUserDefaultsKeyCurrentVersion];
+    [userDefaults synchronize];
 }
 
 + (void)setDefaultsStartingAtVersion:(Version)version {
@@ -29,11 +30,12 @@
 #pragma mark - Defaults Methods
 
 + (void)setDefaultsForVersion_1_0 {
-    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:kUserDefaultsKeyMainColor];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
-    [[NSUserDefaults standardUserDefaults] setInteger:15*60 forKey:kUserDefaultsKeyMaxRecordingLength];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyAutoStartRecordingAfterMaximumReached];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:0 forKey:kUserDefaultsKeyMainColor];
+    [userDefaults setBool:YES forKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
+    [userDefaults setBool:NO forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    [userDefaults setInteger:15*60 forKey:kUserDefaultsKeyMaxRecordingLength];
+    [userDefaults setBool:YES forKey:kUserDefaultsKeyAutoStartRecordingAfterMaximumReached];
 }
 
 @end

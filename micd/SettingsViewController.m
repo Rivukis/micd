@@ -30,7 +30,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
     
     [self initialSetupOfViews];
     self.isFirstTimeLayingOutSubviews = YES;
@@ -103,31 +102,40 @@
 - (IBAction)recordingsSavePlaybackPositionSwitchValueChanged:(UISwitch *)sender {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:sender.on forKey:kUserDefaultsKeyRecordingsSavePlaybackPosition];
+    [userDefaults synchronize];
 }
 
 - (IBAction)startRecordingOnAppDidBecomeActiveSwitchValueChanged:(UISwitch *)sender {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:sender.on forKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    [userDefaults synchronize];
 }
 
 - (IBAction)maxRecordingLengthSegmentedControl:(UISegmentedControl *)sender {
     NSString *selectedSegmentTitle = [sender titleForSegmentAtIndex:sender.selectedSegmentIndex];
     NSInteger maxRecordingLength = [selectedSegmentTitle integerValue] * 60;
-    [[NSUserDefaults standardUserDefaults] setInteger:maxRecordingLength forKey:kUserDefaultsKeyMaxRecordingLength];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:maxRecordingLength forKey:kUserDefaultsKeyMaxRecordingLength];
+    [userDefaults synchronize];
 }
 
 - (IBAction)autoStartRecordingAfterMaximumReachedSwitch:(UISwitch *)sender {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:sender.on forKey:kUserDefaultsKeyAutoStartRecordingAfterMaximumReached];
+    [userDefaults synchronize];
 }
 
 - (IBAction)noTapped:(id)sender {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:YES forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
+    [userDefaults synchronize];
     [self setupPopoverViewForAnswer:NO];
 }
 
 - (IBAction)yesTapped:(id)sender {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:YES forKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
+    [userDefaults synchronize];
     [self setupPopoverViewForAnswer:YES];
 }
 
