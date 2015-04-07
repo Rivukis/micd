@@ -52,6 +52,8 @@ static BOOL const growForLouderNoises = NO;
 
 @property (nonatomic, assign) BOOL interruptionOccuredWhileRecording;
 
+@property (nonatomic, assign) BOOL tryingToStopAndStartRecorder;
+
 @end
 
 @implementation HomeViewController
@@ -176,6 +178,26 @@ static BOOL const growForLouderNoises = NO;
                                                                 duration:nil
                                                              elapsedTime:nil
                                                                 forstate:RemoteCommandCenterControllerStateRecording];
+}
+
+- (void)saveAndStartRecordingIfMaxReached {
+    NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+    BOOL maximumReached = self.recorderController.currentRecordingTime >= maxRecordingLength;
+    if (maximumReached && !self.tryingToStopAndStartRecorder) {
+        self.tryingToStopAndStartRecorder = YES;
+        
+        [self.recorderController pauseRecording];
+        __weak __typeof(self) weakSelf = self;
+        [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
+            if (error) {
+                NSLog(@"error retrieving recording: %@", error);
+                return;
+            }
+            [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+            [self startRecording];
+            self.tryingToStopAndStartRecorder = NO;
+        }];
+    }
 }
 
 #pragma mark - User Actions
@@ -480,7 +502,7 @@ static BOOL const growForLouderNoises = NO;
 }
 
 - (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
-    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording || self.tryingToStopAndStartRecorder) {
         
         CGFloat avgDB = [self.recorderController averagePowerForChannelZero];
         CGFloat transformCoefficient = 1.2 - (((avgDB + 40) / 40) * 0.4f);
@@ -516,24 +538,7 @@ static BOOL const growForLouderNoises = NO;
         
         self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
         
-        NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-        if (self.recorderController.currentRecordingTime > maxRecordingLength) {
-            // TODO: find a way to stop then start recording again
-            
-//            [self recordButtonPressed:self.recordButton];
-            
-//            [self.recorderController pauseRecording];
-//            __weak __typeof(self) weakSelf = self;
-//            [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
-//                if (error) {
-//                    NSLog(@"error retrieving recording: %@", error);
-//                    return;
-//                }
-//                [weakSelf.addNewRecordingDelegate addNewRecording:recording];
-//                [self.recorderController startRecording];
-//            }];
-        }
-        
+//        [self saveAndStartRecordingIfMaxReached];
     } else {
         CGRect presentationFrame = [self.view.layer.presentationLayer frame];
         

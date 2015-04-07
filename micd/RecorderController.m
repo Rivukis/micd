@@ -26,6 +26,13 @@ BOOL const useEnhancedRecorder = NO;
 
 @implementation RecorderController
 
+- (void)setRecordingState:(RecorderControllerState)recordingState {
+    _recordingState = recordingState;
+    if (recordingState == RecorderControllerStateStopped) {
+        NSLog(@"stopped");
+    }
+}
+
 - (instancetype)init {
     return [RecorderController sharedRecorder];
 }
@@ -74,6 +81,7 @@ BOOL const useEnhancedRecorder = NO;
     if (self.recordingState == RecorderControllerStatePaused || self.recordingState == RecorderControllerStateStopped) {
         [self.audioRecorder record];
         self.recordingState = RecorderControllerStateRecording;
+        NSLog(@"recording");
     }
 }
 
@@ -121,6 +129,7 @@ BOOL const useEnhancedRecorder = NO;
         self.recordingState = RecorderControllerStatePausing;
         __weak __typeof(self) weakSelf = self;
         self.blockToExecuteAfterConcatenation = ^void(BOOL successful, NSError *error) {
+            weakSelf.recordingState = RecorderControllerStateStopped;
             if (successful) {
                 completion([weakSelf generateRecording], error);
             } else {
@@ -173,7 +182,6 @@ BOOL const useEnhancedRecorder = NO;
 
 - (void)deleteRecording {
     [self.fileManager removeItemAtURL:[NSURL fileURLWithPath:self.savedFilePath] error:nil];
-    self.recordingState = RecorderControllerStateStopped;
 }
 
 - (Recording *)generateRecording {
