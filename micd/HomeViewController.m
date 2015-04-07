@@ -76,8 +76,8 @@ static BOOL const growForLouderNoises = NO;
     
     self.recordButton = [[OBShapedButton alloc] init];
     [self.recordButton addTarget:self action:@selector(recordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:10] forState:UIControlStateNormal];
-    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:5] forState:UIControlStateHighlighted];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:.01] forState:UIControlStateNormal];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonHighlighted] forState:UIControlStateHighlighted];
     [self.view addSubview:self.recordButton];
     self.recordButtonEnabled = YES;
     
@@ -228,16 +228,17 @@ static BOOL const growForLouderNoises = NO;
     for (int i = 0; i < 15; i++) {
         [self.pulsingValues addObject:(growForLouderNoises) ? @1.2 : @1];
     }
+    
     self.arcAngleShrinkCount = 0;
     [self.displayLinkController addSubscriberWithKey:@"recordButton"];
 }
 
 - (void)animatePauseState {
-    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:1 strokeWidth:10] forState:UIControlStateNormal];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:.01] forState:UIControlStateNormal];
     
     self.recordTime.alpha = 0;
     
-    [UIView animateWithDuration:.25f animations:^{
+    [UIView animateWithDuration:.4f animations:^{
         self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
         self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
         self.recordButton.transform = CGAffineTransformIdentity;
@@ -508,9 +509,9 @@ static BOOL const growForLouderNoises = NO;
         
         self.arcAngleShrinkCount --;
         if (self.arcAngleShrinkCount > -300) {
-            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:0 strokeWidth:10] forState:UIControlStateNormal];
+            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:0] forState:UIControlStateNormal];
         } else {
-            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:self.arcAngleShrinkCount+300 strokeWidth:10] forState:UIControlStateNormal];
+            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:self.arcAngleShrinkCount+300] forState:UIControlStateNormal];
         }
         
         self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
@@ -562,7 +563,7 @@ static BOOL const growForLouderNoises = NO;
         [self.recordButton addSubview:self.recordTime];
         self.recordTime.text = @"";
         self.recordTime.textAlignment = NSTextAlignmentCenter;
-        self.recordTime.font = [UIFont fontWithName: @"Helvetica-Bold" size:20.0f];
+        self.recordTime.font = [UIFont fontWithName: @"Helvetica-Medium" size:22.0f];
         self.recordTime.textColor = [UIColor blackColor];
         self.recordTime.alpha = 0;
     }

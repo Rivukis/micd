@@ -30,6 +30,7 @@
 		7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290B51A8EF0100085B927 /* FakesForProject.m */; };
 		7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */; };
 		D034F0421AA148680059028D /* RecordingsSection.m in Sources */ = {isa = PBXBuildFile; fileRef = D034F0411AA148680059028D /* RecordingsSection.m */; };
+		D05405241AD382DD0026057E /* TactileShapedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D05405231AD382DD0026057E /* TactileShapedButton.m */; };
 		D05500F81AA7C8F100C71FE1 /* PassthroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500F71AA7C8F100C71FE1 /* PassthroughView.m */; };
 		D05500FB1AA7CAD600C71FE1 /* PassthroughImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500FA1AA7CAD600C71FE1 /* PassthroughImageView.m */; };
 		D05D75721A79AAA40050A49C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75711A79AAA40050A49C /* main.m */; };
@@ -145,6 +146,8 @@
 		97CB92049F40C98A8BAF6E34 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D034F0401AA148680059028D /* RecordingsSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsSection.h; sourceTree = "<group>"; };
 		D034F0411AA148680059028D /* RecordingsSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsSection.m; sourceTree = "<group>"; };
+		D05405221AD382DD0026057E /* TactileShapedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TactileShapedButton.h; sourceTree = "<group>"; };
+		D05405231AD382DD0026057E /* TactileShapedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TactileShapedButton.m; sourceTree = "<group>"; };
 		D05500F61AA7C8F100C71FE1 /* PassthroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassthroughView.h; sourceTree = "<group>"; };
 		D05500F71AA7C8F100C71FE1 /* PassthroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassthroughView.m; sourceTree = "<group>"; };
 		D05500F91AA7CAD600C71FE1 /* PassthroughImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassthroughImageView.h; sourceTree = "<group>"; };
@@ -449,6 +452,8 @@
 				D05500FA1AA7CAD600C71FE1 /* PassthroughImageView.m */,
 				22B359A41AC75F2E0037107C /* ProgressBarView.h */,
 				22B359A51AC75F2E0037107C /* ProgressBarView.m */,
+				D05405221AD382DD0026057E /* TactileShapedButton.h */,
+				D05405231AD382DD0026057E /* TactileShapedButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -736,6 +741,7 @@
 				22D2439C1AD0D87700867992 /* FeedbackViewController.m in Sources */,
 				D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */,
 				7AC290B61A8EF0100085B927 /* Constants.m in Sources */,
+				D05405241AD382DD0026057E /* TactileShapedButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

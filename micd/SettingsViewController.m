@@ -48,7 +48,7 @@
 - (void)initialSetupOfViews {
     self.view.backgroundColor = [UIColor clearColor];
     
-    self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicdWithColor7:[UIColor vibrantLightBlueText]];
+    self.loveMicdImageView.image = [WireTapStyleKit imageOfLoveMicd];
     
     self.rememberRecordingLocationSwitch.onTintColor = [UIColor vibrantBlue];
     self.rememberRecordingLocationSwitch.tintColor = [UIColor vibrantBlue];

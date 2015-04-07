@@ -3,7 +3,7 @@
 @implementation UIColor (Palette)
 
 + (UIColor *)vibrantBlue {
-    return [UIColor colorWithRed:41.0f/255.0f green:190.0f/255.0f blue:221.0f/255.0f alpha:1.000f];
+    return [UIColor colorWithRed:36.0f/255.0f green:169.0f/255.0f blue:196.0f/255.0f alpha:1.000f];
 }
 
 + (UIColor *)vibrantLightBlue {
