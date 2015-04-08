@@ -81,8 +81,6 @@ UIDocumentInteractionControllerDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
-    
     self.dataSource = [DataSourceController sharedDataSource];
     self.playerController = [PlayerController sharedPlayer];
     self.playerController.delegate = self;
@@ -483,6 +481,7 @@ UIDocumentInteractionControllerDelegate>
 - (void)readyPlayerWithRecording:(Recording *)recording {
     [self.playerController loadRecording:recording];
     
+    [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
     RemoteCommandCenterController *rccController = [RemoteCommandCenterController sharedRCCController];
     [rccController showRemoteTitle:recording.title
                        createdDate:recording.dateAsString
@@ -628,8 +627,12 @@ UIDocumentInteractionControllerDelegate>
     self.focusedCellIndexPath = indexPath;
     
     [self readyPlayerWithRecording:self.focusedCellModel.recording];
+    // maybe
+    //        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
     
     if (wasPlaying) {
+        // maybe
+//        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
         [self playPlaybackShouldAnimatePlayButton:YES];
     }
     
@@ -657,8 +660,12 @@ UIDocumentInteractionControllerDelegate>
     self.focusedCellIndexPath = indexPath;
     
     [self readyPlayerWithRecording:self.focusedCellModel.recording];
+    // maybe
+    //        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
     
     if (wasPlaying) {
+        // maybe
+        //        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
         [self playPlaybackShouldAnimatePlayButton:YES];
     }
     

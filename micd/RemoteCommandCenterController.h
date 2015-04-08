@@ -8,6 +8,7 @@ typedef NS_ENUM(NSInteger, RemoteCommandCenterControllerState) {
 
 @protocol RemoteCommandCenterControllerDelegate <NSObject>
 
+@optional
 - (MPRemoteCommandHandlerStatus)playCommand;
 - (MPRemoteCommandHandlerStatus)pauseCommand;
 - (MPRemoteCommandHandlerStatus)stopCommand;

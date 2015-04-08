@@ -44,13 +44,6 @@ static const BOOL useSkipButtons = NO;
 - (void)showRemoteTitle:(NSString *)title createdDate:(NSString *)date duration:(NSNumber *)duration elapsedTime:(NSNumber *)elapsedTime forstate:(RemoteCommandCenterControllerState)state {
     self.state = state;
     
-//    if (self.state == RemoteCommandCenterControllerStatePlaying) {
-//        if (title.length == 0) {
-//            title = date;
-//            date = @"";
-//        }
-//    }
-    
     self.nowPlayingInfoTitle = title;
     self.nowPlayingInfoDate = date;
     self.nowPlayingInfoDuration = duration;
@@ -92,6 +85,8 @@ static const BOOL useSkipButtons = NO;
     //    MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:image];
     //    [trackInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
     
+    NSLog(@"%@", trackInfo);
+    
     [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:[trackInfo copy]];
 }
 
@@ -108,6 +103,8 @@ static const BOOL useSkipButtons = NO;
 
 - (void)configureMediaPlayerForRecording {
     [self removeAllTargets];
+    
+    [self setupPauseCommandForRecording];
 }
 
 - (void)setupPlaybackCommands {
@@ -144,11 +141,19 @@ static const BOOL useSkipButtons = NO;
     }
 }
 
+- (void)setupPauseCommandForRecording {
+    self.remoteCommandCenter.pauseCommand.enabled = YES;
+    [self.remoteCommandCenter.pauseCommand addTarget:self action:@selector(pause)];
+}
+
 - (void)removeAllTargets {
     [self.remoteCommandCenter.playCommand removeTarget:self action:@selector(play)];
     [self.remoteCommandCenter.pauseCommand removeTarget:self action:@selector(pause)];
     [self.remoteCommandCenter.stopCommand removeTarget:self action:@selector(stop)];
     [self.remoteCommandCenter.togglePlayPauseCommand removeTarget:self action:@selector(togglePlayPause)];
+    
+    [self.remoteCommandCenter.previousTrackCommand removeTarget:self action:@selector(previousTrack)];
+    [self.remoteCommandCenter.nextTrackCommand removeTarget:self action:@selector(nextTrack)];
     
     [self.remoteCommandCenter.skipBackwardCommand removeTarget:self action:@selector(skipBackward)];
     self.remoteCommandCenter.skipBackwardCommand.preferredIntervals = nil;
@@ -159,35 +164,59 @@ static const BOOL useSkipButtons = NO;
 #pragma mark - Remote Command Messages
 
 - (MPRemoteCommandHandlerStatus)play {
-    return [self.delegate playCommand];
+    if ([self.delegate respondsToSelector:@selector(playCommand)]) {
+        return [self.delegate playCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 - (MPRemoteCommandHandlerStatus)pause {
-    return [self.delegate pauseCommand];
+    if ([self.delegate respondsToSelector:@selector(pauseCommand)]) {
+        return [self.delegate pauseCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 - (MPRemoteCommandHandlerStatus)stop {
-    return [self.delegate stopCommand];
+    if ([self.delegate respondsToSelector:@selector(stopCommand)]) {
+        return [self.delegate stopCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 - (MPRemoteCommandHandlerStatus)togglePlayPause {
-    return [self.delegate togglePlayPauseCommand];
+    if ([self.delegate respondsToSelector:@selector(togglePlayPauseCommand)]) {
+        return [self.delegate togglePlayPauseCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 - (MPRemoteCommandHandlerStatus)previousTrack {
-    return [self.delegate previousTrackCommand];
+    if ([self.delegate respondsToSelector:@selector(previousTrackCommand)]) {
+        return [self.delegate previousTrackCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 - (MPRemoteCommandHandlerStatus)nextTrack {
-    return [self.delegate nextTrackCommand];
+    if ([self.delegate respondsToSelector:@selector(nextTrackCommand)]) {
+        return [self.delegate nextTrackCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 - (MPRemoteCommandHandlerStatus)skipBackward {
-    return [self.delegate skipBackwardCommand];
+    if ([self.delegate respondsToSelector:@selector(skipBackwardCommand)]) {
+        return [self.delegate skipBackwardCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 - (MPRemoteCommandHandlerStatus)skipForward {
-    return [self.delegate skipForwardCommand];
+    if ([self.delegate respondsToSelector:@selector(skipForwardCommand)]) {
+        return [self.delegate skipForwardCommand];
+    }
+    return MPRemoteCommandHandlerStatusCommandFailed;
 }
 
 @end

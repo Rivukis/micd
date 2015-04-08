@@ -20,7 +20,7 @@ static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
 static BOOL const growForLouderNoises = NO;
 
-@interface HomeViewController () <UIGestureRecognizerDelegate>
+@interface HomeViewController () <UIGestureRecognizerDelegate, RemoteCommandCenterControllerDelegate>
 
 @property (assign, nonatomic) BOOL isMovingDown;
 @property (strong, nonatomic) OBShapedButton *recordButton;
@@ -178,7 +178,7 @@ static BOOL const growForLouderNoises = NO;
 }
 
 #pragma mark - Helper Methods
-// completionWhenRecordingIsSaved:(void(^)())completion
+
 - (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowOtherStates:(BOOL)shouldShowOtherStates completionBlockWhenRecordingIsSaved:(void(^)())completion {
     [self.recorderController pauseRecording];
     if (shouldShowOtherStates) {
@@ -210,13 +210,17 @@ static BOOL const growForLouderNoises = NO;
         BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
         if (accessGranted) {
             BOOL success = [self.recorderController startRecording];
-            [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
-                                                                     createdDate:@"buttons disabled"
-                                                                        duration:nil
-                                                                     elapsedTime:nil
-                                                                        forstate:RemoteCommandCenterControllerStateRecording];
-            if (shouldAnimate && success) {
-                [self animateRecordingState];
+            if (success) {
+                NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+                [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
+                [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
+                                                                         createdDate:nil
+                                                                            duration:@(maxRecordingLength)
+                                                                         elapsedTime:@0
+                                                                            forstate:RemoteCommandCenterControllerStateRecording];
+                if (shouldAnimate) {
+                    [self animateRecordingState];
+                }
             }
         } else {
             [self animatePauseState];
@@ -234,10 +238,11 @@ static BOOL const growForLouderNoises = NO;
 
 - (void)setRecordingTimeText {
     if (![self.recordTime.text isEqualToString:self.recorderController.currentRecordingTimeAsString]) {
+        [[RemoteCommandCenterController sharedRCCController] showRemoteElapsedPlaybackTime:@(self.recorderController.currentRecordingTime)];
+        
         self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
         
-        // the 0.01 is so that the recording length on all recordings that hit max show the correct length (not 1 second more/less)
-        float maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength] + 0.01f;;
+        NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
         BOOL maximumReached = self.recorderController.currentRecordingTime >= maxRecordingLength;
         if (maximumReached && !self.tryingToStopAndStartRecorder) {
             [self saveAndStartRecording];
@@ -517,6 +522,17 @@ static BOOL const growForLouderNoises = NO;
 
 - (void)moveToSettingState {
     [self.movementDelegate moveToPositionState:PositionStateSettings];
+}
+
+#pragma mark - RemoteCommandCenterControllerDelegate
+
+- (MPRemoteCommandHandlerStatus)pauseCommand {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+        [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+        return MPRemoteCommandHandlerStatusSuccess;
+    } else {
+        return MPRemoteCommandHandlerStatusCommandFailed;
+    }
 }
 
 #pragma mark - FramesBasedOnStateProtocol
