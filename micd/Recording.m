@@ -181,4 +181,16 @@
     return [AVURLAsset assetWithURL:[self url]];
 }
 
+#pragma mark - UIActivityItem
+
+- (Recording *)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
+    Recording *placeholderRecording = [[Recording alloc] initWithData:nil date:self.date length:self.lengthAsTimeInterval title:self.title];
+    
+    return placeholderRecording;
+}
+
+- (Recording *)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
+    return self;
+}
+
 @end

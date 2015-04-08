@@ -270,19 +270,16 @@ static BOOL const growForLouderNoises = NO;
     CGRect gearFrame = self.gearsCircleImageView.frame;
     gearFrame.origin.y += fullCircle;
     
-    self.recordTime.alpha = 1;
     if (animate) {
         [UIView animateWithDuration:.25f animations:^{
             self.backgroundImageView.frame = mainFrame;
             self.gearsCircleImageView.frame = gearFrame;
-            self.recordTime.alpha = 1;
         } completion:^(BOOL finished) {
             
         }];
     } else {
         self.backgroundImageView.frame = mainFrame;
         self.gearsCircleImageView.frame = gearFrame;
-        self.recordTime.alpha = 1;
     }
     
     
@@ -346,6 +343,9 @@ static BOOL const growForLouderNoises = NO;
     for (int i = 0; i < 15; i++) {
         [self.pulsingValues addObject:(growForLouderNoises) ? @1.2 : @1];
     }
+    
+    self.recordTime.text = @"0:00";
+    self.recordTime.alpha = 1;
     
     self.arcAngleShrinkCount = 0;
     [self.displayLinkController addSubscriberWithKey:@"recordButton"];

@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <CoreGraphics/CGBase.h>
+#import <UIKit/UIKit.h>
 
 @class AVAsset;
 
@@ -10,7 +10,7 @@ struct Length {
     NSInteger centiseconds;
 };
 
-@interface Recording : NSObject
+@interface Recording : NSObject <UIActivityItemSource>
 
 @property (nonatomic, strong, readonly) NSUUID *uuid;
 @property (nonatomic, strong) NSString *title;
@@ -38,5 +38,6 @@ struct Length {
 
 - (BOOL)addTag:(NSString *)tag;
 - (BOOL)removeTag:(NSString *)tag;
+- (NSURL *)url;
 
 @end

@@ -66,7 +66,7 @@
     self.autoStartRecAfterMaxSwitch.tintColor = [UIColor vibrantBlue];
     self.autoStartRecAfterMaxLabel.textColor = [UIColor vibrantLightBlueText];
     
-    self.lengthSegmentedControl.tintColor = [UIColor vibrantLightBlueText];
+    self.lengthSegmentedControl.tintColor = [UIColor vibrantBlue];
     NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
     NSInteger maxRecordingLengthMinutes = maxRecordingLength/60;
     if (maxRecordingLengthMinutes == 5) {

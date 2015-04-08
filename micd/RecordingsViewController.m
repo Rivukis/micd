@@ -19,6 +19,7 @@
 #import "Factory.h"
 #import "RemoteCommandCenterController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "ActivityItemProvider.h"
 
 @interface RecordingsViewController ()
 <UITableViewDataSource,
@@ -27,7 +28,8 @@ UIGestureRecognizerDelegate,
 RemoteCommandCenterControllerDelegate,
 PlayerControllerDelegate,
 RecordingCellModelDelegate,
-RecordingCellDelegate>
+RecordingCellDelegate,
+UIDocumentInteractionControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
@@ -113,9 +115,9 @@ RecordingCellDelegate>
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
     
     // gonna hide and disable these buttons until were ready to use them
-    self.shareButton.hidden = YES;
+//    self.shareButton.hidden = YES;
     self.editButton.hidden = YES;
-    self.shareButton.userInteractionEnabled = NO;
+//    self.shareButton.userInteractionEnabled = NO;
     self.editButton.userInteractionEnabled = NO;
     ///////////////////////
     
@@ -395,6 +397,28 @@ RecordingCellDelegate>
 
 - (IBAction)shareButtonPressed:(id)sender {
     [self addButtonBounceAnimationToView:self.shareButton];
+    
+//    UIDocumentInteractionController *audioShareController = [UIDocumentInteractionController interactionControllerWithURL:self.focusedCellModel.recording.url];
+//    [audioShareController setName:self.playbackTitleLabel.text];
+//    [audioShareController setAnnotation:self.playbackTitleLabel.text];
+//    [audioShareController presentOpenInMenuFromRect:CGRectMake(0, 0, 375, 667) inView:self.view animated:YES];
+//    audioShareController.delegate = self;
+    
+    ActivityItemProvider *activityItem = [[ActivityItemProvider alloc] initWithPlaceholderString:@"placeholder" andRecording:self.focusedCellModel.recording];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[activityItem] applicationActivities:@[]];
+    activityViewController.excludedActivityTypes = [[NSArray alloc] initWithObjects:
+                                                    UIActivityTypePostToWeibo,
+                                                    UIActivityTypePostToFacebook,
+                                                    UIActivityTypeSaveToCameraRoll,
+                                                    UIActivityTypeAddToReadingList,
+                                                    UIActivityTypePrint,
+                                                    UIActivityTypePostToTencentWeibo,
+                                                    UIActivityTypePostToTwitter,
+                                                    nil];
+    [self presentViewController:activityViewController animated:YES completion:^{
+        
+    }];
+    
 }
 
 - (IBAction)editButtonPressed:(id)sender {

@@ -45,6 +45,7 @@
 		D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */; };
 		D08D4BEB1AB27EE300949483 /* PopViewAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */; };
 		D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BF01AB407C400949483 /* DisplayLinkController.m */; };
+		D08E23BA1AD49F9A00E8CB59 /* ActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = D08E23B91AD49F9A00E8CB59 /* ActivityItemProvider.m */; };
 		D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */; };
 		D09A69F01A86EFC500A2C347 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D09A69EF1A86EFC500A2C347 /* HomeViewController.m */; };
 		D0A427CD1ACE370B00BBC4D6 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0A427CB1ACE370B00BBC4D6 /* SettingsViewController.m */; };
@@ -175,6 +176,8 @@
 		D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopViewAnimator.m; path = micd/PopViewAnimator.m; sourceTree = "<group>"; };
 		D08D4BEF1AB407C400949483 /* DisplayLinkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayLinkController.h; sourceTree = "<group>"; };
 		D08D4BF01AB407C400949483 /* DisplayLinkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayLinkController.m; sourceTree = "<group>"; };
+		D08E23B81AD49F9A00E8CB59 /* ActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityItemProvider.h; sourceTree = "<group>"; };
+		D08E23B91AD49F9A00E8CB59 /* ActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityItemProvider.m; sourceTree = "<group>"; };
 		D09A69EB1A86E53100A2C347 /* RecordingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsViewController.h; sourceTree = "<group>"; };
 		D09A69EC1A86E53100A2C347 /* RecordingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsViewController.m; sourceTree = "<group>"; };
 		D09A69EE1A86EFC500A2C347 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -481,6 +484,8 @@
 				D0BFED421ACE517A00E12526 /* DismissingAnimationController.m */,
 				D0BFED431ACE517A00E12526 /* PresentingAnimationController.h */,
 				D0BFED441ACE517A00E12526 /* PresentingAnimationController.m */,
+				D08E23B81AD49F9A00E8CB59 /* ActivityItemProvider.h */,
+				D08E23B91AD49F9A00E8CB59 /* ActivityItemProvider.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -735,6 +740,7 @@
 				D0A427CD1ACE370B00BBC4D6 /* SettingsViewController.m in Sources */,
 				D09A69ED1A86E53100A2C347 /* RecordingsViewController.m in Sources */,
 				7A146A8A1ACA4260004C55A2 /* RemoteCommandCenterController.m in Sources */,
+				D08E23BA1AD49F9A00E8CB59 /* ActivityItemProvider.m in Sources */,
 				D0BD55831AB6690600A73485 /* RecordingsView.m in Sources */,
 				D0C67CDC1A929A4C000F501A /* FramesController.m in Sources */,
 				22B359A31AC75E850037107C /* MicdStyleKit.m in Sources */,
@@ -898,7 +904,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = micd/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -913,7 +919,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = micd/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
