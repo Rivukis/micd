@@ -145,8 +145,11 @@ static BOOL const growForLouderNoises = NO;
         }];
     } else {
         [[PlayerController sharedPlayer] pauseAudio];
-        [self startRecording];
-        [self animateRecordingState];
+        
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
+            [self startRecording];
+            [self animateRecordingState];
+        }
     }
     
     if (self.view.frame.origin.y != [self backgroundImageHomeStateYOffset]) {
@@ -314,8 +317,10 @@ static BOOL const growForLouderNoises = NO;
                 // time to record
                 [[PlayerController sharedPlayer] pauseAudio];
                 
-                [self startRecording];
-                [self animateRecordingState];
+                if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
+                    [self startRecording];
+                    [self animateRecordingState];
+                }
                 
                 break;
                 
