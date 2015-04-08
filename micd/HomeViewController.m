@@ -147,8 +147,7 @@ static BOOL const growForLouderNoises = NO;
         [[PlayerController sharedPlayer] pauseAudio];
         
         if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
-            [self startRecording];
-            [self animateRecordingState];
+            [self startRecordingShouldAnimate:YES];
         }
     }
     
@@ -191,7 +190,7 @@ static BOOL const growForLouderNoises = NO;
 
 #pragma mark - Helper Methods
 
-- (void)startRecording {
+- (void)startRecordingShouldAnimate:(BOOL)shouldAnimate {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
@@ -208,6 +207,9 @@ static BOOL const growForLouderNoises = NO;
                                                                         duration:nil
                                                                      elapsedTime:nil
                                                                         forstate:RemoteCommandCenterControllerStateRecording];
+            if (shouldAnimate) {
+                [self animateRecordingState];
+            }
         } else {
             [self animatePauseState];
             [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
@@ -215,7 +217,7 @@ static BOOL const growForLouderNoises = NO;
     } else {
         [audioSessionController requestMicrophonePermissionWithCompletion:^{
 //            if (!self.justAskedForPermission) {
-                [self startRecording];
+                [self startRecordingShouldAnimate:shouldAnimate];
 //            }
 //            self.justAskedForPermission = YES;
         }];
@@ -246,7 +248,7 @@ static BOOL const growForLouderNoises = NO;
             return;
         }
         [weakSelf.addNewRecordingDelegate addNewRecording:recording];
-        [self startRecording];
+        [self startRecordingShouldAnimate:NO];
         self.tryingToStopAndStartRecorder = NO;
     }];
 }
@@ -313,8 +315,7 @@ static BOOL const growForLouderNoises = NO;
                 [[PlayerController sharedPlayer] pauseAudio];
                 
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
-                    [self startRecording];
-                    [self animateRecordingState];
+                    [self startRecordingShouldAnimate:YES];
                 }
                 
                 break;

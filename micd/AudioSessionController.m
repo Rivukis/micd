@@ -96,7 +96,6 @@
 }
 
 - (void)requestMicrophonePermissionWithCompletion:(void(^)())completion {
-    completion();
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         completion();
     }];
