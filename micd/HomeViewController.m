@@ -52,6 +52,7 @@ static BOOL const growForLouderNoises = NO;
 @property (assign, nonatomic) BOOL movingFromNoRecordingsState;
 
 @property (nonatomic, assign) BOOL interruptionOccuredWhileRecording;
+@property (nonatomic, assign) BOOL currentlyInturrupted;
 
 @property (nonatomic, assign) BOOL tryingToStopAndStartRecorder;
 @property (nonatomic, assign) BOOL shouldShowOtherStates;
@@ -166,11 +167,13 @@ static BOOL const growForLouderNoises = NO;
     AVAudioSessionInterruptionType interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue];
     
     if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
+        self.currentlyInturrupted = YES;
         if (self.recorderController.recordingState == RecorderControllerStateRecording) {
             [self recordButtonPressed:self.recordButton];
             self.interruptionOccuredWhileRecording = YES;
         }
     } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
+        self.currentlyInturrupted = NO;
         if (self.interruptionOccuredWhileRecording && self.recorderController.recordingState != RecorderControllerStateRecording) {
             [self recordButtonPressed:self.recordButton];
         }
@@ -189,6 +192,10 @@ static BOOL const growForLouderNoises = NO;
 #pragma mark - Helper Methods
 
 - (void)startRecording {
+    if (self.currentlyInturrupted) {
+        return;
+    }
+    
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
     if (accessDetermined) {
