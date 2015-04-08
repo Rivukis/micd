@@ -19,6 +19,7 @@ NSString *const kUserDefaultsKeyRecordingsSavePlaybackPosition = @"UserDefaultsK
 NSString *const kUserDefaultsKeyAutoStartRecordingAfterMaximumReached = @"UserDefaultsKeyAutoStartRecordingAfterMaximumReached";
 NSString *const kUserDefaultsKeyMaxRecordingLength = @"UserDefaultsKeyMaxRecordingLength";
 NSString *const kUserDefaultsKeyLoveMicdQuestionAnswered = @"UserDefaultsKeyLoveMicdQuestionAnswered";
+NSString *const kUserDefaultsKeySessionIsActive = @"UserDefaultsKeySessionIsActive";
 
 // WatchKit shit
 NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
