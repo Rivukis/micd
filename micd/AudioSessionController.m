@@ -37,12 +37,27 @@
                                              selector:@selector(responseToAVAudioSessionRouteChange:)
                                                  name:AVAudioSessionRouteChangeNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToAVAudioSessionInterruption:)
+                                                 name:AVAudioSessionInterruptionNotification
+                                               object:nil];
 }
 
 - (void)responseToAVAudioSessionRouteChange:(NSNotification *)notification {
     AVAudioSessionRouteChangeReason changeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
     if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
         [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
+    }
+}
+
+- (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
+    AVAudioSessionInterruptionType interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue];
+    
+    if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeySessionIsActive];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
+        [[AudioSessionController sharedAudioSessionController] setupAudioSession];
     }
 }
 

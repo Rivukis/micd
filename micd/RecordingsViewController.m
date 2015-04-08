@@ -192,9 +192,6 @@ UIDocumentInteractionControllerDelegate>
     
     switch (interruptionType) {
         case AVAudioSessionInterruptionTypeBegan:
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeySessionIsActive];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-
             if (self.playerController.playerState == PlayerControllerStatePlaying) {
                 NSLog(@"pause playback and set bool");
                 [self pausePlaybackShouldAnimate:NO];
@@ -202,8 +199,6 @@ UIDocumentInteractionControllerDelegate>
             }
             break;
         case AVAudioSessionInterruptionTypeEnded:
-            [[AudioSessionController sharedAudioSessionController] setupAudioSession];
-            
             if (self.interruptionOccuredWhilePlaying && self.playerController.playerState != PlayerControllerStatePlaying) {
                 [self playPlaybackShouldAnimatePlayButton:NO];
                 NSLog(@"play playback");
@@ -366,6 +361,7 @@ UIDocumentInteractionControllerDelegate>
 
 - (IBAction)playPauseButtonPressed:(id)sender {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
+        [self addButtonBounceAnimationToView:self.playButton];
         return;
     }
     
@@ -696,9 +692,7 @@ UIDocumentInteractionControllerDelegate>
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
-        return;
-    }
+    BOOL sessionIsActive = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive];
     
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
     RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
@@ -711,7 +705,7 @@ UIDocumentInteractionControllerDelegate>
             self.editingCell = nil;
         }
     } else {
-        if (self.focusedCellModel == recordingCellModel) {
+        if (self.focusedCellModel == recordingCellModel && sessionIsActive) {
             if (self.focusedCellModel.state == CellStatePlaying) {
                 [self pausePlaybackShouldAnimatePauseButton:NO];
             } else {
@@ -722,7 +716,11 @@ UIDocumentInteractionControllerDelegate>
             self.focusedCellIndexPath = indexPath;
             
             [self readyPlayerWithRecording:self.focusedCellModel.recording];
-            [self playPlaybackShouldAnimatePlayButton:NO];
+            if (sessionIsActive) {
+                [self playPlaybackShouldAnimatePlayButton:NO];
+            } else {
+                [self.focusedCellModel setCellState:CellStatePaused];
+            }
         }
     }
 }

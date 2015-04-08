@@ -169,16 +169,11 @@ static BOOL const growForLouderNoises = NO;
     AVAudioSessionInterruptionType interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue];
     
     if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeySessionIsActive];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
         if (self.recorderController.recordingState == RecorderControllerStateRecording) {
             [self recordButtonPressed:self.recordButton];
             self.interruptionOccuredWhileRecording = YES;
         }
     } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
-        [[AudioSessionController sharedAudioSessionController] setupAudioSession];
-        
         if (self.interruptionOccuredWhileRecording && self.recorderController.recordingState != RecorderControllerStateRecording) {
             [self recordButtonPressed:self.recordButton];
         }
