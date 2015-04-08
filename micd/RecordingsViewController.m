@@ -116,9 +116,9 @@ UIDocumentInteractionControllerDelegate>
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
     
     // gonna hide and disable these buttons until were ready to use them
-//    self.shareButton.hidden = YES;
+    self.shareButton.hidden = YES;
     self.editButton.hidden = YES;
-//    self.shareButton.userInteractionEnabled = NO;
+    self.shareButton.userInteractionEnabled = NO;
     self.editButton.userInteractionEnabled = NO;
     ///////////////////////
     
