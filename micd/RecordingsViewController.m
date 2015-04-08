@@ -89,7 +89,6 @@ UIDocumentInteractionControllerDelegate>
     
     self.isFirstTimeLayingOutSubviews = YES;
     
-    [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
