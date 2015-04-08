@@ -184,6 +184,10 @@ UIDocumentInteractionControllerDelegate>
                                              selector:@selector(responseToAVAudioSessionRouteChange:)
                                                  name:AVAudioSessionRouteChangeNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(responseToApplicationDidBecomeActive:)
+                                                 name:kNotificationKeyApplicationDidBecomeActive
+                                               object:nil];
 }
 
 - (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
@@ -193,12 +197,13 @@ UIDocumentInteractionControllerDelegate>
         case AVAudioSessionInterruptionTypeBegan:
             if (self.playerController.playerState == PlayerControllerStatePlaying) {
                 NSLog(@"pause playback and set bool");
-                [self pausePlaybackShouldAnimate:NO];
+                [self pausePlaybackShouldAnimatePauseButton:NO];
                 self.interruptionOccuredWhilePlaying = YES;
             }
             break;
         case AVAudioSessionInterruptionTypeEnded:
             if (self.interruptionOccuredWhilePlaying && self.playerController.playerState != PlayerControllerStatePlaying) {
+                [self.focusedCellModel setCellState:CellStatePlaying];
                 [self playPlaybackShouldAnimatePlayButton:NO];
                 NSLog(@"play playback");
             }
@@ -238,6 +243,10 @@ UIDocumentInteractionControllerDelegate>
     if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable && self.playerController.playerState == PlayerControllerStatePlaying) {
         [self pausePlaybackShouldAnimatePauseButton:NO];
     }
+}
+
+- (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
+    self.interruptionOccuredWhilePlaying = NO;
 }
 
 #pragma mark - Helper Methods
