@@ -20,6 +20,7 @@
 #import "RemoteCommandCenterController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "ActivityItemProvider.h"
+#import "AudioSessionController.h"
 
 @interface RecordingsViewController ()
 <UITableViewDataSource,
@@ -66,7 +67,6 @@ UIDocumentInteractionControllerDelegate>
 
 @property (assign, nonatomic) BOOL audioWasPlaying_gestureStateBegan;
 @property (nonatomic, assign) BOOL interruptionOccuredWhilePlaying;
-@property (nonatomic, assign) BOOL currentlyInturrupted;
 
 @property (strong, nonatomic) NSIndexPath *focusedCellIndexPath;
 @property (strong, nonatomic) RecordingCell *editingCell;
@@ -192,7 +192,9 @@ UIDocumentInteractionControllerDelegate>
     
     switch (interruptionType) {
         case AVAudioSessionInterruptionTypeBegan:
-            self.currentlyInturrupted = YES;
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeySessionIsActive];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+
             if (self.playerController.playerState == PlayerControllerStatePlaying) {
                 NSLog(@"pause playback and set bool");
                 [self pausePlaybackShouldAnimate:NO];
@@ -200,7 +202,8 @@ UIDocumentInteractionControllerDelegate>
             }
             break;
         case AVAudioSessionInterruptionTypeEnded:
-            self.currentlyInturrupted = NO;
+            [[AudioSessionController sharedAudioSessionController] setupAudioSession];
+            
             if (self.interruptionOccuredWhilePlaying && self.playerController.playerState != PlayerControllerStatePlaying) {
                 [self playPlaybackShouldAnimatePlayButton:NO];
                 NSLog(@"play playback");
@@ -362,7 +365,7 @@ UIDocumentInteractionControllerDelegate>
 #pragma mark - Player Buttons
 
 - (IBAction)playPauseButtonPressed:(id)sender {
-    if (self.currentlyInturrupted) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
     
@@ -693,7 +696,7 @@ UIDocumentInteractionControllerDelegate>
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.currentlyInturrupted) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
     

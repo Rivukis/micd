@@ -1,5 +1,6 @@
 #import "AudioSessionController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "Constants.h"
 
 @implementation AudioSessionController
 
@@ -50,8 +51,14 @@
 - (void)setupAudioSession {
     AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
     [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
+    BOOL success = [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    if (success) {
+        [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeySessionIsActive];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeySessionIsActive];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)setAudioSessionOutputToSpeakersIfCurrentlySetToReciever {

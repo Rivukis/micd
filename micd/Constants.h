@@ -19,6 +19,7 @@ extern NSString *const kUserDefaultsKeyRecordingsSavePlaybackPosition;
 extern NSString *const kUserDefaultsKeyAutoStartRecordingAfterMaximumReached;
 extern NSString *const kUserDefaultsKeyMaxRecordingLength;
 extern NSString *const kUserDefaultsKeyLoveMicdQuestionAnswered;
+extern NSString *const kUserDefaultsKeySessionIsActive;
 
 // WatchKit shit
 extern NSString *const kWatchExtKeyMessageType;

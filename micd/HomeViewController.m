@@ -52,7 +52,6 @@ static BOOL const growForLouderNoises = NO;
 @property (assign, nonatomic) BOOL movingFromNoRecordingsState;
 
 @property (nonatomic, assign) BOOL interruptionOccuredWhileRecording;
-@property (nonatomic, assign) BOOL currentlyInturrupted;
 
 @property (nonatomic, assign) BOOL tryingToStopAndStartRecorder;
 @property (nonatomic, assign) BOOL shouldShowOtherStates;
@@ -167,13 +166,16 @@ static BOOL const growForLouderNoises = NO;
     AVAudioSessionInterruptionType interruptionType = [notification.userInfo[AVAudioSessionInterruptionTypeKey] integerValue];
     
     if (interruptionType == AVAudioSessionInterruptionTypeBegan) {
-        self.currentlyInturrupted = YES;
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserDefaultsKeySessionIsActive];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         if (self.recorderController.recordingState == RecorderControllerStateRecording) {
             [self recordButtonPressed:self.recordButton];
             self.interruptionOccuredWhileRecording = YES;
         }
     } else if (interruptionType == AVAudioSessionInterruptionTypeEnded) {
-        self.currentlyInturrupted = NO;
+        [[AudioSessionController sharedAudioSessionController] setupAudioSession];
+        
         if (self.interruptionOccuredWhileRecording && self.recorderController.recordingState != RecorderControllerStateRecording) {
             [self recordButtonPressed:self.recordButton];
         }
@@ -192,7 +194,7 @@ static BOOL const growForLouderNoises = NO;
 #pragma mark - Helper Methods
 
 - (void)startRecording {
-    if (self.currentlyInturrupted) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
     
