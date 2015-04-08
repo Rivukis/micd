@@ -132,17 +132,7 @@ static BOOL const growForLouderNoises = NO;
 
 - (void)responseToRecordPressedFromWatch:(NSNotification *)notification {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
-        [self.recorderController pauseRecording];
-        self.shouldShowOtherStates = YES;
-        [self animatePauseState];
-        __weak __typeof(self) weakSelf = self;
-        [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
-            if (error) {
-                NSLog(@"error retrieving recording: %@", error);
-                return;
-            }
-            [weakSelf.addNewRecordingDelegate addNewRecording:recording];
-        }];
+        [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
     } else {
         [[PlayerController sharedPlayer] pauseAudio];
         
@@ -183,12 +173,30 @@ static BOOL const growForLouderNoises = NO;
 - (void)responseToAVAudioSessionRouteChange:(NSNotification *)notification {
     AVAudioSessionRouteChangeReason changeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
     if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable && self.recorderController.recordingState == RecorderControllerStateRecording) {
-        self.shouldShowOtherStates = YES;
-        [self animatePauseState];
+        [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
     }
 }
 
 #pragma mark - Helper Methods
+// completionWhenRecordingIsSaved:(void(^)())completion
+- (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowOtherStates:(BOOL)shouldShowOtherStates completionBlockWhenRecordingIsSaved:(void(^)())completion {
+    [self.recorderController pauseRecording];
+    if (shouldShowOtherStates) {
+        self.shouldShowOtherStates = shouldShowOtherStates;
+    }
+    if (shouldAnimate) {
+        [self animatePauseState];
+    }
+    __weak __typeof(self) weakSelf = self;
+    [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
+        if (!error) {
+            [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+        }
+        if (completion) {
+            completion();
+        }
+    }];
+}
 
 - (void)startRecordingShouldAnimate:(BOOL)shouldAnimate {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
@@ -240,14 +248,7 @@ static BOOL const growForLouderNoises = NO;
 - (void)saveAndStartRecording {
     self.tryingToStopAndStartRecorder = YES;
 
-    [self.recorderController pauseRecording];
-    __weak __typeof(self) weakSelf = self;
-    [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
-        if (error) {
-            NSLog(@"error retrieving recording: %@", error);
-            return;
-        }
-        [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+    [self pauseRecordingShouldAnimate:NO shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:^{
         [self startRecordingShouldAnimate:NO];
         self.tryingToStopAndStartRecorder = NO;
     }];
@@ -322,19 +323,7 @@ static BOOL const growForLouderNoises = NO;
                 
             case RecorderControllerStateRecording: {
                 // time to stop
-                [self.recorderController pauseRecording];
-                __weak __typeof(self) weakSelf = self;
-                [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
-                    if (error) {
-                        NSLog(@"error retrieving recording: %@", error);
-                        return;
-                    }
-                    [weakSelf.addNewRecordingDelegate addNewRecording:recording];
-                }];
-                
-                self.shouldShowOtherStates = YES;
-                [self animatePauseState];
-                
+                [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
                 break;
             }
             case RecorderControllerStatePausing:
