@@ -82,7 +82,9 @@ BOOL const useEnhancedRecorder = NO;
     
     if (self.recordingState == RecorderControllerStatePaused || self.recordingState == RecorderControllerStateStopped) {
         success = [self.audioRecorder record];
-        self.recordingState = RecorderControllerStateRecording;
+        if (success) {
+            self.recordingState = RecorderControllerStateRecording;
+        }
     }
     
     return success;
