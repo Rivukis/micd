@@ -51,8 +51,10 @@
 - (void)setupAudioSession {
     AVAudioSession *sharedSession = [AVAudioSession sharedInstance];
     [sharedSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    BOOL success = [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    if (success) {
+    BOOL successfullySetActive = [sharedSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    
+    BOOL isOtherAudioPlaying = sharedSession.otherAudioPlaying;
+    if (successfullySetActive && !isOtherAudioPlaying) {
         [self setAudioSessionOutputToSpeakersIfCurrentlySetToReciever];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserDefaultsKeySessionIsActive];
     } else {
@@ -80,9 +82,9 @@
 
 - (void)requestMicrophonePermissionWithCompletion:(void(^)())completion {
     completion();
-//    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-//        completion();
-//    }];
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        completion();
+    }];
 }
 
 @end

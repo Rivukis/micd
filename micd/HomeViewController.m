@@ -216,7 +216,10 @@ static BOOL const growForLouderNoises = NO;
         }
     } else {
         [audioSessionController requestMicrophonePermissionWithCompletion:^{
-            [self startRecording];
+//            if (!self.justAskedForPermission) {
+                [self startRecording];
+//            }
+//            self.justAskedForPermission = YES;
         }];
     }
 }
