@@ -482,8 +482,8 @@
                                     <action selector="goToSettingsPressed:" destination="CQC-OG-zPH" eventType="touchUpInside" id="dsE-tM-9rw"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuI-hM-IeT">
-                                <rect key="frame" x="115" y="43" width="90" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="placeholder" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuI-hM-IeT">
+                                <rect key="frame" x="16" y="43" width="288" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="288" id="GRb-i9-Buj"/>
                                 </constraints>
@@ -494,17 +494,24 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="AuI-hM-IeT" secondAttribute="centerX" id="1ml-hn-jHZ"/>
+                            <constraint firstItem="AuI-hM-IeT" firstAttribute="top" secondItem="Pzg-1K-RJI" secondAttribute="bottom" constant="23" id="2wD-9Q-dZM"/>
                             <constraint firstItem="gG9-Jw-dfB" firstAttribute="trailing" secondItem="Kqv-Rs-pyE" secondAttribute="trailingMargin" id="5dp-o8-qxq"/>
                             <constraint firstItem="F6d-JZ-RLO" firstAttribute="top" secondItem="gG9-Jw-dfB" secondAttribute="bottom" constant="16" id="DCd-dX-vfJ"/>
+                            <constraint firstItem="gG9-Jw-dfB" firstAttribute="top" secondItem="AuI-hM-IeT" secondAttribute="bottom" constant="8" id="IdF-c1-5WS"/>
                             <constraint firstAttribute="centerY" secondItem="AuI-hM-IeT" secondAttribute="centerY" constant="187" id="L60-3E-pQT"/>
                             <constraint firstItem="F6d-JZ-RLO" firstAttribute="leading" secondItem="Kqv-Rs-pyE" secondAttribute="leadingMargin" id="ZNe-ic-jRC"/>
                             <constraint firstItem="F6d-JZ-RLO" firstAttribute="trailing" secondItem="Kqv-Rs-pyE" secondAttribute="trailingMargin" id="bq5-tU-M03"/>
                             <constraint firstItem="gG9-Jw-dfB" firstAttribute="leading" secondItem="Kqv-Rs-pyE" secondAttribute="leadingMargin" id="jdT-YF-Ha8"/>
                             <constraint firstItem="b8T-qx-BNk" firstAttribute="top" secondItem="F6d-JZ-RLO" secondAttribute="bottom" constant="16" id="m70-kt-Ba2"/>
+                            <constraint firstItem="AuI-hM-IeT" firstAttribute="trailing" secondItem="Kqv-Rs-pyE" secondAttribute="trailingMargin" id="nfi-T7-LHl"/>
                             <constraint firstAttribute="centerX" secondItem="F6d-JZ-RLO" secondAttribute="centerX" id="omU-2E-M8g"/>
+                            <constraint firstItem="AuI-hM-IeT" firstAttribute="leading" secondItem="Kqv-Rs-pyE" secondAttribute="leadingMargin" id="q3A-t9-6m2"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="1ml-hn-jHZ"/>
+                                <exclude reference="L60-3E-pQT"/>
+                                <exclude reference="IdF-c1-5WS"/>
                                 <exclude reference="omU-2E-M8g"/>
                             </mask>
                         </variation>
