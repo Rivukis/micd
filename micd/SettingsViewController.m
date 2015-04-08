@@ -258,6 +258,8 @@
 }
 
 - (void)showAppStore:(FeedbackViewController *)popoverViewController {
+    NSString *iTunesLink = @"https://itunes.apple.com/us/app/apple-store/";
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
     [self refreshFeedBackViews];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -265,8 +267,6 @@
 #pragma mark - MFMailComposeViewControllerDelegate
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [self.sendFeedbackButton setTitle:@"Thank you for your feedback!" forState:UIControlStateNormal];
-    
     switch (result) {
         case MFMailComposeResultSent:
             NSLog(@"You sent the email.");
