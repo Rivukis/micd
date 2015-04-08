@@ -201,13 +201,13 @@ static BOOL const growForLouderNoises = NO;
         
         BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
         if (accessGranted) {
-            [self.recorderController startRecording];
+            BOOL success = [self.recorderController startRecording];
             [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
                                                                      createdDate:@"buttons disabled"
                                                                         duration:nil
                                                                      elapsedTime:nil
                                                                         forstate:RemoteCommandCenterControllerStateRecording];
-            if (shouldAnimate) {
+            if (shouldAnimate && success) {
                 [self animateRecordingState];
             }
         } else {
@@ -217,7 +217,7 @@ static BOOL const growForLouderNoises = NO;
     } else {
         [audioSessionController requestMicrophonePermissionWithCompletion:^{
 //            if (!self.justAskedForPermission) {
-                [self startRecordingShouldAnimate:shouldAnimate];
+//            [self startRecordingShouldAnimate:shouldAnimate];
 //            }
 //            self.justAskedForPermission = YES;
         }];

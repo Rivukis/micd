@@ -72,17 +72,20 @@ BOOL const useEnhancedRecorder = NO;
 
 #pragma mark - Recording Methods
 
-- (void)startRecording {
+- (BOOL)startRecording {
+    BOOL success = NO;
+    
     // TODO: handle error when setting session to active
     if (self.recordingState == RecorderControllerStateStopped) {
         self.currentRecordingStartDate = [NSDate date];
     }
     
     if (self.recordingState == RecorderControllerStatePaused || self.recordingState == RecorderControllerStateStopped) {
-        [self.audioRecorder record];
+        success = [self.audioRecorder record];
         self.recordingState = RecorderControllerStateRecording;
-        NSLog(@"recording");
     }
+    
+    return success;
 }
 
 - (void)pauseRecording {

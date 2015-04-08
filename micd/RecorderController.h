@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, RecorderControllerState) {
 @property (nonatomic, readonly) NSTimeInterval currentRecordingTime;
 @property (nonatomic, readonly) NSString *currentRecordingTimeAsString;
 
-- (void)startRecording;
+- (BOOL)startRecording;
     // does nothing if already recording
 - (void)pauseRecording;
     // does nothing if already paused
