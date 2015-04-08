@@ -146,7 +146,7 @@ static BOOL const growForLouderNoises = NO;
     } else {
         [[PlayerController sharedPlayer] pauseAudio];
         
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
             [self startRecording];
             [self animateRecordingState];
         }
@@ -317,7 +317,7 @@ static BOOL const growForLouderNoises = NO;
                 // time to record
                 [[PlayerController sharedPlayer] pauseAudio];
                 
-                if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
                     [self startRecording];
                     [self animateRecordingState];
                 }
