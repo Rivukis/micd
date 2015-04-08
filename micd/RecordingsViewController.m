@@ -696,6 +696,7 @@ UIDocumentInteractionControllerDelegate>
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
