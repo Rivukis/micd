@@ -406,10 +406,16 @@ static BOOL const growForLouderNoises = NO;
         self.recordButtonEnabled = NO;
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
-        [self.movementDelegate moveWithTranslation:translation];
-        [self rotateGearsWithTranslation:translation];
+        
+        // check to see if we are in the intended app zone, if not slow panning to half
+        if ([self isWithinAppArea]) {
+            [self.movementDelegate moveWithTranslation:translation];
+        } else {
+            translation.y = translation.y/2;
+            [self.movementDelegate moveWithTranslation:translation];
+        }
+        
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
@@ -591,16 +597,22 @@ static BOOL const growForLouderNoises = NO;
     return [self backgroundImageHomeStateYOffset] - backgroundImageYOffsetToNewState;
 }
 
+- (BOOL)isWithinAppArea {
+    return (self.view.frame.origin.y < [self backgroundImageRecordingsStateYOffset] && self.view.frame.origin.y > [self backgroundImageSettingsStateYOffset]);
+}
+
 #pragma mark - Adjusting views during pan Translation
 
 - (void)adjustFrameBasedOnTranslation:(CGPoint)translation {
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
+    
+    [self rotateGearsWithYTranslation:translation.y];
 }
 
-- (void)rotateGearsWithTranslation:(CGPoint)translation {
-    [self.gearsImageView moveGearsWithRotationAngle:translation.y];
+- (void)rotateGearsWithYTranslation:(CGFloat)yTranslation {
+    [self.gearsImageView moveGearsWithRotationAngle:yTranslation];
 }
 
 - (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
