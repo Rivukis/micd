@@ -27,6 +27,10 @@ static BOOL const growForLouderNoises = NO;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIImageView *gearsCircleImageView;
 @property (strong, nonatomic) GearsImageView *gearsImageView;
+@property (strong, nonatomic) UIButton *recordingsLowerMoveStateButton;
+@property (strong, nonatomic) UIButton *homeUpperMoveStateButton;
+@property (strong, nonatomic) UIButton *homeLowerMoveStateButton;
+@property (strong, nonatomic) UIButton *settingsUpperMoveStateButton;
 
 @property (strong, nonatomic) RecorderController *recorderController;
 
@@ -95,6 +99,22 @@ static BOOL const growForLouderNoises = NO;
     self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     self.panGesture.delegate = self;
     [self.view addGestureRecognizer:self.panGesture];
+    
+    self.recordingsLowerMoveStateButton = [[UIButton alloc] init];
+    [self.view addSubview:self.recordingsLowerMoveStateButton];
+    [self.recordingsLowerMoveStateButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.homeUpperMoveStateButton = [[UIButton alloc] init];
+    [self.view addSubview:self.homeUpperMoveStateButton];
+    [self.homeUpperMoveStateButton addTarget:self action:@selector(moveToPlayerState) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.homeLowerMoveStateButton = [[UIButton alloc] init];
+    [self.view addSubview:self.homeLowerMoveStateButton];
+    [self.homeLowerMoveStateButton addTarget:self action:@selector(moveToSettingState) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.settingsUpperMoveStateButton = [[UIButton alloc] init];
+    [self.view addSubview:self.settingsUpperMoveStateButton];
+    [self.settingsUpperMoveStateButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -405,10 +425,13 @@ static BOOL const growForLouderNoises = NO;
 #pragma mark - PanGestureRecognizer
 
 - (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
-    
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.movementDelegate cancelMoveAnimations];
         self.recordButtonEnabled = NO;
+        self.recordingsLowerMoveStateButton.enabled = NO;
+        self.homeUpperMoveStateButton.enabled = NO;
+        self.homeLowerMoveStateButton.enabled = NO;
+        self.settingsUpperMoveStateButton.enabled = NO;
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
@@ -423,7 +446,11 @@ static BOOL const growForLouderNoises = NO;
         
         [gestureRecognizer setTranslation:CGPointMake(0, 0) inView:gestureRecognizer.view];
         
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
+        self.recordingsLowerMoveStateButton.enabled = YES;
+        self.homeUpperMoveStateButton.enabled = YES;
+        self.homeLowerMoveStateButton.enabled = YES;
+        self.settingsUpperMoveStateButton.enabled = YES;
         
         NSInteger velocityHorizon = 200;
         CGPoint velocity = [gestureRecognizer velocityInView:gestureRecognizer.view];
@@ -574,6 +601,30 @@ static BOOL const growForLouderNoises = NO;
         [self goToRecordButtonOnlyStateShouldAnimate:NO];
         self.movingFromNoRecordingsState = YES;
     }
+    
+    float gestureSizeWidthConstant = windowHeight * 0.4f; // 0.4
+    float gestureSizeHeightConstant = windowHeight * 0.18f;
+    float baseVerticalAdjustment = 0 - self.view.frame.origin.y;
+    
+    self.recordingsLowerMoveStateButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
+                                                           baseVerticalAdjustment - gestureSizeHeightConstant - windowHeight*0.06f,
+                                                           gestureSizeWidthConstant,
+                                                           gestureSizeHeightConstant);
+    
+    self.homeUpperMoveStateButton.frame = CGRectMake(windowWidth/2.0f - gestureSizeWidthConstant/2,
+                                                        baseVerticalAdjustment - windowHeight*0.008f,
+                                                        gestureSizeWidthConstant,
+                                                        gestureSizeHeightConstant);
+    
+    self.homeLowerMoveStateButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
+                                                     baseVerticalAdjustment - gestureSizeHeightConstant + windowHeight * 1.09 - windowHeight*0.065f,
+                                                     gestureSizeWidthConstant,
+                                                     gestureSizeHeightConstant);
+    
+    self.settingsUpperMoveStateButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,
+                                                      baseVerticalAdjustment + windowHeight*1.09f - windowHeight*0.015f,
+                                                      gestureSizeWidthConstant,
+                                                      gestureSizeHeightConstant);
 }
 
 - (CGRect)frameForState:(PositionState)state {
