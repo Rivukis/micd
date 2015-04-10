@@ -626,13 +626,10 @@ UIDocumentInteractionControllerDelegate>
     [self.focusedCellModel setCellState:CellStateDefault];
     self.focusedCellIndexPath = indexPath;
     
+    self.focusedCellModel.recording.currentPlaybackPosistion = 0.0f;
     [self readyPlayerWithRecording:self.focusedCellModel.recording];
-    // maybe
-    //        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
     
     if (wasPlaying) {
-        // maybe
-//        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
         [self playPlaybackShouldAnimatePlayButton:YES];
     }
     
@@ -659,13 +656,10 @@ UIDocumentInteractionControllerDelegate>
     [self.focusedCellModel setCellState:CellStateDefault];
     self.focusedCellIndexPath = indexPath;
     
+    self.focusedCellModel.recording.currentPlaybackPosistion = 0.0f;
     [self readyPlayerWithRecording:self.focusedCellModel.recording];
-    // maybe
-    //        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
     
     if (wasPlaying) {
-        // maybe
-        //        self.focusedCellModel.recording.currentPlaybackPosistion = 0;
         [self playPlaybackShouldAnimatePlayButton:YES];
     }
     
