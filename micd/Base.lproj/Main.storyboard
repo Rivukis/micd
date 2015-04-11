@@ -83,7 +83,7 @@
                                                                 <constraint firstAttribute="height" constant="1" id="F4o-Sa-Noc"/>
                                                             </constraints>
                                                         </view>
-                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="998" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
+                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="998" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
                                                             <constraints>
                                                                 <constraint firstAttribute="height" priority="750" constant="35" id="WCs-EU-yWr"/>
                                                                 <constraint firstAttribute="width" id="kwG-q3-3cQ"/>
@@ -567,11 +567,57 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqv-Dp-2mr">
-                                <rect key="frame" x="0.0" y="120" width="375" height="435"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wlQ-wE-7eb">
+                                <rect key="frame" x="32" y="613" width="311" height="34"/>
+                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="feedback please">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="emailUsTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="dWC-SA-sAQ"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bvc-aN-eEs">
+                                <rect key="frame" x="32" y="555" width="311" height="45"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Bvc-aN-eEs" secondAttribute="height" multiplier="311:45" id="K5J-ID-rrJ"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ctB-4M-UoI">
+                                <rect key="frame" x="193" y="613" width="150" height="34"/>
+                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Yes">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="yesTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="Q7M-u3-dEs"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TWk-ho-1y6">
+                                <rect key="frame" x="32" y="613" width="150" height="34"/>
+                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="Obd-ke-YwY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="No">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="noTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="u5N-dT-6vq"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqv-Dp-2mr" userLabel="Circle To Love Micd View">
+                                <rect key="frame" x="0.0" y="100" width="375" height="475"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sa1-V0-BT4">
-                                        <rect key="frame" x="0.0" y="114.5" width="375" height="207.5"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sa1-V0-BT4" userLabel="Settings Container View">
+                                        <rect key="frame" x="0.0" y="134.5" width="375" height="207.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Remember playback position" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mae-01-frw">
                                                 <rect key="frame" x="32" y="0.0" width="254" height="30.5"/>
@@ -677,51 +723,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wlQ-wE-7eb">
-                                <rect key="frame" x="32" y="613" width="311" height="34"/>
-                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
-                                <state key="normal" title="feedback please">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="emailUsTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="dWC-SA-sAQ"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bvc-aN-eEs">
-                                <rect key="frame" x="32" y="555" width="311" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Bvc-aN-eEs" secondAttribute="height" multiplier="311:45" id="K5J-ID-rrJ"/>
-                                </constraints>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ctB-4M-UoI">
-                                <rect key="frame" x="193" y="613" width="150" height="34"/>
-                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
-                                <state key="normal" title="Yes">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="yesTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="Q7M-u3-dEs"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TWk-ho-1y6">
-                                <rect key="frame" x="32" y="613" width="150" height="34"/>
-                                <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="Obd-ke-YwY"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
-                                <state key="normal" title="No">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="noTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="u5N-dT-6vq"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.11764705882352941" green="0.5607843137254902" blue="0.76078431372549016" alpha="1" colorSpace="calibratedRGB"/>
@@ -730,10 +731,10 @@
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="centerY" secondItem="TWk-ho-1y6" secondAttribute="centerY" id="27z-6v-z5Y"/>
                             <constraint firstItem="AgR-nW-Ft7" firstAttribute="top" secondItem="TWk-ho-1y6" secondAttribute="bottom" constant="20" id="9Qr-oa-3SO"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="leading" secondItem="TWk-ho-1y6" secondAttribute="leading" id="AJt-gR-803"/>
-                            <constraint firstItem="Bvc-aN-eEs" firstAttribute="top" secondItem="Uqv-Dp-2mr" secondAttribute="bottom" id="B53-Tz-VST"/>
+                            <constraint firstItem="Bvc-aN-eEs" firstAttribute="top" secondItem="Uqv-Dp-2mr" secondAttribute="bottom" multiplier="0.965" id="B53-Tz-VST"/>
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="height" secondItem="TWk-ho-1y6" secondAttribute="height" id="Jj7-S1-eQT"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="leading" secondItem="VZF-qB-C28" secondAttribute="leadingMargin" constant="16" id="K2U-Pe-Ite"/>
-                            <constraint firstItem="Uqv-Dp-2mr" firstAttribute="top" secondItem="AgR-nW-Ft7" secondAttribute="top" multiplier="0.18" id="OKb-ky-3lh"/>
+                            <constraint firstItem="Uqv-Dp-2mr" firstAttribute="top" secondItem="AgR-nW-Ft7" secondAttribute="top" multiplier="0.15" id="OKb-ky-3lh"/>
                             <constraint firstItem="TWk-ho-1y6" firstAttribute="width" secondItem="ctB-4M-UoI" secondAttribute="width" id="YSu-Uc-A8R"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="trailing" secondItem="ctB-4M-UoI" secondAttribute="trailing" id="cjg-Qi-aRy"/>
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="trailing" secondItem="ctB-4M-UoI" secondAttribute="trailing" id="dSm-nN-xqr"/>
