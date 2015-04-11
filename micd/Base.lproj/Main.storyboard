@@ -567,6 +567,116 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqv-Dp-2mr">
+                                <rect key="frame" x="0.0" y="120" width="375" height="435"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sa1-V0-BT4">
+                                        <rect key="frame" x="0.0" y="114.5" width="375" height="207.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Remember playback position" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mae-01-frw">
+                                                <rect key="frame" x="32" y="0.0" width="254" height="30.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OmA-kA-rFC" userLabel="Remember playback position switch">
+                                                <rect key="frame" x="294" y="0.0" width="51" height="31"/>
+                                                <color key="tintColor" red="0.12941176469999999" green="0.63921568630000003" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="recordingsSavePlaybackPositionSwitchValueChanged:" destination="BMN-E5-xRT" eventType="valueChanged" id="GLt-XX-msL"/>
+                                                </connections>
+                                            </switch>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Start recording on launch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEA-e1-oec">
+                                                <rect key="frame" x="32" y="57" width="254" height="19.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jjx-vS-RkR" userLabel="Start recording on launch switch">
+                                                <rect key="frame" x="294" y="51" width="51" height="31"/>
+                                                <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="startRecordingOnAppDidBecomeActiveSwitchValueChanged:" destination="BMN-E5-xRT" eventType="valueChanged" id="RrG-YE-BSe"/>
+                                                </connections>
+                                            </switch>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Max recording length" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nqe-Vw-Wrc">
+                                                <rect key="frame" x="109" y="102" width="157" height="19.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="93h-24-nKO">
+                                                <rect key="frame" x="32" y="131" width="311" height="29"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="rtM-XO-ez0"/>
+                                                </constraints>
+                                                <segments>
+                                                    <segment title="5 min"/>
+                                                    <segment title="15 min"/>
+                                                    <segment title="30 min"/>
+                                                </segments>
+                                                <connections>
+                                                    <action selector="maxRecordingLengthSegmentedControl:" destination="BMN-E5-xRT" eventType="valueChanged" id="XKT-LG-kfd"/>
+                                                </connections>
+                                            </segmentedControl>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Automatically start recording again when max recording length is reached" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="11" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0d-Of-OuQ">
+                                                <rect key="frame" x="32" y="169" width="254" height="38.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-Os-uBh" userLabel="Auto start recording when max reached switch">
+                                                <rect key="frame" x="294" y="173" width="51" height="31"/>
+                                                <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="autoStartRecordingAfterMaximumReachedSwitch:" destination="BMN-E5-xRT" eventType="valueChanged" id="sFI-t6-bOL"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="jjx-vS-RkR" firstAttribute="top" secondItem="OmA-kA-rFC" secondAttribute="bottom" constant="20" id="5Iz-vP-PYk"/>
+                                            <constraint firstAttribute="bottom" secondItem="X0d-Of-OuQ" secondAttribute="bottom" id="DOE-PQ-mgX"/>
+                                            <constraint firstItem="mae-01-frw" firstAttribute="leading" secondItem="Sa1-V0-BT4" secondAttribute="leading" constant="32" id="DcH-1X-fQE"/>
+                                            <constraint firstItem="OmA-kA-rFC" firstAttribute="leading" secondItem="mae-01-frw" secondAttribute="trailing" constant="8" id="Ibk-hM-rHh"/>
+                                            <constraint firstItem="jjx-vS-RkR" firstAttribute="centerX" secondItem="OmA-kA-rFC" secondAttribute="centerX" id="JXJ-7p-MEJ"/>
+                                            <constraint firstItem="DEA-e1-oec" firstAttribute="trailing" secondItem="X0d-Of-OuQ" secondAttribute="trailing" id="PMe-8G-QJg"/>
+                                            <constraint firstItem="OmA-kA-rFC" firstAttribute="top" secondItem="Sa1-V0-BT4" secondAttribute="top" id="R5j-5v-fzX"/>
+                                            <constraint firstItem="mae-01-frw" firstAttribute="top" secondItem="Sa1-V0-BT4" secondAttribute="top" id="VBg-fq-NbH"/>
+                                            <constraint firstItem="mae-01-frw" firstAttribute="trailing" secondItem="DEA-e1-oec" secondAttribute="trailing" id="Ztn-Sd-33g"/>
+                                            <constraint firstItem="d5T-Os-uBh" firstAttribute="centerY" secondItem="X0d-Of-OuQ" secondAttribute="centerY" id="edM-3J-6f4"/>
+                                            <constraint firstItem="93h-24-nKO" firstAttribute="leading" secondItem="DEA-e1-oec" secondAttribute="leading" id="fl2-Xo-HAh"/>
+                                            <constraint firstItem="jjx-vS-RkR" firstAttribute="centerY" secondItem="DEA-e1-oec" secondAttribute="centerY" id="fzx-0n-n1i"/>
+                                            <constraint firstItem="mae-01-frw" firstAttribute="leading" secondItem="DEA-e1-oec" secondAttribute="leading" id="iES-xE-pfX"/>
+                                            <constraint firstItem="DEA-e1-oec" firstAttribute="leading" secondItem="X0d-Of-OuQ" secondAttribute="leading" id="isB-dw-77r"/>
+                                            <constraint firstItem="d5T-Os-uBh" firstAttribute="centerX" secondItem="jjx-vS-RkR" secondAttribute="centerX" id="k6Z-3W-zVY"/>
+                                            <constraint firstItem="mae-01-frw" firstAttribute="centerY" secondItem="OmA-kA-rFC" secondAttribute="centerY" id="lDy-FR-Nqu"/>
+                                            <constraint firstAttribute="centerX" secondItem="Nqe-Vw-Wrc" secondAttribute="centerX" id="rGV-j3-LyT"/>
+                                            <constraint firstAttribute="trailing" secondItem="OmA-kA-rFC" secondAttribute="trailing" constant="32" id="rsb-6Y-IcH"/>
+                                            <constraint firstItem="93h-24-nKO" firstAttribute="trailing" secondItem="jjx-vS-RkR" secondAttribute="trailing" id="u5z-9A-d2l"/>
+                                            <constraint firstItem="93h-24-nKO" firstAttribute="top" secondItem="Nqe-Vw-Wrc" secondAttribute="bottom" constant="10" id="ucB-BF-oEX"/>
+                                            <constraint firstItem="Nqe-Vw-Wrc" firstAttribute="top" secondItem="jjx-vS-RkR" secondAttribute="bottom" constant="20" id="vAR-4c-aF2"/>
+                                            <constraint firstItem="jjx-vS-RkR" firstAttribute="leading" secondItem="DEA-e1-oec" secondAttribute="trailing" constant="8" id="xyN-jO-rWB"/>
+                                            <constraint firstItem="X0d-Of-OuQ" firstAttribute="top" secondItem="93h-24-nKO" secondAttribute="bottom" constant="10" id="y9n-JB-M74"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Sa1-V0-BT4" firstAttribute="width" secondItem="Uqv-Dp-2mr" secondAttribute="width" id="1Hf-3z-vO4"/>
+                                    <constraint firstItem="Sa1-V0-BT4" firstAttribute="height" secondItem="Uqv-Dp-2mr" secondAttribute="height" multiplier="0.8" id="1nm-kZ-QIf"/>
+                                    <constraint firstAttribute="centerX" secondItem="Sa1-V0-BT4" secondAttribute="centerX" id="Wbs-bl-jeY"/>
+                                    <constraint firstAttribute="centerY" secondItem="Sa1-V0-BT4" secondAttribute="centerY" id="w5v-du-OI2"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="1nm-kZ-QIf"/>
+                                    </mask>
+                                </variation>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wlQ-wE-7eb">
                                 <rect key="frame" x="32" y="613" width="311" height="34"/>
                                 <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -600,6 +710,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TWk-ho-1y6">
                                 <rect key="frame" x="32" y="613" width="150" height="34"/>
                                 <color key="backgroundColor" red="0.11565175079999999" green="0.96290342370000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="Obd-ke-YwY"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
                                 <state key="normal" title="No">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -609,113 +722,29 @@
                                     <action selector="noTapped:" destination="BMN-E5-xRT" eventType="touchUpInside" id="u5N-dT-6vq"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OmA-kA-rFC" userLabel="Remember playback position switch">
-                                <rect key="frame" x="294" y="151.5" width="51" height="31"/>
-                                <color key="tintColor" red="0.12941176469999999" green="0.63921568630000003" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <action selector="recordingsSavePlaybackPositionSwitchValueChanged:" destination="BMN-E5-xRT" eventType="valueChanged" id="GLt-XX-msL"/>
-                                </connections>
-                            </switch>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jjx-vS-RkR" userLabel="Start recording on launch switch">
-                                <rect key="frame" x="294" y="207.5" width="51" height="31"/>
-                                <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <action selector="startRecordingOnAppDidBecomeActiveSwitchValueChanged:" destination="BMN-E5-xRT" eventType="valueChanged" id="RrG-YE-BSe"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Remember playback position" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mae-01-frw">
-                                <rect key="frame" x="32" y="157" width="254" height="19.5"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Start recording on launch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEA-e1-oec">
-                                <rect key="frame" x="32" y="213.5" width="254" height="19.5"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Automatically start recording again when max recording length is reached" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="11" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0d-Of-OuQ">
-                                <rect key="frame" x="32" y="344.5" width="254" height="38.5"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Max recording length" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nqe-Vw-Wrc">
-                                <rect key="frame" x="108" y="268.5" width="157" height="19.5"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-Os-uBh" userLabel="Auto start recording when max reached switch">
-                                <rect key="frame" x="294" y="348.5" width="51" height="31"/>
-                                <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <action selector="autoStartRecordingAfterMaximumReachedSwitch:" destination="BMN-E5-xRT" eventType="valueChanged" id="sFI-t6-bOL"/>
-                                </connections>
-                            </switch>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="93h-24-nKO">
-                                <rect key="frame" x="32" y="300.5" width="311" height="29"/>
-                                <segments>
-                                    <segment title="5 min"/>
-                                    <segment title="15 min"/>
-                                    <segment title="30 min"/>
-                                </segments>
-                                <connections>
-                                    <action selector="maxRecordingLengthSegmentedControl:" destination="BMN-E5-xRT" eventType="valueChanged" id="XKT-LG-kfd"/>
-                                </connections>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.11764705882352941" green="0.5607843137254902" blue="0.76078431372549016" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="TWk-ho-1y6" firstAttribute="centerY" secondItem="ctB-4M-UoI" secondAttribute="centerY" id="0u6-qt-d2O"/>
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="centerY" secondItem="TWk-ho-1y6" secondAttribute="centerY" id="27z-6v-z5Y"/>
-                            <constraint firstItem="Nqe-Vw-Wrc" firstAttribute="top" secondItem="jjx-vS-RkR" secondAttribute="bottom" constant="30" id="74F-mf-EeD"/>
-                            <constraint firstItem="jjx-vS-RkR" firstAttribute="centerY" secondItem="DEA-e1-oec" secondAttribute="centerY" constant="-0.5" id="7PC-gm-8FR"/>
-                            <constraint firstItem="TWk-ho-1y6" firstAttribute="leading" secondItem="VZF-qB-C28" secondAttribute="leadingMargin" constant="16" id="8Ww-hI-T9Y"/>
                             <constraint firstItem="AgR-nW-Ft7" firstAttribute="top" secondItem="TWk-ho-1y6" secondAttribute="bottom" constant="20" id="9Qr-oa-3SO"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="leading" secondItem="TWk-ho-1y6" secondAttribute="leading" id="AJt-gR-803"/>
-                            <constraint firstItem="jjx-vS-RkR" firstAttribute="trailing" secondItem="OmA-kA-rFC" secondAttribute="trailing" id="BKO-8i-DUL"/>
-                            <constraint firstItem="DEA-e1-oec" firstAttribute="leading" secondItem="93h-24-nKO" secondAttribute="leading" id="DFe-e0-0Ez"/>
+                            <constraint firstItem="Bvc-aN-eEs" firstAttribute="top" secondItem="Uqv-Dp-2mr" secondAttribute="bottom" id="B53-Tz-VST"/>
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="height" secondItem="TWk-ho-1y6" secondAttribute="height" id="Jj7-S1-eQT"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="leading" secondItem="VZF-qB-C28" secondAttribute="leadingMargin" constant="16" id="K2U-Pe-Ite"/>
-                            <constraint firstItem="d5T-Os-uBh" firstAttribute="top" secondItem="93h-24-nKO" secondAttribute="bottom" constant="20" id="KMW-QM-pWG"/>
-                            <constraint firstItem="mae-01-frw" firstAttribute="leading" secondItem="VZF-qB-C28" secondAttribute="leadingMargin" constant="16" id="MXh-sg-RmL"/>
-                            <constraint firstItem="DEA-e1-oec" firstAttribute="leading" secondItem="mae-01-frw" secondAttribute="leading" id="Oqz-56-i9P"/>
-                            <constraint firstItem="X0d-Of-OuQ" firstAttribute="top" secondItem="93h-24-nKO" secondAttribute="bottom" constant="56" id="UFO-wj-ZN3"/>
-                            <constraint firstItem="DEA-e1-oec" firstAttribute="leading" secondItem="X0d-Of-OuQ" secondAttribute="leading" id="VuF-66-8zq"/>
-                            <constraint firstItem="mae-01-frw" firstAttribute="centerY" secondItem="AgR-nW-Ft7" secondAttribute="top" multiplier="0.25" id="WrJ-FU-sRQ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ctB-4M-UoI" secondAttribute="trailing" constant="16" id="XMd-W1-lhR"/>
+                            <constraint firstItem="Uqv-Dp-2mr" firstAttribute="top" secondItem="AgR-nW-Ft7" secondAttribute="top" multiplier="0.18" id="OKb-ky-3lh"/>
                             <constraint firstItem="TWk-ho-1y6" firstAttribute="width" secondItem="ctB-4M-UoI" secondAttribute="width" id="YSu-Uc-A8R"/>
-                            <constraint firstItem="jjx-vS-RkR" firstAttribute="trailing" secondItem="93h-24-nKO" secondAttribute="trailing" id="cCQ-fI-8nf"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="trailing" secondItem="ctB-4M-UoI" secondAttribute="trailing" id="cjg-Qi-aRy"/>
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="trailing" secondItem="ctB-4M-UoI" secondAttribute="trailing" id="dSm-nN-xqr"/>
-                            <constraint firstItem="93h-24-nKO" firstAttribute="top" secondItem="Nqe-Vw-Wrc" secondAttribute="bottom" constant="12.5" id="efB-CJ-wf9"/>
-                            <constraint firstItem="d5T-Os-uBh" firstAttribute="leading" secondItem="X0d-Of-OuQ" secondAttribute="trailing" constant="8" id="gV3-ab-yqm"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Bvc-aN-eEs" secondAttribute="trailing" constant="16" id="h5i-RI-81u"/>
+                            <constraint firstItem="ctB-4M-UoI" firstAttribute="height" secondItem="TWk-ho-1y6" secondAttribute="height" id="k7q-Lz-goM"/>
+                            <constraint firstAttribute="trailing" secondItem="Uqv-Dp-2mr" secondAttribute="trailing" id="lCI-VL-rif"/>
                             <constraint firstItem="TWk-ho-1y6" firstAttribute="top" secondItem="Bvc-aN-eEs" secondAttribute="bottom" constant="13" id="lsA-ou-eir"/>
-                            <constraint firstItem="OmA-kA-rFC" firstAttribute="leading" secondItem="mae-01-frw" secondAttribute="trailing" constant="8" id="oHK-y2-Ngo"/>
-                            <constraint firstItem="jjx-vS-RkR" firstAttribute="top" secondItem="OmA-kA-rFC" secondAttribute="bottom" constant="25" id="orc-M6-FqA"/>
-                            <constraint firstItem="OmA-kA-rFC" firstAttribute="centerY" secondItem="mae-01-frw" secondAttribute="centerY" id="sRj-FW-5eZ"/>
-                            <constraint firstItem="jjx-vS-RkR" firstAttribute="leading" secondItem="DEA-e1-oec" secondAttribute="trailing" constant="8" id="syz-s5-4n1"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="OmA-kA-rFC" secondAttribute="trailing" constant="16" id="ur2-wX-GYh"/>
                             <constraint firstItem="ctB-4M-UoI" firstAttribute="leading" secondItem="TWk-ho-1y6" secondAttribute="trailing" constant="11" id="vg9-k4-3r2"/>
-                            <constraint firstAttribute="centerX" secondItem="Nqe-Vw-Wrc" secondAttribute="centerX" constant="0.5" id="waq-O3-e3h"/>
+                            <constraint firstItem="Uqv-Dp-2mr" firstAttribute="leading" secondItem="VZF-qB-C28" secondAttribute="leading" id="yOU-pG-5Fp"/>
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="leading" secondItem="TWk-ho-1y6" secondAttribute="leading" id="ygW-3a-pgq"/>
-                            <constraint firstItem="jjx-vS-RkR" firstAttribute="trailing" secondItem="d5T-Os-uBh" secondAttribute="trailing" id="yrU-Kr-Pbt"/>
-                            <constraint firstItem="X0d-Of-OuQ" firstAttribute="centerY" secondItem="d5T-Os-uBh" secondAttribute="centerY" id="zpM-Km-IAy"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="UFO-wj-ZN3"/>
-                                <exclude reference="8Ww-hI-T9Y"/>
-                                <exclude reference="XMd-W1-lhR"/>
-                            </mask>
-                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
