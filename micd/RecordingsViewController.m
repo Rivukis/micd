@@ -311,8 +311,6 @@ UIDocumentInteractionControllerDelegate>
     return nil;
 }
 
-#pragma mark - FramesBasedOnStateProtocol
-
 - (void)handleDisplayLinkAnimation:(CADisplayLink *)displayLink {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.currentPlaybackTimeLabel.text = self.playerController.displayableCurrentTime;
@@ -325,6 +323,8 @@ UIDocumentInteractionControllerDelegate>
         self.progressTimeIndicatorView.center = CGPointMake(progressTimeCenterX+self.progressBarBorder.frame.origin.x, self.progressBarBorder.center.y);
     }];
 }
+
+#pragma mark - FramesBasedOnStateProtocol
 
 - (void)setInitialStateFrame {
     CGRect screenSize = [[UIScreen mainScreen] bounds];
@@ -747,11 +747,11 @@ UIDocumentInteractionControllerDelegate>
         BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
         if (deletingSection) {
             [self.sections removeObjectAtIndex:indexPath.section];
-            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationTop];
         } else {
             RecordingsSection *section = self.sections[indexPath.section];
             [section deleteRecordingCellModelAtIndex:indexPath.row];
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
         }
         
         if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
