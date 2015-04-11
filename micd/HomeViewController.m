@@ -14,7 +14,6 @@
 #import "RemoteCommandCenterController.h"
 #import "AudioSessionController.h"
 #import "MicrophoneAccessRequiredViewController.h"
-#import "RecordAnimationView.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
