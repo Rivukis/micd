@@ -197,24 +197,7 @@ static BOOL const growForLouderNoises = NO;
     }
 }
 
-- (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowOtherStates:(BOOL)shouldShowOtherStates completionBlockWhenRecordingIsSaved:(void(^)())completion {
-    [self.recorderController pauseRecording];
-    if (shouldShowOtherStates) {
-        self.shouldShowOtherStates = shouldShowOtherStates;
-    }
-    if (shouldAnimate) {
-        [self animatePauseState];
-    }
-    __weak __typeof(self) weakSelf = self;
-    [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
-        if (!error) {
-            [weakSelf.addNewRecordingDelegate addNewRecording:recording];
-        }
-        if (completion) {
-            completion();
-        }
-    }];
-}
+#pragma mark - Helper Methods
 
 - (void)startRecordingShouldAnimate:(BOOL)shouldAnimate {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
@@ -245,13 +228,32 @@ static BOOL const growForLouderNoises = NO;
             [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
         }
     } else {
-//        [audioSessionController requestMicrophonePermissionWithCompletion:^{
-//            if (!self.justAskedForPermission) {
-//            [self startRecordingShouldAnimate:shouldAnimate];
-//            }
-//            self.justAskedForPermission = YES;
-//        }];
+        //        [audioSessionController requestMicrophonePermissionWithCompletion:^{
+        //            if (!self.justAskedForPermission) {
+        //            [self startRecordingShouldAnimate:shouldAnimate];
+        //            }
+        //            self.justAskedForPermission = YES;
+        //        }];
     }
+}
+
+- (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowOtherStates:(BOOL)shouldShowOtherStates completionBlockWhenRecordingIsSaved:(void(^)())completion {
+    [self.recorderController pauseRecording];
+    if (shouldShowOtherStates) {
+        self.shouldShowOtherStates = shouldShowOtherStates;
+    }
+    if (shouldAnimate) {
+        [self animatePauseState];
+    }
+    __weak __typeof(self) weakSelf = self;
+    [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
+        if (!error) {
+            [weakSelf.addNewRecordingDelegate addNewRecording:recording];
+        }
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
 - (void)saveAndStartRecording {
@@ -260,10 +262,13 @@ static BOOL const growForLouderNoises = NO;
     [self pauseRecordingShouldAnimate:NO shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:^{
         [self startRecordingShouldAnimate:NO];
         self.tryingToStopAndStartRecorder = NO;
+        
+        NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+        [self performSelector:@selector(saveAndStartRecording) withObject:nil afterDelay:maxRecordingLength];
     }];
 }
 
-#pragma mark - Record Pressed
+#pragma mark - User Action Methods
 
 - (void)recordButtonPressed:(UIButton *)sender {
     if (self.recordButtonEnabled) {
@@ -275,12 +280,18 @@ static BOOL const growForLouderNoises = NO;
                 
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
                     [self startRecordingShouldAnimate:YES];
+                    
+                    NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+                    [self performSelector:@selector(saveAndStartRecording) withObject:nil afterDelay:maxRecordingLength];
                 }
                 
                 break;
                 
             case RecorderControllerStateRecording: {
                 // time to stop
+                
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(saveAndStartRecording) object:nil];
+                
                 [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
                 break;
             }
@@ -291,6 +302,8 @@ static BOOL const growForLouderNoises = NO;
         }
     }
 }
+
+#pragma mark - Animation Methods
 
 - (void)animateRecordingState {
     [self setupRecordButtonRotator];
@@ -392,6 +405,38 @@ static BOOL const growForLouderNoises = NO;
 
 - (void)animateGearsSpinning {
     [self.displayLinkController addSubscriberWithKey:@"gears"];
+}
+
+#pragma mark - View Methods
+
+- (void)setupRecordButtonRotator {
+    self.recordButtonRotator = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfRecordButtonRotator]];
+    self.recordButtonRotator.userInteractionEnabled = NO;
+    self.recordButtonRotator.frame = self.recordButton.bounds;
+    //make it small so it can grow into view
+    self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    [self.recordButton addSubview:self.recordButtonRotator];
+    [self.recordButton sendSubviewToBack:self.recordButtonRotator];
+    
+    CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    //start it at a random location around the record button
+    CGFloat randomAngle = arc4random_uniform(360);
+    animation.fromValue = [NSNumber numberWithFloat:randomAngle];
+    animation.toValue = [NSNumber numberWithFloat: randomAngle + 2*M_PI];
+    animation.duration = 6.0f;
+    animation.repeatCount = 120000;
+    [self.recordButtonRotator.layer addAnimation:animation forKey:@"MyAnimation"];
+    
+    [UIView animateWithDuration:.25 animations:^{
+        self.recordButtonRotator.transform = CGAffineTransformMakeScale(1, 1);
+    }];
+}
+
+- (void)setRecordingTimeText {
+    if (![self.recordTime.text isEqualToString:self.recorderController.currentRecordingTimeAsString]) {
+        [[RemoteCommandCenterController sharedRCCController] showRemoteElapsedPlaybackTime:@(self.recorderController.currentRecordingTime)];
+        self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
+    }
 }
 
 #pragma mark - PanGestureRecognizer
@@ -694,44 +739,7 @@ static BOOL const growForLouderNoises = NO;
     }
 }
 
-#pragma mark - Helper Methods
-
-- (void)setupRecordButtonRotator {
-    self.recordButtonRotator = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfRecordButtonRotator]];
-    self.recordButtonRotator.userInteractionEnabled = NO;
-    self.recordButtonRotator.frame = self.recordButton.bounds;
-    //make it small so it can grow into view
-    self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.5, 0.5);
-    [self.recordButton addSubview:self.recordButtonRotator];
-    [self.recordButton sendSubviewToBack:self.recordButtonRotator];
-    
-    CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    //start it at a random location around the record button
-    CGFloat randomAngle = arc4random_uniform(360);
-    animation.fromValue = [NSNumber numberWithFloat:randomAngle];
-    animation.toValue = [NSNumber numberWithFloat: randomAngle + 2*M_PI];
-    animation.duration = 6.0f;
-    animation.repeatCount = 120000;
-    [self.recordButtonRotator.layer addAnimation:animation forKey:@"MyAnimation"];
-    
-    [UIView animateWithDuration:.25 animations:^{
-        self.recordButtonRotator.transform = CGAffineTransformMakeScale(1, 1);
-    }];
-}
-
-- (void)setRecordingTimeText {
-    if (![self.recordTime.text isEqualToString:self.recorderController.currentRecordingTimeAsString]) {
-        [[RemoteCommandCenterController sharedRCCController] showRemoteElapsedPlaybackTime:@(self.recorderController.currentRecordingTime)];
-        
-        self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
-        
-        NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-        BOOL maximumReached = self.recorderController.currentRecordingTime >= maxRecordingLength;
-        if (maximumReached && !self.tryingToStopAndStartRecorder) {
-            [self saveAndStartRecording];
-        }
-    }
-}
+#pragma mark - Lazy Instantiation
 
 - (NSMutableArray *)pulsingValues {
     if (!_pulsingValues) {
