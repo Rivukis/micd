@@ -2689,54 +2689,51 @@ static UIImage* _imageOfMicdAppIcon = nil;
     //// Color Declarations
     UIColor* vibrantBlue = [UIColor colorWithRed: 0.141 green: 0.663 blue: 0.769 alpha: 1];
 
-    //// Group
+    //// Rectangle 3 Drawing
+
+
+    //// Text Drawing
+    CGRect textRect = CGRectMake(56.09, 5, 121.62, 39.88);
     {
-        //// Rectangle 3 Drawing
+        NSString* textContent = @"Do you love";
+        NSMutableParagraphStyle* textStyle = NSMutableParagraphStyle.defaultParagraphStyle.mutableCopy;
+        textStyle.alignment = NSTextAlignmentLeft;
 
+        NSDictionary* textFontAttributes = @{NSFontAttributeName: [UIFont fontWithName: @"HelveticaNeue-Bold" size: UIFont.buttonFontSize], NSForegroundColorAttributeName: vibrantBlue, NSParagraphStyleAttributeName: textStyle};
 
-        //// Text Drawing
-        CGRect textRect = CGRectMake(50.09, -0, 121.62, 39.88);
-        {
-            NSString* textContent = @"Do you love";
-            NSMutableParagraphStyle* textStyle = NSMutableParagraphStyle.defaultParagraphStyle.mutableCopy;
-            textStyle.alignment = NSTextAlignmentLeft;
-
-            NSDictionary* textFontAttributes = @{NSFontAttributeName: [UIFont fontWithName: @"HelveticaNeue-Bold" size: UIFont.buttonFontSize], NSForegroundColorAttributeName: vibrantBlue, NSParagraphStyleAttributeName: textStyle};
-
-            CGFloat textTextHeight = [textContent boundingRectWithSize: CGSizeMake(textRect.size.width, INFINITY)  options: NSStringDrawingUsesLineFragmentOrigin attributes: textFontAttributes context: nil].size.height;
-            CGContextSaveGState(context);
-            CGContextClipToRect(context, textRect);
-            [textContent drawInRect: CGRectMake(CGRectGetMinX(textRect), CGRectGetMinY(textRect) + CGRectGetHeight(textRect) - textTextHeight, CGRectGetWidth(textRect), textTextHeight) withAttributes: textFontAttributes];
-            CGContextRestoreGState(context);
-        }
-
-
-        //// Symbol 3 Drawing
-        CGRect symbol3Rect = CGRectMake(152.46, -0, 114.33, 44.63);
+        CGFloat textTextHeight = [textContent boundingRectWithSize: CGSizeMake(textRect.size.width, INFINITY)  options: NSStringDrawingUsesLineFragmentOrigin attributes: textFontAttributes context: nil].size.height;
         CGContextSaveGState(context);
-        UIRectClip(symbol3Rect);
-        CGContextTranslateCTM(context, symbol3Rect.origin.x, symbol3Rect.origin.y);
-        CGContextScaleCTM(context, symbol3Rect.size.width / 187, symbol3Rect.size.height / 73);
-
-        [WireTapStyleKit drawMicdLogoWithColor7: vibrantBlue];
+        CGContextClipToRect(context, textRect);
+        [textContent drawInRect: CGRectMake(CGRectGetMinX(textRect), CGRectGetMinY(textRect) + CGRectGetHeight(textRect) - textTextHeight, CGRectGetWidth(textRect), textTextHeight) withAttributes: textFontAttributes];
         CGContextRestoreGState(context);
+    }
 
 
-        //// Text 2 Drawing
-        CGRect text2Rect = CGRectMake(264.79, 7.57, 31.51, 33.3);
-        {
-            NSString* textContent = @"?";
-            NSMutableParagraphStyle* text2Style = NSMutableParagraphStyle.defaultParagraphStyle.mutableCopy;
-            text2Style.alignment = NSTextAlignmentLeft;
+    //// Symbol 3 Drawing
+    CGRect symbol3Rect = CGRectMake(158.46, 17, 76.54, 29.63);
+    CGContextSaveGState(context);
+    UIRectClip(symbol3Rect);
+    CGContextTranslateCTM(context, symbol3Rect.origin.x, symbol3Rect.origin.y);
+    CGContextScaleCTM(context, symbol3Rect.size.width / 187, symbol3Rect.size.height / 73);
 
-            NSDictionary* text2FontAttributes = @{NSFontAttributeName: [UIFont fontWithName: @"HelveticaNeue-Bold" size: 24], NSForegroundColorAttributeName: vibrantBlue, NSParagraphStyleAttributeName: text2Style};
+    [WireTapStyleKit drawMicdLogoWithColor7: vibrantBlue];
+    CGContextRestoreGState(context);
 
-            CGFloat text2TextHeight = [textContent boundingRectWithSize: CGSizeMake(text2Rect.size.width, INFINITY)  options: NSStringDrawingUsesLineFragmentOrigin attributes: text2FontAttributes context: nil].size.height;
-            CGContextSaveGState(context);
-            CGContextClipToRect(context, text2Rect);
-            [textContent drawInRect: CGRectMake(CGRectGetMinX(text2Rect), CGRectGetMinY(text2Rect) + CGRectGetHeight(text2Rect) - text2TextHeight, CGRectGetWidth(text2Rect), text2TextHeight) withAttributes: text2FontAttributes];
-            CGContextRestoreGState(context);
-        }
+
+    //// Text 2 Drawing
+    CGRect text2Rect = CGRectMake(235.29, 12.07, 31.51, 33.3);
+    {
+        NSString* textContent = @"?";
+        NSMutableParagraphStyle* text2Style = NSMutableParagraphStyle.defaultParagraphStyle.mutableCopy;
+        text2Style.alignment = NSTextAlignmentLeft;
+
+        NSDictionary* text2FontAttributes = @{NSFontAttributeName: [UIFont fontWithName: @"HelveticaNeue-Bold" size: 24], NSForegroundColorAttributeName: vibrantBlue, NSParagraphStyleAttributeName: text2Style};
+
+        CGFloat text2TextHeight = [textContent boundingRectWithSize: CGSizeMake(text2Rect.size.width, INFINITY)  options: NSStringDrawingUsesLineFragmentOrigin attributes: text2FontAttributes context: nil].size.height;
+        CGContextSaveGState(context);
+        CGContextClipToRect(context, text2Rect);
+        [textContent drawInRect: CGRectMake(CGRectGetMinX(text2Rect), CGRectGetMinY(text2Rect) + CGRectGetHeight(text2Rect) - text2TextHeight, CGRectGetWidth(text2Rect), text2TextHeight) withAttributes: text2FontAttributes];
+        CGContextRestoreGState(context);
     }
 }
 

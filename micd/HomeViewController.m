@@ -575,7 +575,7 @@ static BOOL const growForLouderNoises = NO;
     }
     
     float gestureSizeWidthConstant = windowHeight * 0.4f; // 0.4
-    float gestureSizeHeightConstant = windowHeight * 0.18f;
+    float gestureSizeHeightConstant = windowHeight * 0.155f;
     float baseVerticalAdjustment = 0 - self.view.frame.origin.y;
     
     self.recordingsLowerMoveStateButton.frame = CGRectMake(windowWidth/2 - gestureSizeWidthConstant/2,

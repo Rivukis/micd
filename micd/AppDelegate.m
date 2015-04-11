@@ -22,6 +22,7 @@
     self.fireDidBecomeActiveNotification = YES;
     
     self.launchImageToFade = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"splashScreen"]];
+    self.launchImageToFade.contentMode = UIViewContentModeScaleAspectFit;
     self.launchImageToFade.frame = self.window.frame;
     [self.window.rootViewController.view addSubview:self.launchImageToFade];
     [self.window.rootViewController.view bringSubviewToFront:self.launchImageToFade];
