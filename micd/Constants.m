@@ -9,6 +9,7 @@ NSString *const kRecorderFormatTypeAsString = @".m4a";
 // Notification shit
 NSString *const kNotificationKeyRecordPressedFromWatch = @"NotificationKeyRecordPressedFromWatch";
 NSString *const kNotificationKeyApplicationDidBecomeActive = @"kNotificationKeyApplicationDidBecomeActive";
+NSString *const kNotificationKeyApplicationWillResignActive = @"NotificationKeyApplicationWillResignActive";
 NSString *const kNotificationKeyRecordingPressedFromWatch = @"NotificationKeyRecordingPressedFromWatch";
 
 // UserDefaults shit

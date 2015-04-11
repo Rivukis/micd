@@ -45,6 +45,8 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyApplicationWillResignActive object:nil];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

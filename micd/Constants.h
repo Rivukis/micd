@@ -9,6 +9,7 @@ extern NSString *const kRecorderFormatTypeAsString;
 // Notification shit
 extern NSString *const kNotificationKeyRecordPressedFromWatch;
 extern NSString *const kNotificationKeyApplicationDidBecomeActive;
+extern NSString *const kNotificationKeyApplicationWillResignActive;
 extern NSString *const kNotificationKeyRecordingPressedFromWatch;
 
 // UserDefaults shit
