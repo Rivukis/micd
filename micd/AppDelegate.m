@@ -66,20 +66,20 @@
     RecorderController *recorderController = [RecorderController sharedRecorder];
     BOOL isRecording = recorderController.recordingState == RecorderControllerStateRecording;
     
-    if ([messageType isEqualToString:kWatchExtKeyMessageTypeGetRecorderInfo]) {
+    if ([messageType isEqualToString:kWatchExtMessageTypeGetRecorderInfo]) {
         // just getting info so nothing to do
     }
     
-    if ([messageType isEqualToString:kWatchExtKeyMessageTypeRecordButtonPressed]) {
+    if ([messageType isEqualToString:kWatchExtMessageTypeRecordButtonPressed]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyRecordPressedFromWatch object:nil];
         isRecording = !isRecording;
     }
     
-    if ([messageType isEqualToString:kWatchExtKeyMessageTypeGetRecordingsList]) {
+    if ([messageType isEqualToString:kWatchExtMessageTypeGetRecordingsList]) {
         replyDict[kWatchExtKeyRecordingsList] = [Factory arrayOfRecordingsForWatch];
     }
     
-    if ([messageType isEqualToString:kWatchExtKeyMessageTypeRecordingPressed]) {
+    if ([messageType isEqualToString:kWatchExtMessageTypeRecordingPressed]) {
         BOOL isRecording = recorderController.recordingState == RecorderControllerStateRecording;
         
         if (!isRecording) {

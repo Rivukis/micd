@@ -22,19 +22,22 @@ NSString *const kUserDefaultsKeyLoveMicdQuestionAnswered = @"UserDefaultsKeyLove
 NSString *const kUserDefaultsKeySessionIsActive = @"UserDefaultsKeySessionIsActive";
 
 // WatchKit shit
-NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
-NSString *const kWatchExtKeyMessageTypeGetRecorderInfo = @"WatchExtKeyMessageTypeGetRecorderInfo";
-NSString *const kWatchExtKeyMessageTypeRecordButtonPressed = @"WatchExtKeyMessageTypeRecordButtonPressed";
-NSString *const kWatchExtKeyMessageTypeGetRecordingsList = @"WatchExtKeyMessageTypeGetRecordingsList";
-NSString *const kWatchExtKeyMessageTypeRecordingPressed = @"WatchExtKeyMessageTypeRecordingPressed";
-
 NSInteger const kWatchExtNumberOfRecordingsShown = 20;
+NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
 NSString *const kWatchExtKeyIsRecording = @"WatchExtKeyIsRecording";
 NSString *const kWatchExtKeyRecordingsList = @"WatchExtKeyRecordingsList";
-NSString *const kWatchExtKeyRecordingsListKeyName = @"WatchExtKeyRecordingsListKeyName";
-NSString *const kWatchExtKeyRecordingsListKeyUUID = @"WatchExtKeyRecordingsListKeyUUID";
-NSString *const kWatchExtKeyRecordingsListIsLoaded = @"WatchExtKeyRecordingsListIsLoaded";
 NSString *const kWatchExtKeyPlayRecordingWithUUIDString = @"WatchExtKeyPlayRecordingWithUUIDString";
+
+NSString *const kWatchExtMessageTypeGetRecorderInfo = @"WatchExtMessageTypeGetRecorderInfo";
+NSString *const kWatchExtMessageTypeRecordButtonPressed = @"WatchExtMessageTypeRecordButtonPressed";
+NSString *const kWatchExtMessageTypeGetRecordingsList = @"WatchExtMessageTypeGetRecordingsList";
+NSString *const kWatchExtMessageTypeRecordingPressed = @"WatchExtMessageTypeRecordingPressed";
+
+NSString *const kWatchExtRecordingDictKeyTitle = @"WatchExtRecordingDictKeyTitle";
+NSString *const kWatchExtRecordingDictKeyUUID = @"WatchExtRecordingDictKeyUUID";
+NSString *const kWatchExtRecordingDictKeyIsLoaded = @"WatchExtRecordingDictKeyIsLoaded";
+NSString *const kWatchExtRecordingDictKeyDate = @"WatchExtRecordingDictKeyDate";
+NSString *const kWatchExtRecordingDictKeyLength = @"WatchExtRecordingDictKeyLength";
 
 // User Info shit
 NSString *const kUserInfoKeyStateToLoadOnAppBecomesActive = @"UserInfoKeyStateToLoadOnAppBecomesActive";

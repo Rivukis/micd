@@ -22,19 +22,22 @@ extern NSString *const kUserDefaultsKeyLoveMicdQuestionAnswered;
 extern NSString *const kUserDefaultsKeySessionIsActive;
 
 // WatchKit shit
-extern NSString *const kWatchExtKeyMessageType;
-extern NSString *const kWatchExtKeyMessageTypeGetRecorderInfo;
-extern NSString *const kWatchExtKeyMessageTypeRecordButtonPressed;
-extern NSString *const kWatchExtKeyMessageTypeGetRecordingsList;
-extern NSString *const kWatchExtKeyMessageTypeRecordingPressed;
-
 extern NSInteger const kWatchExtNumberOfRecordingsShown;
+extern NSString *const kWatchExtKeyMessageType;
 extern NSString *const kWatchExtKeyIsRecording;
 extern NSString *const kWatchExtKeyRecordingsList;
-extern NSString *const kWatchExtKeyRecordingsListKeyName;
-extern NSString *const kWatchExtKeyRecordingsListKeyUUID;
-extern NSString *const kWatchExtKeyRecordingsListIsLoaded;
 extern NSString *const kWatchExtKeyPlayRecordingWithUUIDString;
+
+extern NSString *const kWatchExtMessageTypeGetRecorderInfo;
+extern NSString *const kWatchExtMessageTypeRecordButtonPressed;
+extern NSString *const kWatchExtMessageTypeGetRecordingsList;
+extern NSString *const kWatchExtMessageTypeRecordingPressed;
+
+extern NSString *const kWatchExtRecordingDictKeyTitle;
+extern NSString *const kWatchExtRecordingDictKeyUUID;
+extern NSString *const kWatchExtRecordingDictKeyIsLoaded;
+extern NSString *const kWatchExtRecordingDictKeyDate;
+extern NSString *const kWatchExtRecordingDictKeyLength;
 
 // User Info shit
 extern NSString *const kUserInfoKeyStateToLoadOnAppBecomesActive;

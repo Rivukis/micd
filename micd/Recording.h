@@ -22,8 +22,8 @@ struct Length {
 
 @property (nonatomic, strong, readonly) NSDate *date;
 @property (nonatomic, strong, readonly) NSDateComponents *dateComponents;
-@property (nonatomic, strong) NSString *dateAsFullString;
-@property (nonatomic, strong) NSString *dateAsString;
+@property (nonatomic, weak, readonly) NSString *dateForAppleWatch;
+@property (nonatomic, weak, readonly) NSString *dateAsString;
 
 @property (nonatomic, assign, readonly) NSTimeInterval lengthAsTimeInterval;
 @property (nonatomic, assign, readonly) struct Length length;

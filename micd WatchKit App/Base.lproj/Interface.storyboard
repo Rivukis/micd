@@ -36,14 +36,28 @@
                         <table alignment="left" id="d8d-PP-Yn2">
                             <items>
                                 <tableRow identifier="RecordingRowController" id="4qZ-7R-Ssb" customClass="RecordingRowController">
-                                    <group key="rootItem" width="1" alignment="left" id="0ib-4G-2OQ">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="0ib-4G-2OQ">
                                         <items>
-                                            <label width="1" height="1" alignment="left" verticalAlignment="center" text="Label" id="gYZ-mc-zX0"/>
+                                            <label width="1" alignment="left" text="Track Title When Really Long" numberOfLines="2" id="gYZ-mc-zX0">
+                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                            </label>
+                                            <group width="1" alignment="center" verticalAlignment="bottom" id="5pO-Fv-UIt" userLabel="Bottom of Cell Group">
+                                                <items>
+                                                    <label alignment="left" verticalAlignment="center" text="date" id="wdZ-Y1-Kf3">
+                                                        <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                                    </label>
+                                                    <label alignment="right" verticalAlignment="center" text="length" id="ZLT-Zl-hhq">
+                                                        <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                                    </label>
+                                                </items>
+                                            </group>
                                         </items>
                                     </group>
                                     <connections>
                                         <outlet property="backgroundGroup" destination="0ib-4G-2OQ" id="7JY-sy-uk4"/>
-                                        <outlet property="recordingTitleLabel" destination="gYZ-mc-zX0" id="gz3-zc-uCi"/>
+                                        <outlet property="dateLabel" destination="wdZ-Y1-Kf3" id="qkk-ZA-ugQ"/>
+                                        <outlet property="lengthLabel" destination="ZLT-Zl-hhq" id="yOw-lB-foq"/>
+                                        <outlet property="titleLabel" destination="gYZ-mc-zX0" id="ITu-dH-r7m"/>
                                     </connections>
                                 </tableRow>
                             </items>
@@ -54,7 +68,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="592" y="256"/>
+            <point key="canvasLocation" x="589" y="168"/>
         </scene>
     </scenes>
 </document>

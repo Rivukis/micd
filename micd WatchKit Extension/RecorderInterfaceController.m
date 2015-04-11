@@ -19,7 +19,7 @@
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
     
-    NSDictionary *userInfo = @{kWatchExtKeyMessageType : kWatchExtKeyMessageTypeGetRecorderInfo};
+    NSDictionary *userInfo = @{kWatchExtKeyMessageType : kWatchExtMessageTypeGetRecorderInfo};
     [RecorderInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
         BOOL isRecording = [[replyInfo objectForKey:kWatchExtKeyIsRecording] boolValue];
         [self setupViewForIsRecording:isRecording];
@@ -65,7 +65,7 @@
 - (IBAction)recordButtonPressed {
     [self setupRecordingsButtonShouldBeEnabled:NO];
     // send message to phone that record button was pressed
-    NSDictionary *userInfo = @{kWatchExtKeyMessageType : kWatchExtKeyMessageTypeRecordButtonPressed};
+    NSDictionary *userInfo = @{kWatchExtKeyMessageType : kWatchExtMessageTypeRecordButtonPressed};
     [RecorderInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
         BOOL isRecording = [[replyInfo objectForKey:kWatchExtKeyIsRecording] boolValue];
         [self setupViewForIsRecording:isRecording];

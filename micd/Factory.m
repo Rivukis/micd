@@ -92,22 +92,26 @@
     for (NSInteger i = 0; i < numberOfRecordingsToSend; i++) {
         Recording *recording = dataSourceController.recordings[i];
         NSString *uuidString = recording.uuid.UUIDString;
-        NSString *recordingTitle = @"";
-        BOOL isLoaded = NO;
+        NSString *date = recording.dateForAppleWatch;
+        NSString *length = recording.lengthToDiplay;
         
+        NSString *recordingTitle = @"";
         if (recording.title.length > 0) {
             recordingTitle = recording.title;
         } else {
             recordingTitle = recording.dateAsString;
         }
         
+        BOOL isLoaded = NO;
         if (recording == playerController.loadedRecording) {
             isLoaded = YES;
         }
         
-        [recordingsListForWatch addObject:@{kWatchExtKeyRecordingsListKeyName: recordingTitle,
-                                            kWatchExtKeyRecordingsListKeyUUID: uuidString,
-                                            kWatchExtKeyRecordingsListIsLoaded: @(isLoaded)}];
+        [recordingsListForWatch addObject:@{kWatchExtRecordingDictKeyTitle: recordingTitle,
+                                            kWatchExtRecordingDictKeyUUID: uuidString,
+                                            kWatchExtRecordingDictKeyIsLoaded: @(isLoaded),
+                                            kWatchExtRecordingDictKeyDate: date,
+                                            kWatchExtRecordingDictKeyLength: length}];
     }
     
     return [recordingsListForWatch copy];

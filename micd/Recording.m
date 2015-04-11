@@ -142,28 +142,38 @@
     return displayableLength;
 }
 
-
-- (NSString *)dateAsFullString {
-    if (!_dateAsFullString) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-        _dateAsFullString = [dateFormatter stringFromDate:self.date];
-    }
-    
-    return _dateAsFullString;
+- (NSString *)dateForAppleWatch {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"M/d/yy"];
+    return [dateFormatter stringFromDate:self.date];
 }
 
 - (NSString *)dateAsString {
-    if (!_dateAsString) {
-        //TODO: add st, nd, rd, th to day number (even better if superscript)
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MMMM d"];
-        NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-        [timeFormatter setDateFormat:@"h:mm a"];
-        _dateAsString = [NSString stringWithFormat:@"%@ at %@", [dateFormatter stringFromDate:self.date], [timeFormatter stringFromDate:self.date]];
+    NSString *englishNumeral;    
+    switch (self.dateComponents.day) {
+        case 1:
+        case 21:
+        case 31:
+            englishNumeral = @"st";
+            break;
+        case 2:
+        case 22:
+            englishNumeral = @"nd";
+            break;
+        case 3:
+        case 23:
+            englishNumeral = @"rd";
+            break;
+        default:
+            englishNumeral = @"th";
+            break;
     }
     
-    return _dateAsString;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMMM d"];
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"h:mm a"];
+    return [NSString stringWithFormat:@"%@%@ at %@", [dateFormatter stringFromDate:self.date], englishNumeral, [timeFormatter stringFromDate:self.date]];
 }
 
 #pragma mark - url methods
