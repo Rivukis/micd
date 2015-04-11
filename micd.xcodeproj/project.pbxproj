@@ -31,10 +31,6 @@
 		7AFC16781ABE6C8600B5B7F8 /* UIColor+PalettePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFC16771ABE6C8600B5B7F8 /* UIColor+PalettePicker.m */; };
 		D034F0421AA148680059028D /* RecordingsSection.m in Sources */ = {isa = PBXBuildFile; fileRef = D034F0411AA148680059028D /* RecordingsSection.m */; };
 		D0449A2D1AD4C2F200314743 /* splashScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = D0449A2C1AD4C2F200314743 /* splashScreen.png */; };
-		D0449A331AD5EFEC00314743 /* recordAnimIntro.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0449A321AD5EFEC00314743 /* recordAnimIntro.xcassets */; };
-		D0449A341AD5EFEC00314743 /* recordAnimIntro.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0449A321AD5EFEC00314743 /* recordAnimIntro.xcassets */; };
-		D0449A391AD5F5CC00314743 /* recordAnimCircle.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0449A381AD5F5CC00314743 /* recordAnimCircle.xcassets */; };
-		D0449A3A1AD5F5CC00314743 /* recordAnimCircle.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0449A381AD5F5CC00314743 /* recordAnimCircle.xcassets */; };
 		D05405241AD382DD0026057E /* TactileShapedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D05405231AD382DD0026057E /* TactileShapedButton.m */; };
 		D05500F81AA7C8F100C71FE1 /* PassthroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500F71AA7C8F100C71FE1 /* PassthroughView.m */; };
 		D05500FB1AA7CAD600C71FE1 /* PassthroughImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D05500FA1AA7CAD600C71FE1 /* PassthroughImageView.m */; };
@@ -153,8 +149,6 @@
 		D034F0401AA148680059028D /* RecordingsSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsSection.h; sourceTree = "<group>"; };
 		D034F0411AA148680059028D /* RecordingsSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsSection.m; sourceTree = "<group>"; };
 		D0449A2C1AD4C2F200314743 /* splashScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splashScreen.png; path = micd/splashScreen.png; sourceTree = "<group>"; };
-		D0449A321AD5EFEC00314743 /* recordAnimIntro.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = recordAnimIntro.xcassets; sourceTree = "<group>"; };
-		D0449A381AD5F5CC00314743 /* recordAnimCircle.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = recordAnimCircle.xcassets; path = ../recordAnimCircle.xcassets; sourceTree = "<group>"; };
 		D05405221AD382DD0026057E /* TactileShapedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TactileShapedButton.h; sourceTree = "<group>"; };
 		D05405231AD382DD0026057E /* TactileShapedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TactileShapedButton.m; sourceTree = "<group>"; };
 		D05500F61AA7C8F100C71FE1 /* PassthroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassthroughView.h; sourceTree = "<group>"; };
@@ -338,8 +332,6 @@
 				D05D75741A79AAA40050A49C /* AppDelegate.m */,
 				D0BA6D021AB906D800F6B3FF /* icon.pdf */,
 				D05D757C1A79AAA40050A49C /* Images.xcassets */,
-				D0449A321AD5EFEC00314743 /* recordAnimIntro.xcassets */,
-				D0449A381AD5F5CC00314743 /* recordAnimCircle.xcassets */,
 				D05D757E1A79AAA40050A49C /* LaunchScreen.xib */,
 				D05D75701A79AAA40050A49C /* Info.plist */,
 				D05D75711A79AAA40050A49C /* main.m */,
@@ -645,8 +637,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0449A331AD5EFEC00314743 /* recordAnimIntro.xcassets in Resources */,
-				D0449A391AD5F5CC00314743 /* recordAnimCircle.xcassets in Resources */,
 				D05D757B1A79AAA40050A49C /* Main.storyboard in Resources */,
 				D05D75801A79AAA40050A49C /* LaunchScreen.xib in Resources */,
 				D0BA6D031AB906D800F6B3FF /* icon.pdf in Resources */,
@@ -675,10 +665,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0449A341AD5EFEC00314743 /* recordAnimIntro.xcassets in Resources */,
 				D0BFAD4D1ABF9C9B0051F0CF /* Interface.storyboard in Resources */,
 				D0BFAD4F1ABF9C9B0051F0CF /* Images.xcassets in Resources */,
-				D0449A3A1AD5F5CC00314743 /* recordAnimCircle.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
