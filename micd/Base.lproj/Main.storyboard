@@ -4,6 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Recordings View Controller-->
@@ -82,7 +83,7 @@
                                                                 <constraint firstAttribute="height" constant="1" id="F4o-Sa-Noc"/>
                                                             </constraints>
                                                         </view>
-                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="998" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
+                                                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="998" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R4b-WG-Mi9" userLabel="play/pause imageview">
                                                             <constraints>
                                                                 <constraint firstAttribute="height" priority="750" constant="35" id="WCs-EU-yWr"/>
                                                                 <constraint firstAttribute="width" id="kwG-q3-3cQ"/>
@@ -582,7 +583,7 @@
                                 </connections>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OmA-kA-rFC" userLabel="Remember playback position switch">
-                                <rect key="frame" x="294" y="159" width="51" height="31"/>
+                                <rect key="frame" x="294" y="151.5" width="51" height="31"/>
                                 <color key="tintColor" red="0.12941176469999999" green="0.63921568630000003" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -590,7 +591,7 @@
                                 </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jjx-vS-RkR" userLabel="Start recording on launch switch">
-                                <rect key="frame" x="294" y="215" width="51" height="31"/>
+                                <rect key="frame" x="294" y="207.5" width="51" height="31"/>
                                 <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -598,31 +599,31 @@
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Remember playback position" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mae-01-frw">
-                                <rect key="frame" x="32" y="165" width="254" height="19.5"/>
+                                <rect key="frame" x="32" y="157" width="254" height="19.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Start recording on launch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DEA-e1-oec">
-                                <rect key="frame" x="32" y="221" width="254" height="19.5"/>
+                                <rect key="frame" x="32" y="213.5" width="254" height="19.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Automatically start recording again when max recording length is reached" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="11" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0d-Of-OuQ">
-                                <rect key="frame" x="32" y="351.5" width="254" height="38.5"/>
+                                <rect key="frame" x="32" y="344.5" width="254" height="38.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Max recording length" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nqe-Vw-Wrc">
-                                <rect key="frame" x="108" y="276" width="157" height="19.5"/>
+                                <rect key="frame" x="108" y="268.5" width="157" height="19.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d5T-Os-uBh" userLabel="Auto start recording when max reached switch">
-                                <rect key="frame" x="294" y="355.5" width="51" height="31"/>
+                                <rect key="frame" x="294" y="348.5" width="51" height="31"/>
                                 <color key="tintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="onTintColor" red="0.1176470588" green="0.69019607839999997" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -630,7 +631,7 @@
                                 </connections>
                             </switch>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="93h-24-nKO">
-                                <rect key="frame" x="32" y="307.5" width="311" height="29"/>
+                                <rect key="frame" x="32" y="300.5" width="311" height="29"/>
                                 <segments>
                                     <segment title="5 min"/>
                                     <segment title="15 min"/>
@@ -648,7 +649,6 @@
                             <constraint firstItem="wlQ-wE-7eb" firstAttribute="centerY" secondItem="TWk-ho-1y6" secondAttribute="centerY" id="27z-6v-z5Y"/>
                             <constraint firstItem="Nqe-Vw-Wrc" firstAttribute="top" secondItem="jjx-vS-RkR" secondAttribute="bottom" constant="30" id="74F-mf-EeD"/>
                             <constraint firstItem="jjx-vS-RkR" firstAttribute="centerY" secondItem="DEA-e1-oec" secondAttribute="centerY" constant="-0.5" id="7PC-gm-8FR"/>
-                            <constraint firstItem="mae-01-frw" firstAttribute="top" secondItem="ytR-dO-Z8F" secondAttribute="bottom" constant="145" id="7r7-DP-SWk"/>
                             <constraint firstItem="TWk-ho-1y6" firstAttribute="leading" secondItem="VZF-qB-C28" secondAttribute="leadingMargin" constant="16" id="8Ww-hI-T9Y"/>
                             <constraint firstItem="AgR-nW-Ft7" firstAttribute="top" secondItem="TWk-ho-1y6" secondAttribute="bottom" constant="20" id="9Qr-oa-3SO"/>
                             <constraint firstItem="Bvc-aN-eEs" firstAttribute="leading" secondItem="TWk-ho-1y6" secondAttribute="leading" id="AJt-gR-803"/>
@@ -661,6 +661,7 @@
                             <constraint firstItem="DEA-e1-oec" firstAttribute="leading" secondItem="mae-01-frw" secondAttribute="leading" id="Oqz-56-i9P"/>
                             <constraint firstItem="X0d-Of-OuQ" firstAttribute="top" secondItem="93h-24-nKO" secondAttribute="bottom" constant="56" id="UFO-wj-ZN3"/>
                             <constraint firstItem="DEA-e1-oec" firstAttribute="leading" secondItem="X0d-Of-OuQ" secondAttribute="leading" id="VuF-66-8zq"/>
+                            <constraint firstItem="mae-01-frw" firstAttribute="centerY" secondItem="AgR-nW-Ft7" secondAttribute="top" multiplier="0.25" id="WrJ-FU-sRQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ctB-4M-UoI" secondAttribute="trailing" constant="16" id="XMd-W1-lhR"/>
                             <constraint firstItem="TWk-ho-1y6" firstAttribute="width" secondItem="ctB-4M-UoI" secondAttribute="width" id="YSu-Uc-A8R"/>
                             <constraint firstItem="jjx-vS-RkR" firstAttribute="trailing" secondItem="93h-24-nKO" secondAttribute="trailing" id="cCQ-fI-8nf"/>
