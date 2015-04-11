@@ -14,6 +14,7 @@
 #import "RemoteCommandCenterController.h"
 #import "AudioSessionController.h"
 #import "MicrophoneAccessRequiredViewController.h"
+#import "RecordAnimationView.h"
 
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
@@ -38,9 +39,9 @@ static BOOL const growForLouderNoises = NO;
 @property (strong, nonatomic) DisplayLinkController *displayLinkController;
 @property (strong, nonatomic) UIPanGestureRecognizer *panGesture;
 
-@property (assign, nonatomic) NSUInteger animatingPulseCount;
+@property (strong, nonatomic) UIImageView *recordButtonRotator;
 @property (strong, nonatomic) NSMutableArray *pulsingValues;
-@property (nonatomic) CGFloat arcAngleShrinkCount;
+@property (assign, nonatomic) NSUInteger animatingPulseCount;
 @property (strong, nonatomic) UIView *transitionView;
 @property (nonatomic) CGRect recordButtonOriginalFrame;
 @property (nonatomic) CGRect backgroundImageViewOriginalFrame;
@@ -82,7 +83,7 @@ static BOOL const growForLouderNoises = NO;
     
     self.recordButton = [[OBShapedButton alloc] init];
     [self.recordButton addTarget:self action:@selector(recordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:.01] forState:UIControlStateNormal];
+    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButton] forState:UIControlStateNormal];
     [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonHighlighted] forState:UIControlStateHighlighted];
     [self.view addSubview:self.recordButton];
     self.recordButtonEnabled = YES;
@@ -95,6 +96,7 @@ static BOOL const growForLouderNoises = NO;
     self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     self.panGesture.delegate = self;
     [self.view addGestureRecognizer:self.panGesture];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -177,8 +179,6 @@ static BOOL const growForLouderNoises = NO;
     }
 }
 
-#pragma mark - Helper Methods
-
 - (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowOtherStates:(BOOL)shouldShowOtherStates completionBlockWhenRecordingIsSaved:(void(^)())completion {
     [self.recorderController pauseRecording];
     if (shouldShowOtherStates) {
@@ -227,26 +227,12 @@ static BOOL const growForLouderNoises = NO;
             [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
         }
     } else {
-        [audioSessionController requestMicrophonePermissionWithCompletion:^{
+//        [audioSessionController requestMicrophonePermissionWithCompletion:^{
 //            if (!self.justAskedForPermission) {
 //            [self startRecordingShouldAnimate:shouldAnimate];
 //            }
 //            self.justAskedForPermission = YES;
-        }];
-    }
-}
-
-- (void)setRecordingTimeText {
-    if (![self.recordTime.text isEqualToString:self.recorderController.currentRecordingTimeAsString]) {
-        [[RemoteCommandCenterController sharedRCCController] showRemoteElapsedPlaybackTime:@(self.recorderController.currentRecordingTime)];
-        
-        self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
-        
-        NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-        BOOL maximumReached = self.recorderController.currentRecordingTime >= maxRecordingLength;
-        if (maximumReached && !self.tryingToStopAndStartRecorder) {
-            [self saveAndStartRecording];
-        }
+//        }];
     }
 }
 
@@ -259,6 +245,75 @@ static BOOL const growForLouderNoises = NO;
     }];
 }
 
+#pragma mark - Record Pressed
+
+- (void)recordButtonPressed:(UIButton *)sender {
+    if (self.recordButtonEnabled) {
+        switch (self.recorderController.recordingState) {
+            case RecorderControllerStateStopped:
+            case RecorderControllerStatePaused:
+                // time to record
+                [[PlayerController sharedPlayer] pauseAudio];
+                
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
+                    [self startRecordingShouldAnimate:YES];
+                }
+                
+                break;
+                
+            case RecorderControllerStateRecording: {
+                // time to stop
+                [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+                break;
+            }
+            case RecorderControllerStatePausing:
+            case RecorderControllerStateStopping:
+                // can't do anything
+                break;
+        }
+    }
+}
+
+- (void)animateRecordingState {
+    [self setupRecordButtonRotator];
+    
+    if (!self.movingFromNoRecordingsState) {
+        [self goToRecordButtonOnlyStateShouldAnimate:YES];
+    } else {
+        self.movingFromNoRecordingsState = NO;
+    }
+    
+    self.recordTime.text = @"0:00";
+    self.recordTime.alpha = 1;
+    
+    [self.displayLinkController addSubscriberWithKey:@"recordButton"];
+}
+
+- (void)animatePauseState {
+    self.recordTime.alpha = 0;
+    [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
+    self.pulsingValues = nil;
+    
+    [UIView animateWithDuration:.5f animations:^{
+        if (self.shouldShowOtherStates) {
+            self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
+            self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
+        }
+        self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.1, 0.1);
+        self.recordButton.transform = CGAffineTransformIdentity;
+        self.recordTime.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.view addSubview:self.recordButton];
+        self.recordButton.frame = self.recordButtonOriginalFrame;
+        [self.recordButtonRotator pop_removeAllAnimations];
+        [self.recordButtonRotator removeFromSuperview];
+        [self.transitionView removeFromSuperview];
+        if (self.shouldShowOtherStates) {
+            [self.view addGestureRecognizer:self.panGesture];
+        }
+    }];
+}
+
 - (void)goToRecordButtonOnlyStateShouldAnimate:(BOOL)animate {
     //setup transition view to hold record button stationary
     self.transitionView = [[UIView alloc] initWithFrame:self.view.window.bounds];
@@ -266,16 +321,6 @@ static BOOL const growForLouderNoises = NO;
     self.transitionView.center = self.recordButton.center;
     [self.transitionView addSubview:self.recordButton];
     self.recordButton.center = self.view.window.center;//CGRectMake(0, 0, 256, 256);
-    
-    if (!self.recordTime) {
-        self.recordTime = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
-        [self.recordButton addSubview:self.recordTime];
-        self.recordTime.text = @"";
-        self.recordTime.textAlignment = NSTextAlignmentCenter;
-        self.recordTime.font = [UIFont fontWithName: @"Helvetica-Bold" size:20.0f];
-        self.recordTime.textColor = [UIColor blackColor];
-        self.recordTime.alpha = 0;
-    }
     
     CGPoint recordTimeCenter = CGPointMake(CGRectGetWidth(self.recordButton.bounds)/2, CGRectGetHeight(self.recordButton.bounds)/2);
     recordTimeCenter.y += self.recordButton.bounds.size.height*.30;
@@ -308,77 +353,6 @@ static BOOL const growForLouderNoises = NO;
     self.shouldShowOtherStates = NO;
     [self goToRecordButtonOnlyStateShouldAnimate:YES];
     self.movingFromNoRecordingsState = YES;
-}
-
-#pragma mark - User Actions
-
-- (void)recordButtonPressed:(UIButton *)sender {
-    if (self.recordButtonEnabled) {
-        switch (self.recorderController.recordingState) {
-            case RecorderControllerStateStopped:
-            case RecorderControllerStatePaused:
-                // time to record
-                [[PlayerController sharedPlayer] pauseAudio];
-                
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
-                    [self startRecordingShouldAnimate:YES];
-                }
-                
-                break;
-                
-            case RecorderControllerStateRecording: {
-                // time to stop
-                [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
-                break;
-            }
-            case RecorderControllerStatePausing:
-            case RecorderControllerStateStopping:
-                // can't do anything
-                break;
-        }
-    }
-}
-
-- (void)animateRecordingState {
-    if (!self.movingFromNoRecordingsState) {
-        [self goToRecordButtonOnlyStateShouldAnimate:YES];
-    } else {
-        self.movingFromNoRecordingsState = NO;
-    }
-    
-    self.pulsingValues = [NSMutableArray array];
-    for (int i = 0; i < 15; i++) {
-        [self.pulsingValues addObject:(growForLouderNoises) ? @1.2 : @1];
-    }
-    
-    self.recordTime.text = @"0:00";
-    self.recordTime.alpha = 1;
-    
-    self.arcAngleShrinkCount = 0;
-    [self.displayLinkController addSubscriberWithKey:@"recordButton"];
-}
-
-- (void)animatePauseState {
-    [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:0 arcStartAngle:.01] forState:UIControlStateNormal];
-    
-    self.recordTime.alpha = 0;
-    
-    [UIView animateWithDuration:.4f animations:^{
-        if (self.shouldShowOtherStates) {
-            self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
-            self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
-        }
-        self.recordButton.transform = CGAffineTransformIdentity;
-        self.recordTime.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self.view addSubview:self.recordButton];
-        self.recordButton.frame = self.recordButtonOriginalFrame;
-        [self.transitionView removeFromSuperview];
-        [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
-        if (self.shouldShowOtherStates) {
-            [self.view addGestureRecognizer:self.panGesture];
-        }
-    }];
 }
 
 - (void)popAnimationCompleted {
@@ -641,9 +615,6 @@ static BOOL const growForLouderNoises = NO;
         if (self.pulsingValues.count > 15) {
             [self.pulsingValues removeObjectAtIndex:0];
         }
-        if (self.pulsingValues.count > 15) {
-            [self.pulsingValues removeObjectAtIndex:0];
-        }
         
         float averagedTransformCoefficient = 0.0f;
         for (NSNumber *savedPulseCoefficient in self.pulsingValues) {
@@ -659,13 +630,6 @@ static BOOL const growForLouderNoises = NO;
         
         self.recordButton.transform = CGAffineTransformMakeScale(averagedTransformCoefficient, averagedTransformCoefficient);
         
-        self.arcAngleShrinkCount --;
-        if (self.arcAngleShrinkCount > -300) {
-            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:0] forState:UIControlStateNormal];
-        } else {
-            [self.recordButton setBackgroundImage:[WireTapStyleKit imageOfRecordButtonWithArcEndAngle:self.arcAngleShrinkCount arcStartAngle:self.arcAngleShrinkCount+300] forState:UIControlStateNormal];
-        }
-        
         [self setRecordingTimeText];
     } else {
         CGRect presentationFrame = [self.view.layer.presentationLayer frame];
@@ -679,6 +643,68 @@ static BOOL const growForLouderNoises = NO;
         self.initialY = presentationFrame.origin.y;
         [self.gearsImageView moveGearsWithRotationAngle:-Ytraveled];
     }
+}
+
+#pragma mark - Helper Methods
+
+- (void)setupRecordButtonRotator {
+    self.recordButtonRotator = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfRecordButtonRotator]];
+    self.recordButtonRotator.userInteractionEnabled = NO;
+    self.recordButtonRotator.frame = self.recordButton.bounds;
+    //make it small so it can grow into view
+    self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    [self.recordButton addSubview:self.recordButtonRotator];
+    [self.recordButton sendSubviewToBack:self.recordButtonRotator];
+    
+    CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    //start it at a random location around the record button
+    CGFloat randomAngle = arc4random_uniform(360);
+    animation.fromValue = [NSNumber numberWithFloat:randomAngle];
+    animation.toValue = [NSNumber numberWithFloat: randomAngle + 2*M_PI];
+    animation.duration = 6.0f;
+    animation.repeatCount = 120000;
+    [self.recordButtonRotator.layer addAnimation:animation forKey:@"MyAnimation"];
+    
+    [UIView animateWithDuration:.25 animations:^{
+        self.recordButtonRotator.transform = CGAffineTransformMakeScale(1, 1);
+    }];
+}
+
+- (void)setRecordingTimeText {
+    if (![self.recordTime.text isEqualToString:self.recorderController.currentRecordingTimeAsString]) {
+        [[RemoteCommandCenterController sharedRCCController] showRemoteElapsedPlaybackTime:@(self.recorderController.currentRecordingTime)];
+        
+        self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
+        
+        NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+        BOOL maximumReached = self.recorderController.currentRecordingTime >= maxRecordingLength;
+        if (maximumReached && !self.tryingToStopAndStartRecorder) {
+            [self saveAndStartRecording];
+        }
+    }
+}
+
+- (NSMutableArray *)pulsingValues {
+    if (!_pulsingValues) {
+        _pulsingValues = [NSMutableArray new];
+        for (int i = 0; i < 15; i++) {
+            [_pulsingValues addObject:(growForLouderNoises) ? @1.2 : @1];
+        }
+    }
+    return _pulsingValues;
+}
+
+- (UILabel *)recordTime {
+    if (!_recordTime) {
+        _recordTime = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+        [self.recordButton addSubview:_recordTime];
+        _recordTime.text = @"0:00";
+        _recordTime.textAlignment = NSTextAlignmentCenter;
+        _recordTime.font = [UIFont fontWithName: @"Helvetica-Medium" size:22.0f];
+        _recordTime.textColor = [UIColor blackColor];
+        _recordTime.alpha = 0;
+    }
+    return _recordTime;
 }
 
 @end

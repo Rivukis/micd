@@ -9,5 +9,6 @@
 + (POPSpringAnimation *)springAnimationShrinkToNothing;
 + (POPSpringAnimation *)springAnimationButtonBounce;
 + (POPSpringAnimation *)springAnimationCellBounce;
++ (POPSpringAnimation *)springRotater;
     
 @end

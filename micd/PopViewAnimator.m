@@ -21,10 +21,10 @@
 
 + (POPSpringAnimation *)springAnimationGrowFromNothing; {
     POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-    animation.fromValue = [NSValue valueWithCGSize:CGSizeMake(0.1, 0.1)];
+    animation.fromValue = [NSValue valueWithCGSize:CGSizeMake(0.01, 0.01)];
     animation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
     animation.velocity = [NSValue valueWithCGPoint:CGPointMake(8, 8)];
-    animation.springBounciness = 10.f;
+    animation.springBounciness = 4.f;
     
     return animation;
 }
@@ -33,7 +33,7 @@
     POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
     animation.fromValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
     animation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.0001, 0.0001)];
-    animation.velocity = [NSValue valueWithCGPoint:CGPointMake(20, 20)];
+    animation.velocity = [NSValue valueWithCGPoint:CGPointMake(4, 4)];
     animation.springBounciness = 0.0f;
     
     return animation;
@@ -53,6 +53,18 @@
     animation.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
     animation.velocity = [NSValue valueWithCGPoint:CGPointMake(-2, -2)];
     animation.springBounciness = 12.0f;
+    
+    return animation;
+}
+
++ (POPSpringAnimation *)springRotater {
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerRotation];
+    animation.fromValue = [NSNumber numberWithFloat:0.0f];
+    animation.toValue = [NSNumber numberWithFloat:2*M_PI];
+    animation.velocity = 0;
+    animation.springBounciness = 0;
+    animation.springSpeed = 0;
+    animation.repeatForever = YES;
     
     return animation;
 }

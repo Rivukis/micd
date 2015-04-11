@@ -11,6 +11,7 @@
 @interface AppDelegate ()
 
 @property (nonatomic, assign) BOOL fireDidBecomeActiveNotification;
+@property (nonatomic, strong) UIImageView *launchImageToFade;
 
 @end
 
@@ -19,6 +20,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [VersionController updateVersion];
     self.fireDidBecomeActiveNotification = YES;
+    
+    self.launchImageToFade = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"splashScreen"]];
+    self.launchImageToFade.frame = self.window.frame;
+    [self.window.rootViewController.view addSubview:self.launchImageToFade];
+    [self.window.rootViewController.view bringSubviewToFront:self.launchImageToFade];
+    [self performSelector:@selector(fadeLaunchImage) withObject:nil afterDelay:0.2];
     
     return YES;
 }
@@ -93,6 +100,19 @@
     
     replyDict[kWatchExtKeyIsRecording] = @(isRecording);
     reply([replyDict copy]);
+}
+
+- (void)fadeLaunchImage {
+    [UIView transitionWithView:self.window
+                      duration:1.00f
+                       options:UIViewAnimationOptionCurveEaseInOut
+                    animations:^(void){
+                        self.launchImageToFade.alpha = 0.0f;
+                    }
+                    completion:^(BOOL finished){
+                        [self.launchImageToFade removeFromSuperview];
+                    }];
+
 }
 
 @end
