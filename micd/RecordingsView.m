@@ -9,8 +9,8 @@
         return NO;
     }
     
-    CGPoint convertedPointForPlaybackContainerView = [self.playbackContainerView convertPoint:point fromView:self];
-    BOOL isInsidePlaybackContainerView = [self.playbackContainerView pointInside:convertedPointForPlaybackContainerView withEvent:event];
+    CGPoint convertedPointForPlaybackContainerView = [self.playbackAreaView convertPoint:point fromView:self];
+    BOOL isInsidePlaybackContainerView = [self.playbackAreaView pointInside:convertedPointForPlaybackContainerView withEvent:event];
     
     if (!isInsidePlaybackContainerView) {
         return YES;

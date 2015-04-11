@@ -3,6 +3,6 @@
 @interface RecordingsView : UIView
 
 @property (strong, nonatomic) NSArray *playerControlElements;
-@property (weak, nonatomic) UIView *playbackContainerView;
+@property (weak, nonatomic) UIView *playbackAreaView;
 
 @end

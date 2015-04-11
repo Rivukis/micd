@@ -36,6 +36,8 @@ UIDocumentInteractionControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
 
 @property (weak, nonatomic) IBOutlet UIView *playbackView;
+@property (weak, nonatomic) IBOutlet UIView *playbackAreaView;
+
 @property (weak, nonatomic) IBOutlet UILabel *playbackTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentPlaybackTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalPlaybackTimeLabel;
@@ -147,7 +149,7 @@ UIDocumentInteractionControllerDelegate>
         [self scrollToAndReadyPlayerWithMostRecentRecording];
         
         ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton, self.playbackTitleLabel];
-        ((RecordingsView *)self.view).playbackContainerView = self.playbackView;
+        ((RecordingsView *)self.view).playbackAreaView = self.playbackAreaView;
         
         RecordingCellModel *mostRecentRecordingCellModel = [self mostRecentRecordingCellModel];
         [self readyPlayerWithRecording:mostRecentRecordingCellModel.recording];
