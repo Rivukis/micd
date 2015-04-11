@@ -60,6 +60,8 @@ static BOOL const growForLouderNoises = NO;
 @property (nonatomic, assign) BOOL tryingToStopAndStartRecorder;
 @property (nonatomic, assign) BOOL shouldShowOtherStates;
 
+@property (nonatomic, assign) BOOL shouldMoveToHomeStateOnAppLaunch;
+
 @end
 
 @implementation HomeViewController
@@ -117,14 +119,6 @@ static BOOL const growForLouderNoises = NO;
     [self.settingsUpperMoveStateButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    // for launching the app while recording
-    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
-        [self animateRecordingState];
-    }
-}
-
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -162,13 +156,18 @@ static BOOL const growForLouderNoises = NO;
     }
     
     if (self.view.frame.origin.y != [self backgroundImageHomeStateYOffset]) {
-        [self moveToHomeState];
+        BOOL applicationIsActive = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
+        if (applicationIsActive) {
+            [self moveToHomeState];
+        } else {
+            self.shouldMoveToHomeStateOnAppLaunch = YES;
+        }
     }
 }
 
 - (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
     BOOL shouldMoveToHomeState = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
-    if (shouldMoveToHomeState) {
+    if (shouldMoveToHomeState || self.shouldMoveToHomeStateOnAppLaunch) {
         self.startRecordingWhenAnimationCompletes = YES;
         [self moveToHomeState];
     }
@@ -338,6 +337,7 @@ static BOOL const growForLouderNoises = NO;
         self.recordButton.frame = self.recordButtonOriginalFrame;
         [self.recordButtonRotator pop_removeAllAnimations];
         [self.recordButtonRotator removeFromSuperview];
+        self.recordButtonRotator = nil;
         [self.transitionView removeFromSuperview];
         if (self.shouldShowOtherStates) {
             [self.view addGestureRecognizer:self.panGesture];
@@ -397,10 +397,17 @@ static BOOL const growForLouderNoises = NO;
         self.recordButtonEnabled = YES;
     }
     
-    if (self.startRecordingWhenAnimationCompletes && self.recorderController.recordingState != RecorderControllerStateRecording) {
-        [self recordButtonPressed:self.recordButton];
+    if (self.startRecordingWhenAnimationCompletes) {
+        if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+            [self animateRecordingState];
+        } else {
+            [self recordButtonPressed:self.recordButton];
+        }
+        
         self.startRecordingWhenAnimationCompletes = NO;
     }
+    
+    self.shouldMoveToHomeStateOnAppLaunch = NO;
 }
 
 - (void)animateGearsSpinning {
@@ -414,7 +421,7 @@ static BOOL const growForLouderNoises = NO;
     self.recordButtonRotator.userInteractionEnabled = NO;
     self.recordButtonRotator.frame = self.recordButton.bounds;
     //make it small so it can grow into view
-    self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
     [self.recordButton addSubview:self.recordButtonRotator];
     [self.recordButton sendSubviewToBack:self.recordButtonRotator];
     
@@ -424,12 +431,12 @@ static BOOL const growForLouderNoises = NO;
     animation.fromValue = [NSNumber numberWithFloat:randomAngle];
     animation.toValue = [NSNumber numberWithFloat: randomAngle + 2*M_PI];
     animation.duration = 6.0f;
-    animation.repeatCount = 120000;
+    animation.repeatCount = HUGE_VALF;
     [self.recordButtonRotator.layer addAnimation:animation forKey:@"MyAnimation"];
     
-    [UIView animateWithDuration:.25 animations:^{
+    [UIView animateWithDuration:0.25f delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.recordButtonRotator.transform = CGAffineTransformMakeScale(1, 1);
-    }];
+    } completion:nil];
 }
 
 - (void)setRecordingTimeText {
