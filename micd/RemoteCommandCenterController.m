@@ -85,8 +85,6 @@ static const BOOL useSkipButtons = NO;
     //    MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:image];
     //    [trackInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
     
-    NSLog(@"%@", trackInfo);
-    
     [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:[trackInfo copy]];
 }
 

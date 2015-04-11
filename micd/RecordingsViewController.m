@@ -196,7 +196,6 @@ UIDocumentInteractionControllerDelegate>
     switch (interruptionType) {
         case AVAudioSessionInterruptionTypeBegan:
             if (self.playerController.playerState == PlayerControllerStatePlaying) {
-                NSLog(@"pause playback and set bool");
                 [self pausePlaybackShouldAnimatePauseButton:NO];
                 self.interruptionOccuredWhilePlaying = YES;
             }
@@ -205,7 +204,6 @@ UIDocumentInteractionControllerDelegate>
             if (self.interruptionOccuredWhilePlaying && self.playerController.playerState != PlayerControllerStatePlaying) {
                 [self.focusedCellModel setCellState:CellStatePlaying];
                 [self playPlaybackShouldAnimatePlayButton:NO];
-                NSLog(@"play playback");
             }
             self.interruptionOccuredWhilePlaying = NO;
         default:

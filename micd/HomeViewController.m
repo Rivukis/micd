@@ -223,10 +223,10 @@ static BOOL const growForLouderNoises = NO;
     
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
-    if (YES || accessDetermined) {
+    if (accessDetermined) {
         
         BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
-        if (YES || accessGranted) {
+        if (accessGranted) {
             BOOL success = [self.recorderController startRecording];
             if (success) {
                 NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
