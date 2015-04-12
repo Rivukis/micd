@@ -4,6 +4,7 @@
 @interface RecorderInterfaceController()
 
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *recordButton;
+@property (weak, nonatomic) IBOutlet WKInterfaceGroup *recordButtonGroup;
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *recordingsButton;
 
 @end
@@ -35,10 +36,12 @@
 
 - (void)setupViewForIsRecording:(BOOL)isRecording {
     if (isRecording) {
-        [self.recordButton setBackgroundImage:[UIImage imageNamed:@"recordButtonRecording"]];
+        [self.recordButtonGroup setBackgroundImageNamed:@"image-"];
+        [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 176) duration:6 repeatCount:0];
         [self setupRecordingsButtonShouldBeEnabled:NO];
     } else {
-        [self.recordButton setBackgroundImage:[UIImage imageNamed:@"recordButton"]];
+        [self.recordButtonGroup stopAnimating];
+        [self.recordButtonGroup setBackgroundImageNamed:@"recordButton"];
         [self setupRecordingsButtonShouldBeEnabled:YES];
     }
 }
