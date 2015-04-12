@@ -2,15 +2,15 @@
 #import "FramesController.h"
 #import "PlayerController.h"
 
-@protocol GoToNoRecordingStateDelegate <NSObject>
+@protocol DeletedLastRemainingTrackDelegate <NSObject>
 
-- (void)goToNoRecordingState;
+- (void)deletedLastRemainingTrack;
 
 @end
 
 @interface RecordingsViewController : UIViewController <FramesBasedOnStateProtocol>
 
-@property (weak, nonatomic) id<GoToNoRecordingStateDelegate> noRecordingStateDelegate;
+@property (weak, nonatomic) id<DeletedLastRemainingTrackDelegate> deletedLastRemainingTrackDelegate;
 
 - (void)reloadDataWithNewRecording:(Recording *)recording;
 - (void)playPlaybackShouldAnimatePlayButton:(BOOL)shouldAnimatePlayButton;

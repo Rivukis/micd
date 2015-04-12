@@ -18,7 +18,7 @@
 static CGFloat const kCurrentBackgroundImageHeight = 2755;
 static CGFloat const kCurrentBackgroundImageWidth = 375.0f;
 
-static BOOL const growForLouderNoises = NO;
+static BOOL const growForLouderNoises = YES;
 
 @interface HomeViewController () <UIGestureRecognizerDelegate, RemoteCommandCenterControllerDelegate>
 
@@ -92,6 +92,9 @@ static BOOL const growForLouderNoises = NO;
     [self.view addSubview:self.recordButton];
     self.recordButtonEnabled = YES;
     
+    [self.recordButton addSubview:self.recordButtonRotator];
+    [self.recordButton sendSubviewToBack:self.recordButtonRotator];
+    
     self.gearsCircleImageView = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfGearsCircle]];
     [self.view addSubview:self.gearsCircleImageView];
     self.gearsImageView = [[GearsImageView alloc] init];
@@ -144,32 +147,42 @@ static BOOL const growForLouderNoises = NO;
 }
 
 - (void)responseToRecordPressedFromWatch:(NSNotification *)notification {
-    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
-        [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
-    } else {
-        [[PlayerController sharedPlayer] pauseAudio];
-        
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
-            [self startRecordingShouldAnimate:YES];
-        }
+    BOOL isOnHomeScreen = self.view.frame.origin.y == [self backgroundImageHomeStateYOffset];
+    BOOL isApplicationActive = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
+    BOOL isRecording = self.recorderController.recordingState == RecorderControllerStateRecording;
+    
+    if (isRecording) {
+        [self pauseRecordingShouldAnimate:isApplicationActive shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+        return;
     }
     
-    if (self.view.frame.origin.y != [self backgroundImageHomeStateYOffset]) {
-        BOOL applicationIsActive = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
-        if (applicationIsActive) {
-            [self moveToHomeState];
-        } else {
-            self.shouldMoveToHomeStateOnAppLaunch = YES;
-        }
+    if (isOnHomeScreen) {
+        [self startRecordingShouldAnimate:isApplicationActive];
+        return;
+    }
+    
+    if (isApplicationActive) {
+        self.startRecordingWhenAnimationCompletes = YES;
+        [self moveToHomeState];
+    } else {
+        self.shouldMoveToHomeStateOnAppLaunch = YES;
+        [self startRecordingShouldAnimate:NO];
     }
 }
 
 - (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
-    BOOL shouldMoveToHomeState = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
-    if (shouldMoveToHomeState || self.shouldMoveToHomeStateOnAppLaunch) {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording || self.shouldMoveToHomeStateOnAppLaunch) {
+        self.shouldMoveToHomeStateOnAppLaunch = NO;
+        [self moveToHomeState];
+        return;
+    }
+    
+    BOOL autoRecordOnLaunch = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyStartRecordingOnAppDidBecomeActive];
+    if (autoRecordOnLaunch) {
         self.startRecordingWhenAnimationCompletes = YES;
         [self moveToHomeState];
     }
+    
 }
 
 - (void)responseToAVAudioSessionInterruption:(NSNotification *)notification {
@@ -198,51 +211,55 @@ static BOOL const growForLouderNoises = NO;
 #pragma mark - Helper Methods
 
 - (void)startRecordingShouldAnimate:(BOOL)shouldAnimate {
+    if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+        [self goToRecordingStateAnimateChange:shouldAnimate];
+        return;
+    }
+    
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
     
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
-    if (YES || accessDetermined) {
+    if (NO && !accessDetermined) {
+        [audioSessionController requestMicrophonePermissionWithCompletion:nil];
+        return;
+    }
+    
+    BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
+    if (NO && !accessGranted) {
+        [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
+        return;
+    }
+    
+    [[PlayerController sharedPlayer] pauseAudio];
+    
+    BOOL success = [self.recorderController startRecording];
+    if (success) {
+        NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+        [self performSelector:@selector(saveAndContinueRecording) withObject:nil afterDelay:maxRecordingLength];
         
-        BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
-        if (YES || accessGranted) {
-            BOOL success = [self.recorderController startRecording];
-            if (success) {
-                NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-                [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
-                [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
-                                                                         createdDate:nil
-                                                                            duration:@(maxRecordingLength)
-                                                                         elapsedTime:@0
-                                                                            forstate:RemoteCommandCenterControllerStateRecording];
-                if (shouldAnimate) {
-                    [self animateRecordingState];
-                }
-            }
-        } else {
-            [self animatePauseState];
-            [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
-        }
-    } else {
-                [audioSessionController requestMicrophonePermissionWithCompletion:^{
-        //            if (!self.justAskedForPermission) {
-        //            [self startRecordingShouldAnimate:shouldAnimate];
-        //            }
-        //            self.justAskedForPermission = YES;
-                }];
+        [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
+        [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
+                                                                 createdDate:nil
+                                                                    duration:@(maxRecordingLength)
+                                                                 elapsedTime:@0
+                                                                    forstate:RemoteCommandCenterControllerStateRecording];
+        
+        [self goToRecordingStateAnimateChange:shouldAnimate];
     }
 }
 
 - (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowOtherStates:(BOOL)shouldShowOtherStates completionBlockWhenRecordingIsSaved:(void(^)())completion {
     [self.recorderController pauseRecording];
+    
     if (shouldShowOtherStates) {
         self.shouldShowOtherStates = shouldShowOtherStates;
     }
-    if (shouldAnimate) {
-        [self animatePauseState];
-    }
+    
+    [self goToPauseStateShowCircles:self.shouldShowOtherStates animateChange:shouldAnimate];
+    
     __weak __typeof(self) weakSelf = self;
     [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
         if (!error) {
@@ -254,7 +271,7 @@ static BOOL const growForLouderNoises = NO;
     }];
 }
 
-- (void)saveAndStartRecording {
+- (void)saveAndContinueRecording {
     self.tryingToStopAndStartRecorder = YES;
 
     [self pauseRecordingShouldAnimate:NO shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:^{
@@ -266,162 +283,49 @@ static BOOL const growForLouderNoises = NO;
     }];
 }
 
+- (void)setRecordingTimeText {
+    if (![self.recordTime.text isEqualToString:self.recorderController.currentRecordingTimeAsString]) {
+        [[RemoteCommandCenterController sharedRCCController] showRemoteElapsedPlaybackTime:@(self.recorderController.currentRecordingTime)];
+        self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
+    }
+}
+
+#pragma mark - Public Methods
+
+- (void)deletedLastRemainingTrack {
+    [self goToPauseStateShowCircles:NO animateChange:YES];
+}
+
 #pragma mark - User Action Methods
 
 - (void)recordButtonPressed:(UIButton *)sender {
     if (self.recordButtonEnabled) {
-        switch (self.recorderController.recordingState) {
-            case RecorderControllerStateStopped:
-            case RecorderControllerStatePaused:
-                // time to record
-                [[PlayerController sharedPlayer] pauseAudio];
-                
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
-                    [self startRecordingShouldAnimate:YES];
-                    
-                    NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-                    [self performSelector:@selector(saveAndStartRecording) withObject:nil afterDelay:maxRecordingLength];
-                }
-                
-                break;
-                
-            case RecorderControllerStateRecording: {
-                // time to stop
-                
-                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(saveAndStartRecording) object:nil];
-                
-                [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
-                break;
-            }
-            case RecorderControllerStatePausing:
-            case RecorderControllerStateStopping:
-                // can't do anything
-                break;
+        if (self.recorderController.recordingState == RecorderControllerStateRecording) {
+            [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+        } else {
+            [self startRecordingShouldAnimate:YES];
         }
     }
 }
 
 #pragma mark - Animation Methods
 
-- (void)animateRecordingState {
-    [self setupRecordButtonRotator];
-    
-    if (!self.movingFromNoRecordingsState) {
-        [self goToRecordButtonOnlyStateShouldAnimate:YES];
-    } else {
-        self.movingFromNoRecordingsState = NO;
-    }
-    
-    self.recordTime.text = @"0:00";
-    self.recordTime.alpha = 1;
-    
-    [self.displayLinkController addSubscriberWithKey:@"recordButton"];
-}
-
-- (void)animatePauseState {
-    self.recordTime.alpha = 0;
-    [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
-    self.pulsingValues = nil;
-    
-    [UIView animateWithDuration:.5f animations:^{
-        if (self.shouldShowOtherStates) {
-            self.backgroundImageView.frame = self.backgroundImageViewOriginalFrame;
-            self.gearsCircleImageView.frame = self.gearImageViewOriginalFrame;
-        }
-        self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.1, 0.1);
-        self.recordButton.transform = CGAffineTransformIdentity;
-        self.recordTime.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self.recordButtonRotator removeFromSuperview];
-        self.recordButtonRotator = nil;
-    }];
-}
-
-- (void)goToRecordButtonOnlyStateShouldAnimate:(BOOL)animate {
-    //now take these views and get them outta here
-    CGFloat fullCircle = self.recordButton.frame.size.height;
-    CGRect mainFrame = self.backgroundImageView.frame;
-    mainFrame.origin.y -= fullCircle;
-    CGRect gearFrame = self.gearsCircleImageView.frame;
-    gearFrame.origin.y += fullCircle;
-    
-    if (animate) {
-        [UIView animateWithDuration:.25f animations:^{
-            self.backgroundImageView.frame = mainFrame;
-            self.gearsCircleImageView.frame = gearFrame;
-        } completion:^(BOOL finished) {
-            
-        }];
-    } else {
-        self.backgroundImageView.frame = mainFrame;
-        self.gearsCircleImageView.frame = gearFrame;
-    }
-}
-
-- (void)goToNoRecordingState {
-    self.shouldShowOtherStates = NO;
-    [self goToRecordButtonOnlyStateShouldAnimate:YES];
-    self.movingFromNoRecordingsState = YES;
-}
-
 - (void)popAnimationCompleted {
-//    if (self.recorderController.recordingState == RecorderControllerStateRecording && self.view.frame.origin.y == [self backgroundImageHomeStateYOffset]) {
-//        [self performSelector:@selector(animateRecordingState) withObject:nil afterDelay:1.0f];
-//    }
-    
     [self.displayLinkController removeSubscriberWithKey:@"gears"];
     
     if (self.currentPositionState == PositionStateHome) {
         self.recordButtonEnabled = YES;
     }
     
-    if (self.startRecordingWhenAnimationCompletes) {
-        if (self.recorderController.recordingState == RecorderControllerStateRecording) {
-            [self animateRecordingState];
-        } else {
-            [self recordButtonPressed:self.recordButton];
-        }
-        
+    if (self.startRecordingWhenAnimationCompletes || self.recorderController.recordingState == RecorderControllerStateRecording) {
+        BOOL isApplicationActive = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
+        [self startRecordingShouldAnimate:isApplicationActive];
         self.startRecordingWhenAnimationCompletes = NO;
     }
-    
-    self.shouldMoveToHomeStateOnAppLaunch = NO;
 }
 
 - (void)animateGearsSpinning {
     [self.displayLinkController addSubscriberWithKey:@"gears"];
-}
-
-#pragma mark - View Methods
-
-- (void)setupRecordButtonRotator {
-    self.recordButtonRotator = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfRecordButtonRotator]];
-    self.recordButtonRotator.userInteractionEnabled = NO;
-    self.recordButtonRotator.frame = self.recordButton.bounds;
-    //make it small so it can grow into view
-    self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
-    [self.recordButton addSubview:self.recordButtonRotator];
-    [self.recordButton sendSubviewToBack:self.recordButtonRotator];
-    
-    CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    //start it at a random location around the record button
-    CGFloat randomAngle = arc4random_uniform(360);
-    animation.fromValue = [NSNumber numberWithFloat:randomAngle];
-    animation.toValue = [NSNumber numberWithFloat: randomAngle + 2*M_PI];
-    animation.duration = 6.0f;
-    animation.repeatCount = HUGE_VALF;
-    [self.recordButtonRotator.layer addAnimation:animation forKey:@"MyAnimation"];
-    
-    [UIView animateWithDuration:0.25f delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.recordButtonRotator.transform = CGAffineTransformMakeScale(1, 1);
-    } completion:nil];
-}
-
-- (void)setRecordingTimeText {
-    if (![self.recordTime.text isEqualToString:self.recorderController.currentRecordingTimeAsString]) {
-        [[RemoteCommandCenterController sharedRCCController] showRemoteElapsedPlaybackTime:@(self.recorderController.currentRecordingTime)];
-        self.recordTime.text = self.recorderController.currentRecordingTimeAsString;
-    }
 }
 
 #pragma mark - PanGestureRecognizer
@@ -593,6 +497,8 @@ static BOOL const growForLouderNoises = NO;
                                          buttonSizeConstant,
                                          buttonSizeConstant);
     
+    self.recordButtonRotator.frame = self.recordButton.bounds;
+    
     CGPoint recordTimeCenter = CGPointMake(CGRectGetWidth(self.recordButton.bounds)/2, CGRectGetHeight(self.recordButton.bounds)/2);
     recordTimeCenter.y += self.recordButton.bounds.size.height*.30;
     self.recordTime.center = recordTimeCenter;
@@ -609,10 +515,7 @@ static BOOL const growForLouderNoises = NO;
     self.backgroundImageViewOriginalFrame = self.backgroundImageView.frame;
     
     BOOL weHaveRecordings = [[DataSourceController sharedDataSource] numberOfRecordings];
-    if (!weHaveRecordings) {
-        [self goToRecordButtonOnlyStateShouldAnimate:NO];
-        self.movingFromNoRecordingsState = YES;
-    }
+    [self goToPauseStateShowCircles:weHaveRecordings animateChange:NO];
     
     float gestureSizeWidthConstant = windowHeight * 0.4f; // 0.4
     float gestureSizeHeightConstant = windowHeight * 0.155f;
@@ -759,17 +662,100 @@ static BOOL const growForLouderNoises = NO;
     return _recordTime;
 }
 
-#pragma mark - new shiz
-
-- (void)goToRecordingState {
-    
+- (UIImageView *)recordButtonRotator {
+    if (!_recordButtonRotator) {
+        _recordButtonRotator = [[UIImageView alloc] initWithImage:[WireTapStyleKit imageOfRecordButtonRotator]];
+        _recordButtonRotator.userInteractionEnabled = NO;
+    }
+    return _recordButtonRotator;
 }
 
-- (void)goToPauseStateShowCircles:(BOOL)shouldShowCircles {
-    if (shouldShowCircles) {
+#pragma mark - new shiz
+
+- (void)goToRecordingStateAnimateChange:(BOOL)shouldAnimate {
+    self.recordingsLowerMoveStateButton.enabled = NO;
+    self.homeUpperMoveStateButton.enabled = NO;
+    self.homeLowerMoveStateButton.enabled = NO;
+    self.settingsUpperMoveStateButton.enabled = NO;
+    
+    CGRect backgroundImageFrame = self.backgroundImageViewOriginalFrame;
+    CGRect gearFrame = self.gearImageViewOriginalFrame;
+    CGFloat fullCircleHeight = CGRectGetHeight(self.gearImageViewOriginalFrame);
+    backgroundImageFrame.origin.y -= fullCircleHeight;
+    gearFrame.origin.y += fullCircleHeight;
+    
+    if (shouldAnimate) {
+        [UIView animateWithDuration:.25f animations:^{
+            self.backgroundImageView.frame = backgroundImageFrame;
+            self.gearsCircleImageView.frame = gearFrame;
+        } completion:nil];
         
     } else {
-        
+        self.backgroundImageView.frame = backgroundImageFrame;
+        self.gearsCircleImageView.frame = gearFrame;
+    }
+    
+    CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    //start it at a random location around the record button
+    if (![self.recordButtonRotator.layer animationForKey:@"MyAnimation"]) {
+        CGFloat randomAngle = arc4random_uniform(360);
+        animation.fromValue = [NSNumber numberWithFloat:randomAngle];
+        animation.toValue = [NSNumber numberWithFloat: randomAngle + 2*M_PI];
+        animation.duration = 6.0f;
+        animation.repeatCount = HUGE_VALF;
+        [self.recordButtonRotator.layer addAnimation:animation forKey:@"MyAnimation"];
+    }
+    
+    // always animate
+    [UIView animateWithDuration:0.25f delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.recordButtonRotator.transform = CGAffineTransformMakeScale(1, 1);
+    } completion:nil];
+    
+    self.recordTime.text = @"0:00";
+    self.recordTime.alpha = 1;
+    
+    [self.displayLinkController addSubscriberWithKey:@"recordButton"];
+}
+
+- (void)goToPauseStateShowCircles:(BOOL)shouldShowCircles animateChange:(BOOL)shouldAnimate {
+    self.shouldMoveToHomeStateOnAppLaunch = NO;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(saveAndContinueRecording) object:nil];
+    [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
+    self.recordTime.alpha = 0;
+    self.pulsingValues = nil;
+    
+    CGRect backgroundImageFrame = self.backgroundImageViewOriginalFrame;
+    CGRect gearFrame = self.gearImageViewOriginalFrame;
+    
+    if (!shouldShowCircles) {
+        CGFloat fullCircleHeight = CGRectGetHeight(self.gearImageViewOriginalFrame);
+        backgroundImageFrame.origin.y -= fullCircleHeight;
+        gearFrame.origin.y += fullCircleHeight;
+    }
+    
+    if (shouldAnimate) {
+        [UIView animateWithDuration:.25f animations:^{
+            self.backgroundImageView.frame = backgroundImageFrame;
+            self.gearsCircleImageView.frame = gearFrame;
+            self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+            self.recordButton.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            self.recordingsLowerMoveStateButton.enabled = shouldShowCircles;
+            self.homeUpperMoveStateButton.enabled = shouldShowCircles;
+            self.homeLowerMoveStateButton.enabled = shouldShowCircles;
+            self.settingsUpperMoveStateButton.enabled = shouldShowCircles;
+            [self.recordButtonRotator.layer removeAnimationForKey:@"MyAnimation"];
+        }];
+    } else {
+        self.backgroundImageView.frame = backgroundImageFrame;
+        self.gearsCircleImageView.frame = gearFrame;
+        self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+        self.recordButton.transform = CGAffineTransformIdentity;
+        self.recordingsLowerMoveStateButton.enabled = shouldShowCircles;
+        self.homeUpperMoveStateButton.enabled = shouldShowCircles;
+        self.homeLowerMoveStateButton.enabled = shouldShowCircles;
+        self.settingsUpperMoveStateButton.enabled = shouldShowCircles;
+        [self.recordButtonRotator.layer removeAnimationForKey:@"MyAnimation"];
     }
 }
 

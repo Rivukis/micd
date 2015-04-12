@@ -10,7 +10,7 @@
 #import "PopViewAnimator.h"
 #import "Constants.h"
 
-@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, GoToNoRecordingStateDelegate>
+@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, DeletedLastRemainingTrackDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
 @property (nonatomic) CGRect micdBackgroundOriginalFrame;
@@ -46,7 +46,7 @@
     [self addChildViewController:self.recordingsViewController];
     [self.view addSubview:self.recordingsViewController.view];
     [self.recordingsViewController didMoveToParentViewController:self];
-    self.recordingsViewController.noRecordingStateDelegate = self;
+    self.recordingsViewController.deletedLastRemainingTrackDelegate = self;
     
     self.settingsViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([SettingsViewController class])];
     [self addChildViewController:self.settingsViewController];
@@ -72,9 +72,9 @@
 
 #pragma mark - GoToNoRecordingStateDelegate
 
-- (void)goToNoRecordingState {
+- (void)deletedLastRemainingTrack {
     [self moveToPositionState:PositionStateHome];
-    [self.homeViewController goToNoRecordingState];
+    [self.homeViewController deletedLastRemainingTrack];
 }
 
 #pragma mark - MovementDelegate && Movement Helper Methods

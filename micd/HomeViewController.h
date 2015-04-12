@@ -28,6 +28,6 @@
 
 - (void)popAnimationCompleted;
 - (void)animateGearsSpinning;
-- (void)goToNoRecordingState;
+- (void)deletedLastRemainingTrack;
 
 @end

@@ -761,7 +761,7 @@ UIDocumentInteractionControllerDelegate>
                 [self.focusedCellModel setCellState:CellStatePaused];
                 [self readyPlayerWithRecording:self.focusedCellModel.recording];
             } else {
-                [self.noRecordingStateDelegate goToNoRecordingState];
+                [self.deletedLastRemainingTrackDelegate deletedLastRemainingTrack];
             }
         }
     }
