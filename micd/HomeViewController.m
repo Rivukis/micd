@@ -45,7 +45,6 @@ static BOOL const growForLouderNoises = NO;
 @property (strong, nonatomic) UIImageView *recordButtonRotator;
 @property (strong, nonatomic) NSMutableArray *pulsingValues;
 @property (assign, nonatomic) NSUInteger animatingPulseCount;
-@property (strong, nonatomic) UIView *transitionView;
 @property (nonatomic) CGRect recordButtonOriginalFrame;
 @property (nonatomic) CGRect backgroundImageViewOriginalFrame;
 @property (nonatomic) CGRect gearImageViewOriginalFrame;
@@ -205,10 +204,10 @@ static BOOL const growForLouderNoises = NO;
     
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
-    if (accessDetermined) {
+    if (YES || accessDetermined) {
         
         BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
-        if (accessGranted) {
+        if (YES || accessGranted) {
             BOOL success = [self.recorderController startRecording];
             if (success) {
                 NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
@@ -333,30 +332,12 @@ static BOOL const growForLouderNoises = NO;
         self.recordButton.transform = CGAffineTransformIdentity;
         self.recordTime.alpha = 0;
     } completion:^(BOOL finished) {
-        [self.view addSubview:self.recordButton];
-        self.recordButton.frame = self.recordButtonOriginalFrame;
-        [self.recordButtonRotator pop_removeAllAnimations];
         [self.recordButtonRotator removeFromSuperview];
         self.recordButtonRotator = nil;
-        [self.transitionView removeFromSuperview];
-        if (self.shouldShowOtherStates) {
-            [self.view addGestureRecognizer:self.panGesture];
-        }
     }];
 }
 
 - (void)goToRecordButtonOnlyStateShouldAnimate:(BOOL)animate {
-    //setup transition view to hold record button stationary
-    self.transitionView = [[UIView alloc] initWithFrame:self.view.window.bounds];
-    [self.view addSubview:self.transitionView];
-    self.transitionView.center = self.recordButton.center;
-    [self.transitionView addSubview:self.recordButton];
-    self.recordButton.center = self.view.window.center;//CGRectMake(0, 0, 256, 256);
-    
-    CGPoint recordTimeCenter = CGPointMake(CGRectGetWidth(self.recordButton.bounds)/2, CGRectGetHeight(self.recordButton.bounds)/2);
-    recordTimeCenter.y += self.recordButton.bounds.size.height*.30;
-    self.recordTime.center = recordTimeCenter;
-    
     //now take these views and get them outta here
     CGFloat fullCircle = self.recordButton.frame.size.height;
     CGRect mainFrame = self.backgroundImageView.frame;
@@ -375,9 +356,6 @@ static BOOL const growForLouderNoises = NO;
         self.backgroundImageView.frame = mainFrame;
         self.gearsCircleImageView.frame = gearFrame;
     }
-    
-    
-    [self.view removeGestureRecognizer:self.panGesture];
 }
 
 - (void)goToNoRecordingState {
@@ -476,6 +454,11 @@ static BOOL const growForLouderNoises = NO;
         self.homeLowerMoveStateButton.enabled = YES;
         self.settingsUpperMoveStateButton.enabled = YES;
         
+        if (self.recorderController.recordingState == RecorderControllerStateRecording || [[DataSourceController sharedDataSource] numberOfRecordings] == 0) {
+            [self moveToHomeState];
+            return;
+        }
+        
         NSInteger velocityHorizon = 200;
         CGPoint velocity = [gestureRecognizer velocityInView:gestureRecognizer.view];
         BOOL isPanningUp = velocity.y < 0;
@@ -552,7 +535,8 @@ static BOOL const growForLouderNoises = NO;
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if (touch.view == self.recordButton || self.recorderController.recordingState == RecorderControllerStateRecording) {
+    DataSourceController *dataSource = [DataSourceController sharedDataSource];
+    if (touch.view == self.recordButton || self.recorderController.recordingState == RecorderControllerStateRecording || dataSource.numberOfRecordings == 0) {
         return NO;
     }
     return YES;
@@ -608,6 +592,10 @@ static BOOL const growForLouderNoises = NO;
                                          windowHeight/2.0f - buttonSizeConstant/2.0f - self.view.frame.origin.y,
                                          buttonSizeConstant,
                                          buttonSizeConstant);
+    
+    CGPoint recordTimeCenter = CGPointMake(CGRectGetWidth(self.recordButton.bounds)/2, CGRectGetHeight(self.recordButton.bounds)/2);
+    recordTimeCenter.y += self.recordButton.bounds.size.height*.30;
+    self.recordTime.center = recordTimeCenter;
     
     CGRect gearsFrame = self.recordButton.frame;
     gearsFrame.origin.y += windowHeight/2.0f * 1.1f;
@@ -769,6 +757,20 @@ static BOOL const growForLouderNoises = NO;
         _recordTime.alpha = 0;
     }
     return _recordTime;
+}
+
+#pragma mark - new shiz
+
+- (void)goToRecordingState {
+    
+}
+
+- (void)goToPauseStateShowCircles:(BOOL)shouldShowCircles {
+    if (shouldShowCircles) {
+        
+    } else {
+        
+    }
 }
 
 @end
