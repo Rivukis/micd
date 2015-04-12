@@ -4,4 +4,8 @@
 
 + (NSArray *)fakeArrayOfSearchItems;
 
++ (void)clearDebugger;
++ (void)addMessageToDebugger:(NSString *)message;
++ (NSArray *)debugMessages;
+
 @end

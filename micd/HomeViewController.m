@@ -279,7 +279,7 @@ static BOOL const growForLouderNoises = YES;
         self.tryingToStopAndStartRecorder = NO;
         
         NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-        [self performSelector:@selector(saveAndStartRecording) withObject:nil afterDelay:maxRecordingLength];
+        [self performSelector:@selector(saveAndContinueRecording) withObject:nil afterDelay:maxRecordingLength];
     }];
 }
 
@@ -409,32 +409,6 @@ static BOOL const growForLouderNoises = YES;
         } else {
             [self moveToSettingState];
         }
-    }
-}
-
-- (PositionState)nextPositionStateWhenMovingUp:(BOOL)isMovingUp fromState:(PositionState)fromState {
-    switch (self.currentPositionState) {
-        case PositionStateSettings:
-            if (isMovingUp) {
-                return PositionStateHome;
-            } else {
-                return self.currentPositionState;
-            }
-        case PositionStateHome:
-            if (isMovingUp) {
-                return PositionStateRecordings;
-            } else {
-                return PositionStateSettings;
-            }
-        case PositionStateRecordings:
-            if (isMovingUp) {
-                return self.currentPositionState;
-            } else {
-                return PositionStateHome;
-            }
-        default:
-            return PositionStateHome;
-            break;
     }
 }
 
@@ -740,11 +714,13 @@ static BOOL const growForLouderNoises = YES;
             self.recordButtonRotator.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
             self.recordButton.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
-            self.recordingsLowerMoveStateButton.enabled = shouldShowCircles;
-            self.homeUpperMoveStateButton.enabled = shouldShowCircles;
-            self.homeLowerMoveStateButton.enabled = shouldShowCircles;
-            self.settingsUpperMoveStateButton.enabled = shouldShowCircles;
-            [self.recordButtonRotator.layer removeAnimationForKey:@"MyAnimation"];
+            if (self.recorderController.recordingState != RecorderControllerStateRecording) {
+                self.recordingsLowerMoveStateButton.enabled = shouldShowCircles;
+                self.homeUpperMoveStateButton.enabled = shouldShowCircles;
+                self.homeLowerMoveStateButton.enabled = shouldShowCircles;
+                self.settingsUpperMoveStateButton.enabled = shouldShowCircles;
+                [self.recordButtonRotator.layer removeAnimationForKey:@"MyAnimation"];
+            }
         }];
     } else {
         self.backgroundImageView.frame = backgroundImageFrame;
