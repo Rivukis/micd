@@ -3,7 +3,7 @@
 
 @interface FeedbackViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *textLabel;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UIButton *noButton;
 @property (weak, nonatomic) IBOutlet UIButton *yesButton;
 
@@ -39,13 +39,23 @@
     [self.noButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.yesButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
-    self.textLabel.textColor = [UIColor vibrantLightBlueText];
-    
-    if (self.lovesMicd) {
-        self.textLabel.text = @"Thanks you sexy sonofa bitch. We really appreciate that you really appreciate our app. If you would please take a few moments of your time and rate our app, we would give you a handy...tip";
-    } else {
-        self.textLabel.text = @"HMMM, Obviously you dont have even a smidge of taste. If you would like to leave your idiotic feedback, then please send us an email...you piece of shit.                   \n\n            Not reading it anyway";
+    // hack: for iphone 4 & 5 so the button text fits
+    if (self.view.frame.size.width <= 321) {
+        [self.yesButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0f]];
+        [self.noButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0f]];
     }
+    
+    [self.noButton setTitle:@"Nope" forState:UIControlStateNormal];
+    if (self.lovesMicd) {
+        [self.yesButton setTitle:@"Take me there!" forState:UIControlStateNormal];
+        self.textView.text = @"Aww thanks, your too kind! We really appreciate that you really appreciate our app. As a team of just two indie developers, it would be huge for us if you would rate our very first app.";
+    } else {
+        [self.yesButton setTitle:@"Share my wisdom" forState:UIControlStateNormal];
+        self.textView.text = @"If you have a minute to spare, and you wouldn't mind sharing your wisdom, we would love to hear any feedback or suggestions you have to make our app better. As a team of just two indie developers working on our first app, we have a lot to learn.";
+    }
+    [self.textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0f]];
+    [self.textView setTextColor:[UIColor vibrantLightBlueText]];
+    self.textView.textAlignment = NSTextAlignmentJustified;
 }
 
 - (IBAction)noTapped:(id)sender {

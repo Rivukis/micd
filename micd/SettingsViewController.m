@@ -117,6 +117,7 @@
 
 - (void)refreshFeedBackViews {
     BOOL questionHasBeenAnswered = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
+    questionHasBeenAnswered = NO;
     self.yesButton.hidden = questionHasBeenAnswered;
     self.noButton.hidden = questionHasBeenAnswered;
     self.sendFeedbackButton.hidden = !questionHasBeenAnswered;
@@ -258,7 +259,8 @@
 }
 
 - (void)showAppStore:(FeedbackViewController *)popoverViewController {
-    NSString *iTunesLink = @"https://itunes.apple.com/us/app/apple-store/";
+    NSString *appID = @"";
+    NSString *iTunesLink = [NSString stringWithFormat:@"https://itunes.apple.com/us/app/apple-store/%@", appID];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
     [self refreshFeedBackViews];
     [self dismissViewControllerAnimated:YES completion:nil];
