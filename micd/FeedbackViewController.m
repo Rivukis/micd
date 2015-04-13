@@ -48,7 +48,7 @@
     [self.noButton setTitle:@"Nope" forState:UIControlStateNormal];
     if (self.lovesMicd) {
         [self.yesButton setTitle:@"Take me there!" forState:UIControlStateNormal];
-        self.textView.text = @"Aww thanks, your too kind! We really appreciate that you really appreciate our app. As a team of just two indie developers, it would be huge for us if you would rate our very first app.";
+        self.textView.text = @"Awww thanks, you're too kind! We really appreciate that you really appreciate our app. As a team of just two indie developers, it would be huge for us if you would rate our very first app.";
     } else {
         [self.yesButton setTitle:@"Share my wisdom" forState:UIControlStateNormal];
         self.textView.text = @"If you have a minute to spare, and you wouldn't mind sharing your wisdom, we would love to hear any feedback or suggestions you have to make our app better. As a team of just two indie developers working on our first app, we have a lot to learn.";
