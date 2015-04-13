@@ -20,6 +20,8 @@ struct Length {
 @property (nonatomic, copy, readonly) NSData *data;
 @property (nonatomic, weak, readonly) AVAsset *avAsset;
 
+@property (nonatomic, assign, readonly) NSInteger part;
+
 @property (nonatomic, strong, readonly) NSDate *date;
 @property (nonatomic, strong, readonly) NSDateComponents *dateComponents;
 @property (nonatomic, weak, readonly) NSString *dateForAppleWatch;
@@ -39,5 +41,7 @@ struct Length {
 - (BOOL)addTag:(NSString *)tag;
 - (BOOL)removeTag:(NSString *)tag;
 - (NSURL *)url;
+
+- (void)setPart:(NSInteger)part withOriginalTrackDate:(NSDate *)date;
 
 @end

@@ -5,8 +5,10 @@
 @interface Recording () <NSCoding>
 
 @property (nonatomic, strong, readwrite) NSArray *tags;
-//@property (nonatomic, copy, readwrite) NSData *data;
 @property (nonatomic, strong, readwrite) NSUUID *uuid;
+@property (nonatomic, strong, readwrite) NSDate *date;
+@property (nonatomic, assign, readwrite) NSInteger part;
+@property (nonatomic, assign, readwrite) NSTimeInterval lengthAsTimeInterval;
 
 @end
 
@@ -24,6 +26,7 @@
         _lengthAsTimeInterval = length;
         _title = title ? title : @"";
         _uuid = [[NSUUID alloc] init];
+        _part = 0;
         
         [data writeToFile:[self urlString] atomically:YES];
     }
@@ -34,27 +37,38 @@
     return [self initWithData:data date:startDate length:length title:nil];
 }
 
+static NSString *const kUUIDKey = @"uuid";
+static NSString *const kTitleKey = @"title";
+static NSString *const kDateKey = @"date";
+static NSString *const kPartKey = @"part";
+static NSString *const kTagsKey = @"tags";
+static NSString *const kLengthKey = @"length";
+static NSString *const kOverrideLengthKey = @"overrideLength";
+static NSString *const kCurrentPlaybackPositionKey = @"currentPlaybackPosition";
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
     if (self) {
         // uuid, title, date, tags, length as time interval
-        _uuid = [aDecoder decodeObjectForKey:@"uuid"];
-        _title = [aDecoder decodeObjectForKey:@"title"];
-        _date = [aDecoder decodeObjectForKey:@"date"];
-        _tags = [aDecoder decodeObjectForKey:@"tags"];
-        _lengthAsTimeInterval = [aDecoder decodeDoubleForKey:@"length"];
-        _currentPlaybackPosistion = [aDecoder decodeDoubleForKey:@"currentPlaybackPosistion"];
+        _uuid = [aDecoder decodeObjectForKey:kUUIDKey];
+        _title = [aDecoder decodeObjectForKey:kTitleKey];
+        _date = [aDecoder decodeObjectForKey:kDateKey];
+        _part = [aDecoder decodeIntegerForKey:kPartKey];
+        _tags = [aDecoder decodeObjectForKey:kTagsKey];
+        _lengthAsTimeInterval = [aDecoder decodeDoubleForKey:kLengthKey];
+        _currentPlaybackPosistion = [aDecoder decodeDoubleForKey:kCurrentPlaybackPositionKey];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:_uuid forKey:@"uuid"];
-    [aCoder encodeObject:_title forKey:@"title"];
-    [aCoder encodeObject:_date forKey:@"date"];
-    [aCoder encodeObject:_tags forKey:@"tags"];
-    [aCoder encodeDouble:_lengthAsTimeInterval forKey:@"length"];
-    [aCoder encodeDouble:_currentPlaybackPosistion forKey:@"currentPlaybackPosistion"];
+    [aCoder encodeObject:_uuid forKey:kUUIDKey];
+    [aCoder encodeObject:_title forKey:kTitleKey];
+    [aCoder encodeObject:_date forKey:kDateKey];
+    [aCoder encodeInteger:_part forKey:kPartKey];
+    [aCoder encodeObject:_tags forKey:kTagsKey];
+    [aCoder encodeDouble:_lengthAsTimeInterval forKey:kLengthKey];
+    [aCoder encodeDouble:_currentPlaybackPosistion forKey:kCurrentPlaybackPositionKey];
 }
 
 - (NSData *)data {
@@ -102,6 +116,15 @@
 }
 
 #pragma mark - time and date methods
+
+- (void)setPart:(NSInteger)part withOriginalTrackDate:(NSDate *)date {
+    if (part <=0 || date == nil) {
+        self.part = 0;
+    } else {
+        self.part = part;
+        self.date = date;
+    }
+}
 
 - (NSDateComponents *)dateComponents {
     NSCalendar *calender = [NSCalendar currentCalendar];
