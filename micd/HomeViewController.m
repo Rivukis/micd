@@ -279,7 +279,7 @@ static BOOL const growForLouderNoises = YES;
         self.tryingToStopAndStartRecorder = NO;
         
         NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-        [self performSelector:@selector(saveAndStartRecording) withObject:nil afterDelay:maxRecordingLength];
+        [self performSelector:@selector(saveAndContinueRecording) withObject:nil afterDelay:maxRecordingLength];
     }];
 }
 

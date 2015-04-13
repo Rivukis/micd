@@ -809,10 +809,10 @@ UIDocumentInteractionControllerDelegate>
     bottomBorderView.backgroundColor = [UIColor vibrantBlue];
     [headerView addSubview:bottomBorderView];
     
-    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, self.tableView.frame.size.width-7.0f, 20.0f)];
+    UILabel *headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, CGRectGetWidth(tableView.frame)-14, 20.0f)];
     headerTitleLabel.text = recordingsSection.dateAsString;
     headerTitleLabel.font = [UIFont fontWithName: @"HelveticaNeue-Medium" size:16.0f]; //AvenirNext-Regular
-    headerTitleLabel.textAlignment = NSTextAlignmentRight;
+    headerTitleLabel.textAlignment = NSTextAlignmentLeft;
     headerTitleLabel.textColor = [UIColor vibrantLightBlue];
     [headerView addSubview:headerTitleLabel];
     
