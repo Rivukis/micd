@@ -400,9 +400,9 @@ static BOOL const growForLouderNoises = YES;
             [self moveToPlayerState];
         } else if (currentY > [self backgroundImageHomeStateYOffset]) {
             // in between recordings and home
-            if (abs(velocity.y) < velocityHorizon) {
+            if (fabs(velocity.y) < velocityHorizon) {
                 // move based on location
-                if (abs(currentY - [self backgroundImageRecordingsStateYOffset]) < abs(currentY - [self backgroundImageHomeStateYOffset])) {
+                if (fabs(currentY - [self backgroundImageRecordingsStateYOffset]) < fabs(currentY - [self backgroundImageHomeStateYOffset])) {
                     [self moveToPlayerState];
                 } else {
                     [self moveToHomeState];
@@ -417,10 +417,10 @@ static BOOL const growForLouderNoises = YES;
             }
         } else if (currentY > [self backgroundImageSettingsStateYOffset]) {
             //in between home and settings
-            if (abs(velocity.y) < velocityHorizon) {
+            if (fabs(velocity.y) < velocityHorizon) {
                 // move based on location
                 
-                if (abs(currentY - [self backgroundImageHomeStateYOffset]) < abs(currentY - [self backgroundImageSettingsStateYOffset])) {
+                if (fabs(currentY - [self backgroundImageHomeStateYOffset]) < fabs(currentY - [self backgroundImageSettingsStateYOffset])) {
                     [self moveToHomeState];
                 } else {
                     [self moveToSettingState];
@@ -633,7 +633,7 @@ static BOOL const growForLouderNoises = YES;
             self.hasSetInitialY = YES;
         }
         
-        float Ytraveled = fabsf(presentationFrame.origin.y) - fabsf(self.initialY);
+        float Ytraveled = fabs(presentationFrame.origin.y) - fabs(self.initialY);
         self.initialY = presentationFrame.origin.y;
         [self.gearsImageView moveGearsWithRotationAngle:-Ytraveled];
     }
