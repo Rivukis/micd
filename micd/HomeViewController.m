@@ -55,11 +55,11 @@ static BOOL const growForLouderNoises = YES;
 @property (assign, nonatomic) BOOL movingFromNoRecordingsState;
 
 @property (nonatomic, assign) BOOL interruptionOccuredWhileRecording;
-
 @property (nonatomic, assign) BOOL tryingToStopAndStartRecorder;
-@property (nonatomic, assign) BOOL shouldShowOtherStates;
-
 @property (nonatomic, assign) BOOL shouldMoveToHomeStateOnAppLaunch;
+
+@property (nonatomic, assign) NSInteger currentRecordingPart;
+@property (nonatomic, strong) NSDate *continuationDate;
 
 @end
 
@@ -76,8 +76,6 @@ static BOOL const growForLouderNoises = YES;
     [self startObservingNotifications];
     
     self.interruptionOccuredWhileRecording = NO;
-    DataSourceController *dataSourceController = [DataSourceController sharedDataSource];
-    self.shouldShowOtherStates = dataSourceController.numberOfRecordings != 0;
 }
 
 - (void)setupSubviews {
@@ -152,7 +150,7 @@ static BOOL const growForLouderNoises = YES;
     BOOL isRecording = self.recorderController.recordingState == RecorderControllerStateRecording;
     
     if (isRecording) {
-        [self pauseRecordingShouldAnimate:isApplicationActive shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+        [self pauseRecordingShouldAnimate:isApplicationActive shouldShowCircles:YES completionBlockWhenRecordingIsSaved:nil];
         return;
     }
     
@@ -204,7 +202,7 @@ static BOOL const growForLouderNoises = YES;
 - (void)responseToAVAudioSessionRouteChange:(NSNotification *)notification {
     AVAudioSessionRouteChangeReason changeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
     if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable && self.recorderController.recordingState == RecorderControllerStateRecording) {
-        [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+        [self pauseRecordingShouldAnimate:YES shouldShowCircles:YES completionBlockWhenRecordingIsSaved:nil];
     }
 }
 
@@ -251,20 +249,42 @@ static BOOL const growForLouderNoises = YES;
     }
 }
 
-- (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowOtherStates:(BOOL)shouldShowOtherStates completionBlockWhenRecordingIsSaved:(void(^)())completion {
+- (void)pauseRecordingShouldAnimate:(BOOL)shouldAnimate shouldShowCircles:(BOOL)shouldShowCircles completionBlockWhenRecordingIsSaved:(void(^)())completion {
     [self.recorderController pauseRecording];
     
-    if (shouldShowOtherStates) {
-        self.shouldShowOtherStates = shouldShowOtherStates;
-    }
-    
-    [self goToPauseStateShowCircles:self.shouldShowOtherStates animateChange:shouldAnimate];
+    [self goToPauseStateShowCircles:shouldShowCircles animateChange:shouldAnimate];
     
     __weak __typeof(self) weakSelf = self;
     [self.recorderController retrieveRecordingThenDelete:YES completion:^(Recording *recording, NSError *error) {
+        
+        /* ----- start
+         this occurs for the last track in a 'save and continue' group
+         the currentRecordingPart is not incremented because it won't go through the saveAndContinue method
+         */
+        if (!self.tryingToStopAndStartRecorder && self.currentRecordingPart != 0) {
+            self.currentRecordingPart++;
+        }
+        // ----- end
+        
         if (!error) {
+            if (self.currentRecordingPart == 1) {
+                self.continuationDate = recording.date;
+            }
+            if (self.currentRecordingPart > 0) {
+                [recording setPart:self.currentRecordingPart withOriginalTrackDate:self.continuationDate];
+            }
             [weakSelf.addNewRecordingDelegate addNewRecording:recording];
         }
+        
+        /* ----- start
+         reset currentRecordingPart after saving,
+         so the last recording in the continuation is saved as part of that group of tracks
+         */
+        if (!self.tryingToStopAndStartRecorder) {
+            self.currentRecordingPart = 0;
+        }
+        // ----- end
+        
         if (completion) {
             completion();
         }
@@ -273,8 +293,9 @@ static BOOL const growForLouderNoises = YES;
 
 - (void)saveAndContinueRecording {
     self.tryingToStopAndStartRecorder = YES;
+    self.currentRecordingPart++;
 
-    [self pauseRecordingShouldAnimate:NO shouldShowOtherStates:NO completionBlockWhenRecordingIsSaved:^{
+    [self pauseRecordingShouldAnimate:NO shouldShowCircles:NO completionBlockWhenRecordingIsSaved:^{
         [self startRecordingShouldAnimate:NO];
         self.tryingToStopAndStartRecorder = NO;
         
@@ -301,7 +322,7 @@ static BOOL const growForLouderNoises = YES;
 - (void)recordButtonPressed:(UIButton *)sender {
     if (self.recordButtonEnabled) {
         if (self.recorderController.recordingState == RecorderControllerStateRecording) {
-            [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+            [self pauseRecordingShouldAnimate:YES shouldShowCircles:YES completionBlockWhenRecordingIsSaved:nil];
         } else {
             [self startRecordingShouldAnimate:YES];
         }
@@ -441,7 +462,7 @@ static BOOL const growForLouderNoises = YES;
 
 - (MPRemoteCommandHandlerStatus)pauseCommand {
     if (self.recorderController.recordingState == RecorderControllerStateRecording) {
-        [self pauseRecordingShouldAnimate:YES shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:nil];
+        [self pauseRecordingShouldAnimate:YES shouldShowCircles:YES completionBlockWhenRecordingIsSaved:nil];
         return MPRemoteCommandHandlerStatusSuccess;
     } else {
         return MPRemoteCommandHandlerStatusCommandFailed;

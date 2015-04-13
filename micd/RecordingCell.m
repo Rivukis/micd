@@ -51,7 +51,12 @@
     
     self.title.text = cellModel.title;
     self.length.text = cellModel.recording.lengthToDiplay;
-    self.date.text = cellModel.recording.dateAsString;
+    
+    if (cellModel.recording.part > 0) {
+        self.date.text = [NSString stringWithFormat:@"%@ - Part %lu", cellModel.recording.dateAsString, (long)cellModel.recording.part];
+    } else {
+        self.date.text = cellModel.recording.dateAsString;
+    }
     
     [self setupViewBasedOnState];
     

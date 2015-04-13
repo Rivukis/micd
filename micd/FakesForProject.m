@@ -75,7 +75,7 @@ NSString * const debugCounterKey = @"debuggerCounterKey";
 
 + (void)addMessageToDebugger:(NSString *)message {
     NSInteger debuggerCounter = [[NSUserDefaults standardUserDefaults] integerForKey:debugCounterKey];
-    NSString *debugMessage = [NSString stringWithFormat:@"     %lu: %@", ++debuggerCounter, message];
+    NSString *debugMessage = [NSString stringWithFormat:@"     %lu: %@", (long)++debuggerCounter, message];
     NSArray *debuggerMessages = [[NSUserDefaults standardUserDefaults] objectForKey:debugMessagesKey];
     debuggerMessages = [debuggerMessages arrayByAddingObject:debugMessage];
     
