@@ -26,13 +26,6 @@ BOOL const useEnhancedRecorder = NO;
 
 @implementation RecorderController
 
-- (void)setRecordingState:(RecorderControllerState)recordingState {
-    _recordingState = recordingState;
-    if (recordingState == RecorderControllerStateStopped) {
-        NSLog(@"stopped");
-    }
-}
-
 - (instancetype)init {
     return [RecorderController sharedRecorder];
 }
@@ -76,8 +69,10 @@ BOOL const useEnhancedRecorder = NO;
     BOOL success = NO;
     
     // TODO: handle error when setting session to active
-    if (self.recordingState == RecorderControllerStateStopped) {
+    
+    if (self.currentRecordingStartDate == nil) {
         self.currentRecordingStartDate = [NSDate date];
+        NSLog(@"set new date");
     }
     
     if (self.recordingState == RecorderControllerStatePaused || self.recordingState == RecorderControllerStateStopped) {
@@ -186,6 +181,12 @@ BOOL const useEnhancedRecorder = NO;
 }
 
 - (void)deleteRecording {
+    if (self.recordingState == RecorderControllerStateRecording) {
+        self.currentRecordingStartDate = [NSDate date];
+    } else {
+        self.currentRecordingStartDate = nil;
+    }
+    
     [self.fileManager removeItemAtURL:[NSURL fileURLWithPath:self.savedFilePath] error:nil];
 }
 

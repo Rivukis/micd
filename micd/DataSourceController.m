@@ -43,6 +43,7 @@ static BOOL const kUseFakes = NO;
     
     NSString *recordingsPlistPath = [[Constants documentsDirectory] stringByAppendingPathComponent:kRecordingsPlist];
     [NSKeyedArchiver archiveRootObject:self.recordings toFile:recordingsPlistPath];
+    NSLog(@"saved");
 }
 
 - (void)saveRecording:(Recording *)recording {

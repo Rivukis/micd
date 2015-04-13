@@ -62,4 +62,30 @@
     return @[recording1, recording2, recording3, recording4, recording5, recording6, recording7, recording8, recording9, recording10, recording11, recording13, recording14, recording15, recording16, recording17, recording18, recording19, recording20, recording21, recording23, recording24, recording25, recording26, recording27, recording28, recording29, recording30, recording31, recording32, recording33, recording34, recording35, recording36, recording37];
 }
 
+#pragma mark - Fake Debugger Methods
+
+NSString * const debugMessagesKey = @"debuggerMessagesKey";
+NSString * const debugCounterKey = @"debuggerCounterKey";
+
++ (void)clearDebugger {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSArray array] forKey:debugMessagesKey];
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:debugCounterKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (void)addMessageToDebugger:(NSString *)message {
+    NSInteger debuggerCounter = [[NSUserDefaults standardUserDefaults] integerForKey:debugCounterKey];
+    NSString *debugMessage = [NSString stringWithFormat:@"     %lu: %@", ++debuggerCounter, message];
+    NSArray *debuggerMessages = [[NSUserDefaults standardUserDefaults] objectForKey:debugMessagesKey];
+    debuggerMessages = [debuggerMessages arrayByAddingObject:debugMessage];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:debuggerMessages forKey:debugMessagesKey];
+    [[NSUserDefaults standardUserDefaults] setInteger:debuggerCounter forKey:debugCounterKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSArray *)debugMessages {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:debugMessagesKey];
+}
+
 @end

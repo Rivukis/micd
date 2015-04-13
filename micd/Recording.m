@@ -104,7 +104,6 @@
 #pragma mark - time and date methods
 
 - (NSDateComponents *)dateComponents {
-    
     NSCalendar *calender = [NSCalendar currentCalendar];
     NSInteger componentOptions = NSCalendarUnitYear |
                                  NSCalendarUnitMonth |
