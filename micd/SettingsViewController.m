@@ -117,7 +117,6 @@
 
 - (void)refreshFeedBackViews {
     BOOL questionHasBeenAnswered = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
-    questionHasBeenAnswered = NO;
     self.yesButton.hidden = questionHasBeenAnswered;
     self.noButton.hidden = questionHasBeenAnswered;
     self.sendFeedbackButton.hidden = !questionHasBeenAnswered;
