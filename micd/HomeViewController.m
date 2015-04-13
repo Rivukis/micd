@@ -274,7 +274,7 @@ static BOOL const growForLouderNoises = YES;
 - (void)saveAndContinueRecording {
     self.tryingToStopAndStartRecorder = YES;
 
-    [self pauseRecordingShouldAnimate:NO shouldShowOtherStates:YES completionBlockWhenRecordingIsSaved:^{
+    [self pauseRecordingShouldAnimate:NO shouldShowOtherStates:NO completionBlockWhenRecordingIsSaved:^{
         [self startRecordingShouldAnimate:NO];
         self.tryingToStopAndStartRecorder = NO;
         
