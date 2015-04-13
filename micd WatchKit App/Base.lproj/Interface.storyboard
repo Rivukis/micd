@@ -18,14 +18,14 @@
                         </button>
                         <button width="1" alignment="left" verticalAlignment="bottom" title="Recordings" id="jtB-xv-8BT">
                             <connections>
-                                <action selector="recordingsButtonPressed" destination="AgC-eL-Hgc" id="gxo-jf-lDc"/>
+                                <action selector="goToTracksButtonPressed" destination="AgC-eL-Hgc" id="wWC-qE-SNa"/>
                             </connections>
                         </button>
                     </items>
                     <connections>
+                        <outlet property="goToTracksButton" destination="jtB-xv-8BT" id="pkz-zJ-NcA"/>
                         <outlet property="recordButton" destination="hH1-HM-nUd" id="aEF-sC-G9a"/>
                         <outlet property="recordButtonGroup" destination="Fue-bz-GLN" id="U0E-F2-HPg"/>
-                        <outlet property="recordingsButton" destination="jtB-xv-8BT" id="McF-3U-2LR"/>
                     </connections>
                 </controller>
             </objects>

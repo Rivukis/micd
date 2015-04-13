@@ -220,13 +220,13 @@ static BOOL const growForLouderNoises = YES;
     
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
-    if (accessDetermined) {
+    if (!accessDetermined) {
         [audioSessionController requestMicrophonePermissionWithCompletion:nil];
         return;
     }
     
     BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
-    if (accessGranted) {
+    if (!accessGranted) {
         [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
         return;
     }

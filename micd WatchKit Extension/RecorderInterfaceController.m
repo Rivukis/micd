@@ -5,7 +5,7 @@
 
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *recordButton;
 @property (weak, nonatomic) IBOutlet WKInterfaceGroup *recordButtonGroup;
-@property (weak, nonatomic) IBOutlet WKInterfaceButton *recordingsButton;
+@property (weak, nonatomic) IBOutlet WKInterfaceButton *goToTracksButton;
 
 @end
 
@@ -22,8 +22,7 @@
     
     NSDictionary *userInfo = @{kWatchExtKeyMessageType : kWatchExtMessageTypeGetRecorderInfo};
     [RecorderInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
-        BOOL isRecording = [[replyInfo objectForKey:kWatchExtKeyIsRecording] boolValue];
-        [self setupViewForIsRecording:isRecording];
+        [self handleReplyInfo:replyInfo];
     }];
 }
 
@@ -32,21 +31,35 @@
     [super didDeactivate];
 }
 
+#pragma mark - Helper Methods
+
+- (void)handleReplyInfo:(NSDictionary *)replyInfo {
+    BOOL isRecording = [[replyInfo objectForKey:kWatchExtKeyIsRecording] boolValue];
+    BOOL isAccessGranted = [[replyInfo objectForKey:kWatchExtKeyRecordingPermissionIsGranted] boolValue];
+    [self setupViewForIsRecording:isRecording isAccessGranted:isAccessGranted];
+}
+
 #pragma mark - View Setup Methods
 
-- (void)setupViewForIsRecording:(BOOL)isRecording {
-    if (isRecording) {
-        [self.recordButtonGroup setBackgroundImageNamed:@"image-"];
-        [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 176) duration:6 repeatCount:0];
-        [self setupRecordingsButtonShouldBeEnabled:NO];
-    } else {
+- (void)setupViewForIsRecording:(BOOL)isRecording isAccessGranted:(BOOL)isAccessGranted {
+    if (!isAccessGranted) {
         [self.recordButtonGroup stopAnimating];
-        [self.recordButtonGroup setBackgroundImageNamed:@"recordButton"];
-        [self setupRecordingsButtonShouldBeEnabled:YES];
+        [self.recordButtonGroup setBackgroundImageNamed:@"micPermissionsOffWatch"];
+        [self setupGoToTracksButtonShouldBeEnabled:YES];
+    } else {
+        if (isRecording) {
+            [self.recordButtonGroup setBackgroundImageNamed:@"image-"];
+            [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 176) duration:6 repeatCount:0];
+            [self setupGoToTracksButtonShouldBeEnabled:NO];
+        } else {
+            [self.recordButtonGroup stopAnimating];
+            [self.recordButtonGroup setBackgroundImageNamed:@"recordButton"];
+            [self setupGoToTracksButtonShouldBeEnabled:YES];
+        }
     }
 }
 
-- (void)setupRecordingsButtonShouldBeEnabled:(BOOL)enabled {
+- (void)setupGoToTracksButtonShouldBeEnabled:(BOOL)enabled {
     UIFont *font = [UIFont systemFontOfSize:15];
     UIColor *textColor;
     
@@ -59,23 +72,22 @@
     NSDictionary *attributes = @{NSForegroundColorAttributeName : textColor,
                                  NSFontAttributeName: font};
     NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:@"Recordings" attributes:attributes];
-    [self.recordingsButton setAttributedTitle:attributedTitle];
-    [self.recordingsButton setEnabled:enabled];
+    [self.goToTracksButton setAttributedTitle:attributedTitle];
+    [self.goToTracksButton setEnabled:enabled];
 }
 
 #pragma mark - User Action Methods
 
 - (IBAction)recordButtonPressed {
-    [self setupRecordingsButtonShouldBeEnabled:NO];
+    [self setupGoToTracksButtonShouldBeEnabled:NO];
     // send message to phone that record button was pressed
     NSDictionary *userInfo = @{kWatchExtKeyMessageType : kWatchExtMessageTypeRecordButtonPressed};
     [RecorderInterfaceController openParentApplication:userInfo reply:^(NSDictionary *replyInfo, NSError *error) {
-        BOOL isRecording = [[replyInfo objectForKey:kWatchExtKeyIsRecording] boolValue];
-        [self setupViewForIsRecording:isRecording];
+        [self handleReplyInfo:replyInfo];
     }];
 }
 
-- (IBAction)recordingsButtonPressed {
+- (IBAction)goToTracksButtonPressed {
     [self pushControllerWithName:@"RecordingsInterfaceController" context:nil];
 }
 

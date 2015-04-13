@@ -101,6 +101,9 @@
         }
     }
     
+    BOOL accessGranted = [[AudioSessionController sharedAudioSessionController] hasMicrophonePermissionBeenGranted];
+    
+    replyDict[kWatchExtKeyRecordingPermissionIsGranted] = @(accessGranted);
     replyDict[kWatchExtKeyIsRecording] = @(isRecording);
     reply([replyDict copy]);
 }

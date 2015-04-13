@@ -28,6 +28,7 @@ extern NSString *const kWatchExtKeyMessageType;
 extern NSString *const kWatchExtKeyIsRecording;
 extern NSString *const kWatchExtKeyRecordingsList;
 extern NSString *const kWatchExtKeyPlayRecordingWithUUIDString;
+extern NSString *const kWatchExtKeyRecordingPermissionIsGranted;
 
 extern NSString *const kWatchExtMessageTypeGetRecorderInfo;
 extern NSString *const kWatchExtMessageTypeRecordButtonPressed;

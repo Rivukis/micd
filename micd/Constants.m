@@ -28,6 +28,7 @@ NSString *const kWatchExtKeyMessageType = @"WatchExtKeyMessageType";
 NSString *const kWatchExtKeyIsRecording = @"WatchExtKeyIsRecording";
 NSString *const kWatchExtKeyRecordingsList = @"WatchExtKeyRecordingsList";
 NSString *const kWatchExtKeyPlayRecordingWithUUIDString = @"WatchExtKeyPlayRecordingWithUUIDString";
+NSString *const kWatchExtKeyRecordingPermissionIsGranted = @"WatchExtKeyRecordingPermissionIsGranted";
 
 NSString *const kWatchExtMessageTypeGetRecorderInfo = @"WatchExtMessageTypeGetRecorderInfo";
 NSString *const kWatchExtMessageTypeRecordButtonPressed = @"WatchExtMessageTypeRecordButtonPressed";
