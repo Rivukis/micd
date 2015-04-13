@@ -220,13 +220,13 @@ static BOOL const growForLouderNoises = YES;
     
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
-    if (NO && !accessDetermined) {
+    if (accessDetermined) {
         [audioSessionController requestMicrophonePermissionWithCompletion:nil];
         return;
     }
     
     BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
-    if (NO && !accessGranted) {
+    if (accessGranted) {
         [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
         return;
     }
@@ -236,7 +236,7 @@ static BOOL const growForLouderNoises = YES;
     BOOL success = [self.recorderController startRecording];
     if (success) {
         NSInteger maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-        [self performSelector:@selector(saveAndContinueRecording) withObject:nil afterDelay:maxRecordingLength];
+        [self performSelector:@selector(maxRecordingLengthReached) withObject:nil afterDelay:maxRecordingLength];
         
         [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
         [[RemoteCommandCenterController sharedRCCController] showRemoteTitle:@"RECORDING"
@@ -259,7 +259,7 @@ static BOOL const growForLouderNoises = YES;
         
         /* ----- start
          this occurs for the last track in a 'save and continue' group
-         the currentRecordingPart is not incremented because it won't go through the saveAndContinue method
+         the currentRecordingPart is not incremented because it won't go through the maxRecordingLengthReached method
          */
         if (!self.tryingToStopAndStartRecorder && self.currentRecordingPart != 0) {
             self.currentRecordingPart++;
@@ -291,17 +291,24 @@ static BOOL const growForLouderNoises = YES;
     }];
 }
 
-- (void)saveAndContinueRecording {
-    self.tryingToStopAndStartRecorder = YES;
-    self.currentRecordingPart++;
-
-    [self pauseRecordingShouldAnimate:NO shouldShowCircles:NO completionBlockWhenRecordingIsSaved:^{
-        [self startRecordingShouldAnimate:NO];
-        self.tryingToStopAndStartRecorder = NO;
+- (void)maxRecordingLengthReached {
+    BOOL startNewRecordingWhenMaxReached = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyAutoStartRecordingAfterMaximumReached];
+    
+    if (startNewRecordingWhenMaxReached) {
+        self.tryingToStopAndStartRecorder = YES;
+        self.currentRecordingPart++;
         
-        NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
-        [self performSelector:@selector(saveAndContinueRecording) withObject:nil afterDelay:maxRecordingLength];
-    }];
+        [self pauseRecordingShouldAnimate:NO shouldShowCircles:NO completionBlockWhenRecordingIsSaved:^{
+            [self startRecordingShouldAnimate:NO];
+            self.tryingToStopAndStartRecorder = NO;
+            
+            NSTimeInterval maxRecordingLength = [[NSUserDefaults standardUserDefaults] integerForKey:kUserDefaultsKeyMaxRecordingLength];
+            [self performSelector:@selector(maxRecordingLengthReached) withObject:nil afterDelay:maxRecordingLength];
+        }];
+    } else {
+        BOOL isAppActive = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
+        [self pauseRecordingShouldAnimate:isAppActive shouldShowCircles:YES completionBlockWhenRecordingIsSaved:nil];
+    }
 }
 
 - (void)setRecordingTimeText {
@@ -714,7 +721,7 @@ static BOOL const growForLouderNoises = YES;
 
 - (void)goToPauseStateShowCircles:(BOOL)shouldShowCircles animateChange:(BOOL)shouldAnimate {
     self.shouldMoveToHomeStateOnAppLaunch = NO;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(saveAndContinueRecording) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(maxRecordingLengthReached) object:nil];
     [self.displayLinkController removeSubscriberWithKey:@"recordButton"];
     self.recordTime.alpha = 0;
     self.pulsingValues = nil;
