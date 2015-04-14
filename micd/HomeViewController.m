@@ -458,11 +458,17 @@ static BOOL const growForLouderNoises = YES;
 }
 
 - (void)moveToPlayerState {
-    [self.movementDelegate moveToPositionState:PositionStateRecordings];
+    if (self.recorderController.recordingState != RecorderControllerStateRecording) {
+        self.recordButtonEnabled = NO;
+        [self.movementDelegate moveToPositionState:PositionStateRecordings];
+    }
 }
 
 - (void)moveToSettingState {
-    [self.movementDelegate moveToPositionState:PositionStateSettings];
+    if (self.recorderController.recordingState != RecorderControllerStateRecording) {
+        self.recordButtonEnabled = NO;
+        [self.movementDelegate moveToPositionState:PositionStateSettings];
+    }
 }
 
 #pragma mark - RemoteCommandCenterControllerDelegate

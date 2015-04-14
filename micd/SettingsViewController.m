@@ -258,8 +258,10 @@
 }
 
 - (void)showAppStore:(FeedbackViewController *)popoverViewController {
-    NSString *appID = @"";
-    NSString *iTunesLink = [NSString stringWithFormat:@"https://itunes.apple.com/us/app/apple-store/%@", appID];
+    //    NSString *appID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    // 985079727
+    //    NSString *iTunesLink = [NSString stringWithFormat:@"https://itunes.apple.com/us/app/apple-store/id300136119&mt=8"];
+    NSString *iTunesLink = @"itms-apps://itunes.com/apps/Mic'd";
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
     [self refreshFeedBackViews];
     [self dismissViewControllerAnimated:YES completion:nil];
