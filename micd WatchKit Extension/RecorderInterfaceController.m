@@ -49,7 +49,7 @@
     } else {
         if (isRecording) {
             [self.recordButtonGroup setBackgroundImageNamed:@"image-"];
-            [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 176) duration:6 repeatCount:0];
+            [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 356) duration:6 repeatCount:0];
             [self setupGoToTracksButtonShouldBeEnabled:NO];
         } else {
             [self.recordButtonGroup stopAnimating];

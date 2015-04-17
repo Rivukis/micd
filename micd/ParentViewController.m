@@ -33,7 +33,6 @@
     self.dataSource = [DataSourceController sharedDataSource];
     
     self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
-    self.view.backgroundColor = [UIColor blackColor];
     
     self.homeViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([HomeViewController class])];
     [self addChildViewController:self.homeViewController];

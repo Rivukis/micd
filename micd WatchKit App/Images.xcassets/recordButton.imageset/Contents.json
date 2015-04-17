@@ -2,18 +2,16 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "recordButton.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "recordButton@2x.png"
+      "filename" : "recordButton.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "recordButton@3x.png"
+      "scale" : "3x"
     }
   ],
   "info" : {

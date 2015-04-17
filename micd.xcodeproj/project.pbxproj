@@ -43,6 +43,7 @@
 		D05D758C1A79AAA40050A49C /* micdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D758B1A79AAA40050A49C /* micdTests.m */; };
 		D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */; };
 		D05D759D1A79AC4E0050A49C /* UIColor+Palette.m in Sources */ = {isa = PBXBuildFile; fileRef = D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */; };
+		D06160A01AE0D6DF00F40DF7 /* recordButton.png in Resources */ = {isa = PBXBuildFile; fileRef = D061609F1AE0D6DF00F40DF7 /* recordButton.png */; };
 		D077E54D1AA40A660004AFE4 /* RecordingCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */; };
 		D08D4BEB1AB27EE300949483 /* PopViewAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BEA1AB27EE300949483 /* PopViewAnimator.m */; };
 		D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */ = {isa = PBXBuildFile; fileRef = D08D4BF01AB407C400949483 /* DisplayLinkController.m */; };
@@ -172,6 +173,7 @@
 		D05D75961A79ABDC0050A49C /* WireTapStyleKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WireTapStyleKit.m; path = micd/WireTapStyleKit.m; sourceTree = "<group>"; };
 		D05D759B1A79AC4E0050A49C /* UIColor+Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Palette.h"; path = "micd/UIColor+Palette.h"; sourceTree = "<group>"; };
 		D05D759C1A79AC4E0050A49C /* UIColor+Palette.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Palette.m"; path = "micd/UIColor+Palette.m"; sourceTree = "<group>"; };
+		D061609F1AE0D6DF00F40DF7 /* recordButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recordButton.png; sourceTree = "<group>"; };
 		D077E54B1AA40A660004AFE4 /* RecordingCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingCellModel.h; sourceTree = "<group>"; };
 		D077E54C1AA40A660004AFE4 /* RecordingCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingCellModel.m; sourceTree = "<group>"; };
 		D08D4BE91AB27EE300949483 /* PopViewAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopViewAnimator.h; path = micd/PopViewAnimator.h; sourceTree = "<group>"; };
@@ -399,6 +401,7 @@
 			children = (
 				D0BFAD4B1ABF9C9B0051F0CF /* Interface.storyboard */,
 				D0BFAD4E1ABF9C9B0051F0CF /* Images.xcassets */,
+				D061609F1AE0D6DF00F40DF7 /* recordButton.png */,
 				D0BFAD491ABF9C9B0051F0CF /* Supporting Files */,
 			);
 			path = "micd WatchKit App";
@@ -666,6 +669,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0BFAD4D1ABF9C9B0051F0CF /* Interface.storyboard in Resources */,
+				D06160A01AE0D6DF00F40DF7 /* recordButton.png in Resources */,
 				D0BFAD4F1ABF9C9B0051F0CF /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

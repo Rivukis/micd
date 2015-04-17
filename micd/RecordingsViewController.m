@@ -356,11 +356,6 @@ UIDocumentInteractionControllerDelegate>
     CGRect frame = self.view.frame;
     frame.origin.y += translation.y;
     self.view.frame = frame;
-
-//    CGFloat alphaDelta = 1+(frame.origin.y/200);
-//    self.playButton.alpha = alphaDelta;
-//    self.rewindButton.alpha = alphaDelta;
-//    self.forwardButton.alpha = alphaDelta;
 }
 
 #pragma mark - Player Buttons
@@ -816,7 +811,7 @@ UIDocumentInteractionControllerDelegate>
     headerTitleLabel.textColor = [UIColor vibrantLightBlue];
     [headerView addSubview:headerTitleLabel];
     
-    headerView.backgroundColor = [UIColor blackColor];
+    headerView.backgroundColor = [UIColor colorWithWhite:.047f alpha:1.0f];
     
     return headerView;
 }
