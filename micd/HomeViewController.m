@@ -101,7 +101,7 @@ static BOOL const growForLouderNoises = YES;
     self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     self.panGesture.delegate = self;
     [self.view addGestureRecognizer:self.panGesture];
-
+    
     self.recordingsLowerMoveStateButton = [[UIButton alloc] init];
     [self.view addSubview:self.recordingsLowerMoveStateButton];
     [self.recordingsLowerMoveStateButton addTarget:self action:@selector(moveToHomeState) forControlEvents:UIControlEventTouchUpInside];
@@ -217,6 +217,9 @@ static BOOL const growForLouderNoises = YES;
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
+    
+    self.panGesture.enabled = NO;
+    self.panGesture.enabled = YES;
     
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
@@ -440,16 +443,18 @@ static BOOL const growForLouderNoises = YES;
     }
 }
 
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     DataSourceController *dataSource = [DataSourceController sharedDataSource];
     if (touch.view == self.recordButton || self.recorderController.recordingState == RecorderControllerStateRecording || dataSource.numberOfRecordings == 0) {
         return NO;
     }
+    
     return YES;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    return [self.backgroundImageView pointInside:[gestureRecognizer locationInView:self.backgroundImageView] withEvent:UIEventTypeTouches];
+    CGPoint locationInBackgroundImageView = [gestureRecognizer locationInView:self.backgroundImageView];
+    return [self.backgroundImageView pointInside:locationInBackgroundImageView withEvent:UIEventTypeTouches];
 }
 
 - (void)moveToHomeState {
