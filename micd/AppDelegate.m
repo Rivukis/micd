@@ -108,6 +108,8 @@
     reply([replyDict copy]);
 }
 
+#pragma mark - Helper Methods
+
 - (void)fadeLaunchImage {
     [UIView transitionWithView:self.window
                       duration:1.00f
