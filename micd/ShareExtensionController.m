@@ -35,7 +35,7 @@
     [self makeMovieWithAudioFilePath:recording.urlString videoFilePath:videoPath outputMoviePath:moviePath completionHandler:^{
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSURL *movieURL = [NSURL fileURLWithPath:moviePath];
-            UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[movieURL, recordingTitle] applicationActivities:@[]];
+            UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[movieURL] applicationActivities:@[]];
             
             activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
                 [[NSFileManager defaultManager] removeItemAtPath:videoPath error:nil];
@@ -54,7 +54,7 @@
 
     NSURL *audioURL = [NSURL fileURLWithPath:audioPath];
 
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[audioURL, recordingTitle] applicationActivities:@[]];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[audioURL] applicationActivities:@[]];
 
     activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         [[NSFileManager defaultManager] moveItemAtPath:audioPath toPath:recording.urlString error:nil];
