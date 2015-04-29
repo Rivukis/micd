@@ -1032,7 +1032,7 @@ static UIImage* _imageOfMicdAppIcon = nil;
     UIColor* blackish = [UIColor colorWithRed: 0.048 green: 0.047 blue: 0.047 alpha: 1];
 
     //// Rectangle Drawing
-    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(6.5, 12.5, 48, 26)];
+    UIBezierPath* rectanglePath = [UIBezierPath bezierPathWithRect: CGRectMake(8.5, 13.5, 45, 25)];
     [vibrantBlue setStroke];
     rectanglePath.lineWidth = 3;
     [rectanglePath stroke];
@@ -1040,9 +1040,9 @@ static UIImage* _imageOfMicdAppIcon = nil;
 
     //// Polygon Drawing
     UIBezierPath* polygonPath = UIBezierPath.bezierPath;
-    [polygonPath moveToPoint: CGPointMake(31, 27.88)];
-    [polygonPath addLineToPoint: CGPointMake(51.78, 53.56)];
-    [polygonPath addLineToPoint: CGPointMake(10.22, 53.56)];
+    [polygonPath moveToPoint: CGPointMake(31.5, 27.87)];
+    [polygonPath addLineToPoint: CGPointMake(50.99, 51.22)];
+    [polygonPath addLineToPoint: CGPointMake(12.01, 51.22)];
     [polygonPath closePath];
     [vibrantBlue setFill];
     [polygonPath fill];

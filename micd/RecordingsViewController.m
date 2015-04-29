@@ -542,7 +542,7 @@ UIActionSheetDelegate>
     [actionSheet showInView:self.view];
 }
 
-- (IBAction)editButtonPressed:(id)sender {
+- (IBAction)audioOutputButtonPressed:(id)sender {
     [self addButtonBounceAnimationToView:self.audioOutput];
 }
 

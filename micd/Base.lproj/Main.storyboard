@@ -186,7 +186,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="editButtonPressed:" destination="t5E-Iw-Z4F" eventType="touchUpInside" id="D8i-xf-hMJ"/>
+                                            <action selector="audioOutputButtonPressed:" destination="t5E-Iw-Z4F" eventType="touchUpInside" id="iD4-b6-zf4"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nvw-ve-Wjb">
