@@ -32,7 +32,6 @@
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonHighlightedTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* iconBlackTargets;
-@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonForSplashScreenTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonRotatorTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* watchRecordingTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* loveMicdTargets;
@@ -73,7 +72,7 @@
 + (void)drawMic;
 + (void)drawMicRed;
 + (void)drawIconBlack;
-+ (void)drawRecordButtonForSplashScreen;
++ (void)drawSplashScreenForVideoShareWithColor7: (UIColor*)color7;
 + (void)drawCanvas2;
 + (void)drawRecordButtonRotator;
 + (void)drawMicPermissionWatch;
@@ -119,7 +118,7 @@
 + (UIImage*)imageOfRecordButton;
 + (UIImage*)imageOfRecordButtonHighlighted;
 + (UIImage*)imageOfIconBlack;
-+ (UIImage*)imageOfRecordButtonForSplashScreen;
++ (UIImage*)imageOfSplashScreenForVideoShareWithColor7: (UIColor*)color7;
 + (UIImage*)imageOfRecordButtonRotator;
 + (UIImage*)imageOfWatchRecording;
 + (UIImage*)imageOfGearsWithPositiveGearRotation: (CGFloat)positiveGearRotation negativeGearRotation: (CGFloat)negativeGearRotation;

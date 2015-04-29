@@ -32,7 +32,6 @@ static UIImage* _imageOfMicdBackground = nil;
 static UIImage* _imageOfRecordButton = nil;
 static UIImage* _imageOfRecordButtonHighlighted = nil;
 static UIImage* _imageOfIconBlack = nil;
-static UIImage* _imageOfRecordButtonForSplashScreen = nil;
 static UIImage* _imageOfRecordButtonRotator = nil;
 static UIImage* _imageOfWatchRecording = nil;
 static UIImage* _imageOfLoveMicd = nil;
@@ -1807,35 +1806,29 @@ static UIImage* _imageOfMicdAppIcon = nil;
     CGColorSpaceRelease(colorSpace);
 }
 
-+ (void)drawRecordButtonForSplashScreen
++ (void)drawSplashScreenForVideoShareWithColor7: (UIColor*)color7
 {
     //// General Declarations
     CGContextRef context = UIGraphicsGetCurrentContext();
 
-    //// Color Declarations
-    UIColor* vibrantBlue = [UIColor colorWithRed: 0.141 green: 0.663 blue: 0.769 alpha: 1];
+    //// Symbol Drawing
+    CGRect symbolRect = CGRectMake(0, 0, 256, 256);
+    CGContextSaveGState(context);
+    UIRectClip(symbolRect);
+    CGContextTranslateCTM(context, symbolRect.origin.x, symbolRect.origin.y);
 
-    //// Oval 2 Drawing
-    UIBezierPath* oval2Path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(3, 3, 250, 250)];
-    [vibrantBlue setStroke];
-    oval2Path.lineWidth = 6;
-    [oval2Path stroke];
-
-
-    //// Oval Drawing
-    UIBezierPath* ovalPath = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(16, 16, 224, 224)];
-    [vibrantBlue setFill];
-    [ovalPath fill];
+    [WireTapStyleKit drawRecordButton];
+    CGContextRestoreGState(context);
 
 
     //// Symbol 2 Drawing
-    CGRect symbol2Rect = CGRectMake(101, 87, 54, 82);
+    CGRect symbol2Rect = CGRectMake(173, 224, 83, 32);
     CGContextSaveGState(context);
     UIRectClip(symbol2Rect);
     CGContextTranslateCTM(context, symbol2Rect.origin.x, symbol2Rect.origin.y);
-    CGContextScaleCTM(context, symbol2Rect.size.width / 55, symbol2Rect.size.height / 83);
+    CGContextScaleCTM(context, symbol2Rect.size.width / 187, symbol2Rect.size.height / 73);
 
-    [WireTapStyleKit drawMic];
+    [WireTapStyleKit drawMicdLogoWithColor7: color7];
     CGContextRestoreGState(context);
 }
 
@@ -5394,18 +5387,15 @@ static UIImage* _imageOfMicdAppIcon = nil;
     return _imageOfIconBlack;
 }
 
-+ (UIImage*)imageOfRecordButtonForSplashScreen
++ (UIImage*)imageOfSplashScreenForVideoShareWithColor7: (UIColor*)color7
 {
-    if (_imageOfRecordButtonForSplashScreen)
-        return _imageOfRecordButtonForSplashScreen;
-
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(256, 256), NO, 0.0f);
-    [WireTapStyleKit drawRecordButtonForSplashScreen];
+    [WireTapStyleKit drawSplashScreenForVideoShareWithColor7: color7];
 
-    _imageOfRecordButtonForSplashScreen = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage* imageOfSplashScreenForVideoShare = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    return _imageOfRecordButtonForSplashScreen;
+    return imageOfSplashScreenForVideoShare;
 }
 
 + (UIImage*)imageOfRecordButtonRotator
@@ -5731,14 +5721,6 @@ static UIImage* _imageOfMicdAppIcon = nil;
 
     for (id target in self.iconBlackTargets)
         [target setImage: WireTapStyleKit.imageOfIconBlack];
-}
-
-- (void)setRecordButtonForSplashScreenTargets: (NSArray*)recordButtonForSplashScreenTargets
-{
-    _recordButtonForSplashScreenTargets = recordButtonForSplashScreenTargets;
-
-    for (id target in self.recordButtonForSplashScreenTargets)
-        [target setImage: WireTapStyleKit.imageOfRecordButtonForSplashScreen];
 }
 
 - (void)setRecordButtonRotatorTargets: (NSArray*)recordButtonRotatorTargets
