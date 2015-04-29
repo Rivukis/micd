@@ -113,7 +113,7 @@ UIActionSheetDelegate>
     [self.audioOutput setTitle:@"" forState:UIControlStateNormal];
     [self.audioOutput setBackgroundImage:[WireTapStyleKit imageOfAirplayLogo] forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
-    [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
+    [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButtonHalfSize] forState:UIControlStateNormal];
     
     // gonna hide and disable these buttons until were ready to use them
 //    self.shareButton.hidden = YES;
@@ -537,7 +537,7 @@ UIActionSheetDelegate>
 - (IBAction)shareButtonPressed:(id)sender {
     [self addButtonBounceAnimationToView:self.shareButton];
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"What do you want to do with your recording?" delegate:self cancelButtonTitle:@"Nevermind" destructiveButtonTitle:nil otherButtonTitles:@"Share With Others", @"Export As Audio Only", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"What do you want to do with your recording?" delegate:self cancelButtonTitle:@"Nevermind" destructiveButtonTitle:nil otherButtonTitles:@"Share with others", @"Export as audio only", nil];
     
     [actionSheet showInView:self.view];
 }
