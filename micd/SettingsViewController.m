@@ -44,7 +44,6 @@
         ((SettingsView *)self.view).interactiveElements = @[self.noButton, self.yesButton, self.rememberRecordingLocationSwitch, self.startRecordingOnLaunchSwitch, self.lengthSegmentedControl, self.autoStartRecAfterMaxSwitch, self.sendFeedbackButton];
         ((SettingsView *)self.view).settingsView = self.view;
         
-//        self.sendFeedbackButton.titleLabel.text = @"We love feedback. Email us";
         [self.sendFeedbackButton setTitle:@"We love feeback. Email us" forState:UIControlStateNormal];
         
         self.isFirstTimeLayingOutSubviews = NO;
@@ -115,14 +114,13 @@
 }
 
 - (void)responseToApplicationDidBecomeActive:(NSNotification *)notification {
-//    self.sendFeedbackButton.titleLabel.text = @"We love feedback. Email us";
     [self.sendFeedbackButton setTitle:@"We love feedback. Email us" forState:UIControlStateNormal];
 }
 
 #pragma mark - Helper Methods
 
 - (void)refreshFeedBackViews {
-    BOOL questionHasBeenAnswered = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
+    BOOL questionHasBeenAnswered = NO;//[[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeyLoveMicdQuestionAnswered];
     self.yesButton.hidden = questionHasBeenAnswered;
     self.noButton.hidden = questionHasBeenAnswered;
     self.sendFeedbackButton.hidden = !questionHasBeenAnswered;

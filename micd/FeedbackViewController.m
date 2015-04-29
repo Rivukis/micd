@@ -48,12 +48,12 @@
     [self.noButton setTitle:@"Nope" forState:UIControlStateNormal];
     if (self.lovesMicd) {
         [self.yesButton setTitle:@"Take me there!" forState:UIControlStateNormal];
-        self.textView.text = @"Awww thanks, you're too kind! We really appreciate that you really appreciate our app. As a team of just two indie developers, it would be huge for us if you would rate our very first app.";
+        self.textView.text = @"Awww thanks! You're too kind!\n\nWe really appreciate that you really appreciate our app.\n\nAs a small team of two, it would be huge for us if you would rate our very first app.";
     } else {
         [self.yesButton setTitle:@"Share my wisdom" forState:UIControlStateNormal];
-        self.textView.text = @"If you have a minute to spare, and you wouldn't mind sharing your wisdom, we would love to hear any feedback or suggestions you have to make our app better. As a team of just two indie developers working on our first app, we have a lot to learn.";
+        self.textView.text = @"Sorry to hear that.\n\nWe would love to hear any feedback or suggestions you have to make Mic'd better.\n\nAs a small team of two working on our first app, we have a lot to learn.";
     }
-    [self.textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0f]];
+    [self.textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:16.0f]];
     [self.textView setTextColor:[UIColor vibrantLightBlueText]];
     self.textView.textAlignment = NSTextAlignmentJustified;
 }
