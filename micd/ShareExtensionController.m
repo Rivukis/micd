@@ -6,31 +6,31 @@
 //  Copyright (c) 2015 CleverKnot. All rights reserved.
 //
 
-#import "ShareExtentionController.h"
+#import "ShareExtensionController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "Constants.h"
 #import "Recording.h"
 
-@implementation ShareExtentionController
+@implementation ShareExtensionController
 
-+ (void)presentShareExtensionForRecording:(Recording *)recording fileType:(ShareExtentionControllerFileType)fileType presenter:(UIViewController *)presenter {
-    if (fileType == ShareExtentionControllerFileTypeMovie) {
-        [ShareExtentionController presentMovieInShareExtensionForRecording:recording presenter:presenter];
-    } else if (fileType == ShareExtentionControllerFileTypeAudio) {
-        [ShareExtentionController presentAudioOnlyInShareExtensionForRecording:recording presenter:presenter];
++ (void)presentShareExtensionForRecording:(Recording *)recording fileType:(ShareExtensionControllerFileType)fileType presenter:(UIViewController *)presenter {
+    if (fileType == ShareExtensionControllerFileTypeMovie) {
+        [ShareExtensionController presentMovieInShareExtensionForRecording:recording presenter:presenter];
+    } else if (fileType == ShareExtensionControllerFileTypeAudio) {
+        [ShareExtensionController presentAudioOnlyInShareExtensionForRecording:recording presenter:presenter];
     }
 }
 
 + (void)presentMovieInShareExtensionForRecording:(Recording *)recording presenter:(UIViewController *)presenter {
     
-    NSString *recordingTitle = [ShareExtentionController fileTitleForRecording:recording];
+    NSString *recordingTitle = [ShareExtensionController fileTitleForRecording:recording];
     NSString *moviePath = [NSString stringWithFormat:@"%@/%@.mov", [Constants documentsDirectory], recordingTitle];
     NSString *videoPath = [NSString stringWithFormat:@"%@/video_only.mov", [Constants documentsDirectory]];
     UIImage *videoImage = [UIImage imageNamed:@"recordButton.png"];
     CGSize videoSize = CGSizeMake(512, 512);
     NSTimeInterval videoDuration = MAX(ceil(recording.lengthAsTimeInterval), 2.0);
     
-    [ShareExtentionController writeImageAsMovie:videoImage toPath:videoPath size:videoSize duration:videoDuration];
+    [ShareExtensionController writeImageAsMovie:videoImage toPath:videoPath size:videoSize duration:videoDuration];
     
     [self makeMovieWithAudioFilePath:recording.urlString videoFilePath:videoPath outputMoviePath:moviePath completionHandler:^{
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -48,7 +48,7 @@
 }
 
 + (void)presentAudioOnlyInShareExtensionForRecording:(Recording *)recording presenter:(UIViewController *)presenter {
-    NSString *recordingTitle = [ShareExtentionController fileTitleForRecording:recording];
+    NSString *recordingTitle = [ShareExtensionController fileTitleForRecording:recording];
     NSString *audioPath = [NSString stringWithFormat:@"%@/%@.m4a", [Constants documentsDirectory], recordingTitle];
     [[NSFileManager defaultManager] moveItemAtPath:recording.urlString toPath:audioPath error:nil];
 
@@ -100,7 +100,7 @@
     [movieWriter startSessionAtSourceTime:kCMTimeZero];
     
     //Write samples:
-    CVPixelBufferRef buffer = [ShareExtentionController pixelBufferFromCGImage:image.CGImage size:size];
+    CVPixelBufferRef buffer = [ShareExtensionController pixelBufferFromCGImage:image.CGImage size:size];
     [adaptor appendPixelBuffer:buffer withPresentationTime:kCMTimeZero];
     [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(duration-1, 1)];
     

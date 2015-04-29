@@ -21,7 +21,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "ActivityItemProvider.h"
 #import "AudioSessionController.h"
-#import "ShareExtentionController.h"
+#import "ShareExtensionController.h"
 
 @interface RecordingsViewController ()
 <UITableViewDataSource,
@@ -550,12 +550,12 @@ UIActionSheetDelegate>
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        [ShareExtentionController presentShareExtensionForRecording:self.focusedCellModel.recording
-                                                           fileType:ShareExtentionControllerFileTypeMovie
+        [ShareExtensionController presentShareExtensionForRecording:self.focusedCellModel.recording
+                                                           fileType:ShareExtensionControllerFileTypeMovie
                                                           presenter:self];
     } else if (buttonIndex == 1) {
-        [ShareExtentionController presentShareExtensionForRecording:self.focusedCellModel.recording
-                                                           fileType:ShareExtentionControllerFileTypeAudio
+        [ShareExtensionController presentShareExtensionForRecording:self.focusedCellModel.recording
+                                                           fileType:ShareExtensionControllerFileTypeAudio
                                                           presenter:self];
     }
 }

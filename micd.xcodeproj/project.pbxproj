@@ -12,7 +12,7 @@
 		22B3B94A1AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22B3B9491AD2290A00AFE02F /* MicrophoneAccessRequiredViewController.m */; };
 		22D2439C1AD0D87700867992 /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D2439B1AD0D87700867992 /* FeedbackViewController.m */; };
 		6550B4540B6DB171FECB3CD2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ADDB858B803861D5C14D578 /* libPods.a */; };
-		7A115BEF1AEF3D5C007BD865 /* ShareExtentionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A115BEE1AEF3D5C007BD865 /* ShareExtentionController.m */; };
+		7A115BEF1AEF3D5C007BD865 /* ShareExtensionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A115BEE1AEF3D5C007BD865 /* ShareExtensionController.m */; };
 		7A146A8A1ACA4260004C55A2 /* RemoteCommandCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */; };
 		7A301EF11AC75AE600FC900D /* VersionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A301EF01AC75AE600FC900D /* VersionController.m */; };
 		7A301EF21AC7653100FC900D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
@@ -119,8 +119,8 @@
 		22D2439A1AD0D87700867992 /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
 		22D2439B1AD0D87700867992 /* FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackViewController.m; sourceTree = "<group>"; };
 		2ADDB858B803861D5C14D578 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A115BED1AEF3D5C007BD865 /* ShareExtentionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareExtentionController.h; sourceTree = "<group>"; };
-		7A115BEE1AEF3D5C007BD865 /* ShareExtentionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareExtentionController.m; sourceTree = "<group>"; };
+		7A115BED1AEF3D5C007BD865 /* ShareExtensionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareExtensionController.h; sourceTree = "<group>"; };
+		7A115BEE1AEF3D5C007BD865 /* ShareExtensionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareExtensionController.m; sourceTree = "<group>"; };
 		7A146A881ACA4260004C55A2 /* RemoteCommandCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteCommandCenterController.h; sourceTree = "<group>"; };
 		7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteCommandCenterController.m; sourceTree = "<group>"; };
 		7A301EEF1AC75AE600FC900D /* VersionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionController.h; sourceTree = "<group>"; };
@@ -485,8 +485,8 @@
 				7AC290AB1A8EF0100085B927 /* RecorderController.m */,
 				7A146A881ACA4260004C55A2 /* RemoteCommandCenterController.h */,
 				7A146A891ACA4260004C55A2 /* RemoteCommandCenterController.m */,
-				7A115BED1AEF3D5C007BD865 /* ShareExtentionController.h */,
-				7A115BEE1AEF3D5C007BD865 /* ShareExtentionController.m */,
+				7A115BED1AEF3D5C007BD865 /* ShareExtensionController.h */,
+				7A115BEE1AEF3D5C007BD865 /* ShareExtensionController.m */,
 				7A581D541AD0E459008828CC /* AudioSessionController.h */,
 				7A581D551AD0E459008828CC /* AudioSessionController.m */,
 				7A301EEF1AC75AE600FC900D /* VersionController.h */,
@@ -730,7 +730,7 @@
 				7AC290B81A8EF0100085B927 /* RecorderController.m in Sources */,
 				D05D75971A79ABDC0050A49C /* WireTapStyleKit.m in Sources */,
 				D05500FB1AA7CAD600C71FE1 /* PassthroughImageView.m in Sources */,
-				7A115BEF1AEF3D5C007BD865 /* ShareExtentionController.m in Sources */,
+				7A115BEF1AEF3D5C007BD865 /* ShareExtensionController.m in Sources */,
 				7AC290BD1A8EF0100085B927 /* FakesForProject.m in Sources */,
 				7A96606A1AC5E6C500439660 /* Factory.m in Sources */,
 				D05D75751A79AAA40050A49C /* AppDelegate.m in Sources */,
