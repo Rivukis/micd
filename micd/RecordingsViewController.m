@@ -21,6 +21,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "ActivityItemProvider.h"
 #import "AudioSessionController.h"
+#import "ShareExtensionController.h"
 
 @interface RecordingsViewController ()
 <UITableViewDataSource,
@@ -30,7 +31,7 @@ RemoteCommandCenterControllerDelegate,
 PlayerControllerDelegate,
 RecordingCellModelDelegate,
 RecordingCellDelegate,
-UIDocumentInteractionControllerDelegate>
+UIActionSheetDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIImageView *tableBottomBorder;
@@ -115,9 +116,9 @@ UIDocumentInteractionControllerDelegate>
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
     
     // gonna hide and disable these buttons until were ready to use them
-    self.shareButton.hidden = YES;
+//    self.shareButton.hidden = YES;
+//    self.shareButton.userInteractionEnabled = NO;
     self.editButton.hidden = YES;
-    self.shareButton.userInteractionEnabled = NO;
     self.editButton.userInteractionEnabled = NO;
     ///////////////////////
     
@@ -402,36 +403,6 @@ UIDocumentInteractionControllerDelegate>
     [self addButtonBounceAnimationToView:self.forwardButton];
 }
 
-- (IBAction)shareButtonPressed:(id)sender {
-    [self addButtonBounceAnimationToView:self.shareButton];
-    
-//    UIDocumentInteractionController *audioShareController = [UIDocumentInteractionController interactionControllerWithURL:self.focusedCellModel.recording.url];
-//    [audioShareController setName:self.playbackTitleLabel.text];
-//    [audioShareController setAnnotation:self.playbackTitleLabel.text];
-//    [audioShareController presentOpenInMenuFromRect:CGRectMake(0, 0, 375, 667) inView:self.view animated:YES];
-//    audioShareController.delegate = self;
-    
-    ActivityItemProvider *activityItem = [[ActivityItemProvider alloc] initWithPlaceholderString:@"placeholder" andRecording:self.focusedCellModel.recording];
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[activityItem] applicationActivities:@[]];
-    activityViewController.excludedActivityTypes = [[NSArray alloc] initWithObjects:
-                                                    UIActivityTypePostToWeibo,
-                                                    UIActivityTypePostToFacebook,
-                                                    UIActivityTypeSaveToCameraRoll,
-                                                    UIActivityTypeAddToReadingList,
-                                                    UIActivityTypePrint,
-                                                    UIActivityTypePostToTencentWeibo,
-                                                    UIActivityTypePostToTwitter,
-                                                    nil];
-    [self presentViewController:activityViewController animated:YES completion:^{
-        
-    }];
-    
-}
-
-- (IBAction)editButtonPressed:(id)sender {
-    [self addButtonBounceAnimationToView:self.editButton];
-}
-
 - (void)showPlayerButtons {
 //    if (self.shouldBounce) {
 //        [self performBlock:^{
@@ -558,6 +529,34 @@ UIDocumentInteractionControllerDelegate>
         }
         default:
             break;
+    }
+}
+
+#pragma mark - Other User Actions
+
+- (IBAction)shareButtonPressed:(id)sender {
+    [self addButtonBounceAnimationToView:self.shareButton];
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"What do you want to do with your recording?" delegate:self cancelButtonTitle:@"Nevermind" destructiveButtonTitle:nil otherButtonTitles:@"Share With Others", @"Export As Audio Only", nil];
+    
+    [actionSheet showInView:self.view];
+}
+
+- (IBAction)editButtonPressed:(id)sender {
+    [self addButtonBounceAnimationToView:self.editButton];
+}
+
+#pragma mark - ActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [ShareExtensionController presentShareExtensionForRecording:self.focusedCellModel.recording
+                                                           fileType:ShareExtensionControllerFileTypeMovie
+                                                          presenter:self];
+    } else if (buttonIndex == 1) {
+        [ShareExtensionController presentShareExtensionForRecording:self.focusedCellModel.recording
+                                                           fileType:ShareExtensionControllerFileTypeAudio
+                                                          presenter:self];
     }
 }
 
