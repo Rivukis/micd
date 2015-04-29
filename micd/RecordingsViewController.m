@@ -46,7 +46,7 @@ UIActionSheetDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 @property (weak, nonatomic) IBOutlet UIButton *rewindButton;
 @property (weak, nonatomic) IBOutlet UIButton *forwardButton;
-@property (weak, nonatomic) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet UIButton *audioOutput;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 
 @property (strong, nonatomic) PlayerController *playerController;
@@ -110,16 +110,16 @@ UIActionSheetDelegate>
     [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
     [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
     
-    [self.editButton setTitle:@"" forState:UIControlStateNormal];
-    [self.editButton setBackgroundImage:[WireTapStyleKit imageOfEditCircle] forState:UIControlStateNormal];
+    [self.audioOutput setTitle:@"" forState:UIControlStateNormal];
+    [self.audioOutput setBackgroundImage:[WireTapStyleKit imageOfAirplayLogo] forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
     
     // gonna hide and disable these buttons until were ready to use them
 //    self.shareButton.hidden = YES;
 //    self.shareButton.userInteractionEnabled = NO;
-    self.editButton.hidden = YES;
-    self.editButton.userInteractionEnabled = NO;
+//    self.editButton.hidden = YES;
+//    self.editButton.userInteractionEnabled = NO;
     ///////////////////////
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
@@ -149,7 +149,7 @@ UIActionSheetDelegate>
         [self.playbackView addSubview:self.progressTimeIndicatorView];
         [self scrollToAndReadyPlayerWithMostRecentRecording];
         
-        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.editButton, self.playbackTitleLabel];
+        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.audioOutput, self.playbackTitleLabel];
         ((RecordingsView *)self.view).playbackAreaView = self.playbackAreaView;
         
         RecordingCellModel *mostRecentRecordingCellModel = [self mostRecentRecordingCellModel];
@@ -543,7 +543,7 @@ UIActionSheetDelegate>
 }
 
 - (IBAction)editButtonPressed:(id)sender {
-    [self addButtonBounceAnimationToView:self.editButton];
+    [self addButtonBounceAnimationToView:self.audioOutput];
 }
 
 #pragma mark - ActionSheetDelegate
