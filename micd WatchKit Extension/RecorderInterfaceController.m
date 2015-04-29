@@ -48,11 +48,9 @@
         [self setupGoToTracksButtonShouldBeEnabled:YES];
     } else {
         if (isRecording) {
-            [self.recordButtonGroup setBackgroundImageNamed:@"image-"];
-            [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 356) duration:6 repeatCount:0];
+            [self.recordButtonGroup setBackgroundImageNamed:@"watchRecording"];
             [self setupGoToTracksButtonShouldBeEnabled:NO];
         } else {
-            [self.recordButtonGroup stopAnimating];
             [self.recordButtonGroup setBackgroundImageNamed:@"recordButton"];
             [self setupGoToTracksButtonShouldBeEnabled:YES];
         }
@@ -92,6 +90,3 @@
 }
 
 @end
-
-
-

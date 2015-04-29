@@ -699,6 +699,14 @@
                                                     <action selector="autoStartRecordingAfterMaximumReachedSwitch:" destination="BMN-E5-xRT" eventType="valueChanged" id="sFI-t6-bOL"/>
                                                 </connections>
                                             </switch>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LkU-cf-19e" customClass="UIImageView">
+                                                <rect key="frame" x="32" y="41" width="311" height="1"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="otS-KE-Q6n" customClass="UIImageView">
+                                                <rect key="frame" x="32" y="91" width="311" height="1"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -769,6 +777,8 @@
                     <connections>
                         <outlet property="autoStartRecAfterMaxLabel" destination="X0d-Of-OuQ" id="o2C-5A-nA7"/>
                         <outlet property="autoStartRecAfterMaxSwitch" destination="d5T-Os-uBh" id="q1F-oQ-5zT"/>
+                        <outlet property="divider" destination="LkU-cf-19e" id="UlT-oP-MYe"/>
+                        <outlet property="divider2" destination="otS-KE-Q6n" id="eQR-wZ-eEF"/>
                         <outlet property="lengthSegmentedControl" destination="93h-24-nKO" id="7XJ-Fq-FWY"/>
                         <outlet property="loveMicdImageView" destination="Bvc-aN-eEs" id="FIq-hm-4tP"/>
                         <outlet property="maxRecordingLengthLabel" destination="Nqe-Vw-Wrc" id="rOP-oq-Aax"/>

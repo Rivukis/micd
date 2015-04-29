@@ -22,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *lengthSegmentedControl;
 @property (weak, nonatomic) IBOutlet UILabel *autoStartRecAfterMaxLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *autoStartRecAfterMaxSwitch;
+@property (weak, nonatomic) IBOutlet UIImageView *divider;
+@property (weak, nonatomic) IBOutlet UIImageView *divider2;
 
 @property (assign, nonatomic) BOOL isFirstTimeLayingOutSubviews;
 @end
@@ -93,6 +95,10 @@
     self.sendFeedbackButton.layer.cornerRadius = 5;
     
     [self refreshFeedBackViews];
+    
+    self.divider.image = [WireTapStyleKit imageOfDivider];
+    self.divider2.image = [WireTapStyleKit imageOfDivider];
+
 }
 
 - (void)dealloc {
