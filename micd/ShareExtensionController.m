@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Constants.h"
 #import "Recording.h"
+#import "WireTapStyleKit.h"
 
 @implementation ShareExtensionController
 
@@ -23,12 +24,13 @@
 
 + (void)presentMovieInShareExtensionForRecording:(Recording *)recording presenter:(UIViewController *)presenter {
     
-    NSString *recordingTitle = [ShareExtensionController fileTitleForRecording:recording];
-    NSString *moviePath = [NSString stringWithFormat:@"%@/%@.mov", [Constants documentsDirectory], recordingTitle];
     NSString *videoPath = [NSString stringWithFormat:@"%@/video_only.mov", [Constants documentsDirectory]];
-    UIImage *videoImage = [UIImage imageNamed:@"recordButton.png"];
+    UIImage *videoImage = [WireTapStyleKit imageOfSplashScreenForVideoShare];
     CGSize videoSize = CGSizeMake(512, 512);
     NSTimeInterval videoDuration = MAX(ceil(recording.lengthAsTimeInterval), 2.0);
+    
+    NSString *recordingTitle = [ShareExtensionController fileTitleForRecording:recording];
+    NSString *moviePath = [NSString stringWithFormat:@"%@/%@.mov", [Constants documentsDirectory], recordingTitle];
     
     [ShareExtensionController writeImageAsMovie:videoImage toPath:videoPath size:videoSize duration:videoDuration];
     

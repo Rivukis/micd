@@ -17,6 +17,7 @@
 		7A301EF11AC75AE600FC900D /* VersionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A301EF01AC75AE600FC900D /* VersionController.m */; };
 		7A301EF21AC7653100FC900D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC290A71A8EF0100085B927 /* Constants.m */; };
 		7A307A641AB924E9007AF96D /* MTKValidKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */; };
+		7A52157A1AF19CC00072E8FD /* IOSWindowHackImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A5215791AF19CC00072E8FD /* IOSWindowHackImageView.m */; };
 		7A581D501ACE4373008828CC /* RecordingsInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */; };
 		7A581D531ACE5423008828CC /* RecordingRowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D521ACE5423008828CC /* RecordingRowController.m */; };
 		7A581D561AD0E459008828CC /* AudioSessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A581D551AD0E459008828CC /* AudioSessionController.m */; };
@@ -128,6 +129,8 @@
 		7A301EF01AC75AE600FC900D /* VersionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionController.m; sourceTree = "<group>"; };
 		7A307A621AB924E9007AF96D /* MTKValidKeyPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKValidKeyPath.h; path = micd/MTKValidKeyPath.h; sourceTree = "<group>"; };
 		7A307A631AB924E9007AF96D /* MTKValidKeyPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKValidKeyPath.m; path = micd/MTKValidKeyPath.m; sourceTree = "<group>"; };
+		7A5215781AF19CC00072E8FD /* IOSWindowHackImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSWindowHackImageView.h; sourceTree = "<group>"; };
+		7A5215791AF19CC00072E8FD /* IOSWindowHackImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOSWindowHackImageView.m; sourceTree = "<group>"; };
 		7A581D4E1ACE4373008828CC /* RecordingsInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingsInterfaceController.h; sourceTree = "<group>"; };
 		7A581D4F1ACE4373008828CC /* RecordingsInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordingsInterfaceController.m; sourceTree = "<group>"; };
 		7A581D511ACE5423008828CC /* RecordingRowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordingRowController.h; sourceTree = "<group>"; };
@@ -469,6 +472,8 @@
 				22B359A51AC75F2E0037107C /* ProgressBarView.m */,
 				D05405221AD382DD0026057E /* TactileShapedButton.h */,
 				D05405231AD382DD0026057E /* TactileShapedButton.m */,
+				7A5215781AF19CC00072E8FD /* IOSWindowHackImageView.h */,
+				7A5215791AF19CC00072E8FD /* IOSWindowHackImageView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -742,6 +747,7 @@
 				D05500F81AA7C8F100C71FE1 /* PassthroughView.m in Sources */,
 				D0BFED461ACE517A00E12526 /* PresentingAnimationController.m in Sources */,
 				D0BFED451ACE517A00E12526 /* DismissingAnimationController.m in Sources */,
+				7A52157A1AF19CC00072E8FD /* IOSWindowHackImageView.m in Sources */,
 				D034F0421AA148680059028D /* RecordingsSection.m in Sources */,
 				D08D4BF11AB407C400949483 /* DisplayLinkController.m in Sources */,
 				D0BFED401ACE4BD700E12526 /* SettingsView.m in Sources */,

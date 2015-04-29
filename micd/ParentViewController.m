@@ -9,10 +9,11 @@
 #import "Recording.h"
 #import "PopViewAnimator.h"
 #import "Constants.h"
+#import "IOSWindowHackImageView.h"
 
-@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, DeletedLastRemainingTrackDelegate>
+@interface ParentViewController () <FramesBasedOnStateProtocol, MovementDelegate, AddNewRecordingDelegate, DeletedLastRemainingTrackDelegate, IOSWindowHackImageViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIImageView *micdBackgroundView;
+@property (strong, nonatomic) IBOutlet IOSWindowHackImageView *micdBackgroundView;
 @property (nonatomic) CGRect micdBackgroundOriginalFrame;
 @property (strong, nonatomic) RecordingsViewController *recordingsViewController;
 @property (strong, nonatomic) HomeViewController *homeViewController;
@@ -22,6 +23,8 @@
 @property (assign, nonatomic) BOOL didSetInitialFrames;
 
 @property (strong, nonatomic) PopViewAnimator *viewAnimator;
+
+@property (assign, nonatomic) BOOL destroyingAndRecreatingImageView;
 
 @end
 
@@ -33,6 +36,9 @@
     self.dataSource = [DataSourceController sharedDataSource];
     
     self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
+    self.micdBackgroundView.delegate = self;
+//    self.micdBackgroundView.parent = self;
+    self.micdBackgroundView.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.homeViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([HomeViewController class])];
     [self addChildViewController:self.homeViewController];
@@ -60,6 +66,29 @@
         [self setInitialStateFrame];
         self.didSetInitialFrames = YES;
     }
+}
+
+#pragma mark - IOSWindowHackImageViewDelegate
+
+- (void)destroyAndRecreatMe:(IOSWindowHackImageView *)capinoView {
+    if (!self.destroyingAndRecreatingImageView) {
+        self.destroyingAndRecreatingImageView = YES;
+        CGRect frame = self.micdBackgroundView.frame;
+        
+        [self.micdBackgroundView removeFromSuperview];
+        
+        self.micdBackgroundView = [[IOSWindowHackImageView alloc] initWithFrame:frame];
+        self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
+        self.micdBackgroundView.delegate = self;
+        
+        [self.view addSubview:self.micdBackgroundView];
+        [self.view sendSubviewToBack:self.micdBackgroundView];
+        [self performSelector:@selector(setDestroyingAndRecreatingImageViewToNo) withObject:nil afterDelay:0.2];
+    }
+}
+
+- (void)setDestroyingAndRecreatingImageViewToNo {
+    self.destroyingAndRecreatingImageView = NO;
 }
 
 #pragma mark - AddNewRecordingDelegate
