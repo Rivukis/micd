@@ -75,6 +75,9 @@ UIActionSheetDelegate>
 @property (strong, nonatomic) RecordingCell *editingCell;
 @property (strong, nonatomic, readonly) RecordingCellModel *focusedCellModel;
 
+@property (strong, nonatomic) Recording *share_Recording;
+@property (strong, nonatomic) void(^share_CompletionBlock)();
+
 @property (strong, nonatomic) UIVisualEffectView *blurView;
 
 @end
@@ -325,6 +328,12 @@ UIActionSheetDelegate>
     }];
 }
 
+- (void)showSharingActionSheet {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"What do you want to do with your recording?" delegate:self cancelButtonTitle:@"Nevermind" destructiveButtonTitle:nil otherButtonTitles:@"Share With Others", @"Export As Audio Only", nil];
+    
+    [actionSheet showInView:self.view];
+}
+
 #pragma mark - FramesBasedOnStateProtocol
 
 - (void)setInitialStateFrame {
@@ -537,9 +546,9 @@ UIActionSheetDelegate>
 - (IBAction)shareButtonPressed:(id)sender {
     [self addButtonBounceAnimationToView:self.shareButton];
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"What do you want to do with your recording?" delegate:self cancelButtonTitle:@"Nevermind" destructiveButtonTitle:nil otherButtonTitles:@"Share With Others", @"Export As Audio Only", nil];
-    
-    [actionSheet showInView:self.view];
+    self.share_Recording = self.focusedCellModel.recording;
+    self.share_CompletionBlock = nil;
+    [self showSharingActionSheet];
 }
 
 - (IBAction)audioOutputButtonPressed:(id)sender {
@@ -550,13 +559,19 @@ UIActionSheetDelegate>
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        [ShareExtensionController presentShareExtensionForRecording:self.focusedCellModel.recording
+        [ShareExtensionController presentShareExtensionForRecording:self.share_Recording
                                                            fileType:ShareExtensionControllerFileTypeMovie
-                                                          presenter:self];
+                                                          presenter:self
+                                                         completion:self.share_CompletionBlock];
     } else if (buttonIndex == 1) {
-        [ShareExtensionController presentShareExtensionForRecording:self.focusedCellModel.recording
+        [ShareExtensionController presentShareExtensionForRecording:self.share_Recording
                                                            fileType:ShareExtensionControllerFileTypeAudio
-                                                          presenter:self];
+                                                          presenter:self
+                                                         completion:self.share_CompletionBlock];
+    } else if (buttonIndex == 2) {
+        if (self.share_CompletionBlock) {
+            self.share_CompletionBlock();
+        }
     }
 }
 
@@ -732,33 +747,56 @@ UIActionSheetDelegate>
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        RecordingsSection *editingRecordingsSection = self.sections[indexPath.section];
-        RecordingCellModel *editingCellModel = [editingRecordingsSection cellModelAtIndex:indexPath.row];
-        [self.dataSource deleteRecording:editingCellModel.recording];
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    __weak typeof(self) weakSelf = self;
+    UITableViewRowAction *deleteRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        [weakSelf tableview:tableView deleteRowAtIndexPath:indexPath];
+    }];
+    
+    UITableViewRowAction *shareRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Share" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        RecordingsSection *recordingsSection = self.sections[indexPath.section];
+        RecordingCellModel *recordingCellModel = [recordingsSection cellModelAtIndex:indexPath.row];
+        self.share_Recording = recordingCellModel.recording;
+        self.share_CompletionBlock = ^void(){
+            [weakSelf.tableView setEditing:NO animated:YES];
+        };
         
-        BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
-        if (deletingSection) {
-            [self.sections removeObjectAtIndex:indexPath.section];
-            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationTop];
+        [weakSelf showSharingActionSheet];
+    }];
+    shareRowAction.backgroundColor = [UIColor blueColor];
+    
+    return @[deleteRowAction, shareRowAction];
+}
+
+- (void)tableview:(UITableView *)tableView deleteRowAtIndexPath:(NSIndexPath *)indexPath {
+    RecordingsSection *editingRecordingsSection = self.sections[indexPath.section];
+    RecordingCellModel *editingCellModel = [editingRecordingsSection cellModelAtIndex:indexPath.row];
+    [self.dataSource deleteRecording:editingCellModel.recording];
+    
+    BOOL deletingSection = (editingRecordingsSection.numberOfCellModels <= 1);
+    if (deletingSection) {
+        [self.sections removeObjectAtIndex:indexPath.section];
+        [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationTop];
+    } else {
+        RecordingsSection *section = self.sections[indexPath.section];
+        [section deleteRecordingCellModelAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
+    
+    if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
+        NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
+        if (nextToLoadIndexPath) {
+            self.focusedCellIndexPath = nextToLoadIndexPath;
+            [self.focusedCellModel setCellState:CellStatePaused];
+            [self readyPlayerWithRecording:self.focusedCellModel.recording];
         } else {
-            RecordingsSection *section = self.sections[indexPath.section];
-            [section deleteRecordingCellModelAtIndex:indexPath.row];
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
-        }
-        
-        if ([editingCellModel.recording.uuid.UUIDString isEqualToString:self.playerController.loadedRecording.uuid.UUIDString]) {
-            NSIndexPath *nextToLoadIndexPath = [self indexPathToSelectAfterDeletingIndexPath:indexPath sectionWasDeleted:deletingSection];
-            if (nextToLoadIndexPath) {
-                self.focusedCellIndexPath = nextToLoadIndexPath;
-                [self.focusedCellModel setCellState:CellStatePaused];
-                [self readyPlayerWithRecording:self.focusedCellModel.recording];
-            } else {
-                [self.deletedLastRemainingTrackDelegate deletedLastRemainingTrack];
-            }
+            [self.deletedLastRemainingTrackDelegate deletedLastRemainingTrack];
         }
     }
+}
+
+// Must be stubbed for swipe left gesture to work
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {

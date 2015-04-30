@@ -17,6 +17,6 @@ typedef NS_ENUM(NSInteger, ShareExtensionControllerFileType) {
 
 @interface ShareExtensionController : NSObject
 
-+ (void)presentShareExtensionForRecording:(Recording *)recording fileType:(ShareExtensionControllerFileType)fileType presenter:(UIViewController *)presenter;
++ (void)presentShareExtensionForRecording:(Recording *)recording fileType:(ShareExtensionControllerFileType)fileType presenter:(UIViewController *)presenter completion:(void(^)())completionBlock;
 
 @end

@@ -14,15 +14,15 @@
 
 @implementation ShareExtensionController
 
-+ (void)presentShareExtensionForRecording:(Recording *)recording fileType:(ShareExtensionControllerFileType)fileType presenter:(UIViewController *)presenter {
++ (void)presentShareExtensionForRecording:(Recording *)recording fileType:(ShareExtensionControllerFileType)fileType presenter:(UIViewController *)presenter completion:(void (^)())completionBlock {
     if (fileType == ShareExtensionControllerFileTypeMovie) {
-        [ShareExtensionController presentMovieInShareExtensionForRecording:recording presenter:presenter];
+        [ShareExtensionController presentMovieInShareExtensionForRecording:recording presenter:presenter completion:completionBlock];
     } else if (fileType == ShareExtensionControllerFileTypeAudio) {
-        [ShareExtensionController presentAudioOnlyInShareExtensionForRecording:recording presenter:presenter];
+        [ShareExtensionController presentAudioOnlyInShareExtensionForRecording:recording presenter:presenter completion:completionBlock];
     }
 }
 
-+ (void)presentMovieInShareExtensionForRecording:(Recording *)recording presenter:(UIViewController *)presenter {
++ (void)presentMovieInShareExtensionForRecording:(Recording *)recording presenter:(UIViewController *)presenter completion:(void(^)())completionBlock {
     
     NSString *videoPath = [NSString stringWithFormat:@"%@/video_only.mov", [Constants documentsDirectory]];
     UIImage *videoImage = [WireTapStyleKit imageOfSplashScreenForVideoShare];
@@ -42,6 +42,9 @@
             activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
                 [[NSFileManager defaultManager] removeItemAtPath:videoPath error:nil];
                 [[NSFileManager defaultManager] removeItemAtPath:moviePath error:nil];
+                if (completionBlock) {
+                    completionBlock();
+                }
             };
             
             [presenter presentViewController:activityViewController animated:YES completion:nil];
@@ -49,7 +52,7 @@
     }];
 }
 
-+ (void)presentAudioOnlyInShareExtensionForRecording:(Recording *)recording presenter:(UIViewController *)presenter {
++ (void)presentAudioOnlyInShareExtensionForRecording:(Recording *)recording presenter:(UIViewController *)presenter completion:(void(^)())completionBlock {
     NSString *recordingTitle = [ShareExtensionController fileTitleForRecording:recording];
     NSString *audioPath = [NSString stringWithFormat:@"%@/%@.m4a", [Constants documentsDirectory], recordingTitle];
     [[NSFileManager defaultManager] moveItemAtPath:recording.urlString toPath:audioPath error:nil];
@@ -57,21 +60,24 @@
     NSURL *audioURL = [NSURL fileURLWithPath:audioPath];
 
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[audioURL] applicationActivities:@[]];
+    
+    //    [activityViewController setValue:recordingTitle forKey:@"subject"];
+    
+    activityViewController.excludedActivityTypes = @[UIActivityTypePostToWeibo,
+                                                     UIActivityTypePostToFacebook,
+                                                     UIActivityTypeSaveToCameraRoll,
+                                                     UIActivityTypeAddToReadingList,
+                                                     UIActivityTypePrint,
+                                                     UIActivityTypePostToTencentWeibo,
+                                                     UIActivityTypePostToTwitter];
 
     activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         [[NSFileManager defaultManager] moveItemAtPath:audioPath toPath:recording.urlString error:nil];
+        if (completionBlock) {
+            completionBlock();
+        }
     };
-    [activityViewController setValue:recordingTitle forKey:@"subject"];
-
-    activityViewController.excludedActivityTypes = [[NSArray alloc] initWithObjects:
-                                                    UIActivityTypePostToWeibo,
-                                                    UIActivityTypePostToFacebook,
-                                                    UIActivityTypeSaveToCameraRoll,
-                                                    UIActivityTypeAddToReadingList,
-                                                    UIActivityTypePrint,
-                                                    UIActivityTypePostToTencentWeibo,
-                                                    UIActivityTypePostToTwitter,
-                                                    nil];
+    
     [presenter presentViewController:activityViewController animated:YES completion:nil];
 }
 
