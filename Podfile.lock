@@ -1,12 +1,15 @@
 PODS:
+  - EFCircularSlider (0.2.0)
   - OBShapedButton (1.0.2)
   - pop (1.0.7)
 
 DEPENDENCIES:
+  - EFCircularSlider (~> 0.2.0)
   - OBShapedButton
   - pop (~> 1.0)
 
 SPEC CHECKSUMS:
+  EFCircularSlider: 3af1dd6f86eb3eeeeaab0345ef3d6d1c2fc93d17
   OBShapedButton: ae2ae40dd98b934d4f76be1984c49db73893ada9
   pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
 

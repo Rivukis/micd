@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -157,6 +157,12 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m6S-RF-qVM" userLabel="Playback Touchable Area">
                                 <rect key="frame" x="0.0" y="412" width="375" height="255"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bB-zl-Rus" customClass="EFCircularSlider">
+                                        <rect key="frame" x="56" y="139" width="262" height="262"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pK-hO-A7X" userLabel="Playback Container View">
@@ -375,6 +381,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="audioOutput" destination="uiB-qn-cSn" id="z8E-6y-BUK"/>
+                        <outlet property="circularSlider" destination="4bB-zl-Rus" id="Qzy-Z3-Yj3"/>
                         <outlet property="currentPlaybackTimeLabel" destination="nM0-BA-DCM" id="Dlg-CO-dmh"/>
                         <outlet property="forwardButton" destination="Bet-W1-1ce" id="G7g-bJ-jwj"/>
                         <outlet property="playButton" destination="x4o-WT-nwi" id="vXR-sz-bKl"/>

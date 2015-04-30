@@ -29,6 +29,7 @@
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* progressBarNoBorderTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* airplayLogoTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* shareButtonHalfSizeTargets;
+@property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* airplayLogoHalfSizeTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* micdBackgroundTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonTargets;
 @property(strong, nonatomic) IBOutletCollection(NSObject) NSArray* recordButtonHighlightedTargets;
@@ -67,6 +68,7 @@
 + (void)drawProgressBarNoBorder;
 + (void)drawAirplayLogo;
 + (void)drawShareButtonHalfSize;
++ (void)drawAirplayLogoHalfSize;
 + (void)drawMicdBackground;
 + (void)drawRecordButton1WithArcEndAngle: (CGFloat)arcEndAngle arcStartAngle: (CGFloat)arcStartAngle;
 + (void)drawIconRed;
@@ -117,6 +119,7 @@
 + (UIImage*)imageOfProgressBarNoBorder;
 + (UIImage*)imageOfAirplayLogo;
 + (UIImage*)imageOfShareButtonHalfSize;
++ (UIImage*)imageOfAirplayLogoHalfSize;
 + (UIImage*)imageOfMicdBackground;
 + (UIImage*)imageOfRecordButton1WithArcEndAngle: (CGFloat)arcEndAngle arcStartAngle: (CGFloat)arcStartAngle;
 + (UIImage*)imageOfRecordButton;
