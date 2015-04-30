@@ -6,7 +6,6 @@
 #import "MicdStyleKit.h"
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
-#import "FakesForProject.h"
 #import "ProgressBarView.h"
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
