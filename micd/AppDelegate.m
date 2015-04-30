@@ -36,8 +36,6 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [[AudioSessionController sharedAudioSessionController] setupAudioSession];
-    
     if (self.fireDidBecomeActiveNotification) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationKeyApplicationDidBecomeActive object:nil];
         self.fireDidBecomeActiveNotification = NO;

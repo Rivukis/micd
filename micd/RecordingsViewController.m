@@ -6,7 +6,6 @@
 #import "MicdStyleKit.h"
 #import "RecordingCell.h"
 #import "RecordingsSection.h"
-#import "FakesForProject.h"
 #import "ProgressBarView.h"
 #import "RecordingCellModel.h"
 #import "DisplayLinkController.h"
@@ -116,7 +115,7 @@ UIActionSheetDelegate>
     [self.audioOutput setTitle:@"" forState:UIControlStateNormal];
     [self.audioOutput setBackgroundImage:[WireTapStyleKit imageOfAirplayLogo] forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
-    [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButton] forState:UIControlStateNormal];
+    [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButtonHalfSize] forState:UIControlStateNormal];
     
     // gonna hide and disable these buttons until were ready to use them
 //    self.shareButton.hidden = YES;

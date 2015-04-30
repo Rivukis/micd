@@ -11,7 +11,7 @@
                 <controller identifier="RecorderInterfaceController" title="Mic'd" id="AgC-eL-Hgc" customClass="RecorderInterfaceController">
                     <items>
                         <button alignment="center" id="hH1-HM-nUd">
-                            <group key="contentGroup" width="0.90000000000000002" height="0.70000000000000007" heightAdjustment="6" alignment="left" backgroundImage="recordButton" contentMode="scaleAspectFill" id="Fue-bz-GLN"/>
+                            <group key="contentGroup" width="0.80000000000000004" height="0.70000000000000007" heightAdjustment="6" alignment="left" backgroundImage="recordButton" contentMode="scaleAspectFill" id="Fue-bz-GLN"/>
                             <connections>
                                 <action selector="recordButtonPressed" destination="AgC-eL-Hgc" id="tzV-Yo-vLl"/>
                             </connections>

@@ -2,6 +2,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Recording.h"
 #import "Constants.h"
+#import "AudioSessionController.h"
 
 @interface RecorderController () <AVAudioRecorderDelegate>
 
@@ -76,6 +77,7 @@ BOOL const useEnhancedRecorder = NO;
     }
     
     if (self.recordingState == RecorderControllerStatePaused || self.recordingState == RecorderControllerStateStopped) {
+        [[AudioSessionController sharedAudioSessionController] setupAudioSession];
         success = [self.audioRecorder record];
         if (success) {
             self.recordingState = RecorderControllerStateRecording;
