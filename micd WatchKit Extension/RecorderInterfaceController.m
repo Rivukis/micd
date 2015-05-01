@@ -47,7 +47,7 @@
 - (void)setupViewForIsRecording:(BOOL)isRecording isAccessGranted:(BOOL)isAccessGranted {
     if (!isAccessGranted) {
         [self.recordButtonGroup stopAnimating];
-        [self.recordButtonGroup setBackgroundImageNamed:@"micPermissionsOffWatch"];
+        [self.recordButtonGroup setBackgroundImageNamed:@"micPermissionWatch"];
         [self setupGoToTracksButtonShouldBeEnabled:YES];
     } else {
         if (isRecording) {
