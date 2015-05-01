@@ -79,6 +79,7 @@
         
         self.micdBackgroundView = [[IOSWindowHackImageView alloc] initWithFrame:frame];
         self.micdBackgroundView.image = [WireTapStyleKit imageOfMicdBackground];
+        self.micdBackgroundView.contentMode = UIViewContentModeScaleAspectFit;
         self.micdBackgroundView.delegate = self;
         
         [self.view addSubview:self.micdBackgroundView];
@@ -152,7 +153,9 @@
     
     CGRect backgroundImageFrame = self.micdBackgroundView.frame;
     backgroundImageFrame.size.width = CGRectGetWidth(self.view.bounds);
+    backgroundImageFrame.size.height = CGRectGetHeight(self.view.bounds);
     self.micdBackgroundView.frame = backgroundImageFrame;
+    self.micdBackgroundView.contentMode = UIViewContentModeScaleAspectFit;
     
     self.micdBackgroundOriginalFrame = self.micdBackgroundView.frame;
 }
