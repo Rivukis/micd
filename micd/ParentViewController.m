@@ -149,6 +149,11 @@
     [self.homeViewController setInitialStateFrame];
     [self.recordingsViewController setInitialStateFrame];
     [self.settingsViewController setInitialStateFrame];
+    
+    CGRect backgroundImageFrame = self.micdBackgroundView.frame;
+    backgroundImageFrame.size.width = CGRectGetWidth(self.view.bounds);
+    self.micdBackgroundView.frame = backgroundImageFrame;
+    
     self.micdBackgroundOriginalFrame = self.micdBackgroundView.frame;
 }
 

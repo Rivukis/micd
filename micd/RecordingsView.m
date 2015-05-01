@@ -18,8 +18,6 @@
     
     for (UIView *playerControl in self.playerControlElements) {
         CGPoint convertedPointForPlayerControl = [playerControl convertPoint:point fromView:self];
-        
-        NSLog(@"converted point: %@", NSStringFromCGPoint(convertedPointForPlayerControl));
         BOOL isInsidePlayerControl = [playerControl pointInside:convertedPointForPlayerControl withEvent:event];
         
         if (isInsidePlaybackContainerView && isInsidePlayerControl && playerControl.userInteractionEnabled) {

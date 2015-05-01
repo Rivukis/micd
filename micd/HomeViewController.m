@@ -214,6 +214,7 @@ static BOOL const growForLouderNoises = YES;
         return;
     }
     
+    [[AudioSessionController sharedAudioSessionController] setupAudioSession];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive]) {
         return;
     }
@@ -223,13 +224,13 @@ static BOOL const growForLouderNoises = YES;
     
     AudioSessionController *audioSessionController = [AudioSessionController sharedAudioSessionController];
     BOOL accessDetermined = [audioSessionController hasMicrophonePermissionBeenDetermined];
-    if (!accessDetermined) {
+    if (NO && !accessDetermined) {
         [audioSessionController requestMicrophonePermissionWithCompletion:nil];
         return;
     }
     
     BOOL accessGranted = [audioSessionController hasMicrophonePermissionBeenGranted];
-    if (!accessGranted) {
+    if (NO && !accessGranted) {
         [MicrophoneAccessRequiredViewController showMicrophoneAccessRequiredViewControllerWithPresenter:self];
         return;
     }
