@@ -704,8 +704,10 @@ static BOOL const growForLouderNoises = YES;
         } completion:nil];
         
     } else {
-        self.backgroundImageView.frame = backgroundImageFrame;
-        self.gearsCircleImageView.frame = gearFrame;
+        if (!self.shouldMoveToHomeStateOnAppLaunch) {
+            self.backgroundImageView.frame = backgroundImageFrame;
+            self.gearsCircleImageView.frame = gearFrame;
+        }
     }
     
     CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];

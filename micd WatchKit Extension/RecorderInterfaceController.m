@@ -8,7 +8,6 @@
 @property (weak, nonatomic) IBOutlet WKInterfaceButton *goToTracksButton;
 
 @property (assign, nonatomic) BOOL isRecording;
-@property (assign, nonatomic) BOOL isAnimatingRecording;
 
 @end
 
@@ -52,16 +51,12 @@
         [self setupGoToTracksButtonShouldBeEnabled:YES];
     } else {
         if (isRecording) {
-            if (!self.isAnimatingRecording) {
-                [self.recordButtonGroup setBackgroundImageNamed:@"watchAnimation"];
-                [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 179) duration:6 repeatCount:0];
-                [self.recordButtonGroup startAnimating];
-                self.isAnimatingRecording = YES;
-            }
+            [self.recordButtonGroup setBackgroundImageNamed:@"watchAnimation"];
+            [self.recordButtonGroup startAnimatingWithImagesInRange:NSMakeRange(0, 179) duration:6 repeatCount:0];
+            [self.recordButtonGroup startAnimating];
             [self setupGoToTracksButtonShouldBeEnabled:NO];
         } else {
             [self.recordButtonGroup stopAnimating];
-            self.isAnimatingRecording = NO;
             [self.recordButtonGroup setBackgroundImageNamed:@"recordButton"];
             [self setupGoToTracksButtonShouldBeEnabled:YES];
         }

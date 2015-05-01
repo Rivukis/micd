@@ -45,7 +45,6 @@ UIActionSheetDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 @property (weak, nonatomic) IBOutlet UIButton *rewindButton;
 @property (weak, nonatomic) IBOutlet UIButton *forwardButton;
-@property (weak, nonatomic) IBOutlet UIButton *audioOutput;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 
 @property (strong, nonatomic) PlayerController *playerController;
@@ -112,17 +111,8 @@ UIActionSheetDelegate>
     [self.rewindButton setBackgroundImage:[WireTapStyleKit imageOfReverseDoubleArrow] forState:UIControlStateNormal];
     [self.forwardButton setBackgroundImage:[WireTapStyleKit imageOfForwardDoubleArrowWithAmountForward:@"30"] forState:UIControlStateNormal];
     
-    [self.audioOutput setTitle:@"" forState:UIControlStateNormal];
-    [self.audioOutput setBackgroundImage:[WireTapStyleKit imageOfAirplayLogo] forState:UIControlStateNormal];
     [self.shareButton setTitle:@"" forState:UIControlStateNormal];
     [self.shareButton setBackgroundImage:[WireTapStyleKit imageOfShareButtonHalfSize] forState:UIControlStateNormal];
-    
-    // gonna hide and disable these buttons until were ready to use them
-//    self.shareButton.hidden = YES;
-//    self.shareButton.userInteractionEnabled = NO;
-//    self.editButton.hidden = YES;
-//    self.editButton.userInteractionEnabled = NO;
-    ///////////////////////
     
     self.displayLinkController = [[DisplayLinkController alloc] initWithTarget:self selector:@selector(handleDisplayLinkAnimation:)];
     [self.displayLinkController addDisplayLinkToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
@@ -151,7 +141,14 @@ UIActionSheetDelegate>
         [self.playbackView addSubview:self.progressTimeIndicatorView];
         [self scrollToAndReadyPlayerWithMostRecentRecording];
         
-        ((RecordingsView *)self.view).playerControlElements = @[self.progressTimeIndicatorView, self.playButton, self.rewindButton, self.forwardButton, self.shareButton, self.audioOutput, self.playbackTitleLabel];
+        NSArray *playerControlElements = @[self.progressTimeIndicatorView,
+                                           self.playButton,
+                                           self.rewindButton,
+                                           self.forwardButton,
+                                           self.shareButton,
+                                           self.playbackTitleLabel];
+        
+        ((RecordingsView *)self.view).playerControlElements = playerControlElements;
         ((RecordingsView *)self.view).playbackAreaView = self.playbackAreaView;
         
         RecordingCellModel *mostRecentRecordingCellModel = [self mostRecentRecordingCellModel];
@@ -328,7 +325,7 @@ UIActionSheetDelegate>
 }
 
 - (void)showSharingActionSheet {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"What do you want to do with your recording?" delegate:self cancelButtonTitle:@"Nevermind" destructiveButtonTitle:nil otherButtonTitles:@"Share With Others", @"Export As Audio Only", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"What do you want to do with your recording?" delegate:self cancelButtonTitle:@"Nevermind" destructiveButtonTitle:nil otherButtonTitles:@"Share with others", @"Export as audio only", nil];
     
     [actionSheet showInView:self.view];
 }
@@ -455,8 +452,8 @@ UIActionSheetDelegate>
 - (void)readyPlayerWithRecording:(Recording *)recording {
     [self.playerController loadRecording:recording];
     
-    [[RemoteCommandCenterController sharedRCCController] setDelegate:self];
     RemoteCommandCenterController *rccController = [RemoteCommandCenterController sharedRCCController];
+    [rccController setDelegate:self];
     [rccController showRemoteTitle:recording.title
                        createdDate:recording.dateAsString
                           duration:[NSNumber numberWithDouble:recording.lengthAsTimeInterval]
@@ -548,10 +545,6 @@ UIActionSheetDelegate>
     self.share_Recording = self.focusedCellModel.recording;
     self.share_CompletionBlock = nil;
     [self showSharingActionSheet];
-}
-
-- (IBAction)audioOutputButtonPressed:(id)sender {
-    [self addButtonBounceAnimationToView:self.audioOutput];
 }
 
 #pragma mark - ActionSheetDelegate
@@ -701,6 +694,17 @@ UIActionSheetDelegate>
         cellModel.recording.title = title;
         [self.dataSource saveData];
         if (cellModel == self.focusedCellModel) {
+            // here
+            
+            Recording *recording = cellModel.recording;
+            RemoteCommandCenterController *rccController = [RemoteCommandCenterController sharedRCCController];
+            [rccController setDelegate:self];
+            [rccController showRemoteTitle:recording.title
+                               createdDate:recording.dateAsString
+                                  duration:[NSNumber numberWithDouble:recording.lengthAsTimeInterval]
+                               elapsedTime:[NSNumber numberWithDouble:self.playerController.secondsCompleted]
+                                  forstate:RemoteCommandCenterControllerStatePlaying];
+
             [self setplaybackTitleLabelText:title];
         }
     }
@@ -709,6 +713,7 @@ UIActionSheetDelegate>
 #pragma mark - UITableViewDataSource && UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [[AudioSessionController sharedAudioSessionController] setupAudioSession];
     BOOL sessionIsActive = [[NSUserDefaults standardUserDefaults] boolForKey:kUserDefaultsKeySessionIsActive];
     
     RecordingsSection *recordingsSection = self.sections[indexPath.section];
@@ -762,7 +767,7 @@ UIActionSheetDelegate>
         
         [weakSelf showSharingActionSheet];
     }];
-    shareRowAction.backgroundColor = [UIColor blueColor];
+    shareRowAction.backgroundColor = [UIColor vibrantBlue];
     
     return @[deleteRowAction, shareRowAction];
 }
